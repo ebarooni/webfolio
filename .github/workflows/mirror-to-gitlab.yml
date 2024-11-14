@@ -3,7 +3,7 @@ name: Mirror to GitLab
 on:
   push:
     branches:
-      - "issue/webfolio-6"
+      - "main"
 
 jobs:
   mirror:
