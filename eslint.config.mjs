@@ -1,6 +1,6 @@
-import eslintPluginAstro from 'eslint-plugin-astro';
+import eslintPluginAstro from "eslint-plugin-astro";
 
 export default [
-    ...eslintPluginAstro.configs.recommended,
-    ...eslintPluginAstro.configs['jsx-a11y-recommended']
+  ...eslintPluginAstro.configs["flat/recommended"],
+  ...eslintPluginAstro.configs["flat/jsx-a11y-recommended"],
 ];
