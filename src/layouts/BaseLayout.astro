@@ -1,18 +1,17 @@
 ---
 import Shell from "./Shell.astro";
-import {Theme} from "daisyui";
+import { Theme } from "daisyui";
 
 interface Props {
-    title: string;
-    theme: Theme
+  title: string;
+  theme: Theme;
 }
 
 const { title, theme } = Astro.props;
-
 ---
 
 <Shell title={title} theme={theme}>
-    <div class="min-h-screen w-full bg-base-100">
-        <slot />
-    </div>
+  <div class="min-h-screen w-full bg-base-100">
+    <slot />
+  </div>
 </Shell>
