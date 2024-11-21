@@ -1,0 +1,18 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  name: string;
+  cssClass: string;
+}
+
+const { name, cssClass } = Astro.props;
+---
+
+<Icon name={name} class={cssClass} />
+
+<style>
+  [data-icon] {
+    color: var(oklch(var(--bc) / var(--tw-text-opacity)));
+  }
+</style>
