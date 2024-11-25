@@ -7,8 +7,12 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "prettier:check": "npx prettier . --check",
-    "prettier:fix": "npx prettier . --write"
+    "prettier": "npx prettier",
+    "prettier:check": "npm run prettier -- . --check",
+    "prettier:fix": "npm run prettier -- . --write",
+    "stylelint": "npx stylelint",
+    "stylelint:lint": "npm run stylelint -- \"**/*.(css|scss)\"",
+    "styleline:fix": "npm run stylelint -- \"**/*.(css|scss)\" --fix"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +33,7 @@
     "@angular/cli": "^19.0.1",
     "@angular/compiler-cli": "^19.0.0",
     "@ebarooni/prettier-config": "^1.2.0",
+    "@ebarooni/stylelint-config": "^1.2.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
@@ -36,8 +41,14 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.4.49",
     "prettier": "^3.3.3",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard-scss": "^13.1.0",
     "typescript": "~5.6.2"
   },
-  "prettier": "@ebarooni/prettier-config"
+  "prettier": "@ebarooni/prettier-config",
+  "stylelint": {
+    "extends": ["@ebarooni/stylelint-config"]
+  }
 }
