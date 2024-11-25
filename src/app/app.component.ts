@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   standalone: true,
 })
-export class AppComponent {
-  title = 'webfolio';
-}
+export class AppComponent {}
