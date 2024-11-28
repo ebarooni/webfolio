@@ -12,7 +12,10 @@
     "prettier:fix": "npm run prettier -- . --write",
     "stylelint": "npx stylelint",
     "stylelint:lint": "npm run stylelint -- \"**/*.(css|scss)\"",
-    "styleline:fix": "npm run stylelint -- \"**/*.(css|scss)\" --fix"
+    "styleline:fix": "npm run stylelint -- \"**/*.(css|scss)\" --fix",
+    "eslint": "npx eslint",
+    "lint": "npm run eslint -- .",
+    "fmt": "npm run eslint -- . --fix"
   },
   "private": true,
   "dependencies": {
@@ -32,8 +35,10 @@
     "@angular-devkit/build-angular": "^19.0.1",
     "@angular/cli": "^19.0.1",
     "@angular/compiler-cli": "^19.0.0",
+    "@ebarooni/eslint-config": "^1.1.0",
     "@ebarooni/prettier-config": "^1.2.0",
     "@ebarooni/stylelint-config": "^1.2.0",
+    "@eslint/js": "^9.15.0",
     "@types/jest": "^29.5.14",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.14",
@@ -44,7 +49,8 @@
     "stylelint": "^16.10.0",
     "stylelint-config-standard-scss": "^13.1.0",
     "tailwindcss": "^3.4.15",
-    "typescript": "~5.6.2"
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.16.0"
   },
   "prettier": "@ebarooni/prettier-config",
   "stylelint": {
