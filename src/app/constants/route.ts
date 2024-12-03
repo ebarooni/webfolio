@@ -4,4 +4,5 @@ export enum Route {
   PROJECTS = 'projects',
   CONTACT = 'contact',
   BUILD_INFO = 'build-info',
+  BlOG = 'blog',
 }
