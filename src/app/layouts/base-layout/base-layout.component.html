@@ -1,0 +1,22 @@
+<div class="max-h-screen h-screen w-full bg-base-100">
+  <div class="top-0 fixed w-full">
+    <!-- mobile navbar -->
+    <div class="md:hidden">
+      <app-compact-navbar></app-compact-navbar>
+    </div>
+
+    <!-- desktop navbar -->
+    <div class="hidden md:block">
+      <app-navbar></app-navbar>
+    </div>
+  </div>
+
+  <!-- spacer equivalent to the height of the navbar -->
+  <div class="pt-20 h-full flex flex-col">
+    <div class="flex-auto">
+      <ng-content></ng-content>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+</div>
