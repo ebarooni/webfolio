@@ -1,4 +1,4 @@
-<div class="navbar w-full min-h-20 bg-opacity-75 backdrop-blur">
+<div #navbarDiv class="navbar w-full min-h-20 bg-opacity-75 backdrop-blur">
   <div class="navbar-start"></div>
   <div class="navbar-center">
     <nav class="join bg-base-300 drop-shadow-md rounded-badge">
@@ -37,13 +37,15 @@
       >
         Contact
       </button>
-      <button
-        [routerLink]="Route.BUILD_INFO"
-        class="btn join-item"
-        routerLinkActive="btn-neutral"
-      >
-        Build Info
-      </button>
+      @if (version()) {
+        <button
+          [routerLink]="Route.VERSION"
+          class="btn join-item"
+          routerLinkActive="btn-neutral"
+        >
+          {{ version() }}
+        </button>
+      }
       <div class="dropdown dropdown-bottom dropdown-end">
         <button tabindex="0" class="btn join-item">
           Theme
@@ -68,7 +70,11 @@
         >
           <div class="flex flex-col gap-3 p-3">
             @for (theme of themes; track $index) {
-              <button [appDataTheme]="theme" class="btn bg-base-100 py-3">
+              <button
+                [appDataTheme]="theme"
+                class="btn bg-base-100 py-3"
+                (click)="themeChanged.emit(theme)"
+              >
                 <span class="flex justify-between items-center w-full h-full">
                   <span class="flex items-center gap-1">
                     <svg
@@ -78,6 +84,7 @@
                       stroke-width="1.5"
                       stroke="currentColor"
                       class="size-4"
+                      [ngClass]="{ invisible: theme !== selectedTheme() }"
                     >
                       <path
                         stroke-linecap="round"
