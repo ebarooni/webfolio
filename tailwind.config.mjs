@@ -1,10 +1,11 @@
 import daisyui from "daisyui";
+import { themesArray } from "./src/app/constants/themes-array";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-  theme: {
-    extend: {},
-  },
+  content: ["./src/**/*.{html,ts}"],
   plugins: [daisyui],
+  daisyui: {
+    themes: themesArray,
+  },
 };
