@@ -1,13 +1,24 @@
 <div class="max-h-screen h-screen w-full bg-base-100">
-  <div class="top-0 fixed w-full z-10">
+  <div
+    *ngrxLet="{ theme: appStore.selectTheme$ } as vm"
+    class="top-0 fixed w-full z-10"
+  >
     <!-- mobile navbar -->
     <div class="md:hidden">
-      <app-compact-navbar></app-compact-navbar>
+      <app-compact-navbar
+        [theme]="vm.theme"
+        [version]="'v0.0.0'"
+        (themeChanged)="themeChanged($event)"
+      ></app-compact-navbar>
     </div>
 
     <!-- desktop navbar -->
     <div class="hidden md:block">
-      <app-navbar></app-navbar>
+      <app-navbar
+        [theme]="vm.theme"
+        [version]="'v0.0.0'"
+        (themeChanged)="themeChanged($event)"
+      ></app-navbar>
     </div>
   </div>
 
