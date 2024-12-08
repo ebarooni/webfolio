@@ -1,3 +1,43 @@
 <app-base-layout>
-  <p>home works!</p>
+  <app-container>
+    <div class="flex flex-col gap-8 md:gap-10">
+      <section>
+        <app-hero>
+          <button
+            ngProjectAs="cta-btn-1"
+            [routerLink]="Route.PROJECTS"
+            class="btn btn-primary btn-block md:btn-wide lg:w-56"
+          >
+            Explore My Work
+          </button>
+          <button
+            ngProjectAs="cta-btn-2"
+            [routerLink]="Route.CONTACT"
+            class="btn btn-outline btn-block md:btn-wide lg:w-56"
+          >
+            Get in Touch
+          </button>
+        </app-hero>
+      </section>
+
+      <section>
+        <app-services></app-services>
+      </section>
+
+      <section>
+        <app-highlights></app-highlights>
+      </section>
+
+      <section>
+        <app-call-to-action>
+          <button
+            [routerLink]="Route.CONTACT"
+            class="btn btn-primary btn-block md:btn-wide lg:w-56"
+          >
+            Contact Me
+          </button>
+        </app-call-to-action>
+      </section>
+    </div>
+  </app-container>
 </app-base-layout>
