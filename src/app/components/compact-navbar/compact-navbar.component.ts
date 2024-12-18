@@ -13,12 +13,19 @@ import { LogService } from '../../services/log/log.service';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
+import { ThemeSelectorModalComponent } from '../theme-selector-modal/theme-selector-modal.component';
 
 @Component({
   selector: 'app-compact-navbar',
   templateUrl: './compact-navbar.component.html',
   styleUrls: ['./compact-navbar.component.scss'],
-  imports: [NgClass, RouterLink, RouterLinkActive, LeadingSlashPipe],
+  imports: [
+    NgClass,
+    RouterLink,
+    RouterLinkActive,
+    LeadingSlashPipe,
+    ThemeSelectorModalComponent,
+  ],
 })
 export class CompactNavbarComponent extends BaseNavigationComponent {
   @ViewChild('navbarDiv')
