@@ -15,7 +15,7 @@ export class LogService {
     if (!this.isDevMode) {
       return;
     } else {
-      const mergedLogLevel = logLevel || this.logLevel;
+      const mergedLogLevel = logLevel ?? this.logLevel;
       switch (mergedLogLevel) {
         case 'debug':
           console.debug(

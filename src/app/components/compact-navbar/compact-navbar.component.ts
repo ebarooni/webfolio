@@ -7,26 +7,27 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BaseNavigationComponent } from '../../extends/base-navigation.component';
 import { Theme } from 'daisyui';
-import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
-import { NgClass } from '@angular/common';
 import { LogService } from '../../services/log/log.service';
+import { NgClass } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
+import { ThemeSelectorModalComponent } from '../theme-selector-modal/theme-selector-modal.component';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-compact-navbar',
+  templateUrl: './compact-navbar.component.html',
+  styleUrls: ['./compact-navbar.component.scss'],
   imports: [
+    NgClass,
     RouterLink,
     RouterLinkActive,
-    DataThemeDirective,
-    NgClass,
     LeadingSlashPipe,
+    ThemeSelectorModalComponent,
   ],
-  templateUrl: './navbar.component.html',
 })
-export class NavbarComponent extends BaseNavigationComponent {
+export class CompactNavbarComponent extends BaseNavigationComponent {
   @ViewChild('navbarDiv')
   private readonly navbarDiv?: ElementRef<HTMLDivElement>;
   public readonly selectedTheme = input.required<Theme>();

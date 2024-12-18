@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ServicesComponent } from './services.component';
+import { CompactNavbarComponent } from './compact-navbar.component';
 
-describe('ServicesComponent', () => {
-  let component: ServicesComponent;
-  let fixture: ComponentFixture<ServicesComponent>;
+describe('CompactNavbarComponent', () => {
+  let component: CompactNavbarComponent;
+  let fixture: ComponentFixture<CompactNavbarComponent>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [ServicesComponent],
+      imports: [CompactNavbarComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ServicesComponent);
+    fixture = TestBed.createComponent(CompactNavbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

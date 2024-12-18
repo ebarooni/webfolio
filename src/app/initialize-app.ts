@@ -7,5 +7,8 @@ export function initializeApp() {
   const logService = inject(LogService);
   return appStore
     .initialize()
+    .then(({ theme }) =>
+      document.documentElement.setAttribute('data-theme', theme),
+    )
     .catch((error) => logService.log(error, 'Failed to initialize app'));
 }

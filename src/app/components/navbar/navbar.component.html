@@ -3,35 +3,36 @@
   <div class="navbar-center">
     <nav class="join bg-base-300 drop-shadow-md rounded-badge">
       <button
-        [routerLink]="Route.HOME"
+        [routerLink]="Route.HOME | leadingSlash"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="btn join-item"
         routerLinkActive="btn-neutral"
       >
         Home
       </button>
       <button
-        [routerLink]="Route.BlOG"
+        [routerLink]="Route.BLOG | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-neutral"
       >
         Blog
       </button>
       <button
-        [routerLink]="Route.ABOUT"
+        [routerLink]="Route.ABOUT | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-neutral"
       >
         About
       </button>
       <button
-        [routerLink]="Route.PROJECTS"
+        [routerLink]="Route.PROJECTS | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-neutral"
       >
         Projects
       </button>
       <button
-        [routerLink]="Route.CONTACT"
+        [routerLink]="Route.CONTACT | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-neutral"
       >
@@ -39,7 +40,7 @@
       </button>
       @if (version()) {
         <button
-          [routerLink]="Route.VERSION"
+          [routerLink]="Route.VERSION | leadingSlash"
           class="btn join-item"
           routerLinkActive="btn-neutral"
         >

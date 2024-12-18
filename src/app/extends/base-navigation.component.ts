@@ -33,7 +33,9 @@ export class BaseNavigationComponent {
 
       if (window.scrollY) {
         this.renderer.addClass(navbarDiv.nativeElement, shadow);
-      } else this.renderer.removeClass(navbarDiv.nativeElement, shadow);
+      } else {
+        this.renderer.removeClass(navbarDiv.nativeElement, shadow);
+      }
     } catch (error) {
       this.logService.log(error, 'Failed to change navbar shadow');
     }

@@ -8,7 +8,7 @@ describe('BaseLayoutComponent', () => {
   let fixture: ComponentFixture<BaseLayoutComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule(
+    void TestBed.configureTestingModule(
       Object.assign({}, appConfig, {
         imports: [BaseLayoutComponent],
       }),

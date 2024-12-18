@@ -7,7 +7,7 @@ describe('StackoverflowComponent', () => {
   let fixture: ComponentFixture<StackoverflowComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [StackoverflowComponent],
     }).compileComponents();
 

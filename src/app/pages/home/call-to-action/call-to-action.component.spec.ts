@@ -7,7 +7,7 @@ describe('CallToActionComponent', () => {
   let fixture: ComponentFixture<CallToActionComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [CallToActionComponent],
     }).compileComponents();
 

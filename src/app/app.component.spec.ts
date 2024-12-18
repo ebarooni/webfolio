@@ -4,7 +4,7 @@ import { appConfig } from './app.config';
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule(
+    void TestBed.configureTestingModule(
       Object.assign({}, appConfig, { imports: [AppComponent] }),
     ).compileComponents();
   }));

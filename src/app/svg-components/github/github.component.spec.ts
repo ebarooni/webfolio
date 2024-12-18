@@ -7,7 +7,7 @@ describe('GithubComponent', () => {
   let fixture: ComponentFixture<GithubComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [GithubComponent],
     }).compileComponents();
 
