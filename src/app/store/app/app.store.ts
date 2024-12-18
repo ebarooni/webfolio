@@ -28,13 +28,13 @@ export class AppStore extends ComponentStore<IState> {
     return update;
   });
 
-  initialize(): Promise<void> {
+  initialize(): Promise<IState> {
     return new Promise((resolve, reject) => {
       try {
         const state = AppStore.lookupPersistedState() || INITIAL_STATE;
         this.setState(state);
         AppStore.persistState(state);
-        resolve();
+        resolve(state);
       } catch (error) {
         reject(error);
       }
@@ -51,21 +51,18 @@ export class AppStore extends ComponentStore<IState> {
       return null;
     } else {
       const parsedState = JSON.parse(stateString) as IState;
-      const sanitizedState = Object.keys(parsedState).reduce(
-        (prev, curr) => {
-          if (curr in INITIAL_STATE) {
-            prev = {
-              ...prev,
-              [curr]: parsedState[curr as keyof IState],
-            };
-          }
-          return prev;
-        },
-        <IState>{},
-      );
+      const sanitizedState = Object.keys(parsedState).reduce((prev, curr) => {
+        if (curr in INITIAL_STATE) {
+          prev = {
+            ...prev,
+            [curr]: parsedState[curr as keyof IState],
+          };
+        }
+        return prev;
+      }, {} as IState);
       return {
         ...INITIAL_STATE,
-        ...parsedState,
+        ...sanitizedState,
       };
     }
   }
