@@ -13,10 +13,17 @@ import { Theme } from 'daisyui';
 import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
 import { NgClass } from '@angular/common';
 import { LogService } from '../../services/log/log.service';
+import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, DataThemeDirective, NgClass],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    DataThemeDirective,
+    NgClass,
+    LeadingSlashPipe,
+  ],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent extends BaseNavigationComponent {
