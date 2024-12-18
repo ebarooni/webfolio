@@ -27,8 +27,8 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
-    "@ngrx/component": "^18.1.1",
-    "@ngrx/component-store": "^18.1.1",
+    "@ngrx/component": "^19.0.0",
+    "@ngrx/component-store": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -54,16 +54,6 @@
     "tailwindcss": "^3.4.15",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.0"
-  },
-  "overrides": {
-    "@ngrx/component-store": {
-      "@angular/common": "$@angular/common",
-      "@angular/core": "$@angular/core"
-    },
-    "@ngrx/component": {
-      "@angular/common": "$@angular/common",
-      "@angular/core": "$@angular/core"
-    }
   },
   "prettier": "@ebarooni/prettier-config",
   "stylelint": {
