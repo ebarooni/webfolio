@@ -6,7 +6,7 @@
     <!-- mobile navbar -->
     <div class="md:hidden">
       <app-compact-navbar
-        [theme]="vm.theme"
+        [selectedTheme]="vm.theme"
         [version]="'v0.0.0'"
         (themeChanged)="themeChanged($event)"
       ></app-compact-navbar>
@@ -15,7 +15,7 @@
     <!-- desktop navbar -->
     <div class="hidden md:block">
       <app-navbar
-        [theme]="vm.theme"
+        [selectedTheme]="vm.theme"
         [version]="'v0.0.0'"
         (themeChanged)="themeChanged($event)"
       ></app-navbar>

@@ -7,7 +7,7 @@ describe('LinkedinComponent', () => {
   let fixture: ComponentFixture<LinkedinComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [LinkedinComponent],
     }).compileComponents();
 

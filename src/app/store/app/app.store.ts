@@ -31,12 +31,12 @@ export class AppStore extends ComponentStore<IState> {
   initialize(): Promise<IState> {
     return new Promise((resolve, reject) => {
       try {
-        const state = AppStore.lookupPersistedState() || INITIAL_STATE;
+        const state = AppStore.lookupPersistedState() ?? INITIAL_STATE;
         this.setState(state);
         AppStore.persistState(state);
         resolve(state);
-      } catch (error) {
-        reject(error);
+      } catch {
+        reject(new Error('Unable to initialize state.'));
       }
     });
   }

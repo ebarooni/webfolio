@@ -7,7 +7,7 @@ describe('ServicesComponent', () => {
   let fixture: ComponentFixture<ServicesComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [ServicesComponent],
     }).compileComponents();
 

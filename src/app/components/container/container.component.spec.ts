@@ -7,7 +7,7 @@ describe('ContainerComponent', () => {
   let fixture: ComponentFixture<ContainerComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [ContainerComponent],
     }).compileComponents();
 

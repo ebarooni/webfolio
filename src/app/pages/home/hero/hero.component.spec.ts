@@ -7,7 +7,7 @@ describe('HeroComponent', () => {
   let fixture: ComponentFixture<HeroComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [HeroComponent],
     }).compileComponents();
 

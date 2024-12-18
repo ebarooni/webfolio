@@ -23,7 +23,7 @@ import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
 export class CompactNavbarComponent extends BaseNavigationComponent {
   @ViewChild('navbarDiv')
   private readonly navbarDiv?: ElementRef<HTMLDivElement>;
-  public readonly selectedTheme = input.required<Theme>({ alias: 'theme' });
+  public readonly selectedTheme = input.required<Theme>();
   public readonly version = input<string | undefined>(undefined);
   public readonly themeChanged = output<Theme>();
 
@@ -32,6 +32,6 @@ export class CompactNavbarComponent extends BaseNavigationComponent {
   }
 
   @HostListener('document:scroll') override onDocumentScroll() {
-    super.onDocumentScroll(this.navbarDiv)
+    super.onDocumentScroll(this.navbarDiv);
   }
 }
