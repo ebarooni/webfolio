@@ -37,12 +37,12 @@
     "@angular-devkit/build-angular": "^19.0.1",
     "@angular/cli": "^19.0.1",
     "@angular/compiler-cli": "^19.0.0",
-    "@ebarooni/eslint-config": "^1.1.0",
+    "@ebarooni/eslint-config": "^1.1.1",
     "@ebarooni/prettier-config": "^1.2.0",
     "@ebarooni/stylelint-config": "^1.2.0",
-    "@eslint/js": "^9.15.0",
+    "@eslint/js": "^9.16.0",
     "@types/jest": "^29.5.14",
-    "angular-eslint": "^19.0.0",
+    "angular-eslint": "^19.0.2",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.14",
     "jest": "^29.7.0",
@@ -53,7 +53,7 @@
     "stylelint-config-standard-scss": "^13.1.0",
     "tailwindcss": "^3.4.15",
     "typescript": "~5.6.2",
-    "typescript-eslint": "^8.16.0"
+    "typescript-eslint": "^8.18.0"
   },
   "overrides": {
     "@ngrx/component-store": {
