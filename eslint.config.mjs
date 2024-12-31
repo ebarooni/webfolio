@@ -14,4 +14,10 @@ export default tseslint.config(
     },
   },
   { ignores: [".angular/*"] },
+  {
+    files: ["src/app/pages/contact/contact-form/contact-form.component.ts"],
+    rules: {
+      "@typescript-eslint/unbound-method": "off",
+    },
+  },
 );
