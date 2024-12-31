@@ -12,7 +12,11 @@
       <h2 class="text-3xl font-bold text-primary">Get in Touch</h2>
     </div>
 
-    <form class="flex flex-col gap-8 justify-stretch">
+    <form
+      class="flex flex-col gap-8 justify-stretch"
+      [formGroup]="contactForm"
+      (ngSubmit)="submit()"
+    >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <label class="form-control w-full">
@@ -26,6 +30,12 @@
               type="text"
               placeholder="Max Mustermann"
               class="input input-bordered w-full"
+              [ngClass]="{
+                'input-error':
+                  contactForm.controls.name.invalid &&
+                  contactForm.controls.name.dirty,
+              }"
+              formControlName="name"
             />
           </label>
         </div>
@@ -41,6 +51,12 @@
               type="email"
               placeholder="max@mustermann.de"
               class="input input-bordered w-full"
+              [ngClass]="{
+                'input-error':
+                  contactForm.controls.email.invalid &&
+                  contactForm.controls.email.dirty,
+              }"
+              formControlName="email"
             />
           </label>
         </div>
@@ -58,12 +74,23 @@
             rows="6"
             placeholder="Describe your project or say hello!"
             class="textarea textarea-bordered w-full"
+            [ngClass]="{
+              'textarea-error':
+                contactForm.controls.message.invalid &&
+                contactForm.controls.message.dirty,
+            }"
+            formControlName="message"
           ></textarea>
         </label>
       </div>
 
       <div class="flex justify-center">
-        <button type="submit" class="btn btn-primary btn-block sm:w-80">
+        <button
+          type="submit"
+          class="btn btn-primary btn-block sm:w-80"
+          [ngClass]="{ 'btn-outline': contactForm.invalid }"
+          [disabled]="contactForm.invalid"
+        >
           Send Message
         </button>
       </div>
