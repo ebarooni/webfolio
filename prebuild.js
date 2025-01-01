@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const dayjs = require("dayjs");
 const packageJson = require("./package.json");
 
 const version = packageJson.version;
@@ -10,7 +11,7 @@ const versionDirPath = path.join(__dirname, "src", "environments");
 const versionFilePath = path.join(versionDirPath, "build-info.ts");
 
 const src = `export const VERSION = '${version}';
-export const BUILD_TIME = '${new Date().toISOString()}';
+export const BUILD_TIME = '${dayjs().toISOString()}';
 export const DEPENDENCIES = ${JSON.stringify(dependencies, null, 2)};
 export const DEV_DEPENDENCIES = ${JSON.stringify(devDependencies, null, 2)};
 `;
