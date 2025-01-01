@@ -1,10 +1,10 @@
-import { Component, Inject, Renderer2 } from '@angular/core';
+import { Component, Inject, input, Renderer2 } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CompactNavbarComponent } from '../../components/compact-navbar/compact-navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { LetDirective } from '@ngrx/component';
 import { AppStore } from '../../store/app/app.store';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgClass } from '@angular/common';
 import { Theme } from 'daisyui';
 
 @Component({
@@ -14,10 +14,13 @@ import { Theme } from 'daisyui';
     CompactNavbarComponent,
     FooterComponent,
     LetDirective,
+    NgClass,
   ],
   templateUrl: './base-layout.component.html',
 })
 export class BaseLayoutComponent {
+  public readonly backgroundColorClass = input<string>('bg-base-100');
+
   constructor(
     readonly appStore: AppStore,
     private readonly renderer: Renderer2,
