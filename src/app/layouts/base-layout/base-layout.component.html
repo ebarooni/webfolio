@@ -1,4 +1,4 @@
-<div class="max-h-screen h-screen w-full bg-base-100">
+<div class="max-h-screen h-screen w-full" [ngClass]="backgroundColorClass()">
   <div
     *ngrxLet="{ theme: appStore.selectTheme$ } as vm"
     class="top-0 fixed w-full z-10"
@@ -7,7 +7,7 @@
     <div class="md:hidden">
       <app-compact-navbar
         [selectedTheme]="vm.theme"
-        [version]="'v0.0.0'"
+        [version]="version()"
         (themeChanged)="themeChanged($event)"
       ></app-compact-navbar>
     </div>
@@ -16,7 +16,7 @@
     <div class="hidden md:block">
       <app-navbar
         [selectedTheme]="vm.theme"
-        [version]="'v0.0.0'"
+        [version]="version()"
         (themeChanged)="themeChanged($event)"
       ></app-navbar>
     </div>

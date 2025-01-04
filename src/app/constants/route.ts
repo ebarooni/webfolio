@@ -3,6 +3,6 @@ export enum Route {
   ABOUT = 'about',
   PROJECTS = 'projects',
   CONTACT = 'contact',
-  VERSION = 'version',
+  BUILD_INFO = 'build-info',
   BLOG = 'blog',
 }
