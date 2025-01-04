@@ -1,0 +1,20 @@
+<app-base-layout>
+  <section>
+    <app-hero></app-hero>
+  </section>
+
+  <section>
+    <app-deployment-details></app-deployment-details>
+  </section>
+
+  <section>
+    <app-dependencies [dependencies]="dependencies()"></app-dependencies>
+  </section>
+
+  <section>
+    <app-dependencies
+      [title]="'DevDependencies'"
+      [dependencies]="devDependencies()"
+    ></app-dependencies>
+  </section>
+</app-base-layout>
