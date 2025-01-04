@@ -25,13 +25,13 @@ function ensureDirectoryExists(dirPath) {
 
 function generateVersionFile() {
   try {
-    ensureDirectoryExists(versionDirPath); // Ensure the target directory exists
+    ensureDirectoryExists(versionDirPath);
 
     fs.writeFileSync(versionFilePath, src, "utf8");
     console.log(`Version file created successfully at ${versionFilePath}`);
   } catch (err) {
     console.error(`Error creating version file: ${err}`);
-    process.exit(1); // Exit with an error code
+    process.exit(1);
   }
 }
 
