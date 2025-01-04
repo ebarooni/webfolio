@@ -1,4 +1,4 @@
-import { Component, Inject, input, Renderer2 } from '@angular/core';
+import { Component, Inject, input, Renderer2, signal } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CompactNavbarComponent } from '../../components/compact-navbar/compact-navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -6,6 +6,7 @@ import { LetDirective } from '@ngrx/component';
 import { AppStore } from '../../store/app/app.store';
 import { DOCUMENT, NgClass } from '@angular/common';
 import { Theme } from 'daisyui';
+import { VERSION } from '../../../environments/build-info';
 
 @Component({
   selector: 'app-base-layout',
@@ -20,6 +21,7 @@ import { Theme } from 'daisyui';
 })
 export class BaseLayoutComponent {
   public readonly backgroundColorClass = input<string>('bg-base-100');
+  public readonly version = signal(`v${VERSION}`);
 
   constructor(
     readonly appStore: AppStore,
