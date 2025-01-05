@@ -23,7 +23,7 @@
   </div>
 
   <!-- spacer equivalent to the height of the navbar -->
-  <div class="pt-20 h-full flex flex-col">
+  <div class="h-full flex flex-col" [ngClass]="{ 'pt-20': offsetTop() }">
     <div class="flex-auto">
       <ng-content></ng-content>
     </div>
