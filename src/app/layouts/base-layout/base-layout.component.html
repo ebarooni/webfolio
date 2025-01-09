@@ -1,4 +1,7 @@
-<div class="max-h-screen h-screen w-full" [ngClass]="backgroundColorClass()">
+<div
+  class="min-h-screen w-full flex flex-col"
+  [ngClass]="backgroundColorClass()"
+>
   <div
     *ngrxLet="{ theme: appStore.selectTheme$ } as vm"
     class="top-0 fixed w-full z-10"
@@ -23,7 +26,7 @@
   </div>
 
   <!-- spacer equivalent to the height of the navbar -->
-  <div class="h-full flex flex-col" [ngClass]="{ 'pt-20': offsetTop() }">
+  <div class="flex-auto flex flex-col" [ngClass]="{ 'pt-20': offsetTop() }">
     <div class="flex-auto">
       <ng-content></ng-content>
     </div>
