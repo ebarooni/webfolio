@@ -3,6 +3,13 @@ import { Route } from './constants/route';
 
 export const routes: Routes = [
   {
+    path: Route.PROJECTS,
+    loadComponent: () =>
+      import('./pages/projects/projects.component').then(
+        (m) => m.ProjectsComponent,
+      ),
+  },
+  {
     path: Route.BUILD_INFO,
     loadComponent: () =>
       import('./pages/build-info/build-info.component').then(
