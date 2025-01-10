@@ -2,8 +2,35 @@
   <div
     class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
   >
+    <app-project-item>
+      <ng-container ngProjectAs="project-title"
+        >Capacitor Calendar Plugin</ng-container
+      >
+
+      <ng-container ngProjectAs="project-description"
+        >A Capacitor plugin for interacting with native calendars, providing
+        features to create, update, delete, and query events on iOS and Android
+        platforms.
+      </ng-container>
+
+      <ng-container ngProjectAs="project-features">
+        <div class="badge badge-info">CapacitorJS</div>
+        <div class="badge">iOS</div>
+        <div class="badge badge-success">Android</div>
+      </ng-container>
+
+      <ng-container ngProjectAs="project-link">
+        <a
+          href="https://github.com/ebarooni/capacitor-calendar"
+          target="_blank"
+          class="btn btn-outline btn-primary btn-sm"
+          >GitHub</a
+        >
+      </ng-container>
+    </app-project-item>
+
     <app-project-item></app-project-item>
-    <app-project-item></app-project-item>
+
     <app-project-item></app-project-item>
   </div>
 </div>
