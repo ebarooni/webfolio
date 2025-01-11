@@ -21,6 +21,7 @@ import { VERSION } from '../../../environments/build-info';
 })
 export class BaseLayoutComponent {
   public readonly backgroundColorClass = input<string>('bg-base-100');
+  public readonly offsetTop = input<boolean>(true);
   public readonly version = signal(`v${VERSION}`);
 
   constructor(

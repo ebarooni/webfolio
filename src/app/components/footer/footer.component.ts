@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { GitlabComponent } from '../../svg-components/gitlab/gitlab.component';
 import { GithubComponent } from '../../svg-components/github/github.component';
 import { LinkedinComponent } from '../../svg-components/linkedin/linkedin.component';
@@ -15,5 +15,5 @@ import { StackoverflowComponent } from '../../svg-components/stackoverflow/stack
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {
-  readonly currentYear = new Date().getFullYear();
+  readonly currentYear = signal(new Date().getFullYear());
 }
