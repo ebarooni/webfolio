@@ -3,13 +3,13 @@
     class="flex flex-col items-center justify-center text-center px-8 lg:px-24 py-7 sm:py-16"
   >
     <h1
-      class="text-4xl md:text-6xl font-extrabold mb-4"
+      class="text-headline font-extrabold mb-4"
       [ngClass]="titleColor()"
     >
       <ng-content select="title"></ng-content>
     </h1>
 
-    <p class="text-lg max-w-2xl" [ngClass]="subtitleColor()">
+    <p class="text-body max-w-2xl" [ngClass]="subtitleColor()">
       <ng-content select="subtitle"></ng-content>
     </p>
   </div>
