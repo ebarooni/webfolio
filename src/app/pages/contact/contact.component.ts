@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BaseLayoutComponent } from '../../layouts/base-layout/base-layout.component';
-import { HeroComponent } from './hero/hero.component';
+import { HeroComponent } from '../../components/hero/hero.component';
 import { ContactFormComponent } from './contact-form/contact-form.component';
 
 @Component({
