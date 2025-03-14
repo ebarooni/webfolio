@@ -1,15 +1,14 @@
-import { Component, Inject, input, Renderer2, signal } from '@angular/core';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { Component, Inject, Renderer2, input, signal } from '@angular/core';
+import { DOCUMENT, NgClass } from '@angular/common';
+import { AppStore } from '../../store/app/app.store';
 import { CompactNavbarComponent } from '../../components/compact-navbar/compact-navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { LetDirective } from '@ngrx/component';
-import { AppStore } from '../../store/app/app.store';
-import { DOCUMENT, NgClass } from '@angular/common';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { Theme } from 'daisyui';
 import { VERSION } from '../../../environments/build-info';
 
 @Component({
-  selector: 'app-base-layout',
   imports: [
     NavbarComponent,
     CompactNavbarComponent,
@@ -17,12 +16,16 @@ import { VERSION } from '../../../environments/build-info';
     LetDirective,
     NgClass,
   ],
+  selector: 'app-base-layout',
   templateUrl: './base-layout.component.html',
 })
 export class BaseLayoutComponent {
   public readonly backgroundColorClass = input<string>('bg-base-100');
   public readonly offsetTop = input<boolean>(true);
   public readonly version = signal(`v${VERSION}`);
+  public readonly footerColorClass = input<string>(
+    'bg-gradient-to-b from-base-200 to-base-100',
+  );
 
   constructor(
     readonly appStore: AppStore,
