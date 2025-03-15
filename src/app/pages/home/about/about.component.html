@@ -1,0 +1,16 @@
+<div class="flex gap-16">
+  <div class="hidden md:block w-52 h-52 rounded-full overflow-hidden shadow-lg">
+    <img src="profile.jpg" alt="Profile Picture" class="w-full h-full object-cover" />
+  </div>
+
+  <div class="flex flex-col justify-center gap-2">
+    <h1 class="text-headline font-extrabold text-primary leading-tight text-left">Ehsan Barooni</h1>
+
+    <p class="text-xl md:text-2xl text-neutral-content text-left">Full-Stack Software Engineer | Hybrid Apps | Capacitor</p>
+
+    <div class="flex flex-wrap gap-4 mt-4">
+      <button [routerLink]="Route.PROJECTS" class="btn grow btn-primary text-lg font-semibold">View My Work</button>
+      <button [routerLink]="Route.CONTACT" class="btn grow btn-secondary text-lg font-semibold">Let's Connect</button>
+    </div>
+  </div>
+</div>

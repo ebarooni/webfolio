@@ -4,11 +4,6 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     loadComponent: () =>
-      import('./pages/about/about.component').then((m) => m.AboutComponent),
-    path: Route.ABOUT,
-  },
-  {
-    loadComponent: () =>
       import('./pages/projects/projects.component').then(
         (m) => m.ProjectsComponent,
       ),

@@ -6,36 +6,29 @@
         [routerLink]="Route.HOME | leadingSlash"
         [routerLinkActiveOptions]="{ exact: true }"
         class="btn join-item"
-        routerLinkActive="btn-neutral"
+        routerLinkActive="btn-active"
       >
         Home
       </button>
       <button
         [routerLink]="Route.BLOG | leadingSlash"
         class="btn join-item"
-        routerLinkActive="btn-neutral"
+        routerLinkActive="btn-active"
         disabled
       >
         Blog
       </button>
       <button
-        [routerLink]="Route.ABOUT | leadingSlash"
-        class="btn join-item"
-        routerLinkActive="btn-neutral"
-      >
-        About
-      </button>
-      <button
         [routerLink]="Route.PROJECTS | leadingSlash"
         class="btn join-item"
-        routerLinkActive="btn-neutral"
+        routerLinkActive="btn-active"
       >
         Projects
       </button>
       <button
         [routerLink]="Route.CONTACT | leadingSlash"
         class="btn join-item"
-        routerLinkActive="btn-neutral"
+        routerLinkActive="btn-active"
       >
         Contact
       </button>
@@ -43,7 +36,7 @@
         <button
           [routerLink]="Route.BUILD_INFO | leadingSlash"
           class="btn join-item"
-          routerLinkActive="btn-neutral"
+          routerLinkActive="btn-active"
         >
           {{ version() }}
         </button>
