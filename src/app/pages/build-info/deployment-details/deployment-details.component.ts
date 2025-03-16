@@ -16,7 +16,7 @@ export class DeploymentDetailsComponent {
     const diffInHours = now.diff(buildTime, 'hour');
     const diffInDays = now.diff(buildTime, 'day');
 
-    let timeSinceBuild;
+    let timeSinceBuild: string;
 
     if (diffInHours < 24) {
       timeSinceBuild = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;

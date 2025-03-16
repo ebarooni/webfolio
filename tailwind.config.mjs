@@ -78,8 +78,10 @@ export default {
     extend: {
       fontSize: {
         body: "clamp(0.9rem, 1.5vw, 1.125rem)",
+        "cta-btn": "clamp(0.875rem, 1.5vw, 1.125rem)",
         headline: "clamp(2.5rem, 5vw, 3.5rem)",
         label: "clamp(0.75rem, 1vw, 0.9rem)",
+        "sub-headline": "clamp(1rem, 1.75vw, 1.5rem)",
         subtitle: "clamp(1.25rem, 2vw, 1.75rem)",
         title: "clamp(1.5rem, 3vw, 2.25rem)",
       },
