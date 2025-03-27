@@ -2,44 +2,44 @@
   <div class="navbar-start"></div>
   <div class="navbar-center">
     <nav class="join bg-base-300 drop-shadow-md rounded-badge">
-      <button
+      <a
         [routerLink]="Route.HOME | leadingSlash"
         [routerLinkActiveOptions]="{ exact: true }"
         class="btn join-item"
         routerLinkActive="btn-active"
       >
         Home
-      </button>
-      <button
+      </a>
+      <a
         [routerLink]="Route.BLOG | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-active"
         disabled
       >
         Blog
-      </button>
-      <button
+      </a>
+      <a
         [routerLink]="Route.PROJECTS | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-active"
       >
         Projects
-      </button>
-      <button
+      </a>
+      <a
         [routerLink]="Route.CONTACT | leadingSlash"
         class="btn join-item"
         routerLinkActive="btn-active"
       >
         Contact
-      </button>
+      </a>
       @if (version()) {
-        <button
+        <a
           [routerLink]="Route.BUILD_INFO | leadingSlash"
           class="btn join-item"
           routerLinkActive="btn-active"
         >
           {{ version() }}
-        </button>
+        </a>
       }
       <div class="dropdown dropdown-bottom dropdown-end">
         <button tabindex="0" class="btn join-item">
