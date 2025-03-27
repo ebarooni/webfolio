@@ -1,43 +1,53 @@
-<app-base-layout>
-  <app-container>
-    <div class="flex flex-col gap-8 md:gap-10">
-      <section>
-        <app-hero>
-          <button
-            ngProjectAs="cta-btn-1"
-            [routerLink]="Route.PROJECTS"
-            class="btn btn-primary btn-block md:btn-wide lg:w-56"
-          >
-            Explore My Work
-          </button>
-          <button
-            ngProjectAs="cta-btn-2"
-            [routerLink]="Route.CONTACT"
-            class="btn btn-outline btn-block md:btn-wide lg:w-56"
-          >
-            Get in Touch
-          </button>
-        </app-hero>
-      </section>
+<app-base-layout [offsetTop]="false" [footerColorClass]="'bg-base-200'">
+  <section
+    #aboutSection
+    class="md:min-h-screen flex flex-col gap-8 items-center justify-center pt-20 pb-12 px-6"
+  >
+    <app-about></app-about>
 
-      <section>
-        <app-services></app-services>
-      </section>
+    <div class="max-w-4xl flex justify-center flex-wrap sm:flex-nowrap gap-6">
+      <app-info-card>
+        <span header>{{ yearsOfExperience }}+ Years Experience</span>
 
-      <section>
-        <app-highlights></app-highlights>
-      </section>
+        <span description
+          >Developing scalable web applications, UI/UX design, and cloud-based
+          architectures.</span
+        >
+      </app-info-card>
 
-      <section>
-        <app-call-to-action>
-          <button
-            [routerLink]="Route.CONTACT"
-            class="btn btn-primary btn-block md:btn-wide lg:w-56"
-          >
-            Contact Me
-          </button>
-        </app-call-to-action>
-      </section>
+      <app-info-card>
+        <span header>Angular, Ionic & Enterprise Solutions</span>
+
+        <span description
+          >Expert in building modular, high-performance frontends with Angular,
+          Ionic and Capacitor</span
+        >
+      </app-info-card>
+
+      <app-info-card>
+        <span header>Hybrid Apps & Custom Plugin Development</span>
+
+        <span description
+          >Expert in building cross-platform mobile and web applications using
+          Capacitor, with deep experience in developing custom plugins for
+          native functionality.</span
+        >
+      </app-info-card>
     </div>
-  </app-container>
+
+    @let scrollIndicatorNeeded =
+      aboutSection.clientHeight <= window().innerHeight;
+    @let haveNotScrolled = showScrollIndicator();
+    @if (haveNotScrolled && scrollIndicatorNeeded) {
+      <div
+        class="hidden md:block absolute bottom-0 transform -translate-x-1/2 animate-bounce mb-4"
+      >
+        <app-scroll-indicator></app-scroll-indicator>
+      </div>
+    }
+  </section>
+
+  <section>
+    <app-timeline></app-timeline>
+  </section>
 </app-base-layout>
