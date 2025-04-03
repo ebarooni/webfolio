@@ -2,21 +2,18 @@ import {
   Component,
   ElementRef,
   HostListener,
+  ViewChild,
   input,
   output,
-  Renderer2,
-  ViewChild,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BaseNavigationComponent } from '../../extends/base-navigation.component';
-import { Theme } from 'daisyui';
 import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
-import { NgClass } from '@angular/common';
-import { LogService } from '../../services/log/log.service';
 import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
+import { NgClass } from '@angular/common';
+import { Theme } from 'daisyui';
 
 @Component({
-  selector: 'app-navbar',
   imports: [
     RouterLink,
     RouterLinkActive,
@@ -24,6 +21,7 @@ import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
     NgClass,
     LeadingSlashPipe,
   ],
+  selector: 'app-navbar',
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent extends BaseNavigationComponent {
@@ -32,10 +30,6 @@ export class NavbarComponent extends BaseNavigationComponent {
   public readonly selectedTheme = input.required<Theme>();
   public readonly version = input<string | undefined>(undefined);
   public readonly themeChanged = output<Theme>();
-
-  constructor(renderer: Renderer2, logService: LogService) {
-    super(renderer, logService);
-  }
 
   @HostListener('document:scroll') override onDocumentScroll() {
     super.onDocumentScroll(this.navbarDiv);

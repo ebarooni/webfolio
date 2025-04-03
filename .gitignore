@@ -43,3 +43,4 @@ Thumbs.db
 
 # Build
 src/environments/build-info.ts
+public/profile.jpg

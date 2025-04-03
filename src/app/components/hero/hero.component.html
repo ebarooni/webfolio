@@ -1,0 +1,13 @@
+<div class="pt-20" [ngClass]="backgroundColor()">
+  <div
+    class="flex flex-col items-center justify-center text-center px-8 lg:px-24 py-7 sm:py-16"
+  >
+    <h1 class="text-headline font-extrabold mb-4" [ngClass]="titleColor()">
+      <ng-content select="title"></ng-content>
+    </h1>
+
+    <p class="text-body max-w-2xl" [ngClass]="subtitleColor()">
+      <ng-content select="subtitle"></ng-content>
+    </p>
+  </div>
+</div>

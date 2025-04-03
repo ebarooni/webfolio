@@ -1,5 +1,6 @@
 <footer
-  class="footer footer-center gap-y-5 gap text-base-content p-8 bg-gradient-to-b from-base-200 to-base-100"
+  class="footer footer-center gap-y-5 gap text-base-content p-8"
+  [ngClass]="colorClass()"
 >
   <nav>
     <div class="grid grid-flow-col gap-5">
@@ -46,6 +47,9 @@
     </div>
   </nav>
   <aside>
-    <p>&copy; 2022–{{ currentYear() }} Ehsan Barooni. All rights reserved.</p>
+    <p>
+      &copy; 2022–{{ currentYear() }} Ehsan Barooni IT Solutions. All rights
+      reserved.
+    </p>
   </aside>
 </footer>

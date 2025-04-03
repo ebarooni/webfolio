@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { BaseLayoutComponent } from '../../layouts/base-layout/base-layout.component';
-import { HeroComponent } from './hero/hero.component';
+import { HeroComponent } from '../../components/hero/hero.component';
 import { DeploymentDetailsComponent } from './deployment-details/deployment-details.component';
 import { DependenciesComponent } from './dependencies/dependencies.component';
 import {

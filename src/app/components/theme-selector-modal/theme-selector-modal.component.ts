@@ -1,13 +1,13 @@
-import { Component, ElementRef, input, output, ViewChild } from '@angular/core';
-import { Theme } from 'daisyui';
+import { Component, ElementRef, ViewChild, input, output } from '@angular/core';
 import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
-import { themesArray } from '../../constants/themes-array';
 import { NgClass } from '@angular/common';
+import { Theme } from 'daisyui';
+import { themesArray } from '../../constants/themes-array';
 
 @Component({
+  imports: [DataThemeDirective, NgClass],
   selector: 'app-theme-selector-modal',
   templateUrl: './theme-selector-modal.component.html',
-  imports: [DataThemeDirective, NgClass],
 })
 export class ThemeSelectorModalComponent {
   @ViewChild('modal') private readonly modal?: ElementRef<HTMLDialogElement>;

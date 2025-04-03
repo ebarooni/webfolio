@@ -1,24 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
+import { AboutComponent } from './about/about.component';
 import { BaseLayoutComponent } from '../../layouts/base-layout/base-layout.component';
-import { ContainerComponent } from '../../components/container/container.component';
-import { HeroComponent } from './hero/hero.component';
-import { ServicesComponent } from './services/services.component';
-import { HighlightsComponent } from './highlights/highlights.component';
-import { CallToActionComponent } from './call-to-action/call-to-action.component';
-import { RouterLink } from '@angular/router';
 import { BaseRoutingComponent } from '../../extends/base-routing.component';
+import { InfoCardComponent } from './info-card/info-card.component';
+import { ScrollIndicatorComponent } from '../../svg-components/scroll-indicator/scroll-indicator.component';
+import { TimelineComponent } from './timeline/timeline.component';
+import dayjs from 'dayjs';
 
 @Component({
-  selector: 'app-home',
   imports: [
     BaseLayoutComponent,
-    ContainerComponent,
-    HeroComponent,
-    ServicesComponent,
-    HighlightsComponent,
-    CallToActionComponent,
-    RouterLink,
+    AboutComponent,
+    InfoCardComponent,
+    ScrollIndicatorComponent,
+    TimelineComponent,
   ],
+  selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent extends BaseRoutingComponent {}
+export class HomeComponent extends BaseRoutingComponent {
+  // safari requires dd/mm/yyyy instead of dd-mm-yyyy
+  readonly yearsOfExperience = dayjs().diff(dayjs('01-01-2021'.replace(/-/g, '/')), 'year');
+  readonly window = signal(window);
+  readonly showScrollIndicator = signal(this.isDocumentScrolling());
+
+  @HostListener('document:scroll') onDocumentScroll() {
+    this.showScrollIndicator.set(this.isDocumentScrolling());
+  }
+
+  private isDocumentScrolling() {
+    return window.scrollY < 1;
+  }
+}

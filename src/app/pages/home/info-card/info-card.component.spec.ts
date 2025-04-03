@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { HeroComponent } from './hero.component';
+import { InfoCardComponent } from './info-card.component';
 
-describe('HeroComponent', () => {
-  let component: HeroComponent;
-  let fixture: ComponentFixture<HeroComponent>;
+describe('InfoCardComponent', () => {
+  let component: InfoCardComponent;
+  let fixture: ComponentFixture<InfoCardComponent>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [HeroComponent],
+      imports: [InfoCardComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HeroComponent);
+    fixture = TestBed.createComponent(InfoCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { HeroComponent } from './hero.component';
+import { CheckmarkComponent } from './checkmark.component';
 
-describe('HeroComponent', () => {
-  let component: HeroComponent;
-  let fixture: ComponentFixture<HeroComponent>;
+describe('CheckmarkComponent', () => {
+  let component: CheckmarkComponent;
+  let fixture: ComponentFixture<CheckmarkComponent>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [HeroComponent],
+      imports: [CheckmarkComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HeroComponent);
+    fixture = TestBed.createComponent(CheckmarkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

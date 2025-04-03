@@ -1,23 +1,21 @@
 // @ts-check
 
-import eb from "@ebarooni/eslint-config/angular-recommended-type-checked";
+import config from "@ebarooni/eslint-config";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  ...eb,
+  ...config.angular,
+  config.json,
+  config.markdown,
+  {
+    ignores: [".angular", ".vscode", "dist"],
+  },
   {
     languageOptions: {
       parserOptions: {
-        project: ["**/tsconfig*.json"],
+        project: ["tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
-    },
-  },
-  { ignores: [".angular/*"] },
-  {
-    files: ["src/app/pages/contact/contact-form/contact-form.component.ts"],
-    rules: {
-      "@typescript-eslint/unbound-method": "off",
     },
   },
 );
