@@ -42,5 +42,5 @@ testem.log
 Thumbs.db
 
 # Build
-src/environments/build-info.ts
+src/environments/*
 public/profile.jpg
