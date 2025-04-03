@@ -7,16 +7,16 @@ import {
 import { Route } from '../constants/route';
 import { inject } from '@angular/core';
 
-export const canActivateTimezone: CanActivateFn = (
+export const canDeactivateTimezone: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) => {
   const router = inject(Router);
   const isAllowed =
-    Intl.DateTimeFormat().resolvedOptions().timeZone !== 'Asia/Tehran';
+    Intl.DateTimeFormat().resolvedOptions().timeZone === 'Asia/Tehran';
 
   if (!isAllowed) {
-    return router.createUrlTree([`/${Route.ACCESS_DENIED}`]);
+    return router.createUrlTree([`/${Route.HOME}`]);
   }
   return isAllowed;
 };

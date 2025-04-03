@@ -1,8 +1,18 @@
 import { Route } from './constants/route';
 import { Routes } from '@angular/router';
 import { canActivateTimezone } from './guards/can-activate-timezone';
+import { canDeactivateTimezone } from './guards/can-deactivate-timezone';
 
 export const routes: Routes = [
+  {
+    canActivate: [canDeactivateTimezone],
+    loadComponent: () =>
+      import('./pages/access-denied/access-denied.component').then(
+        (m) => m.AccessDeniedComponent,
+      ),
+    path: Route.ACCESS_DENIED,
+    title: 'Access denied',
+  },
   {
     canActivate: [canActivateTimezone],
     loadComponent: () =>

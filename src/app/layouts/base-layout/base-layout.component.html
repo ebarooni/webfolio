@@ -31,6 +31,8 @@
       <ng-content></ng-content>
     </div>
 
-    <app-footer [colorClass]="footerColorClass()"></app-footer>
+    @if (showFooter()) {
+      <app-footer [colorClass]="footerColorClass()"></app-footer>
+    }
   </div>
 </div>
