@@ -4,7 +4,9 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
+import { AppStore } from '../store/app/app.store';
 import { Route } from '../constants/route';
+import { firstValueFrom } from 'rxjs';
 import { inject } from '@angular/core';
 
 export const canActivateTimezone: CanActivateFn = (
@@ -12,11 +14,16 @@ export const canActivateTimezone: CanActivateFn = (
   state: RouterStateSnapshot,
 ) => {
   const router = inject(Router);
-  const isAllowed =
-    Intl.DateTimeFormat().resolvedOptions().timeZone !== 'Asia/Tehran';
+  const store = inject(AppStore);
 
-  if (!isAllowed) {
-    return router.createUrlTree([`/${Route.ACCESS_DENIED}`]);
-  }
-  return isAllowed;
+  return firstValueFrom(store.selectHasGeoAccess$).then((hasGeoAccess) => {
+    const isAllowed =
+      Intl.DateTimeFormat().resolvedOptions().timeZone !== 'Asia/Tehran' ||
+      hasGeoAccess;
+
+    if (!isAllowed) {
+      return router.createUrlTree([`/${Route.ACCESS_DENIED}`]);
+    }
+    return isAllowed;
+  });
 };

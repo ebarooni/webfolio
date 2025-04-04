@@ -43,5 +43,5 @@ Thumbs.db
 
 # Build
 src/environments/*
-public/profile.jpg
+public/profile.jpeg
 .firebase
