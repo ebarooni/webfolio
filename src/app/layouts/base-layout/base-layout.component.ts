@@ -26,6 +26,7 @@ export class BaseLayoutComponent {
   public readonly footerColorClass = input<string>(
     'bg-gradient-to-b from-base-200 to-base-100',
   );
+  public readonly showFooter = input<boolean>(true);
 
   constructor(
     readonly appStore: AppStore,

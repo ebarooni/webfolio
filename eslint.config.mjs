@@ -11,9 +11,19 @@ export default tseslint.config(
     ignores: [".angular", ".vscode", "dist"],
   },
   {
+    files: ["src/**/*"],
     languageOptions: {
       parserOptions: {
-        project: ["tsconfig.app.json"],
+        project: ["tsconfig.eslint.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    files: ["functions/**"],
+    languageOptions: {
+      parserOptions: {
+        project: ["functions/tsconfig.json"],
         tsconfigRootDir: import.meta.dirname,
       },
     },

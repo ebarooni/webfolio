@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { Theme } from 'daisyui';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Theme } from 'daisyui';
 
 interface IState {
   theme: Theme;
+  hasGeoAccess: boolean;
 }
 
 const INITIAL_STATE: IState = {
+  hasGeoAccess: false,
   theme: 'light',
 };
 
@@ -19,10 +21,23 @@ export class AppStore extends ComponentStore<IState> {
     (state) => state.theme,
   );
 
+  readonly selectHasGeoAccess$: Observable<boolean> = this.select(
+    (state) => state.hasGeoAccess,
+  );
+
   readonly updateTheme = this.updater((state, value: Theme) => {
     const update = {
       ...state,
       theme: value,
+    };
+    AppStore.persistState(update);
+    return update;
+  });
+
+  readonly updateHasGeoAccess = this.updater((state, value: string) => {
+    const update = {
+      ...state,
+      hasGeoAccess: value === 'dogecoin',
     };
     AppStore.persistState(update);
     return update;

@@ -42,5 +42,6 @@ testem.log
 Thumbs.db
 
 # Build
-src/environments/build-info.ts
-public/profile.jpg
+src/environments/*
+public/profile.jpeg
+.firebase

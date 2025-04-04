@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-linkedin',
-  templateUrl: './linkedin.component.html',
   styleUrl: './linkedin.component.scss',
+  templateUrl: './linkedin.component.html',
 })
 export class LinkedinComponent {}
