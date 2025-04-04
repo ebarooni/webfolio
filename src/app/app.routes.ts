@@ -47,4 +47,9 @@ export const routes: Routes = [
     path: Route.HOME,
     title: 'Ehsan Barooni | Full-Stack Software Engineer',
   },
+  {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: Route.HOME,
+  },
 ];
