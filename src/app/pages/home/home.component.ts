@@ -20,7 +20,10 @@ import dayjs from 'dayjs';
 })
 export class HomeComponent extends BaseRoutingComponent {
   // safari requires dd/mm/yyyy instead of dd-mm-yyyy
-  readonly yearsOfExperience = dayjs().diff(dayjs('01-01-2021'.replace(/-/g, '/')), 'year');
+  readonly yearsOfExperience = dayjs().diff(
+    dayjs('01-01-2021'.replace(/-/g, '/')),
+    'year',
+  );
   readonly window = signal(window);
   readonly showScrollIndicator = signal(this.isDocumentScrolling());
 
