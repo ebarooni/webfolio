@@ -46,3 +46,4 @@ Thumbs.db
 src/environments/*
 public/profile.jpeg
 .firebase
+firebase-debug.log
