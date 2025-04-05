@@ -20,6 +20,6 @@
   ></div>
 
   <section>
-    <app-contact-form></app-contact-form>
+    <app-contact-form (formSubmitted)="submitForm($event)"></app-contact-form>
   </section>
 </app-base-layout>

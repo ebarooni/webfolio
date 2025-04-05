@@ -19,6 +19,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+.vscode/
 
 # Visual Studio Code
 .vscode/*
@@ -45,3 +46,4 @@ Thumbs.db
 src/environments/*
 public/profile.jpeg
 .firebase
+firebase-debug.log
