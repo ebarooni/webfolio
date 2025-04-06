@@ -8,9 +8,8 @@
       <ng-container ngProjectAs="title">Contact</ng-container>
 
       <ng-container ngProjectAs="subtitle"
-        >Whether you’re looking for a skilled developer, a technical consultant,
-        or someone to bring your vision to life, I’m here to help. Let’s
-        connect.</ng-container
+        >I help teams and individuals turn ideas into working products. If
+        that’s what you’re looking for, let’s connect.</ng-container
       >
     </app-hero>
   </section>
@@ -20,7 +19,9 @@
   ></div>
 
   <section>
-    <app-contact-form (formSubmitted)="submitForm($event, modalComponent)"></app-contact-form>
+    <app-contact-form
+      (formSubmitted)="submitForm($event, modalComponent)"
+    ></app-contact-form>
   </section>
 </app-base-layout>
 
