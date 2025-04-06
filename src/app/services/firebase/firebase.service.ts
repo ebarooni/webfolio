@@ -35,6 +35,6 @@ export class FirebaseService {
   }
 
   private emulateFunctions(): void {
-    connectFunctionsEmulator(this.functions, '127.0.0.1', 5001);
+    connectFunctionsEmulator(this.functions, 'localhost', 5001);
   }
 }
