@@ -20,6 +20,8 @@
   ></div>
 
   <section>
-    <app-contact-form (formSubmitted)="submitForm($event)"></app-contact-form>
+    <app-contact-form (formSubmitted)="submitForm($event, modalComponent)"></app-contact-form>
   </section>
 </app-base-layout>
+
+<app-modal #modalComponent></app-modal>
