@@ -2,20 +2,19 @@
   class="h-full card rounded-2xl bg-base-300 shadow-lg hover:scale-105 transform transition"
 >
   <div class="card-body">
-    <h2 class="card-title text-base-content">
+    <div class="card-title text-cta-btn text-base-content justify-between">
       <ng-content select="project-title" />
-    </h2>
+      <ng-content select="project-link" />
+    </div>
+
     <div class="flex-auto">
-      <p class="text-neutral-content">
+      <p class="text-neutral-content text-body">
         <ng-content select="project-description" />
       </p>
     </div>
-    <div class="flex flex-wrap gap-2">
+
+    <div class="flex flex-wrap gap-2 mt-2">
       <ng-content select="project-features" />
-    </div>
-    <div class="divider my-0.5"></div>
-    <div class="card-actions">
-      <ng-content select="project-link" />
     </div>
   </div>
 </div>
