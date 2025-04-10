@@ -84,6 +84,11 @@
               }"
               formControlName="message"
             ></textarea>
+
+            @let messageLength = contactForm.controls.message.value?.length;
+            <div class="label">
+              <span class="label-text-alt">{{ messageLength }}/1000</span>
+            </div>
           </label>
         </div>
 
