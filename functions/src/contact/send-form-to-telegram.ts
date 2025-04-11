@@ -27,10 +27,13 @@ export const sendFormToTelegram = onCall(
     }
 
     try {
+      const sanitizedName = sanitizeName(name);
+      const sanitizedMessage = sanitizeMessage(message);
+
       const title = '<b>📬 New Message</b>';
-      const nameElement = `<b>Name:</b> ${name}`;
+      const nameElement = `<b>Name:</b> ${sanitizedName}`;
       const emailElement = `<b>Email:</b> <a href="mailto:${email}">${email}</a>`;
-      const messageElement = `<b>Message:</b>\n${message}`;
+      const messageElement = `<b>Message:</b>\n${sanitizedMessage}`;
       const htmlMessage = `${title}\n${nameElement}\n${emailElement}\n${messageElement}`;
       const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN.value()}/sendMessage`;
 
@@ -45,3 +48,23 @@ export const sendFormToTelegram = onCall(
     }
   },
 );
+
+const sanitizeMessage = (message: string): string => {
+  return message
+    .trim()
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '') // remove control chars but keep \n and \r
+    .replace(/<[^>]*>/g, '') // remove HTML tags
+    .replace(/[\u{1F600}-\u{1F6FF}]/gu, '') // remove emojis (optional)
+    .replace(/[^\S\r\n]+/g, ' ') // collapse horizontal whitespace (but keep newlines)
+    .replace(/^[ \t]+|[ \t]+$/gm, ''); // trim spaces at start/end of each line
+};
+
+const sanitizeName = (name: string): string => {
+  return name
+    .trim()
+    .replace(/[\u0000-\u001F\u007F]/g, '') // remove control chars
+    .replace(/<[^>]*>/g, '') // strip HTML tags
+    .replace(/[\u{1F600}-\u{1F6FF}]/gu, '') // optionally remove emojis
+    .replace(/[^\p{L}\p{M}\p{Zs}'\-]/gu, '') // remove symbols except letters, marks, spaces, apostrophes, hyphens
+    .replace(/\s+/g, ' '); // collapse multiple spaces
+};

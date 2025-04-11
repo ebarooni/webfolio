@@ -44,6 +44,6 @@ Thumbs.db
 
 # Build
 src/environments/*
-public/profile.jpeg
+public/profile.*
 .firebase
 firebase-debug.log
