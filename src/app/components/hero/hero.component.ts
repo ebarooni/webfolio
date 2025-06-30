@@ -2,8 +2,8 @@ import { Component, input } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-hero',
   imports: [NgClass],
+  selector: 'app-hero',
   templateUrl: './hero.component.html',
 })
 export class HeroComponent {
