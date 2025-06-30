@@ -1,10 +1,17 @@
-import { Component, Inject, Renderer2, input, signal } from '@angular/core';
-import { DOCUMENT, NgClass } from '@angular/common';
+import {
+  Component,
+  DOCUMENT,
+  Inject,
+  Renderer2,
+  input,
+  signal,
+} from '@angular/core';
 import { AppStore } from '../../store/app/app.store';
 import { CompactNavbarComponent } from '../../components/compact-navbar/compact-navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { LetDirective } from '@ngrx/component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NgClass } from '@angular/common';
 import { Theme } from 'daisyui';
 import { VERSION } from '../../../environments/build-info';
 

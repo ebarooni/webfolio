@@ -7,15 +7,23 @@
     <ng-container ngProjectAs="title">Blog Posts</ng-container>
 
     <ng-container ngProjectAs="subtitle"
-    >Insights and technical write-ups on web development, frameworks and modern tooling.</ng-container>
+      >Insights and technical write-ups on web development, frameworks and
+      modern tooling.</ng-container
+    >
   </app-hero>
 
-  <div class="container mx-auto max-w-3xl py-4 pb-10 sm:pb-16 px-8 lg:px-0 flex flex-col gap-6 lg:gap-8">
+  <div
+    class="container mx-auto max-w-3xl py-4 pb-10 sm:pb-16 px-8 lg:px-0 flex flex-col gap-6 lg:gap-8"
+  >
     @for (post of posts; track $index) {
-      <div class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-200">
+      <div
+        class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-200"
+      >
         <div class="card-body">
-          <div class="flex flex-wrap justify-between text-sm text-secondary mb-2">
-            <span>{{ post.date | date:'mediumDate' }}</span>
+          <div
+            class="flex flex-wrap justify-between text-sm text-secondary mb-2"
+          >
+            <span>{{ post.date | date: "mediumDate" }}</span>
             <span>⏱ {{ post.readTime }} min read</span>
           </div>
 
