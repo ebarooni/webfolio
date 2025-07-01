@@ -12,7 +12,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { LetDirective } from '@ngrx/component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { NgClass } from '@angular/common';
-import { Theme } from 'daisyui';
+import { Theme } from '../../constants/themes-array';
 import { VERSION } from '../../../environments/build-info';
 
 @Component({
