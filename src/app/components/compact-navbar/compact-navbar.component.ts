@@ -10,7 +10,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BaseNavigationComponent } from '../../extends/base-navigation.component';
 import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
 import { NgClass } from '@angular/common';
-import { Theme } from 'daisyui';
+import { Theme } from '../../constants/themes-array';
 import { ThemeSelectorModalComponent } from '../theme-selector-modal/theme-selector-modal.component';
 
 @Component({
@@ -22,7 +22,7 @@ import { ThemeSelectorModalComponent } from '../theme-selector-modal/theme-selec
     ThemeSelectorModalComponent,
   ],
   selector: 'app-compact-navbar',
-  styleUrls: ['./compact-navbar.component.scss'],
+  styleUrls: ['./compact-navbar.component.css'],
   templateUrl: './compact-navbar.component.html',
 })
 export class CompactNavbarComponent extends BaseNavigationComponent {
