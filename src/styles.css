@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --text-body: clamp(0.9rem, 1.5vw, 1.125rem);
+  --text-cta-btn: clamp(0.875rem, 1.5vw, 1.125rem);
+  --text-headline: clamp(2.5rem, 5vw, 3.5rem);
+  --text-label: clamp(0.75rem, 1vw, 0.9rem);
+  --text-sub-headline: clamp(1rem, 1.75vw, 1.5rem);
+  --text-subtitle: clamp(1.25rem, 2vw, 1.75rem);
+  --text-title: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "dark";
+
+  --animation-btn: 0.3s;
+  --animation-input: 0.25s;
+  --border-btn: 1.5px;
+  --btn-focus-scale: 1.05;
+  --btn-text-case: capitalize;
+  --rounded-badge: clamp(0.5rem, 1vw, 1rem);
+  --rounded-box: clamp(0.5rem, 1vw, 1rem);
+  --rounded-btn: clamp(0.5rem, 1vw, 1rem);
+  --tab-border: 1.5px;
+  --tab-radius: clamp(0.5rem, 1vw, 1rem);
+  --color-accent: #FF8A65;
+  --color-accent-content: #121212;
+  --color-base-100: #121212;
+  --colorbase-200: #1A1B26;
+  --color-base-300: #282A36;
+  --color-base-content: #D1D5DB;
+  --color-error: #E53935;
+  --color-error-content: #FFF;
+  --color-info: #42A5F5;
+  --color-info-content: #121212;
+  --color-neutral: #1C1C28;
+  --color-neutral-content: #E4E4E7;
+  --color-primary: #93C5FD;
+  --color-primary-content: #121212;
+  --color-secondary: #455A64;
+  --color-secondary-content: #FFF;
+  --color-success: #388E3C;
+  --color-success-content: #121212;
+  --color-warning: #FDD835;
+  --color-warning-content: #121212;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+
+
+
+  --animation-btn: 0.3s;
+  --animation-input: 0.25s;
+  --border-btn: 1.5px;
+  --btn-focus-scale: 1.05;
+  --btn-text-case: capitalize;
+  --rounded-badge: clamp(0.5rem, 1vw, 1rem);
+  --rounded-box: clamp(0.5rem, 1vw, 1rem);
+  --rounded-btn: clamp(0.5rem, 1vw, 1rem);
+  --tab-border: 1.5px;
+  --tab-radius: clamp(0.5rem, 1vw, 1rem);
+  --color-accent: #FFB74D;
+  --color-accent-content: #121212;
+  --color-base-100: #FFF;
+  --color-base-200: #F1F5F9;
+  --color-base-300: #E2E8F0;
+  --color-base-content: #374151;
+  --color-error: #D32F2F;
+  --color-error-content: #FFF;
+  --color-info: #1E88E5;
+  --color-info-content: #FFF;
+  --color-neutral: #F9FAFB;
+  --color-neutral-content: #2D3748;
+  --color-primary: #4a5df9;
+  --color-primary-content: #FFF;
+  --color-secondary: #5B7290;
+  --color-secondary-content: #FFF;
+  --color-success: #43A047;
+  --color-success-content: #FFF;
+  --color-warning: #FBC02D;
+  --color-warning-content: #121212;
+}
