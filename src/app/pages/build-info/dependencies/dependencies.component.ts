@@ -5,7 +5,7 @@ import { Component, input } from '@angular/core';
   templateUrl: './dependencies.component.html',
 })
 export class DependenciesComponent {
-  public readonly title = input<string>('Dependencies');
+  public readonly title = input<string>('Runtime Dependencies');
   public readonly dependencies = input.required({
     transform: (deps: Record<string, string>) => this.convertDepsToArray(deps),
   });
