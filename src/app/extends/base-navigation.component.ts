@@ -28,12 +28,12 @@ export class BaseNavigationComponent {
         this.logService.log(error, error.message);
         return;
       }
-      const shadow = 'shadow-sm';
+      const shadowXs = 'shadow-xs';
 
       if (window.scrollY) {
-        this.renderer.addClass(navbarDiv.nativeElement, shadow);
+        this.renderer.addClass(navbarDiv.nativeElement, shadowXs);
       } else {
-        this.renderer.removeClass(navbarDiv.nativeElement, shadow);
+        this.renderer.removeClass(navbarDiv.nativeElement, shadowXs);
       }
     } catch (error) {
       this.logService.log(error, 'Failed to change navbar shadow');
