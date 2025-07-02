@@ -2,6 +2,7 @@
   "hosting": {
     "public": "dist/webfolio/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "predeploy": ["npm run fmt", "npm run build:production"],
     "rewrites": [
       {
         "source": "**",

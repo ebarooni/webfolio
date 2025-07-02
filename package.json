@@ -17,7 +17,7 @@
     "stylelint:fix": "npm run stylelint -- \"**/*.(css|scss)\" --fix",
     "eslint": "npx eslint",
     "lint": "npm run eslint -- .",
-    "fmt": "npm run eslint -- . --fix",
+    "fmt": "npm run prettier:fix && npm run stylelint:fix && npm run eslint -- . --fix",
     "prebuild": "node prebuild.js",
     "deploy:hosting": "firebase deploy --only hosting",
     "emulate:functions": "cd functions && npm run serve"
