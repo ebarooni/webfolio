@@ -1,21 +1,21 @@
 import { Component, signal } from '@angular/core';
-import { BaseLayoutComponent } from '../../layouts/base-layout/base-layout.component';
-import { HeroComponent } from '../../components/hero/hero.component';
-import { DeploymentDetailsComponent } from './deployment-details/deployment-details.component';
-import { DependenciesComponent } from './dependencies/dependencies.component';
 import {
   DEPENDENCIES,
   DEV_DEPENDENCIES,
 } from '../../../environments/build-info';
+import { BaseLayoutComponent } from '../../layouts/base-layout/base-layout.component';
+import { DependenciesComponent } from './dependencies/dependencies.component';
+import { DeploymentDetailsComponent } from './deployment-details/deployment-details.component';
+import { HeroComponent } from '../../components/hero/hero.component';
 
 @Component({
-  selector: 'app-build-info',
   imports: [
     BaseLayoutComponent,
     HeroComponent,
     DeploymentDetailsComponent,
     DependenciesComponent,
   ],
+  selector: 'app-build-info',
   templateUrl: './build-info.component.html',
 })
 export class BuildInfoComponent {

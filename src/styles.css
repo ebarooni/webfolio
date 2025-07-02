@@ -15,10 +15,6 @@
 @plugin "daisyui/theme" {
   name: "dark";
 
-  --border: 1.5px;
-  --rounded-box: clamp(0.5rem, 1vw, 1rem);
-  --rounded-field: clamp(0.5rem, 1vw, 1rem);
-  --rounded-selector: clamp(0.5rem, 1vw, 1rem);
   --color-accent: #ff8a65;
   --color-accent-content: #121212;
   --color-base-100: #121212;
@@ -44,10 +40,6 @@
 @plugin "daisyui/theme" {
   name: "light";
 
-  --border: 1.5px;
-  --rounded-box: clamp(0.5rem, 1vw, 1rem);
-  --rounded-field: clamp(0.5rem, 1vw, 1rem);
-  --rounded-selector: clamp(0.5rem, 1vw, 1rem);
   --color-accent: #ffb74d;
   --color-accent-content: #121212;
   --color-base-100: #fff;
@@ -68,4 +60,9 @@
   --color-success-content: #fff;
   --color-warning: #fbc02d;
   --color-warning-content: #121212;
+}
+
+@utility btn {
+  @apply rounded-lg;
+  @apply h-11;
 }

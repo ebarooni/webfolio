@@ -28,4 +28,16 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ["**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-extraneous-class": "off",
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        {
+          allowNumber: true,
+        },
+      ],
+    },
+  },
 );
