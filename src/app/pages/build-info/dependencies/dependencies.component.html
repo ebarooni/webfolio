@@ -6,28 +6,29 @@
       </h2>
 
       <div class="overflow-auto">
-        <table class="table-auto w-full border-collapse">
+        <table class="table-auto w-full">
           <thead>
             <tr>
               <th
-                class="px-4 py-2 text-left text-base-content font-bold border-b"
+                class="px-4 py-2 text-left font-semibold border-b border-b-base-content/50"
               >
-                Dependency
+                Package
               </th>
               <th
-                class="px-4 py-2 text-left text-base-content font-bold border-b"
+                class="px-4 py-2 text-left font-semibold border-b border-b-base-content/50"
               >
                 Version
               </th>
             </tr>
           </thead>
+
           <tbody>
             @for (dependency of dependencies(); track $index) {
-              <tr>
-                <td class="px-4 py-2 border-b text-neutral-content">
+              <tr class="hover:bg-base-300 rounded-md">
+                <td class="px-4 py-2 rounded-l-md">
                   {{ dependency.name }}
                 </td>
-                <td class="px-4 py-2 border-b text-neutral-content">
+                <td class="px-4 py-2 rounded-r-md">
                   {{ dependency.version }}
                 </td>
               </tr>
