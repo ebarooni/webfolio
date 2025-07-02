@@ -63,6 +63,5 @@
 }
 
 @utility btn {
-  @apply rounded-lg;
   @apply h-11;
 }
