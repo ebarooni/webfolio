@@ -9,28 +9,28 @@
         [routerLink]="Route.HOME | leadingSlash"
         [routerLinkActiveOptions]="{ exact: true }"
         class="btn rounded-l-lg join-item"
-        routerLinkActive="btn-active"
+        [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary']"
       >
         Home
       </a>
       <a
         [routerLink]="Route.BLOG | leadingSlash"
         class="btn join-item"
-        routerLinkActive="btn-active"
+        [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary']"
       >
         Blog
       </a>
       <a
         [routerLink]="Route.PROJECTS | leadingSlash"
         class="btn join-item"
-        routerLinkActive="btn-active"
+        [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary']"
       >
         Projects
       </a>
       <a
         [routerLink]="Route.CONTACT | leadingSlash"
         class="btn join-item"
-        routerLinkActive="btn-active"
+        [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary']"
       >
         Contact
       </a>
@@ -38,7 +38,7 @@
         <a
           [routerLink]="Route.BUILD_INFO | leadingSlash"
           class="btn join-item"
-          routerLinkActive="btn-active"
+          [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary']"
         >
           {{ version() }}
         </a>

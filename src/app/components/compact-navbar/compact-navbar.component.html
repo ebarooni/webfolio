@@ -66,31 +66,35 @@
         <a
           [routerLink]="Route.HOME | leadingSlash"
           [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="active"
+          routerLinkActive="bg-base-100"
           >Home</a
         >
       </li>
       <li>
-        <a [routerLink]="Route.BLOG | leadingSlash" routerLinkActive="active"
+        <a
+          [routerLink]="Route.BLOG | leadingSlash"
+          routerLinkActive="bg-base-100"
           >Blog</a
         >
       </li>
       <li>
         <a
           [routerLink]="Route.PROJECTS | leadingSlash"
-          routerLinkActive="active"
+          routerLinkActive="bg-base-100"
           >Projects</a
         >
       </li>
       <li>
-        <a [routerLink]="Route.CONTACT | leadingSlash" routerLinkActive="active"
+        <a
+          [routerLink]="Route.CONTACT | leadingSlash"
+          routerLinkActive="bg-base-100"
           >Contact</a
         >
       </li>
       <li>
         <a
           [routerLink]="Route.BUILD_INFO | leadingSlash"
-          routerLinkActive="active"
+          routerLinkActive="bg-base-100"
           >{{ version() }}</a
         >
       </li>
