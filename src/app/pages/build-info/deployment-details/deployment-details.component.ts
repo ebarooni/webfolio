@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
 import { BUILD_TIME, VERSION } from '../../../../environments/build-info';
+import { Component, signal } from '@angular/core';
 import dayjs from 'dayjs';
 
 @Component({

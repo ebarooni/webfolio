@@ -1,11 +1,12 @@
-import { Component, inject } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Component, inject } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { AppStore } from '../../store/app/app.store';
 import { AsyncPipe } from '@angular/common';
@@ -32,7 +33,7 @@ export class AccessDeniedComponent {
   );
   readonly contactForm = new FormGroup({
     password: new FormControl('', [
-      Validators.required,
+      (control: AbstractControl) => Validators.required(control),
       Validators.minLength(6),
     ]),
   });

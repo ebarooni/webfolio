@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-gitlab',
+  styleUrl: './gitlab.component.css',
   templateUrl: './gitlab.component.html',
-  styleUrl: './gitlab.component.scss',
 })
 export class GitlabComponent {}

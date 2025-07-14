@@ -12,6 +12,12 @@ export const routes: Routes = [
   },
   {
     loadComponent: () =>
+      import('./pages/blog/blog.component').then((m) => m.BlogComponent),
+    path: Route.BLOG,
+    title: 'Blog | Ehsan Barooni',
+  },
+  {
+    loadComponent: () =>
       import('./pages/projects/projects.component').then(
         (m) => m.ProjectsComponent,
       ),

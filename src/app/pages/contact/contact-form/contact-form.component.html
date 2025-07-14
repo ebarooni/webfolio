@@ -1,8 +1,8 @@
 <div
   class="py-10 lg:py-20 px-8 lg:px-24 bg-gradient-to-b from-base-200 via-base-300 to-base-200"
 >
-  <div class="max-w-4xl mx-auto bg-base-100 card rounded-2xl shadow-lg">
-    <div class="card-body">
+  <div class="max-w-4xl mx-auto bg-base-100 card shadow-lg">
+    <div class="card-body p-8">
       <div class="flex items-center gap-4 mb-10">
         <div
           class="bg-gradient-to-br from-primary to-secondary w-12 h-12 rounded-full flex justify-center items-center"
@@ -20,76 +20,67 @@
       >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label class="form-control w-full">
-              <div class="label">
-                <span
-                  class="label-text text-lg font-medium text-neutral-content"
-                  >Name</span
-                >
-              </div>
-
+            <fieldset class="fieldset">
+              <legend
+                class="fieldset-legend py-0 pb-2 text-lg font-medium text-neutral-content"
+              >
+                Name
+              </legend>
               <input
                 type="text"
+                class="input w-full text-neutral-content/60"
                 placeholder="Max Mustermann"
-                class="input input-bordered w-full"
-                [ngClass]="{
-                  'input-error':
-                    contactForm.controls.name.invalid &&
-                    contactForm.controls.name.dirty,
-                }"
+                [class.input-error]="
+                  contactForm.controls.name.invalid &&
+                  contactForm.controls.name.dirty
+                "
                 formControlName="name"
               />
-            </label>
+            </fieldset>
           </div>
           <div>
-            <label class="form-control w-full">
-              <div class="label">
-                <span
-                  class="label-text text-lg font-medium text-neutral-content"
-                  >Email</span
-                >
-              </div>
-
+            <fieldset class="fieldset">
+              <legend
+                class="fieldset-legend py-0 pb-2 text-lg font-medium text-neutral-content"
+              >
+                Email
+              </legend>
               <input
                 type="email"
+                class="input w-full text-neutral-content/60"
                 placeholder="max@mustermann.de"
-                class="input input-bordered w-full"
-                [ngClass]="{
-                  'input-error':
-                    contactForm.controls.email.invalid &&
-                    contactForm.controls.email.dirty,
-                }"
+                [class.input-error]="
+                  contactForm.controls.email.invalid &&
+                  contactForm.controls.email.dirty
+                "
                 formControlName="email"
               />
-            </label>
+            </fieldset>
           </div>
         </div>
 
         <div>
-          <label class="form-control w-full">
-            <div class="label">
-              <span class="label-text text-lg font-medium text-neutral-content"
-                >Message</span
-              >
-            </div>
-
+          <fieldset class="fieldset">
+            <legend
+              class="fieldset-legend py-0 pb-2 text-lg font-medium text-neutral-content"
+            >
+              Message
+            </legend>
             <textarea
-              rows="6"
+              class="textarea h-52 w-full text-neutral-content/60"
               placeholder="Describe your project or say hello!"
-              class="textarea textarea-bordered w-full"
-              [ngClass]="{
-                'textarea-error':
-                  contactForm.controls.message.invalid &&
-                  contactForm.controls.message.dirty,
-              }"
+              [class.input-error]="
+                contactForm.controls.message.invalid &&
+                contactForm.controls.message.dirty
+              "
               formControlName="message"
             ></textarea>
 
             @let messageLength = contactForm.controls.message.value?.length;
-            <div class="label">
-              <span class="label-text-alt">{{ messageLength }}/1000</span>
+            <div class="label text-neutral-content/60">
+              {{ messageLength }}/1000
             </div>
-          </label>
+          </fieldset>
         </div>
 
         <div class="flex justify-center">

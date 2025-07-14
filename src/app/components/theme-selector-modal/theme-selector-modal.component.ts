@@ -1,8 +1,7 @@
 import { Component, ElementRef, ViewChild, input, output } from '@angular/core';
+import { Theme, themesArray } from '../../constants/themes-array';
 import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
 import { NgClass } from '@angular/common';
-import { Theme } from 'daisyui';
-import { themesArray } from '../../constants/themes-array';
 
 @Component({
   imports: [DataThemeDirective, NgClass],
