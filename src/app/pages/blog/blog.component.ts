@@ -27,7 +27,7 @@ export class BlogComponent {
     {
       date: new Date('2024-12-01'),
       id: 1,
-      readTime: 4,
+      readTime: 3,
       summary:
         'Why static simplicity wasn’t enough for my portfolio and how Angular gave me room to grow.',
       title: 'From Astro to Angular: Why I Rebuilt My Portfolio',
