@@ -31,10 +31,27 @@
           <p class="text-base-content">{{ post.summary }}</p>
 
           <div class="card-actions justify-end mt-4">
-            <a class="btn btn-sm btn-primary">Read More</a>
+            <button
+              (click)="viewPost($index, postModalComponent)"
+              class="btn btn-sm btn-primary"
+            >
+              Read More
+            </button>
           </div>
         </div>
       </div>
     }
   </div>
 </app-base-layout>
+
+<app-post-modal #postModalComponent>
+  @let postId = selectedPostId();
+  @switch (postId) {
+    @case (Posts.ASTRO_TO_ANGULAR) {
+      <app-astro-to-angular></app-astro-to-angular>
+    }
+    @default {
+      <app-astro-to-angular></app-astro-to-angular>
+    }
+  }
+</app-post-modal>
