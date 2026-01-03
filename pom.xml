@@ -2,14 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.barooni.webfolio</groupId>
+  <groupId>dev.barooni</groupId>
   <artifactId>webfolio</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
+
+  <modules>
+    <module>frontend</module>
+  </modules>
 
   <properties>
     <revision>1.0.0-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
+    <version.exec.maven.plugin>3.6.3</version.exec.maven.plugin>
   </properties>
 </project>
