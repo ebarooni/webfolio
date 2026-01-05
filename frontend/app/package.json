@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "scripts": {
     "ng": "npx ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "npm run prebuild && ng build",
     "build:development": "npm run prebuild && ng build --configuration development",
     "build:production": "npm run prebuild && ng build --configuration production",

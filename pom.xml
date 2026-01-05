@@ -1,20 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.barooni</groupId>
-  <artifactId>webfolio</artifactId>
-  <version>${revision}</version>
-  <packaging>pom</packaging>
+    <groupId>dev.barooni</groupId>
+    <artifactId>webfolio</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
 
-  <modules>
-    <module>frontend</module>
-  </modules>
+    <modules>
+        <module>frontend</module>
+        <module>backend</module>
+    </modules>
 
-  <properties>
-    <revision>1.0.0-SNAPSHOT</revision>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>17</maven.compiler.release>
-    <version.exec.maven.plugin>3.6.3</version.exec.maven.plugin>
-  </properties>
+    <properties>
+        <!-- project -->
+        <compiler-plugin.version>3.14.1</compiler-plugin.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <revision>1.0.0-SNAPSHOT</revision>
+        <skipITs>true</skipITs>
+
+        <!-- dep names -->
+        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+        <quarkus.platform.version>3.30.5</quarkus.platform.version>
+
+        <!-- dep versions -->
+        <surefire-plugin.version>3.5.4</surefire-plugin.version>
+        <version.exec.maven.plugin>3.6.3</version.exec.maven.plugin>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
