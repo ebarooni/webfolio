@@ -28,6 +28,7 @@
 
         <!-- dep versions -->
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
+        <version.checkstyle>3.6.0</version.checkstyle>
         <version.exec.maven.plugin>3.6.3</version.exec.maven.plugin>
     </properties>
 
@@ -42,4 +43,22 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${version.checkstyle}</version>
+                    <configuration>
+                        <configLocation>google_checks.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <linkXRef>false</linkXRef>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
