@@ -1,8 +1,8 @@
-package dev.barooni;
+package dev.barooni.contact.form;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-class GreetingResourceIT extends GreetingResourceTest {
+class ContactFormResourceIT extends ContactFormResourceTest {
   // Execute the same tests but in packaged mode.
 }
