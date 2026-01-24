@@ -26,3 +26,6 @@ buildNumber.properties
 
 # Visual Studio Code
 .vscode
+
+# Environment variables
+.env
