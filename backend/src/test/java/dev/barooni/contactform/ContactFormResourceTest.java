@@ -1,4 +1,4 @@
-package dev.barooni.contact.form;
+package dev.barooni.contactform;
 
 import static dev.barooni.Constants.API;
 import static dev.barooni.Constants.CONTACT_FORM;

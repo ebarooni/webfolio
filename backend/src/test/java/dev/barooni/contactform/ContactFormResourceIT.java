@@ -1,4 +1,4 @@
-package dev.barooni.contact.form;
+package dev.barooni.contactform;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 

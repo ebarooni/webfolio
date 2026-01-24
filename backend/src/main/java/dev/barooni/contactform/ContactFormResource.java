@@ -1,6 +1,6 @@
-package dev.barooni.contact.form.v1.resource;
+package dev.barooni.contactform;
 
-import dev.barooni.contact.form.v1.resource.impl.ContactFormRequest;
+import dev.barooni.contactform.dto.ContactFormRequest;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
