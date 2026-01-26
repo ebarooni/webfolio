@@ -27,6 +27,7 @@
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
         <version.checkstyle>3.6.0</version.checkstyle>
         <version.exec.maven.plugin>3.6.3</version.exec.maven.plugin>
+        <version.wiremock>3.13.2</version.wiremock>
     </properties>
 
     <dependencyManagement>
@@ -37,6 +38,12 @@
                 <version>${quarkus.platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wiremock</groupId>
+                <artifactId>wiremock</artifactId>
+                <version>${version.wiremock}</version> 
             </dependency>
         </dependencies>
     </dependencyManagement>
