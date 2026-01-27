@@ -11,5 +11,6 @@ public final class Constants {
 
   public static final String API = "/api";
   public static final String CONTACT_FORM = "/contact-form";
+  public static final String SEND_MESSAGE = "/sendMessage";
   public static final String V1 = "/v1";
 }
