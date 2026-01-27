@@ -1,6 +1,7 @@
 package dev.barooni.contactform;
 
 import dev.barooni.contactform.dto.ContactFormRequest;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -21,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/v1/contact-form")
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(description = "Endpoints for receiving contact requests from the website.", name = "Contact")
+@RequestScoped
 public interface ContactFormResource {
   
   @POST

@@ -26,7 +26,7 @@ public class ContactFormRequest {
       required = true,
       type = SchemaType.STRING
   )
-  @Size(max = 254)
+  @Size(max = 254, min = 3)
   public String email;
 
   @NotBlank
@@ -38,7 +38,7 @@ public class ContactFormRequest {
       required = true,
       type = SchemaType.STRING
   )
-  @Size(max = 100)
+  @Size(max = 100, min = 1)
   public String name;
 
   @NotBlank
@@ -50,6 +50,6 @@ public class ContactFormRequest {
       required = true,
       type = SchemaType.STRING
   )
-  @Size(max = 1000)
+  @Size(max = 1000, min = 1)
   public String message;
 }
