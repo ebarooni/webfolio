@@ -27,7 +27,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <workingDirectory>${project.basedir}/app</workingDirectory>
+                            <workingDirectory>${project.basedir}/ui</workingDirectory>
                             <executable>npm</executable>
                             <arguments>
                                 <argument>ci</argument>
@@ -43,7 +43,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <workingDirectory>${project.basedir}/app</workingDirectory>
+                            <workingDirectory>${project.basedir}/ui</workingDirectory>
                             <executable>npm</executable>
                             <arguments>
                                 <argument>run</argument>
