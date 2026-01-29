@@ -3,8 +3,8 @@ package dev.barooni.contactform.impl;
 import dev.barooni.contactform.ContactFormResource;
 import dev.barooni.contactform.dto.ContactFormRequest;
 import dev.barooni.telegram.TelegramNotifier;
+import dev.barooni.telegram.dto.TelegramResponse;
 import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
 import jakarta.ws.rs.core.Response;
 
 /**
@@ -18,39 +18,23 @@ public class ContactFormResourceImpl implements ContactFormResource {
   @Override
   public Response submitContactForm(ContactFormRequest request) {
     final String message = formatTelegramMessage(request);
-    Response telegramResponse = telegramNotifier.notify(message);
-    JsonObject telegramBody = processResponse(telegramResponse);
+    TelegramResponse telegramResponse = telegramNotifier.notify(message);
+    processResponse(telegramResponse);
 
-    return Response.accepted(telegramBody).build();
+    return Response.accepted(telegramResponse).build();
   }
 
-  private JsonObject processResponse(final Response response) {
-    response.bufferEntity();
-    int status = response.getStatus();
-
-    JsonObject json = null;
-    try {
-      json = response.readEntity(JsonObject.class);
-    } catch (Exception ignored) {
-      json = null;
+  private void processResponse(final TelegramResponse response) {
+    if (response.ok()) {
+      return;
     }
 
-    if (json != null) {
-      boolean ok = json.getBoolean("ok", false);
-
-      if (!ok) {
-        String description = json.getString("description", "Unknown Telegram error");
-        throw new RuntimeException(description);
-      }
-
-      return json;
-    }
-    
-    if (status < 200 || status >= 300) {
-      throw new RuntimeException("Telegram API error without body");
+    String description = response.description();
+    if (description == null) {
+      description = "Unknown Telegram error";
     }
 
-    return null;
+    throw new RuntimeException(description);
   }
 
   private String formatTelegramMessage(ContactFormRequest request) {
