@@ -3,66 +3,66 @@ openapi: 3.1.0
 components:
   schemas:
     ContactFormRequest:
-      description: DTO that represents the structure of contact form request.
       type: object
       required:
       - email
       - name
       - message
+      description: DTO that represents the structure of contact form request.
       properties:
         email:
           type: string
-          maxLength: 254
           minLength: 3
-          description: Email address for responding to the user.
           format: email
           examples:
           - jane.doe@example.com
+          maxLength: 254
           pattern: \S
+          description: Email address for responding to the user.
         name:
           type: string
-          maxLength: 100
           minLength: 1
-          description: Name of the person submitting the form.
           examples:
           - Jane Doe
+          maxLength: 100
           pattern: \S
+          description: Name of the person submitting the form.
         message:
           type: string
-          maxLength: 1000
           minLength: 1
-          description: Message text provided by the user.
           examples:
           - "Hi, I would like to know more about your services."
+          maxLength: 1000
           pattern: \S
+          description: Message text provided by the user.
     SendMessageRequest:
-      description: DTO that represents the structure of send message request.
       type: object
       required:
       - chat_id
       - text
+      description: DTO that represents the structure of send message request.
       properties:
         chat_id:
           type: string
-          description: Unique identifier of the target chat.
           examples:
           - "123456789"
           pattern: \S
+          description: Unique identifier of the target chat.
         parse_mode:
           type: string
-          description: Parsing mode for the message content. Always set to HTML.
           examples:
           - HTML
-          default: HTML
           pattern: HTML
+          description: Parsing mode for the message content. Always set to HTML.
+          default: HTML
         text:
           type: string
-          maxLength: 2048
           minLength: 1
-          description: Text content of the message to be sent.
           examples:
           - Hello from Quarkus 👋
+          maxLength: 2048
           pattern: \S
+          description: Text content of the message to be sent.
 tags:
 - name: Contact
   description: Endpoints for receiving contact requests from the website.
