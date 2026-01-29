@@ -61,6 +61,40 @@
             "description" : "Text content of the message to be sent."
           }
         }
+      },
+      "TelegramMessage" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "examples" : [ "Hello from Quarkus 👋" ],
+            "description" : "The message that was initially sent."
+          }
+        }
+      },
+      "TelegramResponse" : {
+        "type" : "object",
+        "required" : [ "ok" ],
+        "properties" : {
+          "ok" : {
+            "type" : "boolean",
+            "description" : "Whether the request succeeded."
+          },
+          "error_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Present when ok is false."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Human readable error description, present when ok is false."
+          },
+          "result" : {
+            "$ref" : "#/components/schemas/TelegramMessage",
+            "type" : "object",
+            "description" : "Present when ok is true."
+          }
+        }
       }
     }
   },
