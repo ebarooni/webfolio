@@ -1,5 +1,6 @@
 package dev.barooni.telegram.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
@@ -12,7 +13,8 @@ public record TelegramResponse(
     boolean ok,
 
     @Schema(description = "Present when ok is false.")
-    Integer error_code,
+    @JsonProperty("error_code")
+    Integer errorCode,
 
     @Schema(description = "Human readable error description, present when ok is false.")
     String description,
