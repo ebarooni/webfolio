@@ -19,7 +19,6 @@
     "lint": "npm run eslint -- .",
     "fmt": "npm run prettier:fix && npm run stylelint:fix && npm run eslint -- . --fix",
     "prebuild": "node prebuild.js",
-    "deploy:hosting": "firebase deploy --only hosting",
     "emulate:functions": "cd functions && npm run serve"
   },
   "private": true,
@@ -35,7 +34,6 @@
     "@ngrx/component": "^20.0.1",
     "@ngrx/component-store": "^20.0.1",
     "dayjs": "^1.11.13",
-    "firebase": "^11.6.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
