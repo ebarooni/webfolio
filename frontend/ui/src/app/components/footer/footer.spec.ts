@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { XingComponent } from './xing.component';
+import { Footer } from './footer';
 
-describe('XingComponent', () => {
-  let component: XingComponent;
-  let fixture: ComponentFixture<XingComponent>;
+describe('FooterComponent', () => {
+  let component: Footer;
+  let fixture: ComponentFixture<Footer>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [XingComponent],
+      imports: [Footer],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(XingComponent);
+    fixture = TestBed.createComponent(Footer);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

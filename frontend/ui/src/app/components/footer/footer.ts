@@ -4,7 +4,6 @@ import { GitlabComponent } from '../../svg-components/gitlab/gitlab.component';
 import { LinkedinComponent } from '../../svg-components/linkedin/linkedin.component';
 import { NgClass } from '@angular/common';
 import { StackoverflowComponent } from '../../svg-components/stackoverflow/stackoverflow.component';
-import { XingComponent } from '../../svg-components/xing/xing.component';
 
 @Component({
   imports: [
@@ -13,12 +12,11 @@ import { XingComponent } from '../../svg-components/xing/xing.component';
     LinkedinComponent,
     StackoverflowComponent,
     NgClass,
-    XingComponent,
   ],
   selector: 'app-footer',
-  templateUrl: './footer.component.html',
+  templateUrl: './footer.html',
 })
-export class FooterComponent {
+export class Footer {
   readonly colorClass = input.required<string>();
   readonly currentYear = signal(new Date().getFullYear());
 }

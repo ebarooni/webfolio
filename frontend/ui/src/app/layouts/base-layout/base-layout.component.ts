@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { AppStore } from '../../store/app/app.store';
 import { CompactNavbarComponent } from '../../components/compact-navbar/compact-navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { Footer } from '../../components/footer/footer';
 import { LetDirective } from '@ngrx/component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { NgClass } from '@angular/common';
@@ -19,7 +19,7 @@ import { VERSION } from '../../../environments/build-info';
   imports: [
     NavbarComponent,
     CompactNavbarComponent,
-    FooterComponent,
+    Footer,
     LetDirective,
     NgClass,
   ],
