@@ -1,6 +1,6 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { Theme, themesArray } from '../constants/themes-array';
-import { LogService } from '../services/log/log.service';
+import { Log } from '../log/log';
 import { Route } from '../constants/route';
 
 @Component({
@@ -10,7 +10,7 @@ import { Route } from '../constants/route';
 export class BaseNavigationComponent {
   constructor(
     private readonly renderer: Renderer2,
-    private readonly logService: LogService,
+    private readonly log: Log,
   ) {}
 
   get themes(): Theme[] {
@@ -25,7 +25,7 @@ export class BaseNavigationComponent {
     try {
       if (!navbarDiv?.nativeElement) {
         const error = new Error('Document not available');
-        this.logService.log(error, error.message);
+        this.log.debug(error);
         return;
       }
       const shadowXs = 'shadow-xs';
@@ -36,7 +36,7 @@ export class BaseNavigationComponent {
         this.renderer.removeClass(navbarDiv.nativeElement, shadowXs);
       }
     } catch (error) {
-      this.logService.log(error, 'Failed to change navbar shadow');
+      this.log.debug(error as Error);
     }
   }
 }
