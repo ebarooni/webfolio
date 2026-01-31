@@ -2,7 +2,7 @@ import {
   ApplicationConfig,
   isDevMode,
   provideAppInitializer,
-  provideZoneChangeDetection,
+  provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { IS_DEV_MODE } from './tokens/is-dev-mode';
@@ -17,12 +17,12 @@ export const appConfig: ApplicationConfig = {
     { provide: IS_DEV_MODE, useValue: isDevMode() },
     provideAppInitializer(initializeApp),
     provideAppStore(),
+    provideBrowserGlobalErrorListeners(),
     provideHttpClient(),
     provideLogService(),
     provideRouter(
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
     ),
-    provideZoneChangeDetection({ eventCoalescing: true }),
   ],
 };

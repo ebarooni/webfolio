@@ -1,13 +1,13 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { TestBed } from '@angular/core/testing';
+import { AppComponent } from './app';
 import { appConfig } from './app.config';
 
 describe('AppComponent', () => {
-  beforeEach(waitForAsync(() => {
-    void TestBed.configureTestingModule(
+  beforeEach(async () => {
+    await TestBed.configureTestingModule(
       Object.assign({}, appConfig, { imports: [AppComponent] }),
     ).compileComponents();
-  }));
+  });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);

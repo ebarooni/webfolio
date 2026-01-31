@@ -2,16 +2,15 @@ import { AppStore } from './store/app/app.store';
 import { LogService } from './services/log/log.service';
 import { inject } from '@angular/core';
 
-export function initializeApp() {
+export async function initializeApp() {
   const appStore = inject(AppStore);
   const logService = inject(LogService);
 
-  return appStore
-    .initialize()
-    .then(({ theme }) => {
-      document.documentElement.setAttribute('data-theme', theme);
-    })
-    .catch((error: unknown) => {
-      logService.log(error, 'Failed to initialize app.');
-    });
+  try {
+    const { theme } = await appStore
+      .initialize();
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (error) {
+    logService.log(error, 'Failed to initialize app.');
+  }
 }

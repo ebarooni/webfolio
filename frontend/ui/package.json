@@ -18,40 +18,39 @@
     "eslint": "npx eslint",
     "lint": "npm run eslint -- .",
     "fmt": "npm run prettier:fix && npm run stylelint:fix && npm run eslint -- . --fix",
-    "prebuild": "node prebuild.js",
-    "emulate:functions": "cd functions && npm run serve"
+    "prebuild": "node prebuild.js"
   },
   "private": true,
+  "packageManager": "npm@11.6.2",
   "dependencies": {
-    "@angular/animations": "^21.1.2",
     "@angular/common": "^21.1.2",
     "@angular/compiler": "^21.1.2",
     "@angular/core": "^21.1.2",
     "@angular/forms": "^21.1.2",
     "@angular/platform-browser": "^21.1.2",
-    "@angular/platform-browser-dynamic": "^21.1.2",
     "@angular/router": "^21.1.2",
     "@ngrx/component": "^21.0.1",
     "@ngrx/component-store": "^21.0.1",
     "dayjs": "^1.11.19",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^21.1.2",
+    "@angular/build": "^21.1.2",
     "@angular/cli": "^21.1.2",
     "@angular/compiler-cli": "^21.1.2",
     "@ebarooni/prettier-config": "^1.4.0",
     "@ebarooni/stylelint-config": "^1.4.0",
     "@tailwindcss/postcss": "^4.1.11",
     "daisyui": "^5.0.43",
+    "jsdom": "^27.4.0",
     "postcss": "^8.5.6",
     "prettier": "^3.5.3",
     "stylelint": "^16.16.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "tailwindcss": "^4.1.11",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.18"
   },
   "prettier": "@ebarooni/prettier-config"
 }
