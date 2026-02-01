@@ -1,0 +1,149 @@
+{
+  "openapi" : "3.1.0",
+  "components" : {
+    "schemas" : {
+      "ContactFormRequest" : {
+        "type" : "object",
+        "required" : [ "email", "name", "message" ],
+        "description" : "DTO that represents the structure of contact form request.",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "minLength" : 3,
+            "format" : "email",
+            "examples" : [ "jane.doe@example.com" ],
+            "maxLength" : 254,
+            "pattern" : "\\S",
+            "description" : "Email address for responding to the user."
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "examples" : [ "Jane Doe" ],
+            "maxLength" : 100,
+            "pattern" : "\\S",
+            "description" : "Name of the person submitting the form."
+          },
+          "message" : {
+            "type" : "string",
+            "minLength" : 1,
+            "examples" : [ "Hi, I would like to know more about your services." ],
+            "maxLength" : 1000,
+            "pattern" : "\\S",
+            "description" : "Message text provided by the user."
+          }
+        }
+      },
+      "SendMessageRequest" : {
+        "type" : "object",
+        "required" : [ "chat_id", "text" ],
+        "description" : "DTO that represents the structure of send message request.",
+        "properties" : {
+          "chat_id" : {
+            "type" : "string",
+            "examples" : [ "123456789" ],
+            "pattern" : "\\S",
+            "description" : "Unique identifier of the target chat."
+          },
+          "parse_mode" : {
+            "type" : "string",
+            "examples" : [ "HTML" ],
+            "pattern" : "HTML",
+            "description" : "Parsing mode for the message content. Always set to HTML.",
+            "default" : "HTML"
+          },
+          "text" : {
+            "type" : "string",
+            "minLength" : 1,
+            "examples" : [ "Hello from Quarkus 👋" ],
+            "maxLength" : 2048,
+            "pattern" : "\\S",
+            "description" : "Text content of the message to be sent."
+          }
+        }
+      },
+      "TelegramMessage" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "examples" : [ "Hello from Quarkus 👋" ],
+            "description" : "The message that was initially sent."
+          }
+        }
+      },
+      "TelegramResponse" : {
+        "type" : "object",
+        "required" : [ "ok" ],
+        "properties" : {
+          "ok" : {
+            "type" : "boolean",
+            "description" : "Whether the request succeeded."
+          },
+          "error_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Present when ok is false."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Human readable error description, present when ok is false."
+          },
+          "result" : {
+            "$ref" : "#/components/schemas/TelegramMessage",
+            "type" : "object",
+            "description" : "Present when ok is true."
+          }
+        }
+      }
+    }
+  },
+  "tags" : [ {
+    "name" : "Contact",
+    "description" : "Endpoints for receiving contact requests from the website."
+  } ],
+  "paths" : {
+    "/api/v1/contact-form" : {
+      "post" : {
+        "summary" : "Submit a contact form",
+        "tags" : [ "Contact" ],
+        "requestBody" : {
+          "description" : "The contact data and message.",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ContactFormRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Submission accepted."
+          },
+          "400" : {
+            "description" : "Validation failed or payload is malformed."
+          },
+          "429" : {
+            "description" : "Too many requests. Rate limit exceeded."
+          },
+          "500" : {
+            "description" : "Unexpected server error."
+          }
+        }
+      }
+    }
+  },
+  "info" : {
+    "title" : "webfolio-backend API",
+    "version" : "1.0.0-SNAPSHOT"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080",
+    "description" : "Auto generated value"
+  }, {
+    "url" : "http://0.0.0.0:8080",
+    "description" : "Auto generated value"
+  } ]
+}

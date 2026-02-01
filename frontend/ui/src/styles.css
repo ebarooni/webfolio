@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --text-body: clamp(0.9rem, 1.5vw, 1.125rem);
+  --text-cta-btn: clamp(0.875rem, 1.5vw, 1.125rem);
+  --text-headline: clamp(2.5rem, 5vw, 3.5rem);
+  --text-label: clamp(0.75rem, 1vw, 0.9rem);
+  --text-sub-headline: clamp(1rem, 1.75vw, 1.5rem);
+  --text-subtitle: clamp(1.25rem, 2vw, 1.75rem);
+  --text-title: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "dark";
+
+  --color-primary: #93c5fd;
+  --color-primary-content: #121212;
+
+  --color-secondary: #455a64;
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #ff8a65;
+  --color-accent-content: #121212;
+
+  --color-neutral: #1c1c28;
+  --color-neutral-content: #e4e4e7;
+
+  --color-base-100: #121212;
+  --color-base-200: #1a1b26;
+  --color-base-300: #282a36;
+  --color-base-content: #d1d5db;
+
+  --color-info: #42a5f5;
+  --color-info-content: #121212;
+
+  --color-success: #388e3c;
+  --color-success-content: #121212;
+
+  --color-warning: #fdd835;
+  --color-warning-content: #121212;
+
+  --color-error: #e53935;
+  --color-error-content: #ffffff;
+
+  --radius-box: 1rem;
+  --radius-field: 0.75rem;
+  --radius-selector: 0.5rem;
+
+  --size-field: 2.75rem;
+  --size-selector: 1.25rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+
+  --color-primary: #4a5df9;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #5b7290;
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #ffb74d;
+  --color-accent-content: #121212;
+
+  --color-neutral: #f9fafb;
+  --color-neutral-content: #2d3748;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f1f5f9;
+  --color-base-300: #e2e8f0;
+  --color-base-content: #374151;
+
+  --color-info: #1e88e5;
+  --color-info-content: #ffffff;
+
+  --color-success: #43a047;
+  --color-success-content: #ffffff;
+
+  --color-warning: #fbc02d;
+  --color-warning-content: #121212;
+
+  --color-error: #d32f2f;
+  --color-error-content: #ffffff;
+
+  --radius-box: 1rem;
+  --radius-field: 0.75rem;
+  --radius-selector: 0.5rem;
+
+  --size-field: 2.75rem;
+  --size-selector: 1.25rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
