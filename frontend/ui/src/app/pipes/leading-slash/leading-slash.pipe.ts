@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Route } from '../../constants/route';
+import { Route } from '../../config/constants/route';
 
 @Pipe({
   name: 'leadingSlash',

@@ -11,7 +11,7 @@ import { map, tap } from 'rxjs';
 import { AppStore } from '../../store/app/app.store';
 import { AsyncPipe } from '@angular/common';
 import { BaseLayoutComponent } from '../../layouts/base-layout/base-layout.component';
-import { Route } from '../../constants/route';
+import { Route } from '../../config/constants/route';
 import { Router } from '@angular/router';
 
 @Component({

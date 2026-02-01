@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
-import { Theme } from '../../constants/themes-array';
+import { Theme } from '../../config/constants/themes-array';
 
 @Directive({
   selector: '[appDataTheme]',

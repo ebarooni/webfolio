@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, input, output } from '@angular/core';
-import { Theme, themesArray } from '../../constants/themes-array';
+import { Theme, themesArray } from '../../config/constants/themes-array';
 import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
 import { NgClass } from '@angular/common';
 

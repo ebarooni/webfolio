@@ -11,7 +11,7 @@ import { BaseNavigationComponent } from '../../extends/base-navigation.component
 import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
 import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
 import { NgClass } from '@angular/common';
-import { Theme } from '../../constants/themes-array';
+import { Theme } from '../../config/constants/themes-array';
 
 @Component({
   imports: [

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { Theme, themesArray } from '../constants/themes-array';
+import { Theme, themesArray } from '../config/constants/themes-array';
 import { Log } from '../log/log';
-import { Route } from '../constants/route';
+import { Route } from '../config/constants/route';
 
 @Component({
   selector: 'app-base-navigation',

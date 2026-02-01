@@ -1,7 +1,7 @@
 import { ComponentStore } from '@ngrx/component-store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Theme } from '../../constants/themes-array';
+import { Theme } from '../../config/constants/themes-array';
 
 interface IState {
   theme: Theme;

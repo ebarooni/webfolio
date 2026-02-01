@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Route } from '../constants/route';
+import { Route } from '../config/constants/route';
 
 @Component({
   selector: 'app-base-routing',

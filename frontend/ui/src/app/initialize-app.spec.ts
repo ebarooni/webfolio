@@ -4,7 +4,7 @@ import { DOCUMENT } from '@angular/common';
 import { initializeApp } from './initialize-app';
 import { AppStore } from './store/app/app.store';
 import { Log } from './log/log';
-import { Theme } from './constants/themes-array';
+import { Theme } from './config/constants/themes-array';
 
 describe('initializeApp', () => {
   const setup = (opts?: { theme?: Theme; initReject?: unknown }) => {

@@ -1,4 +1,4 @@
-import { Route } from './constants/route';
+import { Route } from './config/constants/route';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [

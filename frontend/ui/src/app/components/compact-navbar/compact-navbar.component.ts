@@ -10,7 +10,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BaseNavigationComponent } from '../../extends/base-navigation.component';
 import { LeadingSlashPipe } from '../../pipes/leading-slash/leading-slash.pipe';
 import { NgClass } from '@angular/common';
-import { Theme } from '../../constants/themes-array';
+import { Theme } from '../../config/constants/themes-array';
 import { ThemeSelectorModalComponent } from '../theme-selector-modal/theme-selector-modal.component';
 
 @Component({
