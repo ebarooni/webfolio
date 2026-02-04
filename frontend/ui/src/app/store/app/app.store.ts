@@ -13,9 +13,9 @@ const INITIAL_STATE: IState = {
   theme: 'light',
 };
 
-const PERSISTENCE_KEY = 'app';
+const PERSISTENCE_KEY = 'app:v1';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AppStore extends ComponentStore<IState> {
   readonly selectTheme$: Observable<Theme> = this.select(
     (state) => state.theme,
@@ -30,6 +30,7 @@ export class AppStore extends ComponentStore<IState> {
       ...state,
       theme: value,
     };
+
     AppStore.persistState(update);
     return update;
   });
@@ -39,21 +40,16 @@ export class AppStore extends ComponentStore<IState> {
       ...state,
       hasGeoAccess: value === 'dogecoin',
     };
+
     AppStore.persistState(update);
     return update;
   });
 
-  initialize(): Promise<IState> {
-    return new Promise((resolve, reject) => {
-      try {
-        const state = AppStore.lookupPersistedState() ?? INITIAL_STATE;
-        this.setState(state);
-        AppStore.persistState(state);
-        resolve(state);
-      } catch {
-        reject(new Error('Unable to initialize state.'));
-      }
-    });
+  initialize(): IState {
+    const state = AppStore.lookupPersistedState() ?? INITIAL_STATE;
+    this.setState(state);
+    AppStore.persistState(state);
+    return state;
   }
 
   private static persistState(state: IState): void {
@@ -75,10 +71,21 @@ export class AppStore extends ComponentStore<IState> {
         }
         return prev;
       }, {} as IState);
-      return {
+
+      const mergedState = {
         ...INITIAL_STATE,
         ...sanitizedState,
-      };
+      }
+
+      if (typeof mergedState.hasGeoAccess !== 'boolean') {
+        mergedState.hasGeoAccess = INITIAL_STATE.hasGeoAccess;
+      }
+
+      if (typeof mergedState.theme !== 'string') {
+        mergedState.theme = INITIAL_STATE.theme;
+      }
+
+      return mergedState;
     }
   }
 }
