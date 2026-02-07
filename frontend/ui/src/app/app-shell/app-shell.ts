@@ -1,69 +1,75 @@
-import {
-  Component,
-  DOCUMENT,
-  computed,
-  effect,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DOCUMENT, computed, effect, inject, untracked } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, distinctUntilChanged, shareReplay, startWith } from 'rxjs';
+
 import { AppStore } from '../store/app/app.store';
 import { CompactNavbarComponent } from '../components/compact-navbar/compact-navbar.component';
-import { Footer } from '../components/footer/footer';
+import { Footer } from './footer/footer';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { Theme } from '../config/constants/themes-array';
 import { VERSION } from '../../environments/build-info';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
-import { ShellVariant } from '../config/constants/shell-variant';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Route } from '../config/constants/route';
+
+type UiConfig = Readonly<{
+  footerBgClass: string;
+  page: Route;
+}>;
+
+const DEFAULT_UI_CONFIG: UiConfig = {
+  footerBgClass: 'bg-base-200',
+  page: Route.HOME,
+};
 
 @Component({
-  imports: [
-    NavbarComponent,
-    CompactNavbarComponent,
-    Footer,
-    RouterOutlet
-],
   selector: 'app-shell',
+  imports: [NavbarComponent, CompactNavbarComponent, Footer, RouterOutlet],
   templateUrl: './app-shell.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppShell {
   private readonly appStore = inject(AppStore);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
 
   readonly version = `v${VERSION}`;
 
-  private readonly variant$ = this.router.events.pipe(
+  private readonly uiConfig$ = this.router.events.pipe(
     filter((event): event is NavigationEnd => event instanceof NavigationEnd),
     map(() => {
-      let aRoute: ActivatedRoute = this.route;
-      while (aRoute.firstChild) {
-        aRoute = aRoute.firstChild;
-      }
-      
-      return (aRoute.snapshot.data['shellVariant'] as ShellVariant | undefined) ?? 'default';
+      let aRoute: ActivatedRoute = this.router.routerState.root;
+      while (aRoute.firstChild) aRoute = aRoute.firstChild;
+
+      const data = aRoute.snapshot?.data;
+
+      const footerBgClass =
+        (data['footerBgClass'] as string | undefined) ?? DEFAULT_UI_CONFIG.footerBgClass;
+
+      const page =
+        (data['page'] as Route | undefined) ?? DEFAULT_UI_CONFIG.page;
+
+      return { footerBgClass, page } satisfies UiConfig;
     }),
+    distinctUntilChanged(
+      (a, b) => a.footerBgClass === b.footerBgClass && a.page === b.page
+    ),
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  readonly variant = toSignal(this.variant$, { initialValue: 'default' as ShellVariant });
+  readonly uiConfig = toSignal(this.uiConfig$, { initialValue: DEFAULT_UI_CONFIG });
 
   readonly theme = toSignal(this.appStore.selectTheme$, {
     initialValue: 'light' as Theme,
   });
 
-  readonly shellClass = computed(() => {
-    switch (this.variant()) {
-      case 'plain':
-      case 'default':
-      default:
-        return 'min-h-screen w-full flex flex-col bg-base-100';
-    }
-  });
+  readonly shellClass = computed(() => 'min-h-screen w-full flex flex-col bg-base-100');
 
   constructor() {
     effect(() => {
-      this.document.documentElement.setAttribute('data-theme', this.theme());
+      const theme = this.theme();
+      untracked(() => {
+        this.document.documentElement.setAttribute('data-theme', theme);
+      });
     });
   }
 

@@ -17,11 +17,11 @@
     </div>
   </header>
 
-  <main class="flex-auto flex flex-col">
+  <main class="flex-auto flex flex-col pt-16 md:pt-20">
     <section class="flex-auto">
       <router-outlet></router-outlet>
     </section>
 
-    <app-footer></app-footer>
+    <app-footer [bgClass]="uiConfig().footerBgClass"></app-footer>
   </main>
 </div>

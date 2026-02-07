@@ -1,25 +1,18 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideRouter, Router } from '@angular/router';
-import { RouterOutlet } from '@angular/router';
+import { provideRouter, Router, RouterOutlet } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AppShell } from './app-shell';
 import { AppStore } from '../store/app/app.store';
 import { Theme } from '../config/constants/themes-array';
-import { ShellVariant } from '../config/constants/shell-variant';
 import { VERSION } from '../../environments/build-info';
+import { Route } from '../config/constants/route';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
   template: '',
 })
 class NavbarStubComponent {
@@ -30,7 +23,6 @@ class NavbarStubComponent {
 
 @Component({
   selector: 'app-compact-navbar',
-  standalone: true,
   template: '',
 })
 class CompactNavbarStubComponent {
@@ -41,13 +33,13 @@ class CompactNavbarStubComponent {
 
 @Component({
   selector: 'app-footer',
-  standalone: true,
   template: '',
 })
-class FooterStubComponent {}
+class FooterStubComponent {
+  @Input() bgClass!: string;
+}
 
 @Component({
-  standalone: true,
   template: '<div>dummy</div>',
 })
 class DummyRouteComponent {}
@@ -69,7 +61,11 @@ describe('AppShell', () => {
         { provide: AppStore, useValue: appStoreMock },
         provideRouter([
           { path: '', component: DummyRouteComponent },
-          { path: 'plain', component: DummyRouteComponent, data: { shellVariant: 'plain' as ShellVariant } },
+          {
+            path: 'contact',
+            component: DummyRouteComponent,
+            data: { page: Route.CONTACT, footerBgClass: 'bg-base-100' },
+          },
         ]),
       ],
     })
@@ -188,39 +184,46 @@ describe('AppShell', () => {
     });
   });
 
-  describe('variant and shellClass', () => {
-    it('should have initial variant "default"', async () => {
+  describe('uiConfig and shellClass', () => {
+    it('should have default uiConfig before any navigation ends', async () => {
       const { fixture } = await setup();
-      expect(fixture.componentInstance.variant()).toBe('default');
+
+      expect(fixture.componentInstance.uiConfig().page).toBe(Route.HOME);
+      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe('bg-base-200');
     });
 
-    it('should update variant based on leaf route data after NavigationEnd', fakeAsync(async () => {
+    it('should update uiConfig based on leaf route data after NavigationEnd', fakeAsync(async () => {
       const { fixture } = await setup();
 
-      router.navigateByUrl('/plain');
+      router.navigateByUrl('/contact');
       tick();
       fixture.detectChanges();
 
-      expect(fixture.componentInstance.variant()).toBe('plain');
+      expect(fixture.componentInstance.uiConfig().page).toBe(Route.CONTACT);
+      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe('bg-base-100');
     }));
 
-    it('should compute the expected shellClass for default variant', async () => {
+    it('should compute the expected shellClass', async () => {
       const { fixture } = await setup();
+
       expect(fixture.componentInstance.shellClass()).toBe(
         'min-h-screen w-full flex flex-col bg-base-100',
       );
     });
 
-    it('should compute the expected shellClass for plain variant', fakeAsync(async () => {
+    it('should bind footer bgClass from uiConfig and update after navigation', fakeAsync(async () => {
       const { fixture } = await setup();
 
-      router.navigateByUrl('/plain');
+      const footer = fixture.debugElement.query(By.directive(FooterStubComponent))
+        .componentInstance as FooterStubComponent;
+
+      expect(footer.bgClass).toBe('bg-base-200');
+
+      router.navigateByUrl('/contact');
       tick();
       fixture.detectChanges();
 
-      expect(fixture.componentInstance.shellClass()).toBe(
-        'min-h-screen w-full flex flex-col bg-base-100',
-      );
+      expect(footer.bgClass).toBe('bg-base-100');
     }));
   });
 });
