@@ -1,0 +1,109 @@
+<div
+  #navbarDiv
+  class="navbar w-full min-h-20 bg-transparent/75 backdrop-blur-sm"
+>
+  <div class="navbar-start"></div>
+
+  <div class="navbar-center">
+    <nav class="join bg-base-300 rounded-lg drop-shadow-md" aria-label="Primary">
+      @for (item of navItems; track item.route) {
+        <a
+          class="btn join-item"
+          [class.rounded-l-lg]="$first"
+          [routerLink]="[item.route]"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+          [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary', 'text-primary']"
+        >
+          {{ item.label }}
+        </a>
+      }
+
+      @if (version()) {
+        <a
+          class="btn join-item"
+          [routerLink]="[Route.BUILD_INFO]"
+          [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary', 'text-primary']"
+        >
+          {{ version() }}
+        </a>
+      }
+
+      <div
+        #themeDropdown
+        class="dropdown dropdown-bottom dropdown-end"
+        [class.dropdown-open]="isThemeMenuOpen()"
+      >
+        <button
+          type="button"
+          class="btn rounded-r-lg join-item focus:outline-none focus-visible:ring-2 focus-visible:ring-base-content/30"
+          (click)="toggleThemeMenu()"
+          (keydown.escape)="closeThemeMenu()"
+          aria-haspopup="menu"
+          [attr.aria-expanded]="isThemeMenuOpen()"
+        >
+          Theme
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-4"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        @if (isThemeMenuOpen()) {
+          <!-- Open BELOW the button -->
+          <div
+            role="menu"
+            class="dropdown-content mt-3 w-56 max-h-72 overflow-y-auto rounded-md bg-base-200 border border-white/5 shadow-md outline-1 outline-black/5"
+          >
+            <div class="flex flex-col gap-3 p-3">
+              @for (theme of themes; track theme) {
+                <button
+                  type="button"
+                  role="menuitemradio"
+                  [attr.aria-checked]="theme === selectedTheme()"
+                  [appDataTheme]="theme"
+                  class="btn rounded-md bg-base-100 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-base-content/30"
+                  (click)="selectTheme(theme)"
+                >
+                  <span class="flex justify-between items-center w-full h-full">
+                    <span class="flex items-center gap-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-4"
+                        [ngClass]="{ invisible: theme !== selectedTheme() }"
+                        aria-hidden="true"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                      </svg>
+
+                      <span class="text-left font-semibold">{{ theme }}</span>
+                    </span>
+
+                    <span class="flex flex-initial gap-1 h-full" aria-hidden="true">
+                      <span class="bg-primary rounded-box w-2"></span>
+                      <span class="bg-secondary rounded-box w-2"></span>
+                      <span class="bg-accent rounded-box w-2"></span>
+                      <span class="bg-neutral rounded-box w-2"></span>
+                    </span>
+                  </span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </nav>
+  </div>
+
+  <div class="navbar-end"></div>
+</div>

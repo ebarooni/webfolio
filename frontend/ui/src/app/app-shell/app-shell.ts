@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, DOCUMENT, computed, effect, inject, untracked } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, distinctUntilChanged, shareReplay, startWith } from 'rxjs';
+import { filter, map, distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { AppStore } from '../store/app/app.store';
-import { CompactNavbarComponent } from '../components/compact-navbar/compact-navbar.component';
+import { CompactNavbar } from './compact-navbar/compact-navbar';
 import { Footer } from './footer/footer';
-import { NavbarComponent } from '../components/navbar/navbar.component';
+import { Navbar } from './navbar/navbar';
 import { Theme } from '../config/constants/themes-array';
 import { VERSION } from '../../environments/build-info';
 import { Route } from '../config/constants/route';
@@ -23,7 +23,7 @@ const DEFAULT_UI_CONFIG: UiConfig = {
 
 @Component({
   selector: 'app-shell',
-  imports: [NavbarComponent, CompactNavbarComponent, Footer, RouterOutlet],
+  imports: [Navbar, CompactNavbar, Footer, RouterOutlet],
   templateUrl: './app-shell.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

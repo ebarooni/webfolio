@@ -1,7 +1,0 @@
-.collapse {
-  &:not(.collapse-close) {
-    > :where(input[type="checkbox"]:checked ~ .collapse-content) {
-      padding-bottom: 0;
-    }
-  }
-}
