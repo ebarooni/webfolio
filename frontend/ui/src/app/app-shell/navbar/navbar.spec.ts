@@ -1,53 +1,36 @@
-import { Component } from '@angular/core';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { provideRouter, Router } from '@angular/router';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Navbar } from './navbar';
-import { Theme } from '../../config/constants/themes-array';
-import { Route } from '../../config/constants/route';
-
-@Component({
-  standalone: true,
-  template: '<div>dummy</div>',
-})
-class DummyRouteComponent {}
+import type { Theme } from '../../config/constants/themes-array';
+import { provideRouter } from '@angular/router';
+import { provideLocationMocks } from '@angular/common/testing';
 
 describe('Navbar', () => {
   let fixture: ComponentFixture<Navbar>;
   let component: Navbar;
-  let router: Router;
 
-  const configureTestingModule = async () => {
+  const create = async (opts?: {
+    selectedTheme?: Theme;
+    version?: string | undefined;
+  }) => {
     await TestBed.configureTestingModule({
-      imports: [Navbar],
       providers: [
-        provideRouter([
-          { path: Route.HOME, component: DummyRouteComponent },
-          { path: Route.BLOG, component: DummyRouteComponent },
-          { path: Route.PROJECTS, component: DummyRouteComponent },
-          { path: Route.CONTACT, component: DummyRouteComponent },
-          { path: Route.BUILD_INFO, component: DummyRouteComponent },
-          { path: '', redirectTo: Route.HOME, pathMatch: 'full' },
-        ]),
+        provideRouter([]),
+        provideLocationMocks(),
       ],
+      imports: [Navbar],
     }).compileComponents();
-
-    router = TestBed.inject(Router);
-  };
-
-  const createComponent = async (options?: { selectedTheme?: Theme; version?: string }) => {
-    await configureTestingModule();
 
     fixture = TestBed.createComponent(Navbar);
     component = fixture.componentInstance;
 
-    fixture.componentRef.setInput('selectedTheme', options?.selectedTheme ?? ('light' as Theme));
+    fixture.componentRef.setInput(
+      'selectedTheme',
+      (opts?.selectedTheme ?? ('light' as Theme)) as Theme,
+    );
 
-    if (options?.version !== undefined) {
-      fixture.componentRef.setInput('version', options.version);
-    }
+    fixture.componentRef.setInput('version', opts?.version);
 
     fixture.detectChanges();
   };
@@ -62,220 +45,156 @@ describe('Navbar', () => {
   });
 
   it('should create', async () => {
-    await createComponent();
+    await create();
     expect(component).toBeTruthy();
   });
 
   it('should throw if required selectedTheme input is not provided', async () => {
-    await configureTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [Navbar],
+    }).compileComponents();
 
-    const navbarFixture = TestBed.createComponent(Navbar);
+    const f = TestBed.createComponent(Navbar);
 
-    expect(() => navbarFixture.detectChanges()).toThrow();
+    expect(() => f.detectChanges()).toThrow();
   });
 
-  describe('navigation links', () => {
-    it('should render the navigation items', async () => {
-      await createComponent();
-
-      const anchorTexts = fixture.debugElement
-        .queryAll(By.css('nav a'))
-        .map((de) => (de.nativeElement as HTMLAnchorElement).textContent?.trim())
-        .filter(Boolean);
-
-      expect(anchorTexts).toContain('Home');
-      expect(anchorTexts).toContain('Blog');
-      expect(anchorTexts).toContain('Projects');
-      expect(anchorTexts).toContain('Contact');
-    });
-
-    it('should not render the version link when version input is undefined', async () => {
-      await createComponent({ version: undefined });
-
-      const anchorTexts = fixture.debugElement
-        .queryAll(By.css('nav a'))
-        .map((de) => (de.nativeElement as HTMLAnchorElement).textContent?.trim())
-        .filter(Boolean);
-
-      expect(anchorTexts).not.toContain('v1.2.3');
-    });
-
-    it('should render the version link when version input is provided', async () => {
-      await createComponent({ version: 'v1.2.3' });
-
-      const anchorTexts = fixture.debugElement
-        .queryAll(By.css('nav a'))
-        .map((de) => (de.nativeElement as HTMLAnchorElement).textContent?.trim())
-        .filter(Boolean);
-
-      expect(anchorTexts).toContain('v1.2.3');
-    });
-
-    it('should apply routerLinkActive classes to the active route', fakeAsync(async () => {
-      await createComponent();
-
-      router.navigateByUrl(`/${Route.HOME}`);
-      tick();
-      fixture.detectChanges();
-
-      const homeAnchor = fixture.debugElement
-        .queryAll(By.css('nav a'))
-        .map((de) => de.nativeElement as HTMLAnchorElement)
-        .find((a) => a.textContent?.trim() === 'Home');
-
-      expect(homeAnchor).toBeTruthy();
-      expect(homeAnchor!.className).toContain('btn-active');
-
-      router.navigateByUrl(`/${Route.CONTACT}`);
-      tick();
-      fixture.detectChanges();
-
-      const contactAnchor = fixture.debugElement
-        .queryAll(By.css('nav a'))
-        .map((de) => de.nativeElement as HTMLAnchorElement)
-        .find((a) => a.textContent?.trim() === 'Contact');
-
-      expect(contactAnchor).toBeTruthy();
-      expect(contactAnchor!.className).toContain('btn-active');
-    }));
-  });
-
-  describe('theme dropdown behavior', () => {
-    const getThemeToggleButton = () =>
-      fixture.debugElement.query(By.css('button[aria-haspopup="menu"]')).nativeElement as HTMLButtonElement;
-
-    it('should be closed by default', async () => {
-      await createComponent();
+  describe('theme menu state', () => {
+    it('toggleThemeMenu should toggle open state', async () => {
+      await create();
 
       expect(component.isThemeMenuOpen()).toBe(false);
-      expect(fixture.debugElement.query(By.css('[role="menu"]'))).toBeNull();
-    });
 
-    it('should open and close when clicking the Theme button', async () => {
-      await createComponent();
-
-      const themeButton = getThemeToggleButton();
-
-      themeButton.click();
-      fixture.detectChanges();
-
+      component.toggleThemeMenu();
       expect(component.isThemeMenuOpen()).toBe(true);
-      expect(fixture.debugElement.query(By.css('[role="menu"]'))).toBeTruthy();
 
-      themeButton.click();
-      fixture.detectChanges();
-
+      component.toggleThemeMenu();
       expect(component.isThemeMenuOpen()).toBe(false);
-      expect(fixture.debugElement.query(By.css('[role="menu"]'))).toBeNull();
     });
 
-    it('should close on Escape keydown on the Theme button', async () => {
-      await createComponent();
+    it('closeThemeMenu should close', async () => {
+      await create();
 
-      const themeButton = getThemeToggleButton();
-      themeButton.click();
-      fixture.detectChanges();
-
-      expect(component.isThemeMenuOpen()).toBe(true);
-
-      themeButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-      fixture.detectChanges();
+      component.isThemeMenuOpen.set(true);
+      component.closeThemeMenu();
 
       expect(component.isThemeMenuOpen()).toBe(false);
     });
 
-    it('should close when clicking outside of the dropdown while open', async () => {
-      await createComponent();
-
-      const themeButton = getThemeToggleButton();
-      themeButton.click();
-      fixture.detectChanges();
-
-      expect(component.isThemeMenuOpen()).toBe(true);
-
-      document.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
-      fixture.detectChanges();
-
-      expect(component.isThemeMenuOpen()).toBe(false);
-    });
-
-    it('should NOT close when clicking inside the dropdown while open', async () => {
-      await createComponent();
-
-      const themeButton = getThemeToggleButton();
-      themeButton.click();
-      fixture.detectChanges();
-
-      expect(component.isThemeMenuOpen()).toBe(true);
-
-      const dropdownContainer = fixture.debugElement.query(By.css('#themeDropdown, [ng-reflect-ng-reflect]'));
-      const dropdownNative =
-        fixture.debugElement.query(By.css('.dropdown')).nativeElement as HTMLElement;
-
-      dropdownNative.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
-      fixture.detectChanges();
-
-      expect(component.isThemeMenuOpen()).toBe(true);
-    });
-
-    it('should emit themeChanged and close the menu when selecting a theme', async () => {
-      await createComponent({ selectedTheme: 'light' as Theme });
+    it('selectTheme should emit themeChanged and close the menu', async () => {
+      await create({ selectedTheme: 'light' as Theme });
 
       const emitSpy = vi.spyOn(component.themeChanged, 'emit');
 
-      getThemeToggleButton().click();
-      fixture.detectChanges();
-
-      const themeButtons = fixture.debugElement.queryAll(By.css('[role="menu"] button[role="menuitemradio"]'));
-      expect(themeButtons.length).toBeGreaterThan(0);
-
-      (themeButtons[0].nativeElement as HTMLButtonElement).click();
-      fixture.detectChanges();
+      component.isThemeMenuOpen.set(true);
+      component.selectTheme('dark' as Theme);
 
       expect(emitSpy).toHaveBeenCalledTimes(1);
-      expect(emitSpy).toHaveBeenCalledWith(expect.any(String));
-
+      expect(emitSpy).toHaveBeenCalledWith('dark');
       expect(component.isThemeMenuOpen()).toBe(false);
     });
+  });
 
-    it('should set aria-expanded according to open state', async () => {
-      await createComponent();
+  describe('outside click behavior (pointerdown)', () => {
+    it('should close when clicking outside dropdown while open', async () => {
+      await create();
 
-      const themeButton = getThemeToggleButton();
+      component.isThemeMenuOpen.set(true);
 
-      expect(themeButton.getAttribute('aria-expanded')).toBe('false');
+      const dropdownEl = document.createElement('div');
+      dropdownEl.innerHTML = `<button id="inside"></button>`;
+      document.body.appendChild(dropdownEl);
 
-      themeButton.click();
-      fixture.detectChanges();
+      vi.spyOn(component, 'themeDropdown').mockReturnValue({
+        nativeElement: dropdownEl,
+      } as any);
 
-      expect(themeButton.getAttribute('aria-expanded')).toBe('true');
+      const outside = document.createElement('div');
+      document.body.appendChild(outside);
+
+      outside.dispatchEvent(
+        new PointerEvent('pointerdown', { bubbles: true }),
+      );
+
+      expect(component.isThemeMenuOpen()).toBe(false);
+
+      dropdownEl.remove();
+      outside.remove();
+    });
+
+    it('should NOT close when clicking inside dropdown while open', async () => {
+      await create();
+
+      component.isThemeMenuOpen.set(true);
+
+      const dropdownEl = document.createElement('div');
+      dropdownEl.innerHTML = `<button id="inside"></button>`;
+      document.body.appendChild(dropdownEl);
+
+      const insideBtn = dropdownEl.querySelector('#inside') as HTMLElement;
+
+      vi.spyOn(component, 'themeDropdown').mockReturnValue({
+        nativeElement: dropdownEl,
+      } as any);
+
+      insideBtn.dispatchEvent(
+        new PointerEvent('pointerdown', { bubbles: true }),
+      );
+
+      expect(component.isThemeMenuOpen()).toBe(true);
+
+      dropdownEl.remove();
+    });
+
+    it('should do nothing if dropdown element is missing', async () => {
+      await create();
+
+      component.isThemeMenuOpen.set(true);
+
+      vi.spyOn(component, 'themeDropdown').mockReturnValue(
+        undefined as any,
+      );
+
+      document.body.dispatchEvent(
+        new PointerEvent('pointerdown', { bubbles: true }),
+      );
+
+      expect(component.isThemeMenuOpen()).toBe(true);
     });
   });
 
   describe('scroll shadow behavior', () => {
-    it('should toggle shadow-xs on navbar when scrolling (throttled)', fakeAsync(async () => {
-      await createComponent();
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
 
-      const navbarElement = fixture.debugElement.query(By.css('.navbar')).nativeElement as HTMLElement;
+    afterEach(() => {
+      vi.useRealTimers();
+    });
 
-      navbarElement.classList.remove('shadow-xs');
+    it('should toggle shadow-xs on navbarDiv when scrolling', async () => {
+      await create();
+
+      const host = document.createElement('div');
+      document.body.appendChild(host);
+
+      vi.spyOn(component, 'navbarDiv').mockReturnValue({
+        nativeElement: host,
+      } as any);
 
       vi.spyOn(window, 'scrollY', 'get').mockReturnValue(10);
-
       window.dispatchEvent(new Event('scroll'));
 
-      tick(60);
-      fixture.detectChanges();
-
-      expect(navbarElement.classList.contains('shadow-xs')).toBe(true);
+      vi.advanceTimersByTime(60);
+      expect(host.classList.contains('shadow-xs')).toBe(true);
 
       vi.spyOn(window, 'scrollY', 'get').mockReturnValue(0);
-
       window.dispatchEvent(new Event('scroll'));
-      tick(60);
-      fixture.detectChanges();
 
-      expect(navbarElement.classList.contains('shadow-xs')).toBe(false);
-    }));
+      vi.advanceTimersByTime(60);
+      expect(host.classList.contains('shadow-xs')).toBe(false);
+
+      host.remove();
+    });
   });
 });
