@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router, RouterOutlet } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -48,7 +48,9 @@ describe('AppShell', () => {
   let router: Router;
 
   const setup = async (opts?: { initialTheme?: Theme }) => {
-    const theme$ = new BehaviorSubject<Theme>(opts?.initialTheme ?? ('light' as Theme));
+    const theme$ = new BehaviorSubject<Theme>(
+      opts?.initialTheme ?? ('light' as Theme),
+    );
 
     const appStoreMock: Pick<AppStore, 'selectTheme$' | 'updateTheme'> = {
       selectTheme$: theme$.asObservable() as any,
@@ -84,6 +86,8 @@ describe('AppShell', () => {
     router = TestBed.inject(Router);
 
     const fixture = TestBed.createComponent(AppShell);
+
+    await router.navigateByUrl('/');
     fixture.detectChanges();
 
     return { fixture, appStoreMock, theme$ };
@@ -139,11 +143,13 @@ describe('AppShell', () => {
     it('should be wired from both nav components outputs', async () => {
       const { fixture, appStoreMock } = await setup();
 
-      const compact = fixture.debugElement.query(By.directive(CompactNavbarStubComponent))
-        .componentInstance as CompactNavbarStubComponent;
+      const compact = fixture.debugElement.query(
+        By.directive(CompactNavbarStubComponent),
+      ).componentInstance as CompactNavbarStubComponent;
 
-      const navbar = fixture.debugElement.query(By.directive(NavbarStubComponent))
-        .componentInstance as NavbarStubComponent;
+      const navbar = fixture.debugElement.query(
+        By.directive(NavbarStubComponent),
+      ).componentInstance as NavbarStubComponent;
 
       compact.themeChanged.emit('dark' as Theme);
       navbar.themeChanged.emit('light' as Theme);
@@ -158,11 +164,13 @@ describe('AppShell', () => {
     it('should pass selectedTheme and version to both navbar components', async () => {
       const { fixture, theme$ } = await setup({ initialTheme: 'light' as Theme });
 
-      const compact = fixture.debugElement.query(By.directive(CompactNavbarStubComponent))
-        .componentInstance as CompactNavbarStubComponent;
+      const compact = fixture.debugElement.query(
+        By.directive(CompactNavbarStubComponent),
+      ).componentInstance as CompactNavbarStubComponent;
 
-      const navbar = fixture.debugElement.query(By.directive(NavbarStubComponent))
-        .componentInstance as NavbarStubComponent;
+      const navbar = fixture.debugElement.query(
+        By.directive(NavbarStubComponent),
+      ).componentInstance as NavbarStubComponent;
 
       expect(compact.selectedTheme).toBe('light');
       expect(navbar.selectedTheme).toBe('light');
@@ -192,16 +200,15 @@ describe('AppShell', () => {
       expect(fixture.componentInstance.uiConfig().footerBgClass).toBe('bg-base-200');
     });
 
-    it('should update uiConfig based on leaf route data after NavigationEnd', fakeAsync(async () => {
+    it('should update uiConfig based on leaf route data after NavigationEnd', async () => {
       const { fixture } = await setup();
 
-      router.navigateByUrl('/contact');
-      tick();
+      await router.navigateByUrl('/contact');
       fixture.detectChanges();
 
       expect(fixture.componentInstance.uiConfig().page).toBe(Route.CONTACT);
       expect(fixture.componentInstance.uiConfig().footerBgClass).toBe('bg-base-100');
-    }));
+    });
 
     it('should compute the expected shellClass', async () => {
       const { fixture } = await setup();
@@ -211,19 +218,19 @@ describe('AppShell', () => {
       );
     });
 
-    it('should bind footer bgClass from uiConfig and update after navigation', fakeAsync(async () => {
+    it('should bind footer bgClass from uiConfig and update after navigation', async () => {
       const { fixture } = await setup();
 
-      const footer = fixture.debugElement.query(By.directive(FooterStubComponent))
-        .componentInstance as FooterStubComponent;
+      const footer = fixture.debugElement.query(
+        By.directive(FooterStubComponent),
+      ).componentInstance as FooterStubComponent;
 
       expect(footer.bgClass).toBe('bg-base-200');
 
-      router.navigateByUrl('/contact');
-      tick();
+      await router.navigateByUrl('/contact');
       fixture.detectChanges();
 
       expect(footer.bgClass).toBe('bg-base-100');
-    }));
+    });
   });
 });
