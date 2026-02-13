@@ -18,7 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Theme, themesArray } from '../../config/constants/themes-array';
 import { Route } from '../../config/constants/route';
-import { ThemeSelectorModalComponent } from '../../components/theme-selector-modal/theme-selector-modal.component';
+import { ThemeSelectorModal } from './theme-selector-modal/theme-selector-modal';
 
 type NavItem = Readonly<{
   label: string;
@@ -29,7 +29,7 @@ type NavItem = Readonly<{
 
 @Component({
   selector: 'app-compact-navbar',
-  imports: [RouterLink, RouterLinkActive, ThemeSelectorModalComponent],
+  imports: [RouterLink, RouterLinkActive, ThemeSelectorModal],
   templateUrl: './compact-navbar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,7 +42,7 @@ export class CompactNavbar {
 
   readonly navbarDiv = viewChild<ElementRef<HTMLDivElement>>('navbarDiv');
   readonly themeSelectorModalComponent =
-    viewChild<ThemeSelectorModalComponent>('themeSelectorModalComponent');
+    viewChild<ThemeSelectorModal>('themeSelectorModal');
 
   readonly isMenuOpen = signal(false);
 
