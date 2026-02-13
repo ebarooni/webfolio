@@ -1,0 +1,10 @@
+.gl-icon path {
+  transition: all 0.8s;
+}
+
+.gl-forehead:hover,
+.gl-right-cheek:hover,
+.gl-chin:hover,
+.gl-left-cheek:hover {
+  fill: lightgrey;
+}

@@ -1,0 +1,7 @@
+.gh-octocat {
+  transition: all 0.8s;
+}
+
+.gh-icon:hover .gh-octocat {
+  fill: #096bde;
+}

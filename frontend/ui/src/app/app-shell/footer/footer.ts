@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { GithubComponent } from '../../svg-components/github/github.component';
-import { GitlabComponent } from '../../svg-components/gitlab/gitlab.component';
-import { LinkedinComponent } from '../../svg-components/linkedin/linkedin.component';
-import { StackoverflowComponent } from '../../svg-components/stackoverflow/stackoverflow.component';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Github } from './github/github';
+import { Gitlab } from './gitlab/gitlab';
+import { Linkedin } from './linkedin/linkedin';
+import { Stackoverflow } from './stackoverflow/stackoverflow';
 
 type SocialId = 'github' | 'gitlab' | 'stackoverflow' | 'linkedin' | 'xing';
 
@@ -15,7 +15,7 @@ type SocialLink = Readonly<{
 
 @Component({
   selector: 'app-footer',
-  imports: [GitlabComponent, GithubComponent, LinkedinComponent, StackoverflowComponent],
+  imports: [Gitlab, Github, Linkedin, Stackoverflow],
   templateUrl: './footer.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
