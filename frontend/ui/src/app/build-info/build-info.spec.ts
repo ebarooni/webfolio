@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { BuildInfoComponent } from './build-info.component';
+import { BuildInfoComponent } from './build-info';
 
 describe('BuildInfoComponent', () => {
   let component: BuildInfoComponent;
