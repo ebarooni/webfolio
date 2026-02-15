@@ -1,4 +1,4 @@
-<app-base-layout [offsetTop]="false" [backgroundColorClass]="'bg-base-200'">
+<section class="bg-base-200 grow-1">
   <app-hero
     [backgroundColor]="'bg-gradient-to-b from-base-100 to-base-200'"
     [titleColor]="''"
@@ -6,24 +6,19 @@
   >
     <ng-container ngProjectAs="title">Blog Posts</ng-container>
 
-    <ng-container ngProjectAs="subtitle"
-      >Insights and technical write-ups on web development, frameworks and
-      modern tooling.</ng-container
-    >
+    <ng-container ngProjectAs="subtitle">
+      Insights and technical write-ups on web development, frameworks and modern tooling.
+    </ng-container>
   </app-hero>
 
-  <div
-    class="container mx-auto max-w-3xl py-4 pb-10 sm:pb-16 px-8 lg:px-0 flex flex-col gap-6 lg:gap-8"
-  >
-    @for (post of posts; track $index) {
-      <div
-        class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-200"
-      >
+  <div class="grow-1 container mx-auto max-w-3xl px-6 lg:px-0 py-6 pb-10 sm:pb-16 space-y-6 lg:space-y-8">
+    @for (post of posts; track post.id) {
+      <article class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-200">
         <div class="card-body">
-          <div
-            class="flex flex-wrap justify-between text-sm text-secondary mb-2"
-          >
-            <span>{{ post.date | date: "mediumDate" }}</span>
+          <div class="flex flex-wrap justify-between text-sm text-secondary mb-2">
+            <time [attr.datetime]="post.date.toISOString()">
+              {{ post.date | date: 'mediumDate' }}
+            </time>
             <span>⏱ {{ post.readTime }} min read</span>
           </div>
 
@@ -32,17 +27,18 @@
 
           <div class="card-actions justify-end mt-4">
             <button
-              (click)="viewPost($index, postModalComponent)"
+              type="button"
               class="btn btn-sm btn-primary"
+              (click)="viewPost(post.id, postModalComponent)"
             >
               Read More
             </button>
           </div>
         </div>
-      </div>
+      </article>
     }
   </div>
-</app-base-layout>
+</section>
 
 <app-post-modal #postModalComponent>
   @let postId = selectedPostId();
