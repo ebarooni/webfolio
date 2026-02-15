@@ -1,4 +1,4 @@
-import { CheckmarkComponent } from '../../../svg-components/checkmark/checkmark.component';
+import { CheckmarkComponent } from '../../svg-components/checkmark/checkmark.component';
 import { Component } from '@angular/core';
 
 @Component({

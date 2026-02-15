@@ -1,6 +1,6 @@
-import { BaseRoutingComponent } from '../../../extends/base-routing.component';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Route } from '../../config/constants/route';
 
 @Component({
   host: {
@@ -10,4 +10,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-about',
   templateUrl: './about.component.html',
 })
-export class AboutComponent extends BaseRoutingComponent {}
+export class AboutComponent {
+  get Route(): typeof Route {
+      return Route;
+  }
+}
