@@ -10,7 +10,6 @@ describe('ProjectItemComponent', () => {
     }).compileComponents();
 
     const fixture = TestBed.createComponent(ProjectItemComponent);
-    const component = fixture.componentInstance;
 
     const project: ProjectItem = {
       title: 'Webfolio',
