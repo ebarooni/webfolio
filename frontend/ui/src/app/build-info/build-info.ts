@@ -9,6 +9,9 @@ import { DeploymentDetailsComponent } from './deployment-details/deployment-deta
   selector: 'app-build-info',
   templateUrl: './build-info.html',
   imports: [HeroComponent, DeploymentDetailsComponent, DependenciesComponent],
+  host: {
+    class: 'flex flex-col grow-1'
+  },
 })
 export class BuildInfoComponent {
   readonly dependencies = signal(DEPENDENCIES);
