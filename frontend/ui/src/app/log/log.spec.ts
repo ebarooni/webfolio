@@ -14,7 +14,7 @@ describe('Log', () => {
     TestBed.configureTestingModule({
       providers: [
         Log,
-        { provide: IS_DEV_MODE, useValue: DevMode.TRUE === isDevMode ? true : false },
+        { provide: IS_DEV_MODE, useValue: DevMode.TRUE === isDevMode },
       ],
     });
 

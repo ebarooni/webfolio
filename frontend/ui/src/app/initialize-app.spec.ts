@@ -11,7 +11,7 @@ describe('initializeApp', () => {
     const theme = opts?.theme ?? 'dark';
 
     const appStoreMock: Pick<AppStore, 'initialize'> = {
-      initialize: vi.fn(async () => {
+      initialize: vi.fn(() => {
         if (opts?.initReject !== undefined) {
           throw opts.initReject;
         }

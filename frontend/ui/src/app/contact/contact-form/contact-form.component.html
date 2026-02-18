@@ -1,0 +1,77 @@
+<div class="card mx-auto max-w-4xl bg-base-100 shadow-lg">
+  <div class="card-body p-6 sm:p-8">
+    <div class="mb-8 flex items-center gap-4 sm:mb-10">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary">
+        <span class="text-xl">👨‍💻</span>
+      </div>
+
+      <h2 class="text-2xl font-bold text-primary sm:text-3xl">Get in Touch</h2>
+    </div>
+
+    <form class="flex flex-col gap-7 sm:gap-8" [formGroup]="contactForm" (ngSubmit)="submit()">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend py-0 pb-2 text-lg font-medium text-neutral-content">
+            Name
+          </legend>
+          <input
+            type="text"
+            class="input w-full text-neutral-content/60"
+            placeholder="Max Mustermann"
+            formControlName="name"
+            [class.input-error]="contactForm.controls.name.invalid && (contactForm.controls.name.touched || contactForm.controls.name.dirty)"
+            [attr.aria-invalid]="contactForm.controls.name.invalid"
+          />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend py-0 pb-2 text-lg font-medium text-neutral-content">
+            Email
+          </legend>
+          <input
+            type="email"
+            class="input w-full text-neutral-content/60"
+            placeholder="max@mustermann.de"
+            formControlName="email"
+            [class.input-error]="contactForm.controls.email.invalid && (contactForm.controls.email.touched || contactForm.controls.email.dirty)"
+            [attr.aria-invalid]="contactForm.controls.email.invalid"
+          />
+        </fieldset>
+      </div>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend py-0 pb-2 text-lg font-medium text-neutral-content">
+          Message
+        </legend>
+
+        <textarea
+          class="textarea h-52 w-full text-neutral-content/60"
+          placeholder="Describe your project or say hello!"
+          formControlName="message"
+          [class.textarea-error]="contactForm.controls.message.invalid && (contactForm.controls.message.touched || contactForm.controls.message.dirty)"
+          [attr.aria-invalid]="contactForm.controls.message.invalid"
+        ></textarea>
+
+        <div class="label text-neutral-content/60">
+          {{ message().length }}/{{ maxMessageLength }}
+        </div>
+      </fieldset>
+
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-block sm:w-80"
+          [class.btn-outline]="contactForm.invalid"
+          [class.btn-disabled]="contactForm.invalid || isSubmitting()"
+          [disabled]="contactForm.invalid || isSubmitting()"
+        >
+        
+          @if (isSubmitting()) {
+            <span class="loading loading-spinner loading-sm"></span>
+          }
+          <span>{{ isSubmitting() ? 'Sending...' : 'Send Message' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

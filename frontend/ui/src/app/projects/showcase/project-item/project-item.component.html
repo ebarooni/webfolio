@@ -1,0 +1,36 @@
+<article
+  class="h-full card bg-base-300 shadow-lg transition will-change-transform
+         hover:scale-[1.02] focus-within:scale-[1.02]
+         motion-reduce:transform-none motion-reduce:transition-none"
+>
+  <div class="card-body gap-4 sm:gap-5">
+    <div class="card-title justify-between gap-3">
+      <h3 class="text-sub-headline text-base-content leading-snug">
+        {{ project().title }}
+      </h3>
+
+      @if (hasLink()) {
+        <a
+          class="btn btn-circle btn-ghost shrink-0 focus-visible:outline-none focus-visible:ring focus-visible:ring-primary/30"
+          [href]="project().href"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="ariaLabel()"
+          title="Open"
+        >
+          <app-open />
+        </a>
+      }
+    </div>
+
+    <p class="text-body text-neutral-content leading-relaxed">
+      {{ project().description }}
+    </p>
+
+    <div class="mt-auto flex flex-wrap gap-2">
+      @for (feature of project().features; track feature) {
+        <span class="badge badge-secondary">{{ feature }}</span>
+      }
+    </div>
+  </div>
+</article>

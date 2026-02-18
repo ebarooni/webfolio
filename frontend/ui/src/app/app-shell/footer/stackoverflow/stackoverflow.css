@@ -1,0 +1,7 @@
+.so-lines {
+  transition: all 0.8s;
+}
+
+.so-icon:hover .so-lines {
+  fill: #242729;
+}

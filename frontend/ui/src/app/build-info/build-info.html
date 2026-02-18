@@ -1,0 +1,33 @@
+<section class="grow-1 bg-base-200">
+  <app-hero
+    [backgroundColor]="'bg-gradient-to-b from-base-100 to-base-200'"
+    [titleColor]="''"
+    [subtitleColor]="'text-neutral-content'"
+  >
+    <ng-container ngProjectAs="title">Build Information</ng-container>
+
+    <ng-container ngProjectAs="subtitle">
+      Explore the current version, deployment details, and technical dependencies powering this website.
+    </ng-container>
+  </app-hero>
+
+  <div class="container mx-auto max-w-4xl px-6 lg:px-0 py-6 pb-10 sm:pb-16 space-y-10">
+    <section aria-labelledby="deployment-details">
+      <h2 id="deployment-details" class="sr-only">Deployment details</h2>
+      <app-deployment-details></app-deployment-details>
+    </section>
+
+    <section aria-labelledby="runtime-deps">
+      <h2 id="runtime-deps" class="sr-only">Runtime dependencies</h2>
+      <app-dependencies [dependencies]="dependencies()"></app-dependencies>
+    </section>
+
+    <section aria-labelledby="buildtime-deps">
+      <h2 id="buildtime-deps" class="sr-only">Build time dependencies</h2>
+      <app-dependencies
+        [title]="'Build-Time Dependencies'"
+        [dependencies]="devDependencies()"
+      ></app-dependencies>
+    </section>
+  </div>
+</section>

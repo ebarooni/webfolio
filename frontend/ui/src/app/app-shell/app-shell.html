@@ -1,0 +1,27 @@
+<div [class]="shellClass()">
+  <header class="fixed top-0 w-full z-10">
+    <div class="sm:hidden">
+      <app-compact-navbar
+        [selectedTheme]="theme()"
+        [version]="version"
+        (themeChanged)="themeChanged($event)"
+      />
+    </div>
+
+    <div class="hidden sm:block">
+      <app-navbar
+        [selectedTheme]="theme()"
+        [version]="version"
+        (themeChanged)="themeChanged($event)"
+      />
+    </div>
+  </header>
+
+  <main class="flex-auto flex flex-col">
+    <section class="flex-auto flex flex-col">
+      <router-outlet></router-outlet>
+    </section>
+
+    <app-footer [bgClass]="uiConfig().footerBgClass"></app-footer>
+  </main>
+</div>

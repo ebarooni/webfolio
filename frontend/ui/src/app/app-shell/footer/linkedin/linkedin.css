@@ -1,0 +1,7 @@
+.li-fill {
+  transition: all 0.8s;
+}
+
+.li-icon:hover .li-fill {
+  fill: #434649;
+}

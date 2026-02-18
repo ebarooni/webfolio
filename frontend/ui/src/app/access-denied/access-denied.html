@@ -1,0 +1,39 @@
+<section class="min-h-full grid place-items-center px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+  <div class="w-full max-w-md">
+    <div class="card bg-base-200 shadow-md">
+      <div class="card-body items-center text-center gap-4 p-6 sm:p-8">
+        <h1 class="card-title text-error text-subtitle">Access Denied</h1>
+
+        <p class="text-body text-base-content">
+          This website is not available in your region.
+        </p>
+
+        <form
+          class="w-full max-w-sm flex flex-col gap-4"
+          [formGroup]="contactForm"
+          (ngSubmit)="submit()"
+          novalidate
+        >
+          <input
+            type="password"
+            placeholder="Password"
+            class="input input-bordered w-full h-11"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+
+          @if (!hasGeoAccess()) {
+            <button
+              type="submit"
+              class="btn btn-primary w-full"
+              [class.btn-outline]="contactForm.invalid"
+              [disabled]="contactForm.invalid"
+            >
+              Submit
+            </button>
+          }
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
