@@ -1,4 +1,4 @@
-<section class="grow-1 bg-base-200">
+<section class="flex-1 bg-base-200">
   <app-hero
     [backgroundColor]="'bg-gradient-to-b from-base-100 to-base-200'"
     [titleColor]="'text-primary'"
@@ -13,8 +13,11 @@
 
   <div class="h-1 w-full bg-gradient-to-r from-primary via-accent to-secondary"></div>
 
-  <div class="w-full py-10 lg:py-20 px-8 lg:px-24 bg-gradient-to-b from-base-200 via-base-300 to-base-200">
-    <app-contact-form (formSubmitted)="submitForm($event, modalComponent)"></app-contact-form>
+  <div class="w-full bg-gradient-to-b from-base-200 via-base-300 to-base-200 px-6 py-10 sm:px-8 md:py-14 lg:px-24 lg:py-20">
+    <app-contact-form
+      [isSubmitting]="isSubmitting()"
+      (formSubmitted)="submitForm($event, modalComponent)"
+    />
   </div>
 </section>
 
