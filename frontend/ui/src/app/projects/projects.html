@@ -1,0 +1,17 @@
+<section class="bg-gradient-to-b from-base-100 to-base-200 to-75%">
+  <app-hero
+    [backgroundColor]="'bg-gradient-to-br from-base-200 via-primary to-base-300'"
+    [titleColor]="'text-neutral'"
+    [subtitleColor]="'text-secondary-content'"
+  >
+    <ng-container ngProjectAs="title">Projects</ng-container>
+
+    <ng-container ngProjectAs="subtitle">
+      A selection of projects that reflect my approach to design and code.
+    </ng-container>
+  </app-hero>
+
+  <section>
+    <app-showcase></app-showcase>
+  </section>
+</section>

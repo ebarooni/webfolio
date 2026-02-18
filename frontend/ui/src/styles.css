@@ -48,9 +48,6 @@
   --radius-field: 0.75rem;
   --radius-selector: 0.5rem;
 
-  --size-field: 2.75rem;
-  --size-selector: 1.25rem;
-
   --border: 1px;
 
   --depth: 1;
@@ -93,15 +90,8 @@
   --radius-field: 0.75rem;
   --radius-selector: 0.5rem;
 
-  --size-field: 2.75rem;
-  --size-selector: 1.25rem;
-
   --border: 1px;
 
   --depth: 1;
   --noise: 0;
-}
-
-@utility btn {
-  @apply h-11;
 }
