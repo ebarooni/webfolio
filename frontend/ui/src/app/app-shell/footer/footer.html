@@ -1,28 +1,26 @@
-<footer 
+<footer
   class="footer footer-horizontal footer-center gap-y-5 gap text-base-content p-8"
   [class]="bgClass()"
-  >
+>
   <nav aria-label="Social links">
     <div class="grid grid-flow-col gap-5">
       @for (link of links(); track trackById($index, link)) {
-        <div class="tooltip" [attr.data-tip]="link.label">
-          <a
-            class="link rounded focus:outline-none focus-visible:ring focus-visible:ring-base-content/30"
-            [href]="link.href"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="link.label"
-            [attr.title]="link.label"
-          >
-            @switch (link.icon) {
-              @case ('github') { <app-github /> }
-              @case ('gitlab') { <app-gitlab /> }
-              @case ('stackoverflow') { <app-stackoverflow /> }
-              @case ('linkedin') { <app-linkedin /> }
-              @default { <span class="text-label font-medium">{{ link.label }}</span> }
-            }
-          </a>
-        </div>
+      <div class="tooltip" [attr.data-tip]="link.label">
+        <a
+          class="link rounded focus:outline-none focus-visible:ring focus-visible:ring-base-content/30"
+          [href]="link.href"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="link.label"
+          [attr.title]="link.label"
+        >
+          @switch (link.icon) { @case ('github') { <app-github /> } @case
+          ('gitlab') { <app-gitlab /> } @case ('stackoverflow') {
+          <app-stackoverflow /> } @case ('linkedin') { <app-linkedin /> }
+          @default {
+          <span class="text-label font-medium">{{ link.label }}</span> } }
+        </a>
+      </div>
       }
     </div>
   </nav>

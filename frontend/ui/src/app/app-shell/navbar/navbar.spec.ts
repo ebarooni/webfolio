@@ -15,10 +15,7 @@ describe('Navbar', () => {
     version?: string | undefined;
   }) => {
     await TestBed.configureTestingModule({
-      providers: [
-        provideRouter([]),
-        provideLocationMocks(),
-      ],
+      providers: [provideRouter([]), provideLocationMocks()],
       imports: [Navbar],
     }).compileComponents();
 
@@ -27,7 +24,7 @@ describe('Navbar', () => {
 
     fixture.componentRef.setInput(
       'selectedTheme',
-      (opts?.selectedTheme ?? ('light' as Theme)) as Theme,
+      opts?.selectedTheme ?? ('light' as Theme),
     );
 
     fixture.componentRef.setInput('version', opts?.version);
@@ -107,14 +104,12 @@ describe('Navbar', () => {
 
       vi.spyOn(component, 'themeDropdown').mockReturnValue({
         nativeElement: dropdownEl,
-      } as any);
+      });
 
       const outside = document.createElement('div');
       document.body.appendChild(outside);
 
-      outside.dispatchEvent(
-        new PointerEvent('pointerdown', { bubbles: true }),
-      );
+      outside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
 
       expect(component.isThemeMenuOpen()).toBe(false);
 
@@ -131,11 +126,11 @@ describe('Navbar', () => {
       dropdownEl.innerHTML = `<button id="inside"></button>`;
       document.body.appendChild(dropdownEl);
 
-      const insideBtn = dropdownEl.querySelector('#inside') as HTMLElement;
+      const insideBtn = dropdownEl.querySelector('#inside')!;
 
       vi.spyOn(component, 'themeDropdown').mockReturnValue({
         nativeElement: dropdownEl,
-      } as any);
+      });
 
       insideBtn.dispatchEvent(
         new PointerEvent('pointerdown', { bubbles: true }),
@@ -151,9 +146,7 @@ describe('Navbar', () => {
 
       component.isThemeMenuOpen.set(true);
 
-      vi.spyOn(component, 'themeDropdown').mockReturnValue(
-        undefined as any,
-      );
+      vi.spyOn(component, 'themeDropdown').mockReturnValue(undefined);
 
       document.body.dispatchEvent(
         new PointerEvent('pointerdown', { bubbles: true }),
@@ -178,8 +171,10 @@ describe('Navbar', () => {
       const host = document.createElement('div');
       document.body.appendChild(host);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       vi.spyOn(component, 'navbarDiv').mockReturnValue({
         nativeElement: host,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
 
       vi.spyOn(window, 'scrollY', 'get').mockReturnValue(10);

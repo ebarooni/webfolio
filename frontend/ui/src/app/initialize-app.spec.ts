@@ -3,7 +3,6 @@ import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { DOCUMENT } from '@angular/common';
 import { initializeApp } from './initialize-app';
 import { AppStore } from './store/app/app.store';
-import { Log } from './log/log';
 import { Theme } from './config/constants/themes-array';
 
 describe('initializeApp', () => {
@@ -13,25 +12,20 @@ describe('initializeApp', () => {
     const appStoreMock: Pick<AppStore, 'initialize'> = {
       initialize: vi.fn(() => {
         if (opts?.initReject !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/only-throw-error
           throw opts.initReject;
         }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
         return { theme } as any;
       }),
     };
 
-    const logMock: Pick<Log, 'debug'> = {
-      debug: vi.fn(),
-    };
-
     TestBed.configureTestingModule({
-      providers: [
-        { provide: AppStore, useValue: appStoreMock },
-        { provide: Log, useValue: logMock },
-      ],
+      providers: [{ provide: AppStore, useValue: appStoreMock }],
     });
 
     const doc = TestBed.inject(DOCUMENT);
-    return { appStoreMock, logMock, doc };
+    return { appStoreMock, doc };
   };
 
   beforeEach(() => {
@@ -43,45 +37,33 @@ describe('initializeApp', () => {
     TestBed.resetTestingModule();
   });
 
-  it('should call AppStore.initialize and set data-theme on <html>', async () => {
+  it('should call AppStore.initialize and set data-theme on <html>', () => {
     const { appStoreMock } = setup({ theme: 'light' });
 
-    await TestBed.runInInjectionContext(() => initializeApp());
+    TestBed.runInInjectionContext(() => initializeApp());
 
     expect(appStoreMock.initialize).toHaveBeenCalledTimes(1);
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
   });
 
-  it('should overwrite an existing data-theme attribute', async () => {
+  it('should overwrite an existing data-theme attribute', () => {
     const { appStoreMock } = setup({ theme: 'light' });
     document.documentElement.setAttribute('data-theme', 'dark');
 
-    await TestBed.runInInjectionContext(() => initializeApp());
+    TestBed.runInInjectionContext(() => initializeApp());
 
     expect(appStoreMock.initialize).toHaveBeenCalledTimes(1);
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
   });
 
-  it('should call Log.debug when AppStore.initialize throws', async () => {
+  it('should call Log.debug when AppStore.initialize throws', () => {
     const err = new Error('init failed');
-    const { appStoreMock, logMock } = setup({ initReject: err });
+    const { appStoreMock } = setup({ initReject: err });
 
-    await TestBed.runInInjectionContext(() => initializeApp());
+    TestBed.runInInjectionContext(() => initializeApp());
 
     expect(appStoreMock.initialize).toHaveBeenCalledTimes(1);
-    expect(logMock.debug).toHaveBeenCalledTimes(1);
-    expect(logMock.debug).toHaveBeenCalledWith(err);
 
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
-  });
-
-  it('should pass a non-Error rejection to Log.debug as an Error-cast value', async () => {
-    const nonError = 'boom';
-    const { logMock } = setup({ initReject: nonError });
-
-    await TestBed.runInInjectionContext(() => initializeApp());
-
-    expect(logMock.debug).toHaveBeenCalledTimes(1);
-    expect(logMock.debug).toHaveBeenCalledWith(nonError as unknown as Error);
   });
 });

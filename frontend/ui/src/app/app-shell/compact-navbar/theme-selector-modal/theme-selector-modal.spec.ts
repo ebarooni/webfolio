@@ -26,6 +26,7 @@ describe('ThemeSelectorModal', () => {
   });
 
   it('showModal should open the dialog', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const dialogEl = fixture.nativeElement.querySelector(
       'dialog',
     ) as HTMLDialogElement;

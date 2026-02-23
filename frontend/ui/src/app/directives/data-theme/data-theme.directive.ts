@@ -1,4 +1,11 @@
-import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import { Theme } from '../../config/constants/themes-array';
 
 @Directive({
@@ -7,10 +14,8 @@ import { Theme } from '../../config/constants/themes-array';
 export class DataThemeDirective implements OnInit {
   @Input('appDataTheme') theme!: Theme;
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
-  ) {}
+  private readonly el = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
 
   ngOnInit() {
     this.renderer.setAttribute(this.el.nativeElement, 'data-theme', this.theme);

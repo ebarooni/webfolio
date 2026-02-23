@@ -24,6 +24,6 @@ export class ProjectItemComponent {
 
   readonly ariaLabel = computed(() => {
     const p = this.project();
-    return p.linkAriaLabel?.trim() || `Open ${p.title}`;
+    return p.linkAriaLabel?.trim() ?? `Open ${p.title}`;
   });
 }

@@ -39,7 +39,8 @@ export class Navbar {
   readonly themeChanged = output<Theme>();
 
   readonly navbarDiv = viewChild<ElementRef<HTMLDivElement>>('navbarDiv');
-  readonly themeDropdown = viewChild<ElementRef<HTMLDivElement>>('themeDropdown');
+  readonly themeDropdown =
+    viewChild<ElementRef<HTMLDivElement>>('themeDropdown');
 
   readonly themes = themesArray;
   readonly Route = Route;

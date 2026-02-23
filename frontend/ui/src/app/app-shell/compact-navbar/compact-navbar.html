@@ -15,11 +15,7 @@
   <div class="collapse-title p-0" [class.bg-base-300]="isMenuOpen()">
     <nav class="navbar py-3" aria-label="Primary">
       <div class="navbar-start">
-        <button
-          type="button"
-          class="btn btn-sm"
-          (click)="openThemeSelector()"
-        >
+        <button type="button" class="btn btn-sm" (click)="openThemeSelector()">
           Theme
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,27 +45,27 @@
           (click)="toggleMenu()"
         >
           @if (!isMenuOpen()) {
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              class="size-5 fill-current"
-              aria-hidden="true"
-            >
-              <path
-                d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
-              />
-            </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            class="size-5 fill-current"
+            aria-hidden="true"
+          >
+            <path
+              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+            />
+          </svg>
           } @else {
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              class="size-5 fill-current"
-              aria-hidden="true"
-            >
-              <polygon
-                points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"
-              />
-            </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            class="size-5 fill-current"
+            aria-hidden="true"
+          >
+            <polygon
+              points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"
+            />
+          </svg>
           }
         </button>
       </div>
@@ -77,21 +73,25 @@
   </div>
 
   <div class="collapse-content p-0">
-    <ul id="compact-nav-menu" class="menu bg-base-300 gap-3 w-full pb-6" role="list">
-      @for (item of navItems; track item.route) {
-        @if (!item.requiresVersion || version()) {
-          <li>
-            <a
-              [routerLink]="item.route"
-              [routerLinkActiveOptions]="{ exact: !!item.exact }"
-              routerLinkActive="bg-base-100"
-              (click)="closeMenu()"
-            >
-              @if (item.requiresVersion) { {{ version() }} } @else { {{ item.label }} }
-            </a>
-          </li>
-        }
-      }
+    <ul
+      id="compact-nav-menu"
+      class="menu bg-base-300 gap-3 w-full pb-6"
+      role="list"
+    >
+      @for (item of navItems; track item.route) { @if (!item.requiresVersion ||
+      version()) {
+      <li>
+        <a
+          [routerLink]="item.route"
+          [routerLinkActiveOptions]="{ exact: !!item.exact }"
+          routerLinkActive="bg-base-100"
+          (click)="closeMenu()"
+        >
+          @if (item.requiresVersion) { {{ version() }} } @else { {{ item.label
+          }} }
+        </a>
+      </li>
+      } }
     </ul>
   </div>
 </div>

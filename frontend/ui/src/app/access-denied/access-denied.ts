@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+} from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -24,7 +29,10 @@ export class AccessDenied {
 
   readonly contactForm = this.fb.group({
     password: this.fb.control('', {
-      validators: [Validators.required, Validators.minLength(6)],
+      validators: [
+        (control) => Validators.required(control),
+        Validators.minLength(6),
+      ],
     }),
   });
 

@@ -22,6 +22,7 @@ describe('Linkedin', () => {
   });
 
   it('should render the svg and both logo paths', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const host: HTMLElement = fixture.nativeElement;
 
     const svg = host.querySelector('svg.li-icon');

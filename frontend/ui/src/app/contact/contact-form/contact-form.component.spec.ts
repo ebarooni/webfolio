@@ -36,18 +36,18 @@ describe('ContactFormComponent', () => {
     component.formSubmitted.subscribe(spy);
 
     component.contactForm.setValue({
-      name: "Max Mustermann",
-      email: "max@mustermann.de",
-      message: " Hello <b>world</b>\n\n",
+      name: 'Max Mustermann',
+      email: 'max@mustermann.de',
+      message: ' Hello <b>world</b>\n\n',
     });
 
     component.submit();
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({
-      name: "Max Mustermann",
-      email: "max@mustermann.de",
-      message: "Hello world",
+      name: 'Max Mustermann',
+      email: 'max@mustermann.de',
+      message: 'Hello world',
     });
 
     expect(component.contactForm.value).toEqual({

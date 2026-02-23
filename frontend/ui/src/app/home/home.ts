@@ -47,7 +47,11 @@ export class HomeComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     fromEvent(window, 'resize')
-      .pipe(auditTime(100), startWith(null), takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        auditTime(100),
+        startWith(null),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(() => this.viewportH.set(window.innerHeight));
 
     fromEvent(document, 'scroll')
@@ -57,7 +61,8 @@ export class HomeComponent implements AfterViewInit {
     const el = this.aboutSectionEl?.nativeElement;
     if (!el) return;
 
-    const setAboutHeight = () => this.aboutH.set(el.getBoundingClientRect().height);
+    const setAboutHeight = () =>
+      this.aboutH.set(el.getBoundingClientRect().height);
     setAboutHeight();
 
     const ro = new ResizeObserver(() => setAboutHeight());

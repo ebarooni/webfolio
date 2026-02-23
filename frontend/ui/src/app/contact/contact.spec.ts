@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { ContactComponent } from './contact';
@@ -42,6 +45,7 @@ describe('ContactComponent', () => {
     expect(component.isSubmitting()).toBe(true);
 
     req.flush({});
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(modal.showModal).toHaveBeenCalledWith(
       'Message sent ✅',
       'Thanks for reaching out. I will get back to you soon.',
@@ -58,8 +62,12 @@ describe('ContactComponent', () => {
     );
 
     const req = httpMock.expectOne('/api/v1/contact-form');
-    req.flush({ message: 'disabled' }, { status: 503, statusText: 'Service Unavailable' });
+    req.flush(
+      { message: 'disabled' },
+      { status: 503, statusText: 'Service Unavailable' },
+    );
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(modal.showModal).toHaveBeenCalledWith(
       'Error ⚠️',
       'Submissions are currently disabled. Please reach out using one of the social links below.',

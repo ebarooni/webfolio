@@ -40,7 +40,7 @@ describe('App', () => {
   it('should contain a <router-outlet> element in the DOM', async () => {
     const { fixture } = await setup();
 
-    const el: HTMLElement = fixture.nativeElement;
+    const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('router-outlet')).not.toBeNull();
   });
 });

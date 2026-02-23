@@ -12,10 +12,13 @@ describe('CompactNavbar', () => {
   let component: CompactNavbar;
   let fixture: ComponentFixture<CompactNavbar>;
 
-  const setInputs = (opts?: { theme?: Theme; version?: string | undefined }) => {
+  const setInputs = (opts?: {
+    theme?: Theme;
+    version?: string | undefined;
+  }) => {
     fixture.componentRef.setInput(
       'selectedTheme',
-      (opts?.theme ?? ('light' as Theme)) as Theme,
+      opts?.theme ?? ('light' as Theme),
     );
     fixture.componentRef.setInput('version', opts?.version);
     fixture.detectChanges();
@@ -173,7 +176,8 @@ describe('CompactNavbar', () => {
       .queryAll(By.css('#compact-nav-menu a'))
       .find(
         (de) =>
-          (de.nativeElement as HTMLAnchorElement).textContent?.trim() === 'Home',
+          (de.nativeElement as HTMLAnchorElement).textContent?.trim() ===
+          'Home',
       );
 
     expect(homeDe).toBeTruthy();
@@ -181,7 +185,9 @@ describe('CompactNavbar', () => {
     const routerLinkDir = homeDe!.injector.get(RouterLink, null);
     expect(routerLinkDir).toBeTruthy();
 
-    const href = (homeDe!.nativeElement as HTMLAnchorElement).getAttribute('href');
+    const href = (homeDe!.nativeElement as HTMLAnchorElement).getAttribute(
+      'href',
+    );
     expect(href).toBeTruthy();
   });
 });
