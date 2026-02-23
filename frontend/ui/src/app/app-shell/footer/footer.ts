@@ -25,15 +25,30 @@ export class Footer {
   readonly currentYear = new Date().getFullYear();
 
   readonly links = input<readonly SocialLink[]>([
-    { id: 'github', label: 'GitHub', href: 'https://github.com/ebarooni', icon: 'github' },
-    { id: 'gitlab', label: 'GitLab', href: 'https://gitlab.com/ebarooni', icon: 'gitlab' },
+    {
+      id: 'github',
+      label: 'GitHub',
+      href: 'https://github.com/ebarooni',
+      icon: 'github',
+    },
+    {
+      id: 'gitlab',
+      label: 'GitLab',
+      href: 'https://gitlab.com/ebarooni',
+      icon: 'gitlab',
+    },
     {
       id: 'stackoverflow',
       label: 'Stack Overflow',
       href: 'https://stackoverflow.com/users/13690331/ebarooni',
       icon: 'stackoverflow',
     },
-    { id: 'linkedin', label: 'LinkedIn', href: 'https://linkedin.com/in/barooni', icon: 'linkedin' },
+    {
+      id: 'linkedin',
+      label: 'LinkedIn',
+      href: 'https://linkedin.com/in/barooni',
+      icon: 'linkedin',
+    },
   ] as const);
 
   trackById = (_: number, item: SocialLink) => item.id;

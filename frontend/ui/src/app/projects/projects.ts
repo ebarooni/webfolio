@@ -7,7 +7,7 @@ import { ShowcaseComponent } from './showcase/showcase.component';
   templateUrl: './projects.html',
   imports: [HeroComponent, ShowcaseComponent],
   host: {
-    class: 'flex flex-col grow-1'
+    class: 'flex flex-col grow-1',
   },
 })
 export class ProjectsComponent {}

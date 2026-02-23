@@ -12,10 +12,15 @@ enum Posts {
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.html',
-  imports: [DatePipe, HeroComponent, PostModalComponent, AstroToAngularComponent],
+  imports: [
+    DatePipe,
+    HeroComponent,
+    PostModalComponent,
+    AstroToAngularComponent,
+  ],
   host: {
-    class: 'flex flex-col grow-1'
-  }
+    class: 'flex flex-col grow-1',
+  },
 })
 export class BlogComponent {
   readonly selectedPostId = signal<Posts>(Posts.ASTRO_TO_ANGULAR);

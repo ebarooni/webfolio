@@ -12,6 +12,6 @@ import { Route } from '../../config/constants/route';
 })
 export class AboutComponent {
   get Route(): typeof Route {
-      return Route;
+    return Route;
   }
 }

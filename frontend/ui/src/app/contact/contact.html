@@ -7,13 +7,18 @@
     <ng-container ngProjectAs="title">Contact</ng-container>
 
     <ng-container ngProjectAs="subtitle">
-      I help teams and individuals turn ideas into working products. If that’s what you’re looking for, let’s connect.
+      I help teams and individuals turn ideas into working products. If that’s
+      what you’re looking for, let’s connect.
     </ng-container>
   </app-hero>
 
-  <div class="h-1 w-full bg-gradient-to-r from-primary via-accent to-secondary"></div>
+  <div
+    class="h-1 w-full bg-gradient-to-r from-primary via-accent to-secondary"
+  ></div>
 
-  <div class="w-full bg-gradient-to-b from-base-200 via-base-300 to-base-200 px-6 py-10 sm:px-8 md:py-14 lg:px-24 lg:py-20">
+  <div
+    class="w-full bg-gradient-to-b from-base-200 via-base-300 to-base-200 px-6 py-10 sm:px-8 md:py-14 lg:px-24 lg:py-20"
+  >
     <app-contact-form
       [isSubmitting]="isSubmitting()"
       (formSubmitted)="submitForm($event, modalComponent)"

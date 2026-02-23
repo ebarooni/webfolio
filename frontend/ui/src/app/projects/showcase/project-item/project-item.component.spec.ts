@@ -1,7 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { describe, expect, it } from 'vitest';
-import { ProjectItemComponent, type ProjectItem } from './project-item.component';
+import {
+  ProjectItemComponent,
+  type ProjectItem,
+} from './project-item.component';
 
 describe('ProjectItemComponent', () => {
   it('renders title, description, features and link when href is provided', async () => {
@@ -22,10 +25,14 @@ describe('ProjectItemComponent', () => {
     fixture.detectChanges();
 
     const titleEl = fixture.debugElement.query(By.css('h3'));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(titleEl.nativeElement.textContent).toContain('Webfolio');
 
     const badges = fixture.debugElement.queryAll(By.css('.badge'));
-    expect(badges.map((b) => b.nativeElement.textContent.trim())).toEqual(project.features);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    expect(badges.map((b) => b.nativeElement.textContent.trim())).toEqual(
+      project.features,
+    );
 
     const link = fixture.debugElement.query(By.css('a.btn'));
     expect(link).toBeTruthy();

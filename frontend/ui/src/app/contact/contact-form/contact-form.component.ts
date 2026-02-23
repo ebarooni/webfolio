@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
@@ -28,7 +28,7 @@ export class ContactFormComponent {
   readonly contactForm = this.fb.group({
     name: this.fb.control('', {
       validators: [
-        Validators.required,
+        (control) => Validators.required(control),
         Validators.pattern(/^[a-zA-ZäöüÄÖÜß' -]{2,50}$/),
         Validators.minLength(2),
         Validators.maxLength(50),
@@ -36,19 +36,24 @@ export class ContactFormComponent {
       updateOn: 'blur',
     }),
     email: this.fb.control('', {
-      validators: [Validators.required, Validators.email],
+      validators: [
+        (control) => Validators.required(control),
+        (control) => Validators.email(control),
+      ],
       updateOn: 'blur',
     }),
     message: this.fb.control('', {
       validators: [
-        Validators.required,
+        (control) => Validators.required(control),
         Validators.minLength(2),
         Validators.maxLength(this.maxMessageLength),
       ],
     }),
   });
 
-  readonly message = toSignal(this.contactForm.controls.message.valueChanges, { initialValue: '' });
+  readonly message = toSignal(this.contactForm.controls.message.valueChanges, {
+    initialValue: '',
+  });
 
   submit(): void {
     if (this.isSubmitting()) return;
@@ -62,6 +67,7 @@ export class ContactFormComponent {
 
     const sanitizedMessage = message
       .trim()
+      // eslint-disable-next-line no-control-regex
       .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
       .replace(/<[^>]*>/g, '')
       .replace(/[\u{1F600}-\u{1F6FF}]/gu, '')

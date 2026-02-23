@@ -1,5 +1,18 @@
-import { ChangeDetectionStrategy, Component, DOCUMENT, computed, effect, inject, untracked } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DOCUMENT,
+  computed,
+  effect,
+  inject,
+  untracked,
+} from '@angular/core';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, distinctUntilChanged, shareReplay } from 'rxjs';
 
@@ -43,7 +56,8 @@ export class AppShell {
       const data = aRoute.snapshot?.data;
 
       const footerBgClass =
-        (data['footerBgClass'] as string | undefined) ?? DEFAULT_UI_CONFIG.footerBgClass;
+        (data['footerBgClass'] as string | undefined) ??
+        DEFAULT_UI_CONFIG.footerBgClass;
 
       const page =
         (data['page'] as Route | undefined) ?? DEFAULT_UI_CONFIG.page;
@@ -51,18 +65,22 @@ export class AppShell {
       return { footerBgClass, page } satisfies UiConfig;
     }),
     distinctUntilChanged(
-      (a, b) => a.footerBgClass === b.footerBgClass && a.page === b.page
+      (a, b) => a.footerBgClass === b.footerBgClass && a.page === b.page,
     ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  readonly uiConfig = toSignal(this.uiConfig$, { initialValue: DEFAULT_UI_CONFIG });
+  readonly uiConfig = toSignal(this.uiConfig$, {
+    initialValue: DEFAULT_UI_CONFIG,
+  });
 
   readonly theme = toSignal(this.appStore.selectTheme$, {
     initialValue: 'light' as Theme,
   });
 
-  readonly shellClass = computed(() => 'min-h-screen w-full flex flex-col bg-base-100');
+  readonly shellClass = computed(
+    () => 'min-h-screen w-full flex flex-col bg-base-100',
+  );
 
   constructor() {
     effect(() => {

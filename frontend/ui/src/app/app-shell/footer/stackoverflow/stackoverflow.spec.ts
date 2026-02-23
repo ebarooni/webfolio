@@ -22,6 +22,7 @@ describe('Stackoverflow', () => {
   });
 
   it('should render the svg and the lines path', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const host: HTMLElement = fixture.nativeElement;
 
     const svg = host.querySelector('svg.so-icon');

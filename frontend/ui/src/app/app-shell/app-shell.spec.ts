@@ -53,7 +53,7 @@ describe('AppShell', () => {
     );
 
     const appStoreMock: Pick<AppStore, 'selectTheme$' | 'updateTheme'> = {
-      selectTheme$: theme$.asObservable() as any,
+      selectTheme$: theme$.asObservable(),
       updateTheme: vi.fn(),
     };
 
@@ -121,7 +121,9 @@ describe('AppShell', () => {
     });
 
     it('should update data-theme on <html> when theme changes', async () => {
-      const { fixture, theme$ } = await setup({ initialTheme: 'light' as Theme });
+      const { fixture, theme$ } = await setup({
+        initialTheme: 'light' as Theme,
+      });
 
       theme$.next('dark' as Theme);
       fixture.detectChanges();
@@ -162,7 +164,9 @@ describe('AppShell', () => {
 
   describe('template bindings', () => {
     it('should pass selectedTheme and version to both navbar components', async () => {
-      const { fixture, theme$ } = await setup({ initialTheme: 'light' as Theme });
+      const { fixture, theme$ } = await setup({
+        initialTheme: 'light' as Theme,
+      });
 
       const compact = fixture.debugElement.query(
         By.directive(CompactNavbarStubComponent),
@@ -187,8 +191,12 @@ describe('AppShell', () => {
     it('should render a RouterOutlet and footer', async () => {
       const { fixture } = await setup();
 
-      expect(fixture.debugElement.query(By.directive(RouterOutlet))).toBeTruthy();
-      expect(fixture.debugElement.query(By.directive(FooterStubComponent))).toBeTruthy();
+      expect(
+        fixture.debugElement.query(By.directive(RouterOutlet)),
+      ).toBeTruthy();
+      expect(
+        fixture.debugElement.query(By.directive(FooterStubComponent)),
+      ).toBeTruthy();
     });
   });
 
@@ -197,7 +205,9 @@ describe('AppShell', () => {
       const { fixture } = await setup();
 
       expect(fixture.componentInstance.uiConfig().page).toBe(Route.HOME);
-      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe('bg-base-200');
+      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe(
+        'bg-base-200',
+      );
     });
 
     it('should update uiConfig based on leaf route data after NavigationEnd', async () => {
@@ -207,7 +217,9 @@ describe('AppShell', () => {
       fixture.detectChanges();
 
       expect(fixture.componentInstance.uiConfig().page).toBe(Route.CONTACT);
-      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe('bg-base-100');
+      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe(
+        'bg-base-100',
+      );
     });
 
     it('should compute the expected shellClass', async () => {

@@ -7,47 +7,49 @@
     <ng-container ngProjectAs="title">Blog Posts</ng-container>
 
     <ng-container ngProjectAs="subtitle">
-      Insights and technical write-ups on web development, frameworks and modern tooling.
+      Insights and technical write-ups on web development, frameworks and modern
+      tooling.
     </ng-container>
   </app-hero>
 
-  <div class="grow-1 container mx-auto max-w-3xl px-6 lg:px-0 py-6 pb-10 sm:pb-16 space-y-6 lg:space-y-8">
+  <div
+    class="grow-1 container mx-auto max-w-3xl px-6 lg:px-0 py-6 pb-10 sm:pb-16 space-y-6 lg:space-y-8"
+  >
     @for (post of posts; track post.id) {
-      <article class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-200">
-        <div class="card-body">
-          <div class="flex flex-wrap justify-between text-sm text-secondary mb-2">
-            <time [attr.datetime]="post.date.toISOString()">
-              {{ post.date | date: 'mediumDate' }}
-            </time>
-            <span>⏱ {{ post.readTime }} min read</span>
-          </div>
-
-          <h2 class="card-title text-xl mb-2">{{ post.title }}</h2>
-          <p class="text-base-content">{{ post.summary }}</p>
-
-          <div class="card-actions justify-end mt-4">
-            <button
-              type="button"
-              class="btn btn-sm btn-primary"
-              (click)="viewPost(post.id, postModalComponent)"
-            >
-              Read More
-            </button>
-          </div>
+    <article
+      class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-200"
+    >
+      <div class="card-body">
+        <div class="flex flex-wrap justify-between text-sm text-secondary mb-2">
+          <time [attr.datetime]="post.date.toISOString()">
+            {{ post.date | date: 'mediumDate' }}
+          </time>
+          <span>⏱ {{ post.readTime }} min read</span>
         </div>
-      </article>
+
+        <h2 class="card-title text-xl mb-2">{{ post.title }}</h2>
+        <p class="text-base-content">{{ post.summary }}</p>
+
+        <div class="card-actions justify-end mt-4">
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="viewPost(post.id, postModalComponent)"
+          >
+            Read More
+          </button>
+        </div>
+      </div>
+    </article>
     }
   </div>
 </section>
 
 <app-post-modal #postModalComponent>
-  @let postId = selectedPostId();
-  @switch (postId) {
-    @case (Posts.ASTRO_TO_ANGULAR) {
-      <app-astro-to-angular></app-astro-to-angular>
-    }
-    @default {
-      <app-astro-to-angular></app-astro-to-angular>
-    }
-  }
+  @let postId = selectedPostId(); @switch (postId) { @case
+  (Posts.ASTRO_TO_ANGULAR) {
+  <app-astro-to-angular></app-astro-to-angular>
+  } @default {
+  <app-astro-to-angular></app-astro-to-angular>
+  } }
 </app-post-modal>

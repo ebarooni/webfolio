@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { ProjectItemComponent, type ProjectItem } from './project-item/project-item.component';
+import {
+  ProjectItemComponent,
+  type ProjectItem,
+} from './project-item/project-item.component';
 
 @Component({
   selector: 'app-showcase',
@@ -18,7 +21,8 @@ export class ShowcaseComponent {
     {
       title: 'Webfolio',
       href: 'https://github.com/ebarooni/webfolio',
-      description: 'A personal portfolio website developed with Angular, TailwindCSS and DaisyUI.',
+      description:
+        'A personal portfolio website developed with Angular, TailwindCSS and DaisyUI.',
       features: ['Angular', 'TailwindCSS', 'DaisyUI'],
     },
     {
@@ -31,13 +35,15 @@ export class ShowcaseComponent {
     {
       title: 'Web Configs',
       href: 'https://github.com/ebarooni/dev-tools',
-      description: 'A collection of shared configuration including ESLint, Prettier, Stylelint and Swiftlint.',
+      description:
+        'A collection of shared configuration including ESLint, Prettier, Stylelint and Swiftlint.',
       features: ['ESLint', 'Prettier', 'Stylelint', 'Swiftlint'],
     },
     {
       title: 'Repo Sync',
       href: 'https://gist.github.com/ebarooni/c268a88bf8e09175b5017a176f46b31e',
-      description: 'A github workflow that mirrors the repositories to another remote on every push.',
+      description:
+        'A github workflow that mirrors the repositories to another remote on every push.',
       features: ['GitHub', 'GitLab', 'CI/CD'],
     },
     {

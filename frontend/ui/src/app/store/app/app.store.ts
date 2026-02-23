@@ -75,7 +75,7 @@ export class AppStore extends ComponentStore<IState> {
       const mergedState = {
         ...INITIAL_STATE,
         ...sanitizedState,
-      }
+      };
 
       if (typeof mergedState.hasGeoAccess !== 'boolean') {
         mergedState.hasGeoAccess = INITIAL_STATE.hasGeoAccess;

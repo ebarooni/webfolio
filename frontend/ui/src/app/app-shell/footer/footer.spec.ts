@@ -86,7 +86,9 @@ describe('Footer', () => {
   });
 
   it('should throw if required bgClass input is not provided', async () => {
-    await TestBed.configureTestingModule({ imports: [Footer] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [Footer],
+    }).compileComponents();
 
     const footerFixture = TestBed.createComponent(Footer);
 
@@ -108,7 +110,9 @@ describe('Footer', () => {
     it('should render a navigation landmark with correct aria-label', async () => {
       await createComponent();
 
-      const nav = fixture.debugElement.query(By.css('nav[aria-label="Social links"]'));
+      const nav = fixture.debugElement.query(
+        By.css('nav[aria-label="Social links"]'),
+      );
       expect(nav).toBeTruthy();
     });
 
@@ -116,7 +120,9 @@ describe('Footer', () => {
       await createComponent();
 
       const tooltipElements = fixture.debugElement.queryAll(By.css('.tooltip'));
-      const anchorElements = fixture.debugElement.queryAll(By.css('.tooltip a'));
+      const anchorElements = fixture.debugElement.queryAll(
+        By.css('.tooltip a'),
+      );
 
       expect(tooltipElements.length).toBe(component.links().length);
       expect(anchorElements.length).toBe(component.links().length);
@@ -140,7 +146,9 @@ describe('Footer', () => {
 
       expect(fixture.debugElement.query(By.css('app-github'))).toBeTruthy();
       expect(fixture.debugElement.query(By.css('app-gitlab'))).toBeTruthy();
-      expect(fixture.debugElement.query(By.css('app-stackoverflow'))).toBeTruthy();
+      expect(
+        fixture.debugElement.query(By.css('app-stackoverflow')),
+      ).toBeTruthy();
       expect(fixture.debugElement.query(By.css('app-linkedin'))).toBeTruthy();
     });
 
@@ -148,7 +156,10 @@ describe('Footer', () => {
       await createComponent();
 
       const copyrightText =
-        fixture.debugElement.query(By.css('aside p')).nativeElement.textContent ?? '';
+        (
+          fixture.debugElement.query(By.css('aside p'))
+            .nativeElement as HTMLParagraphElement
+        ).textContent ?? '';
 
       const currentYear = new Date().getFullYear();
 
@@ -162,27 +173,44 @@ describe('Footer', () => {
   describe('custom links input', () => {
     it('should render fallback label when icon is null', async () => {
       const customLinks: readonly SocialLink[] = [
-        { id: 'xing', label: 'XING', href: 'https://example.com/xing', icon: null },
+        {
+          id: 'xing',
+          label: 'XING',
+          href: 'https://example.com/xing',
+          icon: null,
+        },
       ];
 
       await createComponent({ links: customLinks });
 
-      const fallbackLabel = fixture.debugElement.query(By.css('span.text-label'));
+      const fallbackLabel = fixture.debugElement.query(
+        By.css('span.text-label'),
+      );
       expect(fallbackLabel).toBeTruthy();
-      expect(fallbackLabel.nativeElement.textContent.trim()).toBe('XING');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect((fallbackLabel.nativeElement.textContent as string).trim()).toBe(
+        'XING',
+      );
     });
 
     it('should update rendered links when links input changes', async () => {
       await createComponent();
 
       const updatedLinks: readonly SocialLink[] = [
-        { id: 'xing', label: 'XING', href: 'https://example.com/xing', icon: null },
+        {
+          id: 'xing',
+          label: 'XING',
+          href: 'https://example.com/xing',
+          icon: null,
+        },
       ];
 
       fixture.componentRef.setInput('links', updatedLinks);
       fixture.detectChanges();
 
-      const anchorElements = fixture.debugElement.queryAll(By.css('.tooltip a'));
+      const anchorElements = fixture.debugElement.queryAll(
+        By.css('.tooltip a'),
+      );
       expect(anchorElements.length).toBe(1);
 
       const anchor = anchorElements[0].nativeElement as HTMLAnchorElement;

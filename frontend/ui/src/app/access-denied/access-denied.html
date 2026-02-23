@@ -1,4 +1,6 @@
-<section class="min-h-full grid place-items-center px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+<section
+  class="min-h-full grid place-items-center px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12"
+>
   <div class="w-full max-w-md">
     <div class="card bg-base-200 shadow-md">
       <div class="card-body items-center text-center gap-4 p-6 sm:p-8">
@@ -23,14 +25,14 @@
           />
 
           @if (!hasGeoAccess()) {
-            <button
-              type="submit"
-              class="btn btn-primary w-full"
-              [class.btn-outline]="contactForm.invalid"
-              [disabled]="contactForm.invalid"
-            >
-              Submit
-            </button>
+          <button
+            type="submit"
+            class="btn btn-primary w-full"
+            [class.btn-outline]="contactForm.invalid"
+            [disabled]="contactForm.invalid"
+          >
+            Submit
+          </button>
           }
         </form>
       </div>
