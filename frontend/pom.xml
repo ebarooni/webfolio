@@ -9,7 +9,7 @@
     </parent>
   
     <artifactId>webfolio-frontend</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <build>
         <plugins>
