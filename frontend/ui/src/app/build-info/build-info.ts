@@ -3,7 +3,7 @@ import { DEPENDENCIES, DEV_DEPENDENCIES } from '../../environments/build-info';
 
 import { HeroComponent } from '../components/hero/hero.component';
 import { DependenciesComponent } from './dependencies/dependencies.component';
-import { DeploymentDetails } from './deployment-details/deployment-details.component';
+import { DeploymentDetails } from './deployment-details/deployment-details';
 
 @Component({
   selector: 'app-build-info',
