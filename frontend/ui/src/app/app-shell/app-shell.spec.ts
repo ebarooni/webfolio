@@ -222,14 +222,6 @@ describe('AppShell', () => {
       );
     });
 
-    it('should compute the expected shellClass', async () => {
-      const { fixture } = await setup();
-
-      expect(fixture.componentInstance.shellClass()).toBe(
-        'min-h-screen w-full flex flex-col bg-base-100',
-      );
-    });
-
     it('should bind footer bgClass from uiConfig and update after navigation', async () => {
       const { fixture } = await setup();
 

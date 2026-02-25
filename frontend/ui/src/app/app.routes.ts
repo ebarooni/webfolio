@@ -54,7 +54,7 @@ export const routes: Routes = [
       {
         path: Route.BUILD_INFO,
         loadComponent: () =>
-          import('./build-info/build-info').then((m) => m.BuildInfoComponent),
+          import('./build-info/build-info').then((m) => m.BuildInfo),
         title: 'Build Info | Ehsan Barooni',
         data: {
           page: Route.BUILD_INFO,

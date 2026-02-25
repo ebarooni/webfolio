@@ -1,19 +1,19 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { DEPENDENCIES, DEV_DEPENDENCIES } from '../../environments/build-info';
 
 import { HeroComponent } from '../components/hero/hero.component';
-import { DependenciesComponent } from './dependencies/dependencies.component';
-import { DeploymentDetailsComponent } from './deployment-details/deployment-details.component';
+import { Dependencies } from './dependencies/dependencies';
+import { DeploymentDetails } from './deployment-details/deployment-details';
 
 @Component({
   selector: 'app-build-info',
   templateUrl: './build-info.html',
-  imports: [HeroComponent, DeploymentDetailsComponent, DependenciesComponent],
+  imports: [HeroComponent, DeploymentDetails, Dependencies],
   host: {
-    class: 'flex flex-col grow-1',
+    class: 'flex flex-col flex-1',
   },
 })
-export class BuildInfoComponent {
-  readonly dependencies = signal(DEPENDENCIES);
-  readonly devDependencies = signal(DEV_DEPENDENCIES);
+export class BuildInfo {
+  readonly dependencies = computed(() => DEPENDENCIES);
+  readonly devDependencies = computed(() => DEV_DEPENDENCIES);
 }
