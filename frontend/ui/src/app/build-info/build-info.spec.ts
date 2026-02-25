@@ -22,7 +22,7 @@ class DependenciesStub {
   @Input() dependencies!: Record<string, string>;
 }
 
-describe('BuildInfoComponent', () => {
+describe('BuildInfo', () => {
   let fixture: ComponentFixture<BuildInfo>;
 
   beforeEach(async () => {
