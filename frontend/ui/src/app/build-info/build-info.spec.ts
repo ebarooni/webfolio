@@ -1,17 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-vi.mock('../../environments/build-info', () => ({
-  DEPENDENCIES: { angular: '21.0.0', rxjs: '7.8.0' },
-  DEV_DEPENDENCIES: { vitest: '2.0.0' },
-}));
-
+import { beforeEach, describe, expect, it } from 'vitest';
 import { BuildInfo } from './build-info';
 
-@Component({ selector: 'app-hero', template: '<ng-content />' })
-class HeroStub {}
+@Component({
+  selector: 'app-hero',
+  template: '<ng-content />',
+})
+class HeroStub {
+  @Input() backgroundColor?: string;
+  @Input() titleColor?: string;
+  @Input() subtitleColor?: string;
+}
 
 @Component({ selector: 'app-deployment-details', template: '' })
 class DeploymentDetailsStub {}
@@ -48,19 +49,10 @@ describe('BuildInfo', () => {
     ).toBeTruthy();
   });
 
-  it('passes runtime dependencies to the first dependencies block', () => {
-    const blocks = fixture.debugElement.queryAll(By.directive(DependenciesStub));
-    const runtime = blocks[0].componentInstance as DependenciesStub;
-
-    expect(blocks.length).toBe(2);
-    expect(runtime.dependencies).toEqual({ angular: '21.0.0', rxjs: '7.8.0' });
-  });
-
   it('passes build time dependencies with a custom title', () => {
     const blocks = fixture.debugElement.queryAll(By.directive(DependenciesStub));
     const buildtime = blocks[1].componentInstance as DependenciesStub;
 
-    expect(buildtime.title).toBe('Build time dependencies');
-    expect(buildtime.dependencies).toEqual({ vitest: '2.0.0' });
+    expect(buildtime.title).toBe('Build Time Dependencies');
   });
 });

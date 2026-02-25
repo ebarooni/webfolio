@@ -26,7 +26,7 @@ describe('DependenciesComponent', () => {
     fixture.detectChanges();
 
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Runtime dependencies',
+      'Runtime Dependencies',
     );
   });
 

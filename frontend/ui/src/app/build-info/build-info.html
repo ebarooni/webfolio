@@ -14,19 +14,19 @@
   <div class="container mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 lg:px-0">
     <div class="space-y-8 sm:space-y-10 pb-10 sm:pb-16">
       <section aria-labelledby="deployment-details-title">
-        <h2 id="deployment-details-title" class="sr-only">Deployment details</h2>
+        <h2 id="deployment-details-title" class="sr-only">Deployment Details</h2>
         <app-deployment-details />
       </section>
 
       <section aria-labelledby="runtime-deps-title">
-        <h2 id="runtime-deps-title" class="sr-only">Runtime dependencies</h2>
+        <h2 id="runtime-deps-title" class="sr-only">Runtime Dependencies</h2>
         <app-dependencies [dependencies]="dependencies()" />
       </section>
 
       <section aria-labelledby="buildtime-deps-title">
-        <h2 id="buildtime-deps-title" class="sr-only">Build time dependencies</h2>
+        <h2 id="buildtime-deps-title" class="sr-only">Build Time Dependencies</h2>
         <app-dependencies
-          [title]="'Build time dependencies'"
+          [title]="'Build Time Dependencies'"
           [dependencies]="devDependencies()"
         />
       </section>
