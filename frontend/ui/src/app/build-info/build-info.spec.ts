@@ -50,7 +50,9 @@ describe('BuildInfo', () => {
   });
 
   it('passes build time dependencies with a custom title', () => {
-    const blocks = fixture.debugElement.queryAll(By.directive(DependenciesStub));
+    const blocks = fixture.debugElement.queryAll(
+      By.directive(DependenciesStub),
+    );
     const buildtime = blocks[1].componentInstance as DependenciesStub;
 
     expect(buildtime.title).toBe('Build Time Dependencies');

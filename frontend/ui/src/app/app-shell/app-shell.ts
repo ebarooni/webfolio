@@ -6,7 +6,12 @@ import {
   inject,
   untracked,
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs';
 
@@ -53,17 +58,23 @@ export class AppShell {
       const data = aRoute.snapshot?.data;
 
       const footerBgClass =
-        (data['footerBgClass'] as string | undefined) ?? DEFAULT_UI_CONFIG.footerBgClass;
+        (data['footerBgClass'] as string | undefined) ??
+        DEFAULT_UI_CONFIG.footerBgClass;
 
-      const page = (data['page'] as Route | undefined) ?? DEFAULT_UI_CONFIG.page;
+      const page =
+        (data['page'] as Route | undefined) ?? DEFAULT_UI_CONFIG.page;
 
       return { footerBgClass, page } satisfies UiConfig;
     }),
-    distinctUntilChanged((a, b) => a.footerBgClass === b.footerBgClass && a.page === b.page),
+    distinctUntilChanged(
+      (a, b) => a.footerBgClass === b.footerBgClass && a.page === b.page,
+    ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  readonly uiConfig = toSignal(this.uiConfig$, { initialValue: DEFAULT_UI_CONFIG });
+  readonly uiConfig = toSignal(this.uiConfig$, {
+    initialValue: DEFAULT_UI_CONFIG,
+  });
 
   readonly theme = toSignal(this.appStore.selectTheme$, {
     initialValue: 'light' as Theme,
@@ -72,7 +83,9 @@ export class AppShell {
   constructor() {
     effect(() => {
       const theme = this.theme();
-      untracked(() => this.document.documentElement.setAttribute('data-theme', theme));
+      untracked(() =>
+        this.document.documentElement.setAttribute('data-theme', theme),
+      );
     });
   }
 

@@ -1,9 +1,9 @@
 import { Component, input } from '@angular/core';
 
-interface DependencyRow { 
-  name: string; 
-  version: string 
-};
+interface DependencyRow {
+  name: string;
+  version: string;
+}
 
 @Component({
   selector: 'app-dependencies',
@@ -15,9 +15,7 @@ export class Dependencies {
     transform: (deps: Record<string, string>) => this.convertDepsToArray(deps),
   });
 
-  private convertDepsToArray(
-    deps: Record<string, string>,
-  ): DependencyRow[] {
+  private convertDepsToArray(deps: Record<string, string>): DependencyRow[] {
     return Object.entries(deps).map(([key, value]) => ({
       name: key,
       version: value,

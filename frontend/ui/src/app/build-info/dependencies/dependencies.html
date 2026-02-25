@@ -17,12 +17,10 @@
 
         <tbody>
           @for (dep of dependencies(); track dep.name) {
-            <tr>
-              <th scope="row" class="font-medium">
-                {{ dep.name }}
-              </th>
-              <td>{{ dep.version }}</td>
-            </tr>
+          <tr>
+            <th scope="row" class="font-medium">{{ dep.name }}</th>
+            <td>{{ dep.version }}</td>
+          </tr>
           }
         </tbody>
       </table>
