@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { DEPENDENCIES, DEV_DEPENDENCIES } from '../../environments/build-info';
 
 import { HeroComponent } from '../components/hero/hero.component';
@@ -10,10 +10,10 @@ import { DeploymentDetailsComponent } from './deployment-details/deployment-deta
   templateUrl: './build-info.html',
   imports: [HeroComponent, DeploymentDetailsComponent, DependenciesComponent],
   host: {
-    class: 'flex flex-col grow-1',
+    class: 'flex flex-col flex-1',
   },
 })
-export class BuildInfoComponent {
-  readonly dependencies = signal(DEPENDENCIES);
-  readonly devDependencies = signal(DEV_DEPENDENCIES);
+export class BuildInfo {
+  readonly dependencies = computed(() => DEPENDENCIES);
+  readonly devDependencies = computed(() => DEV_DEPENDENCIES);
 }
