@@ -1,24 +1,29 @@
 ---
 agent: 'agent'
-description: 'Improve code quality of Angular project and keep up with state-of-the-art patterns'
+description: 'Improve Angular components according to modern best practices and project standards'
 ---
 
-## Task
+## Objective
 
-Analyze the given component(s) and improve the code quality according to the given requirements below.
+Analyze the provided Angular component(s) and improve their structure, readability, maintainability, and architectural quality while adhering strictly to the project standards defined below.
 
-## Project Characteristics
+Do not introduce unnecessary abstractions or overengineering.
 
-- Angular version 21
-- Tailwind version 4
-- DaisyUI version 5
-- Vitest for unit tests
-- Uses standalone components by default
-- Each screen is wrapped by the app-shell component that provides the general layout of the UI
+## Project Context
+
+- Angular 21
+- Tailwind CSS 4
+- DaisyUI 5
+- Vitest for unit testing
+- Standalone components by default
+- Each screen is wrapped by the `app-shell` component, which defines the global layout structure
+
+You must understand how `app-shell` controls layout before modifying any screen-level component.
 
 ## Coding Guidelines
 
-- Use descriptive names for variable names. For example use formControl instead of fc.
+- Ensure the code follows clean code principles, including descriptive naming, clear separation of concerns, and minimal duplication.
+- Optimize for readability over cleverness. Favor clarity, simplicity, and maintainability.
 - Dont use shorthand if-statements. Always write the if blocks inside brackets.
 
 ## Requirements
@@ -29,6 +34,5 @@ Analyze the given component(s) and improve the code quality according to the giv
 - Use Angular signals as the primary reactive state mechanism unless there is a strong reason not to.
 - Design and implement components with a mobile first approach while ensuring proper behavior on larger screens.
 - Adhere to modern Angular best practices, clean code principles, and up to date architectural patterns.
-- Understand the app-shell component first so that you know how the general layout looks like.
 
 The app-shell component will be provided to you as context. Improve the other provided components by adhering to the requirements stated above.
