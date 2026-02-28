@@ -1,55 +1,55 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
+  signal,
 } from '@angular/core';
-import {
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AppStore } from '../store/app/app.store';
 import { Route } from '../config/constants/route';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-access-denied',
-  standalone: true,
-  imports: [ReactiveFormsModule],
   templateUrl: './access-denied.html',
+  imports: [FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'min-h-dvh flex',
+  },
 })
 export class AccessDenied {
   private readonly store = inject(AppStore);
   private readonly router = inject(Router);
-  private readonly fb = inject(NonNullableFormBuilder);
 
-  readonly contactForm = this.fb.group({
-    password: this.fb.control('', {
-      validators: [
-        (control) => Validators.required(control),
-        Validators.minLength(6),
-      ],
-    }),
-  });
+  readonly password = signal('');
+  readonly isPasswordValid = computed(() => this.password().trim().length >= 6);
 
   readonly hasGeoAccess = toSignal(this.store.selectHasGeoAccess$, {
     initialValue: false,
   });
 
-  private readonly redirectEffect = effect(() => {
-    if (this.hasGeoAccess()) {
-      void this.router.navigateByUrl(Route.HOME);
-    }
-  });
+  constructor() {
+    effect(() => {
+      if (this.hasGeoAccess()) {
+        void this.router.navigateByUrl(Route.HOME);
+      }
+    });
+  }
+
+  updatePassword(event: Event): void {
+    this.password.set((event.target as HTMLInputElement).value);
+  }
 
   submit(): void {
-    if (this.contactForm.invalid) return;
+    if (!this.isPasswordValid()) {
+      return;
+    }
 
-    const { password } = this.contactForm.getRawValue();
-    this.store.updateHasGeoAccess(password);
+    this.store.updateHasGeoAccess(this.password());
   }
 }
