@@ -25,7 +25,9 @@ export class ContactComponent {
   readonly isSubmitting = signal(false);
 
   submitForm(data: ContactFormData, modal: ModalComponent): void {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting()) {
+      return;
+    }
 
     this.isSubmitting.set(true);
 
@@ -45,7 +47,9 @@ export class ContactComponent {
           );
           return of(null);
         }),
-        finalize(() => this.isSubmitting.set(false)),
+        finalize(() => {
+          this.isSubmitting.set(false);
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();

@@ -51,12 +51,18 @@ export class ContactFormComponent {
     }),
   });
 
-  readonly message = toSignal(this.contactForm.controls.message.valueChanges, {
+  readonly nameControl = this.contactForm.controls.name;
+  readonly emailControl = this.contactForm.controls.email;
+  readonly messageControl = this.contactForm.controls.message;
+
+  readonly message = toSignal(this.messageControl.valueChanges, {
     initialValue: '',
   });
 
   submit(): void {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting()) {
+      return;
+    }
 
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();

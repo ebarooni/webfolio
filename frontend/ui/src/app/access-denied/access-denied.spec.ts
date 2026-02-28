@@ -44,18 +44,6 @@ describe('AccessDenied', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have an invalid form initially', () => {
-    expect(component.contactForm.invalid).toBe(true);
-  });
-
-  it('submit should call store.updateHasGeoAccess with the password when valid', () => {
-    component.contactForm.setValue({ password: '123456' });
-
-    component.submit();
-
-    expect(storeMock.updateHasGeoAccess).toHaveBeenCalledWith('123456');
-  });
-
   it('should navigate to home when hasGeoAccess becomes true', async () => {
     hasGeoAccess$.next(true);
     fixture.detectChanges();

@@ -12,18 +12,19 @@
     </ng-container>
   </app-hero>
 
-  <div
-    class="h-1 w-full bg-gradient-to-r from-primary via-accent to-secondary"
-  ></div>
+  <hr
+    class="h-1 border-0 bg-gradient-to-r from-primary via-accent to-secondary"
+  />
 
-  <div
-    class="w-full bg-gradient-to-b from-base-200 via-base-300 to-base-200 px-6 py-10 sm:px-8 md:py-14 lg:px-24 lg:py-20"
+  <section
+    class="w-full bg-gradient-to-b from-base-200 via-base-300 to-base-200 px-4 py-10 sm:px-6 md:py-14 lg:px-24 lg:py-20"
+    aria-label="Contact form"
   >
     <app-contact-form
       [isSubmitting]="isSubmitting()"
       (formSubmitted)="submitForm($event, modalComponent)"
     />
-  </div>
+  </section>
 </section>
 
 <app-modal #modalComponent></app-modal>

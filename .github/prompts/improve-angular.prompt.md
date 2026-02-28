@@ -1,13 +1,11 @@
 ---
 agent: 'agent'
-description: 'Improve Angular components according to modern best practices and project standards'
+description: 'Refactor Angular components and services to modern best practices while strictly following the given standards standards'
 ---
 
 ## Objective
 
-Analyze the provided Angular component(s) and improve their structure, readability, maintainability, and architectural quality while adhering strictly to the project standards defined below.
-
-Do not introduce unnecessary abstractions or overengineering.
+Refactor the provided Angular component(s) and service(s) to improve structure, readability, maintainability, and architectural quality while preserving behavior and project conventions.
 
 ## Project Context
 
@@ -18,7 +16,7 @@ Do not introduce unnecessary abstractions or overengineering.
 - Standalone components by default
 - Each screen is wrapped by the `app-shell` component, which defines the global layout structure
 
-You must understand how `app-shell` controls layout before modifying any screen-level component.
+You must understand how `app-shell` controls layout before modifying any screen-level component. The `app-shell` component will be provided only when dealing with screen-level components.
 
 ## Coding Guidelines
 
@@ -35,4 +33,11 @@ You must understand how `app-shell` controls layout before modifying any screen-
 - Design and implement components with a mobile first approach while ensuring proper behavior on larger screens.
 - Adhere to modern Angular best practices, clean code principles, and up to date architectural patterns.
 
-The app-shell component will be provided to you as context. Improve the other provided components by adhering to the requirements stated above.
+## Output Format
+
+- Preserve functionality.
+- Do not change public APIs unless clearly incorrect.
+- Do not add comments explaining obvious code.
+- Do not add explanations.
+- Do not introduce unnecessary abstractions or overengineering.
+- Return only the improved component code.
