@@ -7,9 +7,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { ContactComponent } from './contact';
 import { ModalComponent } from '../components/modal/modal.component';
-import { ContactFormData } from './contact-form/contact-form.component';
+import { ContactFormData } from './contact-form/contact-form';
 
-describe('ContactComponent', () => {
+describe('Contact', () => {
   let fixture: ComponentFixture<ContactComponent>;
   let component: ContactComponent;
   let httpMock: HttpTestingController;

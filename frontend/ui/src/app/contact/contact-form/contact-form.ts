@@ -15,9 +15,9 @@ export interface ContactFormData {
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-contact-form',
-  templateUrl: './contact-form.component.html',
+  templateUrl: './contact-form.html',
 })
-export class ContactFormComponent {
+export class ContactForm {
   private readonly fb = inject(NonNullableFormBuilder);
 
   readonly isSubmitting = input(false);

@@ -4,16 +4,16 @@ import { catchError, finalize, of, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import {
-  ContactFormComponent,
+  ContactForm,
   ContactFormData,
-} from './contact-form/contact-form.component';
+} from './contact-form/contact-form';
 import { HeroComponent } from '../components/hero/hero.component';
 import { ModalComponent } from '../components/modal/modal.component';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.html',
-  imports: [HeroComponent, ContactFormComponent, ModalComponent],
+  imports: [HeroComponent, ContactForm, ModalComponent],
   host: {
     class: 'flex flex-col flex-1',
   },
