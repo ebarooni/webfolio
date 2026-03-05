@@ -1,24 +1,28 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-interface DependencyRow {
+export type DependencyRow = Readonly<{
   name: string;
   version: string;
+}>;
+
+function toRows(deps: Record<string, string>): DependencyRow[] {
+  return Object.entries(deps)
+    .map(([name, version]) => ({ name, version }) satisfies DependencyRow)
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 @Component({
   selector: 'app-dependencies',
   templateUrl: './dependencies.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dependencies {
-  public readonly title = input<string>('Runtime Dependencies');
-  public readonly dependencies = input.required({
-    transform: (deps: Record<string, string>) => this.convertDepsToArray(deps),
-  });
+  readonly title = input<string>('Runtime Dependencies');
 
-  private convertDepsToArray(deps: Record<string, string>): DependencyRow[] {
-    return Object.entries(deps).map(([key, value]) => ({
-      name: key,
-      version: value,
-    }));
-  }
+  readonly dependencies = input.required<
+    DependencyRow[],
+    Record<string, string>
+  >({
+    transform: (deps) => toRows(deps),
+  });
 }

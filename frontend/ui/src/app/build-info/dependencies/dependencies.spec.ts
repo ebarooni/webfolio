@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Dependencies } from './dependencies';
 
-describe('DependenciesComponent', () => {
+describe('Dependencies', () => {
   let fixture: ComponentFixture<Dependencies>;
 
   beforeEach(async () => {
