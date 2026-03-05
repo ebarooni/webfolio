@@ -10,7 +10,6 @@ import { Theme } from '../../config/constants/themes-array';
 
 @Directive({
   selector: '[appDataTheme]',
-  standalone: true,
 })
 export class DataTheme {
   readonly theme = input.required<Theme>({ alias: 'appDataTheme' });
