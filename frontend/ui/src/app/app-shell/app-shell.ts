@@ -52,10 +52,13 @@ export class AppShell {
   private readonly uiConfig$ = this.router.events.pipe(
     filter((event): event is NavigationEnd => event instanceof NavigationEnd),
     map(() => {
-      let aRoute: ActivatedRoute = this.router.routerState.root;
-      while (aRoute.firstChild) aRoute = aRoute.firstChild;
+      let currentRoute: ActivatedRoute = this.router.routerState.root;
 
-      const data = aRoute.snapshot?.data;
+      while (currentRoute.firstChild) {
+        currentRoute = currentRoute.firstChild;
+      }
+
+      const data = currentRoute.snapshot?.data;
 
       const footerBgClass =
         (data['footerBgClass'] as string | undefined) ??
@@ -83,9 +86,9 @@ export class AppShell {
   constructor() {
     effect(() => {
       const theme = this.theme();
-      untracked(() =>
-        this.document.documentElement.setAttribute('data-theme', theme),
-      );
+      untracked(() => {
+        this.document.documentElement.setAttribute('data-theme', theme);
+      });
     });
   }
 
