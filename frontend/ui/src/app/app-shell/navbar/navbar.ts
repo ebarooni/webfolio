@@ -15,7 +15,7 @@ import { fromEvent } from 'rxjs';
 import { auditTime, filter, startWith } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
+import { DataTheme } from '../data-theme/data-theme';
 import { Theme, themesArray } from '../../config/constants/themes-array';
 import { Route } from '../../config/constants/route';
 
@@ -27,7 +27,7 @@ type NavItem = Readonly<{
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, DataThemeDirective, NgClass],
+  imports: [RouterLink, RouterLinkActive, DataTheme, NgClass],
   templateUrl: './navbar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

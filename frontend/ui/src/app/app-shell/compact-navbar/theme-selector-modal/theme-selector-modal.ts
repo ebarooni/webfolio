@@ -8,11 +8,11 @@ import {
 } from '@angular/core';
 
 import { Theme, themesArray } from '../../../config/constants/themes-array';
-import { DataThemeDirective } from '../../../directives/data-theme/data-theme.directive';
+import { DataTheme } from '../../data-theme/data-theme';
 
 @Component({
   selector: 'app-theme-selector-modal',
-  imports: [DataThemeDirective],
+  imports: [DataTheme],
   templateUrl: './theme-selector-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
