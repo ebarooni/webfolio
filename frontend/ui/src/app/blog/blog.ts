@@ -9,6 +9,14 @@ enum Posts {
   ASTRO_TO_ANGULAR,
 }
 
+type BlogPostPreview = Readonly<{
+  date: Date;
+  id: Posts;
+  readTime: number;
+  summary: string;
+  title: string;
+}>;
+
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.html',
@@ -19,13 +27,11 @@ enum Posts {
     AstroToAngularComponent,
   ],
   host: {
-    class: 'flex flex-col grow-1',
+    class: 'flex flex-col flex-1',
   },
 })
 export class BlogComponent {
-  readonly selectedPostId = signal<Posts>(Posts.ASTRO_TO_ANGULAR);
-
-  readonly posts = [
+  readonly posts: readonly BlogPostPreview[] = [
     {
       date: new Date('2024-12-01'),
       id: Posts.ASTRO_TO_ANGULAR,
@@ -35,6 +41,8 @@ export class BlogComponent {
       title: 'From Astro to Angular: Why I Rebuilt My Portfolio',
     },
   ] as const;
+
+  readonly selectedPostId = signal<Posts>(this.posts[0].id);
 
   get Posts(): typeof Posts {
     return Posts;
