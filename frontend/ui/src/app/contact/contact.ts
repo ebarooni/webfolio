@@ -3,10 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, of, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import {
-  ContactForm,
-  ContactFormData,
-} from './contact-form/contact-form';
+import { ContactForm, ContactFormData } from './contact-form/contact-form';
 import { HeroComponent } from '../components/hero/hero.component';
 import { ModalComponent } from '../components/modal/modal.component';
 

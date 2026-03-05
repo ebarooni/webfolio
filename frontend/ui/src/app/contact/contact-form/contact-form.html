@@ -94,7 +94,7 @@
           [disabled]="contactForm.invalid || isSubmitting()"
         >
           @if (isSubmitting()) {
-            <span class="loading loading-spinner loading-sm"></span>
+          <span class="loading loading-spinner loading-sm"></span>
           }
           <span>{{ isSubmitting() ? "Sending..." : "Send Message" }}</span>
         </button>
