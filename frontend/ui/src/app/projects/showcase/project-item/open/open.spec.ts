@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { describe, expect, it } from 'vitest';
-import { OpenComponent } from './open.component';
+import { OpenComponent } from './open';
 
 describe('OpenComponent', () => {
   it('should create and render an svg', async () => {

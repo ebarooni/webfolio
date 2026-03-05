@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { describe, expect, it } from 'vitest';
-import { ShowcaseComponent } from './showcase.component';
+import { Showcase } from './showcase';
 
-describe('ShowcaseComponent', () => {
+describe('Showcase', () => {
   it('renders one project card per project', async () => {
     await TestBed.configureTestingModule({
-      imports: [ShowcaseComponent],
+      imports: [Showcase],
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(ShowcaseComponent);
+    const fixture = TestBed.createComponent(Showcase);
     fixture.detectChanges();
 
     const component = fixture.componentInstance;

@@ -1,20 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { describe, expect, it } from 'vitest';
-import {
-  ProjectItemComponent,
-  type ProjectItem,
-} from './project-item.component';
+import { ProjectItem, type ProjectDescription } from './project-item';
 
 describe('ProjectItemComponent', () => {
   it('renders title, description, features and link when href is provided', async () => {
     await TestBed.configureTestingModule({
-      imports: [ProjectItemComponent],
+      imports: [ProjectItem],
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(ProjectItemComponent);
+    const fixture = TestBed.createComponent(ProjectItem);
 
-    const project: ProjectItem = {
+    const project: ProjectDescription = {
       title: 'Webfolio',
       description: 'A personal portfolio website.',
       href: 'https://example.com',
@@ -42,10 +39,10 @@ describe('ProjectItemComponent', () => {
 
   it('does not render link button when href is missing', async () => {
     await TestBed.configureTestingModule({
-      imports: [ProjectItemComponent],
+      imports: [ProjectItem],
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(ProjectItemComponent);
+    const fixture = TestBed.createComponent(ProjectItem);
 
     fixture.componentRef.setInput('project', {
       title: 'Capawesome',

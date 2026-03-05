@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { OpenComponent } from './open/open.component';
+import { OpenComponent } from './open/open';
 
-export type ProjectItem = Readonly<{
+export type ProjectDescription = Readonly<{
   title: string;
   description: string;
   href?: string;
@@ -12,10 +12,10 @@ export type ProjectItem = Readonly<{
 @Component({
   selector: 'app-project-item',
   imports: [OpenComponent],
-  templateUrl: './project-item.component.html',
+  templateUrl: './project-item.html',
 })
-export class ProjectItemComponent {
-  readonly project = input.required<ProjectItem>();
+export class ProjectItem {
+  readonly project = input.required<ProjectDescription>();
 
   readonly hasLink = computed(() => {
     const href = this.project().href;
@@ -24,6 +24,12 @@ export class ProjectItemComponent {
 
   readonly ariaLabel = computed(() => {
     const p = this.project();
-    return p.linkAriaLabel?.trim() ?? `Open ${p.title}`;
+
+    const custom = p.linkAriaLabel?.trim();
+    if (custom && custom.length > 0) {
+      return custom;
+    }
+
+    return `Open ${p.title}`;
   });
 }

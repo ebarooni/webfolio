@@ -36,7 +36,7 @@ export const routes: Routes = [
       {
         path: Route.PROJECTS,
         loadComponent: () =>
-          import('./projects/projects').then((m) => m.ProjectsComponent),
+          import('./projects/projects').then((m) => m.Projects),
         title: 'Projects | Ehsan Barooni',
         data: {
           page: Route.PROJECTS,
