@@ -1,0 +1,37 @@
+<section class="mx-auto flex w-full max-w-4xl flex-col gap-10 text-center">
+  <header class="space-y-2">
+    <h2 class="text-title font-bold text-secondary">Timeline</h2>
+  </header>
+
+  <ul
+    class="timeline timeline-snap-icon timeline-vertical max-md:timeline-compact"
+  >
+    @for (item of items; track item.title) {
+    <li>
+      @if (!$first) {
+      <hr />
+      }
+
+      <div class="timeline-middle">
+        <app-checkmark />
+      </div>
+
+      <div
+        class="mb-10 w-full md:mb-10"
+        [class.timeline-end]="item.align === 'end'"
+        [class.timeline-start]="item.align === 'start'"
+        [class.md\:text-start]="item.align === 'end'"
+        [class.md\:text-end]="item.align === 'start'"
+      >
+        <time class="font-mono italic">{{ item.period }}</time>
+        <h3 class="text-lg font-black">{{ item.title }}</h3>
+        <p class="text-neutral-content">{{ item.description }}</p>
+      </div>
+
+      @if (!$last) {
+      <hr />
+      }
+    </li>
+    }
+  </ul>
+</section>

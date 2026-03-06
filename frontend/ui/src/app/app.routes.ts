@@ -18,7 +18,7 @@ export const routes: Routes = [
     children: [
       {
         path: Route.HOME,
-        loadComponent: () => import('./home/home').then((m) => m.HomeComponent),
+        loadComponent: () => import('./home/home').then((m) => m.Home),
         title: 'Ehsan Barooni | Full-Stack Software Engineer',
         data: {
           footerBgClass: 'bg-base-200',

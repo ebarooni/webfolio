@@ -1,0 +1,46 @@
+<section
+  class="mx-auto flex w-full max-w-4xl flex-col items-center gap-8 sm:flex-row sm:items-center md:gap-16"
+>
+  <figure
+    class="hidden h-52 w-52 shrink-0 overflow-hidden rounded-full shadow-lg sm:block"
+  >
+    <img
+      src="profile.webp"
+      alt="Portrait of Ehsan Barooni"
+      fetchpriority="high"
+    />
+  </figure>
+
+  <div
+    class="flex flex-1 flex-col justify-center gap-3 text-center sm:text-left"
+  >
+    <header class="space-y-2">
+      <h1 class="text-headline font-extrabold leading-tight text-primary">
+        Ehsan Barooni
+      </h1>
+
+      <p class="text-sub-headline text-neutral-content">
+        Full Stack Software Engineer | Hybrid Apps | Capacitor
+      </p>
+    </header>
+
+    <nav
+      aria-label="Primary actions"
+      class="mt-3 flex flex-col gap-4 sm:flex-row"
+    >
+      <a
+        [routerLink]="Route.PROJECTS"
+        class="btn btn-primary text-cta-btn font-semibold sm:flex-1 md:max-w-68"
+      >
+        View My Work
+      </a>
+
+      <a
+        [routerLink]="Route.CONTACT"
+        class="btn btn-secondary text-cta-btn font-semibold sm:flex-1 md:max-w-68"
+      >
+        Let's Connect
+      </a>
+    </nav>
+  </div>
+</section>
