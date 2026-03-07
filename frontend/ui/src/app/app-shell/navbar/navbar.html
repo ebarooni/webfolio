@@ -1,19 +1,17 @@
-<div
-  #navbarDiv
-  class="navbar w-full min-h-20 bg-transparent/75 backdrop-blur-sm"
+<nav
+  class="navbar min-h-20 w-full bg-transparent/75 backdrop-blur-sm"
+  [class.shadow-xs]="isScrolled()"
+  aria-label="Primary"
 >
   <div class="navbar-start"></div>
 
   <div class="navbar-center">
-    <nav
-      class="join bg-base-300 rounded-lg drop-shadow-md"
-      aria-label="Primary"
-    >
+    <div class="join rounded-lg bg-base-300 drop-shadow-md">
       @for (item of navItems; track item.route) {
       <a
         class="btn join-item"
         [class.rounded-l-lg]="$first"
-        [routerLink]="[item.route]"
+        [routerLink]="item.route"
         [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
         [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary', 'text-primary']"
       >
@@ -22,7 +20,7 @@
       } @if (version()) {
       <a
         class="btn join-item"
-        [routerLink]="[Route.BUILD_INFO]"
+        [routerLink]="Route.BUILD_INFO"
         [routerLinkActive]="['btn-active', 'border-b-2', 'border-b-primary', 'text-primary']"
       >
         {{ version() }}
@@ -36,19 +34,19 @@
       >
         <button
           type="button"
-          class="btn rounded-r-lg join-item focus:outline-none focus-visible:ring-2 focus-visible:ring-base-content/30"
-          (click)="toggleThemeMenu()"
-          (keydown.escape)="closeThemeMenu()"
+          class="btn join-item rounded-r-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-base-content/30"
           aria-haspopup="menu"
           [attr.aria-expanded]="isThemeMenuOpen()"
+          (click)="toggleThemeMenu()"
+          (keydown.escape)="closeThemeMenu()"
         >
           Theme
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
             stroke="currentColor"
+            stroke-width="1.5"
             class="size-4"
             aria-hidden="true"
           >
@@ -61,29 +59,28 @@
         </button>
 
         @if (isThemeMenuOpen()) {
-        <!-- Open BELOW the button -->
         <div
           role="menu"
-          class="dropdown-content mt-3 w-56 max-h-72 overflow-y-auto rounded-md bg-base-200 border border-white/5 shadow-md outline-1 outline-black/5"
+          class="dropdown-content mt-3 max-h-72 w-56 overflow-y-auto rounded-md border border-white/5 bg-base-200 shadow-md outline-1 outline-black/5"
         >
           <div class="flex flex-col gap-3 p-3">
             @for (theme of themes; track theme) {
             <button
               type="button"
               role="menuitemradio"
+              class="btn rounded-md bg-base-100 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-base-content/30"
               [attr.aria-checked]="theme === selectedTheme()"
               [appDataTheme]="theme"
-              class="btn rounded-md bg-base-100 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-base-content/30"
               (click)="selectTheme(theme)"
             >
-              <span class="flex justify-between items-center w-full h-full">
+              <span class="flex h-full w-full items-center justify-between">
                 <span class="flex items-center gap-1">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
                     stroke="currentColor"
+                    stroke-width="1.5"
                     class="size-4"
                     [ngClass]="{ invisible: theme !== selectedTheme() }"
                     aria-hidden="true"
@@ -98,11 +95,11 @@
                   <span class="text-left font-semibold">{{ theme }}</span>
                 </span>
 
-                <span class="flex flex-initial gap-1 h-full" aria-hidden="true">
-                  <span class="bg-primary rounded-box w-2"></span>
-                  <span class="bg-secondary rounded-box w-2"></span>
-                  <span class="bg-accent rounded-box w-2"></span>
-                  <span class="bg-neutral rounded-box w-2"></span>
+                <span class="flex h-full flex-initial gap-1" aria-hidden="true">
+                  <span class="rounded-box w-2 bg-primary"></span>
+                  <span class="rounded-box w-2 bg-secondary"></span>
+                  <span class="rounded-box w-2 bg-accent"></span>
+                  <span class="rounded-box w-2 bg-neutral"></span>
                 </span>
               </span>
             </button>
@@ -111,8 +108,8 @@
         </div>
         }
       </div>
-    </nav>
+    </div>
   </div>
 
   <div class="navbar-end"></div>
-</div>
+</nav>

@@ -1,23 +1,20 @@
-// compact-navbar.component.ts
-
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ElementRef,
   inject,
   input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { fromEvent } from 'rxjs';
-import { auditTime, startWith } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged, fromEvent, map, of, startWith } from 'rxjs';
 
-import { Theme, themesArray } from '../../config/constants/themes-array';
 import { Route } from '../../config/constants/route';
+import { Theme } from '../../config/constants/themes-array';
 import { ThemeSelectorModal } from './theme-selector-modal/theme-selector-modal';
 
 type NavItem = Readonly<{
@@ -35,20 +32,19 @@ type NavItem = Readonly<{
 })
 export class CompactNavbar {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly document = inject(DOCUMENT);
+  private readonly window = this.document.defaultView;
 
   readonly selectedTheme = input.required<Theme>();
   readonly version = input<string | undefined>(undefined);
   readonly themeChanged = output<Theme>();
 
-  readonly navbarDiv = viewChild<ElementRef<HTMLDivElement>>('navbarDiv');
   readonly themeSelectorModalComponent =
     viewChild<ThemeSelectorModal>('themeSelectorModal');
 
   readonly isMenuOpen = signal(false);
 
-  readonly themes = themesArray;
   readonly Route = Route;
-
   readonly navItems: readonly NavItem[] = [
     { label: 'Home', route: Route.HOME, exact: true },
     { label: 'Blog', route: Route.BLOG },
@@ -57,18 +53,31 @@ export class CompactNavbar {
     { label: 'Build', route: Route.BUILD_INFO, requiresVersion: true },
   ] as const;
 
+  readonly isScrolled = toSignal(
+    this.window
+      ? fromEvent(this.window, 'scroll').pipe(
+          startWith(null),
+          map(() => this.window!.scrollY > 0),
+          distinctUntilChanged(),
+        )
+      : of(false),
+    {
+      initialValue: false,
+    },
+  );
+
   constructor() {
-    fromEvent(window, 'scroll')
-      .pipe(startWith(null), auditTime(50), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        const el = this.navbarDiv()?.nativeElement;
-        if (!el) return;
-        el.classList.toggle('shadow-xs', window.scrollY > 0);
+    fromEvent<KeyboardEvent>(this.document, 'keydown')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event) => {
+        if (event.key === 'Escape' && this.isMenuOpen()) {
+          this.closeMenu();
+        }
       });
   }
 
   toggleMenu(): void {
-    this.isMenuOpen.update((open) => !open);
+    this.isMenuOpen.update((isOpen) => !isOpen);
   }
 
   closeMenu(): void {

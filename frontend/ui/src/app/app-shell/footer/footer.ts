@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+
 import { Github } from './github/github';
 import { Gitlab } from './gitlab/gitlab';
 import { Linkedin } from './linkedin/linkedin';
@@ -51,5 +52,7 @@ export class Footer {
     },
   ] as const);
 
-  trackById = (_: number, item: SocialLink) => item.id;
+  trackById(index: number, item: SocialLink): SocialId {
+    return item.id;
+  }
 }
