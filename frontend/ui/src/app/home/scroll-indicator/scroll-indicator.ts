@@ -2,6 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-scroll-indicator',
-  templateUrl: './scroll-indicator.component.html',
+  templateUrl: './scroll-indicator.html',
 })
-export class ScrollIndicatorComponent {}
+export class ScrollIndicator {}

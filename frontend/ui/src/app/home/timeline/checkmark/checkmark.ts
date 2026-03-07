@@ -2,6 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-checkmark',
-  templateUrl: './checkmark.component.html',
+  templateUrl: './checkmark.html',
 })
-export class CheckmarkComponent {}
+export class Checkmark {}

@@ -4,10 +4,10 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  ViewChild,
   computed,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import { About } from './about/about';
 import { InfoCard } from './info-card/info-card';
 import { Timeline } from './timeline/timeline';
-import { ScrollIndicatorComponent } from '../svg-components/scroll-indicator/scroll-indicator.component';
+import { ScrollIndicator } from './scroll-indicator/scroll-indicator';
 
 type HomeHighlight = Readonly<{
   title: string;
@@ -27,7 +27,7 @@ type HomeHighlight = Readonly<{
 @Component({
   selector: 'app-home',
   templateUrl: './home.html',
-  imports: [About, InfoCard, ScrollIndicatorComponent, Timeline],
+  imports: [About, InfoCard, ScrollIndicator, Timeline],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-1 flex-col',
@@ -36,8 +36,7 @@ type HomeHighlight = Readonly<{
 export class Home implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild('heroSection', { read: ElementRef })
-  private readonly heroSectionRef?: ElementRef<HTMLElement>;
+  readonly heroSection = viewChild<ElementRef<HTMLDivElement>>('heroSection');
 
   readonly yearsOfExperience = dayjs().diff(dayjs('2021-01-01'), 'year');
 
@@ -101,7 +100,7 @@ export class Home implements AfterViewInit {
   }
 
   private observeHeroSectionHeight(): void {
-    const heroSection = this.heroSectionRef?.nativeElement;
+    const heroSection = this.heroSection()?.nativeElement;
 
     if (!heroSection) {
       return;

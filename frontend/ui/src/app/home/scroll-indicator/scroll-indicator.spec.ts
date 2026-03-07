@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ScrollIndicatorComponent } from './scroll-indicator.component';
+import { ScrollIndicator } from './scroll-indicator';
 
-describe('ScrollIndicatorComponent', () => {
-  let component: ScrollIndicatorComponent;
-  let fixture: ComponentFixture<ScrollIndicatorComponent>;
+describe('ScrollIndicator', () => {
+  let component: ScrollIndicator;
+  let fixture: ComponentFixture<ScrollIndicator>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [ScrollIndicatorComponent],
+      imports: [ScrollIndicator],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ScrollIndicatorComponent);
+    fixture = TestBed.createComponent(ScrollIndicator);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
