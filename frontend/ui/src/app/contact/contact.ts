@@ -4,24 +4,24 @@ import { catchError, finalize, of, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ContactForm, ContactFormData } from './contact-form/contact-form';
-import { HeroComponent } from '../components/hero/hero.component';
-import { ModalComponent } from '../components/modal/modal.component';
+import { Hero } from '../shared/components/hero/hero';
+import { Modal } from './modal/modal';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.html',
-  imports: [HeroComponent, ContactForm, ModalComponent],
+  imports: [Hero, ContactForm, Modal],
   host: {
     class: 'flex flex-col flex-1',
   },
 })
-export class ContactComponent {
+export class Contact {
   private readonly http = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly isSubmitting = signal(false);
 
-  submitForm(data: ContactFormData, modal: ModalComponent): void {
+  submitForm(data: ContactFormData, modal: Modal): void {
     if (this.isSubmitting()) {
       return;
     }

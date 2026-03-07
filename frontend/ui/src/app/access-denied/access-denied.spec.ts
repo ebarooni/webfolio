@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AccessDenied } from './access-denied';
 import { AppStore } from '../store/app/app.store';
-import { Route } from '../config/constants/route';
+import { Route } from '../config/route';
 
 describe('AccessDenied', () => {
   let fixture: ComponentFixture<AccessDenied>;

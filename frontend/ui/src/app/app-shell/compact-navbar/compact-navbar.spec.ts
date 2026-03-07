@@ -6,7 +6,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CompactNavbar } from './compact-navbar';
-import type { Theme } from '../../config/constants/themes-array';
+import type { Theme } from '../../config/themes-array';
 
 describe('CompactNavbar', () => {
   let component: CompactNavbar;

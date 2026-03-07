@@ -5,21 +5,21 @@ import {
 } from '@angular/common/http/testing';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { ContactComponent } from './contact';
-import { ModalComponent } from '../components/modal/modal.component';
+import { Contact } from './contact';
+import { Modal } from './modal/modal';
 import { ContactFormData } from './contact-form/contact-form';
 
 describe('Contact', () => {
-  let fixture: ComponentFixture<ContactComponent>;
-  let component: ContactComponent;
+  let fixture: ComponentFixture<Contact>;
+  let component: Contact;
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ContactComponent],
+      imports: [HttpClientTestingModule, Contact],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContactComponent);
+    fixture = TestBed.createComponent(Contact);
     component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
@@ -30,7 +30,7 @@ describe('Contact', () => {
   });
 
   it('should show success modal on successful submit', () => {
-    const modal = { showModal: vi.fn() } as unknown as ModalComponent;
+    const modal = { showModal: vi.fn() } as unknown as Modal;
 
     const payload: ContactFormData = {
       email: 'max@mustermann.de',
@@ -54,7 +54,7 @@ describe('Contact', () => {
   });
 
   it('should show error modal on failed submit', () => {
-    const modal = { showModal: vi.fn() } as unknown as ModalComponent;
+    const modal = { showModal: vi.fn() } as unknown as Modal;
 
     component.submitForm(
       { email: 'a@b.com', name: 'Max Mustermann', message: 'Hello' },

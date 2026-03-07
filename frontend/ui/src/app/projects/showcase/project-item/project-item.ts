@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { OpenComponent } from './open/open';
+import { Open } from './open/open';
 
 export type ProjectDescription = Readonly<{
   title: string;
@@ -11,7 +11,7 @@ export type ProjectDescription = Readonly<{
 
 @Component({
   selector: 'app-project-item',
-  imports: [OpenComponent],
+  imports: [Open],
   templateUrl: './project-item.html',
 })
 export class ProjectItem {

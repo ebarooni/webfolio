@@ -6,7 +6,7 @@ import {
   input,
   Renderer2,
 } from '@angular/core';
-import { Theme } from '../../config/constants/themes-array';
+import { Theme } from '../../config/themes-array';
 
 @Directive({
   selector: '[appDataTheme]',

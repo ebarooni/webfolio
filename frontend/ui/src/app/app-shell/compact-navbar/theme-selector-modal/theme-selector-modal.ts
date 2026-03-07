@@ -7,7 +7,7 @@ import {
   viewChild,
 } from '@angular/core';
 
-import { Theme, themesArray } from '../../../config/constants/themes-array';
+import { Theme, themesArray } from '../../../config/themes-array';
 import { DataTheme } from '../../data-theme/data-theme';
 
 @Component({

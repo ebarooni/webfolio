@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ModalComponent } from './modal.component';
+import { PostModal } from './post-modal';
 
-describe('ModalComponent', () => {
-  let component: ModalComponent;
-  let fixture: ComponentFixture<ModalComponent>;
+describe('PostModal', () => {
+  let component: PostModal;
+  let fixture: ComponentFixture<PostModal>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [ModalComponent],
+      imports: [PostModal],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ModalComponent);
+    fixture = TestBed.createComponent(PostModal);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

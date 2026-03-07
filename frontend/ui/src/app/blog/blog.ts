@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { HeroComponent } from '../components/hero/hero.component';
-import { PostModalComponent } from './post-modal/post-modal.component';
-import { AstroToAngularComponent } from './posts/astro-to-angular/astro-to-angular.component';
+import { Hero } from '../shared/components/hero/hero';
+import { PostModal } from './post-modal/post-modal';
+import { AstroToAngular } from './posts/astro-to-angular/astro-to-angular';
 
 enum Posts {
   ASTRO_TO_ANGULAR,
@@ -20,12 +20,7 @@ type BlogPostPreview = Readonly<{
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.html',
-  imports: [
-    DatePipe,
-    HeroComponent,
-    PostModalComponent,
-    AstroToAngularComponent,
-  ],
+  imports: [DatePipe, Hero, PostModal, AstroToAngular],
   host: {
     class: 'flex flex-col flex-1',
   },
@@ -48,7 +43,7 @@ export class BlogComponent {
     return Posts;
   }
 
-  viewPost(postId: Posts, dialog: PostModalComponent): void {
+  viewPost(postId: Posts, dialog: PostModal): void {
     this.selectedPostId.set(postId);
     dialog.show();
   }

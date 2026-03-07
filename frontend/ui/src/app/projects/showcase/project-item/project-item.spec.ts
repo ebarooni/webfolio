@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { describe, expect, it } from 'vitest';
 import { ProjectItem, type ProjectDescription } from './project-item';
 
-describe('ProjectItemComponent', () => {
+describe('ProjectItem', () => {
   it('renders title, description, features and link when href is provided', async () => {
     await TestBed.configureTestingModule({
       imports: [ProjectItem],

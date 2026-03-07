@@ -21,8 +21,8 @@ import {
   startWith,
 } from 'rxjs';
 
-import { Route } from '../../config/constants/route';
-import { Theme, themesArray } from '../../config/constants/themes-array';
+import { Route } from '../../config/route';
+import { Theme, themesArray } from '../../config/themes-array';
 import { DataTheme } from '../data-theme/data-theme';
 
 type NavItem = Readonly<{

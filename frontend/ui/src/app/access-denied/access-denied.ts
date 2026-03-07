@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AppStore } from '../store/app/app.store';
-import { Route } from '../config/constants/route';
+import { Route } from '../config/route';
 import { FormsModule } from '@angular/forms';
 
 @Component({

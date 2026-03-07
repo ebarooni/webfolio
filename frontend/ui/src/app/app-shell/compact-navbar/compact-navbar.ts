@@ -13,8 +13,8 @@ import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { distinctUntilChanged, fromEvent, map, of, startWith } from 'rxjs';
 
-import { Route } from '../../config/constants/route';
-import { Theme } from '../../config/constants/themes-array';
+import { Route } from '../../config/route';
+import { Theme } from '../../config/themes-array';
 import { ThemeSelectorModal } from './theme-selector-modal/theme-selector-modal';
 
 type NavItem = Readonly<{

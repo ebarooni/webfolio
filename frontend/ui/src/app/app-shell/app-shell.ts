@@ -15,8 +15,8 @@ import {
 import { distinctUntilChanged, filter, map, merge, of } from 'rxjs';
 
 import { VERSION } from '../../environments/build-info';
-import { Route } from '../config/constants/route';
-import { Theme } from '../config/constants/themes-array';
+import { Route } from '../config/route';
+import { Theme } from '../config/themes-array';
 import { AppStore } from '../store/app/app.store';
 import { CompactNavbar } from './compact-navbar/compact-navbar';
 import { Footer } from './footer/footer';

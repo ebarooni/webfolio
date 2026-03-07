@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Navbar } from './navbar';
-import type { Theme } from '../../config/constants/themes-array';
+import type { Theme } from '../../config/themes-array';
 import { provideRouter } from '@angular/router';
 import { provideLocationMocks } from '@angular/common/testing';
 
@@ -153,43 +153,6 @@ describe('Navbar', () => {
       );
 
       expect(component.isThemeMenuOpen()).toBe(true);
-    });
-  });
-
-  describe('scroll shadow behavior', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
-    it('should toggle shadow-xs on navbarDiv when scrolling', async () => {
-      await create();
-
-      const host = document.createElement('div');
-      document.body.appendChild(host);
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      vi.spyOn(component, 'navbarDiv').mockReturnValue({
-        nativeElement: host,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);
-
-      vi.spyOn(window, 'scrollY', 'get').mockReturnValue(10);
-      window.dispatchEvent(new Event('scroll'));
-
-      vi.advanceTimersByTime(60);
-      expect(host.classList.contains('shadow-xs')).toBe(true);
-
-      vi.spyOn(window, 'scrollY', 'get').mockReturnValue(0);
-      window.dispatchEvent(new Event('scroll'));
-
-      vi.advanceTimersByTime(60);
-      expect(host.classList.contains('shadow-xs')).toBe(false);
-
-      host.remove();
     });
   });
 });

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { HeroComponent } from './hero.component';
+import { AstroToAngular } from './astro-to-angular';
 
-describe('HeroComponent', () => {
-  let component: HeroComponent;
-  let fixture: ComponentFixture<HeroComponent>;
+describe('AstroToAngular', () => {
+  let component: AstroToAngular;
+  let fixture: ComponentFixture<AstroToAngular>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [HeroComponent],
+      imports: [AstroToAngular],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HeroComponent);
+    fixture = TestBed.createComponent(AstroToAngular);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

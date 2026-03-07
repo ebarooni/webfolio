@@ -7,9 +7,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AppShell } from './app-shell';
 import { AppStore } from '../store/app/app.store';
-import { Theme } from '../config/constants/themes-array';
+import { Theme } from '../config/themes-array';
 import { VERSION } from '../../environments/build-info';
-import { Route } from '../config/constants/route';
+import { Route } from '../config/route';
 
 @Component({
   selector: 'app-navbar',

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { ThemeSelectorModal } from './theme-selector-modal';
-import { themesArray } from '../../../config/constants/themes-array';
+import { themesArray } from '../../../config/themes-array';
 
 describe('ThemeSelectorModal', () => {
   let component: ThemeSelectorModal;

@@ -7,10 +7,10 @@ import {
 
 @Component({
   selector: 'app-post-modal',
-  templateUrl: './post-modal.component.html',
+  templateUrl: './post-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostModalComponent {
+export class PostModal {
   private readonly modal = viewChild<ElementRef<HTMLDialogElement>>('modal');
 
   show(): void {

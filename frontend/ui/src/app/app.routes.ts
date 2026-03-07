@@ -1,4 +1,4 @@
-import { Route } from './config/constants/route';
+import { Route } from './config/route';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -44,8 +44,7 @@ export const routes: Routes = [
       },
       {
         path: Route.CONTACT,
-        loadComponent: () =>
-          import('./contact/contact').then((m) => m.ContactComponent),
+        loadComponent: () => import('./contact/contact').then((m) => m.Contact),
         title: 'Contact | Ehsan Barooni',
         data: {
           page: Route.CONTACT,

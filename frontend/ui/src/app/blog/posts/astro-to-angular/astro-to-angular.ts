@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-astro-to-angular',
-  templateUrl: './astro-to-angular.component.html',
+  templateUrl: './astro-to-angular.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AstroToAngularComponent {}
+export class AstroToAngular {}

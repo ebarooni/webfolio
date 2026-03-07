@@ -2,9 +2,9 @@ import { Component, ElementRef, signal, viewChild } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html',
+  templateUrl: './modal.html',
 })
-export class ModalComponent {
+export class Modal {
   private readonly modalRef = viewChild<ElementRef<HTMLDialogElement>>('modal');
   readonly title = signal('');
   readonly message = signal('');

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { Route } from '../../config/constants/route';
+import { Route } from '../../config/route';
 
 @Component({
   selector: 'app-about',

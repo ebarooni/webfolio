@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { AstroToAngularComponent } from './astro-to-angular.component';
+import { Modal } from './modal';
 
-describe('AstroToAngularComponent', () => {
-  let component: AstroToAngularComponent;
-  let fixture: ComponentFixture<AstroToAngularComponent>;
+describe('Modal', () => {
+  let component: Modal;
+  let fixture: ComponentFixture<Modal>;
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
-      imports: [AstroToAngularComponent],
+      imports: [Modal],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AstroToAngularComponent);
+    fixture = TestBed.createComponent(Modal);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
