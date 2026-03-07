@@ -1,13 +1,13 @@
-<div class="pt-20" [ngClass]="backgroundColor()">
+<section class="pt-20" [ngClass]="backgroundClass()">
   <div
-    class="flex flex-col items-center justify-center text-center px-8 lg:px-24 py-7 sm:py-16"
+    class="flex flex-col items-center justify-center px-8 py-7 text-center sm:py-16 lg:px-24"
   >
-    <h1 class="text-headline font-extrabold mb-4" [ngClass]="titleColor()">
-      <ng-content select="title"></ng-content>
+    <h1 class="text-headline mb-4 font-extrabold" [ngClass]="titleClass()">
+      <ng-content select="[heroTitle]"></ng-content>
     </h1>
 
-    <p class="text-body max-w-2xl" [ngClass]="subtitleColor()">
-      <ng-content select="subtitle"></ng-content>
+    <p class="text-body max-w-2xl" [ngClass]="subtitleClass()">
+      <ng-content select="[heroSubtitle]"></ng-content>
     </p>
   </div>
-</div>
+</section>

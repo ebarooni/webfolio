@@ -1,13 +1,13 @@
-import { Component, input } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { Component, input } from '@angular/core';
 
 @Component({
-  imports: [NgClass],
   selector: 'app-hero',
+  imports: [NgClass],
   templateUrl: './hero.html',
 })
 export class Hero {
-  public backgroundColor = input.required<string>();
-  public titleColor = input.required<string>();
-  public subtitleColor = input.required<string>();
+  public backgroundClass = input<string>('');
+  public titleClass = input<string>('');
+  public subtitleClass = input<string>('text-neutral-content');
 }
