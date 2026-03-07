@@ -1,6 +1,6 @@
 ---
 agent: 'agent'
-description: 'Refactor Angular components and services to modern best practices while strictly following the given standards standards'
+description: 'Refactor Angular components and services to modern best practices while strictly following the given guidelines'
 ---
 
 ## Objective
