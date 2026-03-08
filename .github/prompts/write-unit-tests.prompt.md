@@ -14,7 +14,7 @@ Write unit tests for the provided Angular components, services, directives and p
 - DaisyUI 5
 - Vitest for unit testing
 - Zoneless
-- Standalone components by default
+- Uses tandalone components by default
 - Each screen is wrapped by the `app-shell` component, which defines the global layout structure
 
 ## Requirements
