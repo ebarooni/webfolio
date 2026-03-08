@@ -1,29 +1,12 @@
-import {
-  Directive,
-  ElementRef,
-  effect,
-  inject,
-  input,
-  Renderer2,
-} from '@angular/core';
+import { Directive, input } from '@angular/core';
 import { Theme } from '../../config/themes-array';
 
 @Directive({
   selector: '[appDataTheme]',
+  host: {
+    '[attr.data-theme]': 'theme()',
+  },
 })
 export class DataTheme {
   readonly theme = input.required<Theme>({ alias: 'appDataTheme' });
-
-  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly renderer = inject(Renderer2);
-
-  constructor() {
-    effect(() => {
-      this.renderer.setAttribute(
-        this.el.nativeElement,
-        'data-theme',
-        this.theme(),
-      );
-    });
-  }
 }
