@@ -51,11 +51,13 @@ class MockFooter {
 }
 
 @Component({
+  selector: 'app-default-route-test',
   template: '',
 })
 class DefaultRouteComponent {}
 
 @Component({
+  selector: 'app-blog-route-test',
   template: '',
 })
 class BlogRouteComponent {}
