@@ -31,6 +31,7 @@ Write unit tests for the provided Angular components, services, directives and p
 - Ensure all test code is fully type safe.
 - Avoid unsafe access on implicitly typed values.
 - When querying DOM elements through `DebugElement`, cast `nativeElement` to the correct concrete HTML element type before reading properties or calling methods.
+- Use `provideRouter([...])` when configuring Angular TestBed for components depending on Router instead of manually mocking the Router service.
 
 ## Output Format
 
