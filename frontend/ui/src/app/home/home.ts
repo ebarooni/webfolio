@@ -63,11 +63,6 @@ export class Home implements AfterViewInit {
   private readonly heroSectionHeight = signal(0);
 
   readonly showScrollIndicator = computed(() => {
-    console.log(
-      this.isAtPageTop(),
-      this.heroSectionHeight(),
-      this.viewportHeight(),
-    );
     return (
       this.isAtPageTop() && this.heroSectionHeight() <= this.viewportHeight()
     );
