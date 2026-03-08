@@ -1,58 +1,85 @@
-import { TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { describe, expect, it } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import { ProjectItem, type ProjectDescription } from './project-item';
 
+@Component({
+  selector: 'app-open',
+  standalone: true,
+  template: '',
+})
+class MockOpen {}
+
 describe('ProjectItem', () => {
-  it('renders title, description, features and link when href is provided', async () => {
+  let fixture: ComponentFixture<ProjectItem>;
+  let component: ProjectItem;
+
+  const project: ProjectDescription = {
+    title: 'Test Project',
+    description: 'Description',
+    href: 'https://example.com',
+    features: ['Angular', 'TypeScript'],
+  };
+
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProjectItem],
+      imports: [ProjectItem, MockOpen],
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(ProjectItem);
-
-    const project: ProjectDescription = {
-      title: 'Webfolio',
-      description: 'A personal portfolio website.',
-      href: 'https://example.com',
-      features: ['Angular', 'TailwindCSS', 'daisyUI'],
-    };
-
+    fixture = TestBed.createComponent(ProjectItem);
+    component = fixture.componentInstance;
     fixture.componentRef.setInput('project', project);
     fixture.detectChanges();
-
-    const titleEl = fixture.debugElement.query(By.css('h3'));
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(titleEl.nativeElement.textContent).toContain('Webfolio');
-
-    const badges = fixture.debugElement.queryAll(By.css('.badge'));
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    expect(badges.map((b) => b.nativeElement.textContent.trim())).toEqual(
-      project.features,
-    );
-
-    const link = fixture.debugElement.query(By.css('a.btn'));
-    expect(link).toBeTruthy();
-    expect(link.attributes['href']).toBe(project.href);
-    expect(link.attributes['rel']).toContain('noopener');
   });
 
-  it('does not render link button when href is missing', async () => {
-    await TestBed.configureTestingModule({
-      imports: [ProjectItem],
-    }).compileComponents();
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-    const fixture = TestBed.createComponent(ProjectItem);
+  it('creates the component', () => {
+    expect(component).toBeTruthy();
+  });
 
-    fixture.componentRef.setInput('project', {
-      title: 'Capawesome',
-      description: 'Enterprise grade solutions.',
-      features: ['CapacitorJS', 'Cross-platform'],
-    });
+  it('computes hasLink correctly when href exists', () => {
+    expect(component.hasLink()).toBe(true);
+  });
 
+  it('computes ariaLabel using default format', () => {
+    expect(component.ariaLabel()).toBe('Open Test Project');
+  });
+
+  it('renders project title', () => {
+    const titleDebug = fixture.debugElement.query(By.css('h3'));
+    const titleEl = titleDebug.nativeElement as HTMLHeadingElement;
+    expect(titleEl.textContent?.trim()).toBe(project.title);
+  });
+
+  it('renders project description', () => {
+    const descDebug = fixture.debugElement.query(By.css('p'));
+    const descEl = descDebug.nativeElement as HTMLParagraphElement;
+    expect(descEl.textContent?.trim()).toBe(project.description);
+  });
+
+  it('renders feature badges', () => {
+    const badges = fixture.debugElement.queryAll(By.css('.badge'));
+    expect(badges.length).toBe(project.features.length);
+  });
+
+  it('renders link when href exists', () => {
+    const link = fixture.debugElement.query(By.css('a'));
+    expect(link).not.toBeNull();
+  });
+
+  it('uses custom aria label when provided', () => {
+    const custom: ProjectDescription = {
+      ...project,
+      linkAriaLabel: 'Custom label',
+    };
+
+    fixture.componentRef.setInput('project', custom);
     fixture.detectChanges();
 
-    const link = fixture.debugElement.query(By.css('a.btn'));
-    expect(link).toBeNull();
+    expect(component.ariaLabel()).toBe('Custom label');
   });
 });

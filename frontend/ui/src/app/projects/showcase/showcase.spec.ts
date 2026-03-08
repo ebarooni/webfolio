@@ -1,19 +1,43 @@
-import { TestBed } from '@angular/core/testing';
+import { Component, Input } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { describe, expect, it } from 'vitest';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import { Showcase } from './showcase';
+import type { ProjectDescription } from './project-item/project-item';
+
+@Component({
+  selector: 'app-project-item',
+  standalone: true,
+  template: '',
+})
+class MockProjectItem {
+  @Input() project!: ProjectDescription;
+}
 
 describe('Showcase', () => {
-  it('renders one project card per project', async () => {
+  let fixture: ComponentFixture<Showcase>;
+  let component: Showcase;
+
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Showcase],
+      imports: [Showcase, MockProjectItem],
     }).compileComponents();
 
-    const fixture = TestBed.createComponent(Showcase);
+    fixture = TestBed.createComponent(Showcase);
+    component = fixture.componentInstance;
     fixture.detectChanges();
+  });
 
-    const component = fixture.componentInstance;
-    const cards = fixture.debugElement.queryAll(By.css('app-project-item'));
-    expect(cards.length).toBe(component.projects.length);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('creates the component', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('renders a project item for each project', () => {
+    const items = fixture.debugElement.queryAll(By.css('app-project-item'));
+    expect(items.length).toBe(component.projects.length);
   });
 });
