@@ -30,7 +30,7 @@ export class Timeline {
     {
       period: 'Q1 2021',
       title: 'B.Sc. Graduate',
-      description: 'Completed BSc in Industrial Engineering.',
+      description: 'Completed studies in Industrial Engineering.',
       align: 'start',
     },
     {
