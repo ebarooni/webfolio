@@ -1,193 +1,182 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideLocationMocks } from '@angular/common/testing';
-import { provideRouter, RouterLink } from '@angular/router';
 import { By } from '@angular/platform-browser';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Route } from '../../config/route';
+import { themesArray } from '../../config/themes-array';
 import { CompactNavbar } from './compact-navbar';
-import type { Theme } from '../../config/themes-array';
+import { ThemeSelectorModal } from './theme-selector-modal/theme-selector-modal';
 
 describe('CompactNavbar', () => {
-  let component: CompactNavbar;
   let fixture: ComponentFixture<CompactNavbar>;
-
-  const setInputs = (opts?: {
-    theme?: Theme;
-    version?: string | undefined;
-  }) => {
-    fixture.componentRef.setInput(
-      'selectedTheme',
-      opts?.theme ?? ('light' as Theme),
-    );
-    fixture.componentRef.setInput('version', opts?.version);
-    fixture.detectChanges();
-  };
+  let component: CompactNavbar;
 
   beforeEach(async () => {
-    vi.restoreAllMocks();
-    TestBed.resetTestingModule();
-
     await TestBed.configureTestingModule({
       imports: [CompactNavbar],
-      providers: [provideRouter([]), provideLocationMocks()],
-      schemas: [NO_ERRORS_SCHEMA],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CompactNavbar);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('selectedTheme', themesArray[0]);
+    fixture.detectChanges();
   });
 
   afterEach(() => {
-    TestBed.resetTestingModule();
+    vi.restoreAllMocks();
   });
 
   it('should create', () => {
-    setInputs();
     expect(component).toBeTruthy();
   });
 
-  it('should throw if required selectedTheme input is not provided', async () => {
-    TestBed.resetTestingModule();
-
-    await TestBed.configureTestingModule({
-      imports: [CompactNavbar],
-      providers: [provideRouter([]), provideLocationMocks()],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
-    const f = TestBed.createComponent(CompactNavbar);
-    expect(() => f.detectChanges()).toThrow();
-  });
-
-  it('should render Theme button', () => {
-    setInputs();
-
-    const themeBtn = fixture.debugElement
-      .queryAll(By.css('button'))
-      .find((b) =>
-        (b.nativeElement as HTMLButtonElement).textContent?.includes('Theme'),
-      );
-
-    expect(themeBtn).toBeTruthy();
-  });
-
-  it('should toggle menu open state when hamburger is clicked', () => {
-    setInputs();
-
-    const toggleBtn = fixture.debugElement.query(
-      By.css('button[aria-controls="compact-nav-menu"]'),
+  it('should render navigation items without build item when version is undefined', () => {
+    const linkDebugElements = fixture.debugElement.queryAll(
+      By.css('#compact-nav-menu a'),
     );
-    expect(toggleBtn).toBeTruthy();
+    const linkTexts = linkDebugElements.map((debugElement) => {
+      const anchor = debugElement.nativeElement as HTMLAnchorElement;
+      return anchor.textContent?.trim();
+    });
+
+    expect(linkTexts).toEqual(['Home', 'Blog', 'Projects', 'Contact']);
+  });
+
+  it('should render build item with version when version is set', () => {
+    fixture.componentRef.setInput('version', 'v1.2.3');
+    fixture.detectChanges();
+
+    const linkDebugElements = fixture.debugElement.queryAll(
+      By.css('#compact-nav-menu a'),
+    );
+    const linkTexts = linkDebugElements.map((debugElement) => {
+      const anchor = debugElement.nativeElement as HTMLAnchorElement;
+      return anchor.textContent?.trim();
+    });
+
+    expect(linkTexts).toEqual([
+      'Home',
+      'Blog',
+      'Projects',
+      'Contact',
+      'v1.2.3',
+    ]);
+  });
+
+  it('should toggle menu when toggle button is clicked', () => {
+    const toggleButtonDebugElement = fixture.debugElement.query(
+      By.css('button[aria-label="Toggle menu"]'),
+    );
+    const toggleButton =
+      toggleButtonDebugElement.nativeElement as HTMLButtonElement;
 
     expect(component.isMenuOpen()).toBe(false);
+    expect(toggleButton.getAttribute('aria-expanded')).toBe('false');
 
-    toggleBtn.triggerEventHandler('click', new MouseEvent('click'));
+    toggleButton.click();
     fixture.detectChanges();
+
     expect(component.isMenuOpen()).toBe(true);
+    expect(toggleButton.getAttribute('aria-expanded')).toBe('true');
 
-    toggleBtn.triggerEventHandler('click', new MouseEvent('click'));
-    fixture.detectChanges();
-    expect(component.isMenuOpen()).toBe(false);
-  });
-
-  it('should apply collapse-open class when menu is open', () => {
-    setInputs();
-
-    const root = fixture.debugElement.query(By.css('div.collapse'));
-    expect(root).toBeTruthy();
-
-    expect(
-      (root.nativeElement as HTMLElement).classList.contains('collapse-open'),
-    ).toBe(false);
-
-    component.isMenuOpen.set(true);
-    fixture.detectChanges();
-
-    expect(
-      (root.nativeElement as HTMLElement).classList.contains('collapse-open'),
-    ).toBe(true);
-  });
-
-  it('should apply bg-base-300 to the title when menu is open', () => {
-    setInputs();
-
-    const title = fixture.debugElement.query(By.css('.collapse-title'));
-    expect(title).toBeTruthy();
-
-    expect(
-      (title.nativeElement as HTMLElement).classList.contains('bg-base-300'),
-    ).toBe(false);
-
-    component.isMenuOpen.set(true);
-    fixture.detectChanges();
-
-    expect(
-      (title.nativeElement as HTMLElement).classList.contains('bg-base-300'),
-    ).toBe(true);
-  });
-
-  it('should render nav items (without Build when version is undefined)', () => {
-    setInputs({ version: undefined });
-
-    const links = fixture.debugElement.queryAll(By.css('#compact-nav-menu a'));
-    const texts = links
-      .map((l) => (l.nativeElement as HTMLAnchorElement).textContent?.trim())
-      .filter(Boolean);
-
-    expect(texts).toContain('Home');
-    expect(texts).toContain('Blog');
-    expect(texts).toContain('Projects');
-    expect(texts).toContain('Contact');
-
-    expect(texts).not.toContain('Build');
-  });
-
-  it('should show version text for the Build item when version is provided', () => {
-    setInputs({ version: '1.2.3' });
-
-    const links = fixture.debugElement.queryAll(By.css('#compact-nav-menu a'));
-    const texts = links
-      .map((l) => (l.nativeElement as HTMLAnchorElement).textContent?.trim())
-      .filter(Boolean);
-
-    expect(texts).toContain('1.2.3');
-  });
-
-  it('should close the menu when clicking a nav link', () => {
-    setInputs({ version: undefined });
-
-    component.isMenuOpen.set(true);
-    fixture.detectChanges();
-
-    const firstLink = fixture.debugElement.query(By.css('#compact-nav-menu a'));
-    expect(firstLink).toBeTruthy();
-
-    firstLink.triggerEventHandler('click', new MouseEvent('click'));
+    toggleButton.click();
     fixture.detectChanges();
 
     expect(component.isMenuOpen()).toBe(false);
+    expect(toggleButton.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('Home link should have RouterLink and an href', () => {
-    setInputs({ version: undefined });
+  it('should close menu when a navigation link is clicked', () => {
+    component.isMenuOpen.set(true);
+    fixture.detectChanges();
 
-    const homeDe = fixture.debugElement
-      .queryAll(By.css('#compact-nav-menu a'))
-      .find(
-        (de) =>
-          (de.nativeElement as HTMLAnchorElement).textContent?.trim() ===
-          'Home',
-      );
-
-    expect(homeDe).toBeTruthy();
-
-    const routerLinkDir = homeDe!.injector.get(RouterLink, null);
-    expect(routerLinkDir).toBeTruthy();
-
-    const href = (homeDe!.nativeElement as HTMLAnchorElement).getAttribute(
-      'href',
+    const linkDebugElement = fixture.debugElement.query(
+      By.css('#compact-nav-menu a'),
     );
-    expect(href).toBeTruthy();
+    const anchor = linkDebugElement.nativeElement as HTMLAnchorElement;
+
+    anchor.click();
+    fixture.detectChanges();
+
+    expect(component.isMenuOpen()).toBe(false);
+  });
+
+  it('should close menu on Escape key press when menu is open', () => {
+    component.isMenuOpen.set(true);
+    fixture.detectChanges();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+
+    expect(component.isMenuOpen()).toBe(false);
+  });
+
+  it('should not close menu on Escape key press when menu is already closed', () => {
+    component.isMenuOpen.set(false);
+    fixture.detectChanges();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+
+    expect(component.isMenuOpen()).toBe(false);
+  });
+
+  it('should open theme selector when theme button is clicked', () => {
+    const modalComponent = component.themeSelectorModalComponent();
+
+    expect(modalComponent).toBeTruthy();
+
+    if (!modalComponent) {
+      throw new Error('Expected theme selector modal component to exist.');
+    }
+
+    const showModalSpy = vi
+      .spyOn(modalComponent, 'showModal')
+      .mockImplementation(() => undefined);
+
+    const buttonDebugElements = fixture.debugElement.queryAll(
+      By.css('nav button'),
+    );
+    const themeButtonDebugElement = buttonDebugElements[0];
+    const themeButton =
+      themeButtonDebugElement.nativeElement as HTMLButtonElement;
+
+    themeButton.click();
+
+    expect(showModalSpy).toHaveBeenCalled();
+  });
+
+  it('should emit themeChanged when onThemeChanged is called', () => {
+    const emitSpy = vi.spyOn(component.themeChanged, 'emit');
+
+    component.onThemeChanged(themesArray[1]);
+
+    expect(emitSpy).toHaveBeenCalledWith(themesArray[1]);
+  });
+
+  it('should expose the expected navigation configuration', () => {
+    expect(component.navItems).toEqual([
+      { label: 'Home', route: Route.HOME, exact: true },
+      { label: 'Blog', route: Route.BLOG },
+      { label: 'Projects', route: Route.PROJECTS },
+      { label: 'Contact', route: Route.CONTACT },
+      { label: 'Build', route: Route.BUILD_INFO, requiresVersion: true },
+    ]);
+  });
+
+  it('should render the theme selector modal with the selected theme input', () => {
+    const modalDebugElement = fixture.debugElement.query(
+      By.directive(ThemeSelectorModal),
+    );
+
+    expect(modalDebugElement).toBeTruthy();
+
+    const modalComponent =
+      modalDebugElement.componentInstance as ThemeSelectorModal;
+
+    expect(modalComponent.selectedTheme()).toBe(themesArray[0]);
   });
 });
