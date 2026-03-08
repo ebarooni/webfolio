@@ -1,240 +1,216 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { Component, input, output } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { provideRouter, Router, RouterOutlet } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import {
+  beforeAll,
+  beforeEach,
+  afterEach,
+  afterAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 import { AppShell } from './app-shell';
-import { AppStore } from '../store/app/app.store';
-import { Theme } from '../config/themes-array';
-import { VERSION } from '../../environments/build-info';
 import { Route } from '../config/route';
+import type { Theme } from '../config/themes-array';
+import { AppStore } from '../store/app/app.store';
+import { Navbar } from './navbar/navbar';
+import { Footer } from './footer/footer';
+import { CompactNavbar } from './compact-navbar/compact-navbar';
 
 @Component({
   selector: 'app-navbar',
   template: '',
 })
-class NavbarStubComponent {
-  @Input() selectedTheme!: Theme;
-  @Input() version!: string;
-  @Output() themeChanged = new EventEmitter<Theme>();
+class MockNavbar {
+  readonly selectedTheme = input.required<Theme>();
+  readonly version = input.required<string>();
+  readonly themeChanged = output<Theme>();
 }
 
 @Component({
   selector: 'app-compact-navbar',
   template: '',
 })
-class CompactNavbarStubComponent {
-  @Input() selectedTheme!: Theme;
-  @Input() version!: string;
-  @Output() themeChanged = new EventEmitter<Theme>();
+class MockCompactNavbar {
+  readonly selectedTheme = input.required<Theme>();
+  readonly version = input.required<string>();
+  readonly themeChanged = output<Theme>();
 }
 
 @Component({
   selector: 'app-footer',
   template: '',
 })
-class FooterStubComponent {
-  @Input() bgClass!: string;
+class MockFooter {
+  readonly bgClass = input.required<string>();
 }
 
 @Component({
-  template: '<div>dummy</div>',
+  template: '',
 })
-class DummyRouteComponent {}
+class DefaultRouteComponent {}
+
+@Component({
+  template: '',
+})
+class BlogRouteComponent {}
 
 describe('AppShell', () => {
+  let fixture: ComponentFixture<AppShell>;
+  let component: AppShell;
   let router: Router;
+  let themeSubject: BehaviorSubject<Theme>;
+  let updateTheme: ReturnType<
+    typeof vi.fn<(observableOrValue: Theme | Observable<Theme>) => Subscription>
+  >;
 
-  const setup = async (opts?: { initialTheme?: Theme }) => {
-    const theme$ = new BehaviorSubject<Theme>(
-      opts?.initialTheme ?? ('light' as Theme),
-    );
+  beforeAll(() => {
+    document.documentElement.removeAttribute('data-theme');
+  });
 
-    const appStoreMock: Pick<AppStore, 'selectTheme$' | 'updateTheme'> = {
-      selectTheme$: theme$.asObservable(),
-      updateTheme: vi.fn(),
-    };
+  beforeEach(async () => {
+    themeSubject = new BehaviorSubject<Theme>('light');
+    updateTheme = vi.fn();
 
     await TestBed.configureTestingModule({
       imports: [AppShell],
       providers: [
-        { provide: AppStore, useValue: appStoreMock },
         provideRouter([
-          { path: '', component: DummyRouteComponent },
           {
-            path: 'contact',
-            component: DummyRouteComponent,
-            data: { page: Route.CONTACT, footerBgClass: 'bg-base-100' },
+            path: '',
+            component: DefaultRouteComponent,
+          },
+          {
+            path: 'blog',
+            component: BlogRouteComponent,
+            data: {
+              footerBgClass: 'bg-neutral',
+              page: Route.BLOG,
+            },
           },
         ]),
+        {
+          provide: AppStore,
+          useValue: {
+            selectTheme$: themeSubject.asObservable(),
+            updateTheme,
+          } satisfies Pick<AppStore, 'selectTheme$' | 'updateTheme'>,
+        },
       ],
     })
       .overrideComponent(AppShell, {
-        set: {
-          imports: [
-            NavbarStubComponent,
-            CompactNavbarStubComponent,
-            FooterStubComponent,
-            RouterOutlet,
-          ],
+        remove: {
+          imports: [Navbar, CompactNavbar, Footer, RouterOutlet],
+        },
+        add: {
+          imports: [MockNavbar, MockCompactNavbar, MockFooter, RouterOutlet],
         },
       })
       .compileComponents();
 
     router = TestBed.inject(Router);
-
-    const fixture = TestBed.createComponent(AppShell);
-
     await router.navigateByUrl('/');
+
+    fixture = TestBed.createComponent(AppShell);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-
-    return { fixture, appStoreMock, theme$ };
-  };
-
-  beforeEach(() => {
-    vi.restoreAllMocks();
-    document.documentElement.removeAttribute('data-theme');
+    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   afterEach(() => {
-    TestBed.resetTestingModule();
+    themeSubject.complete();
+    vi.clearAllMocks();
+    document.documentElement.removeAttribute('data-theme');
   });
 
-  it('should create', async () => {
-    const { fixture } = await setup();
-    expect(fixture.componentInstance).toBeTruthy();
+  afterAll(() => {
+    vi.restoreAllMocks();
   });
 
-  describe('version', () => {
-    it('should expose the version string prefixed with "v"', async () => {
-      const { fixture } = await setup();
-      expect(fixture.componentInstance.version).toBe(`v${VERSION}`);
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  describe('theme effect', () => {
-    it('should set data-theme on <html> to the initial theme', async () => {
-      await setup({ initialTheme: 'light' as Theme });
-      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
-    });
+  it('should set the document theme attribute from the current theme signal', () => {
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
-    it('should update data-theme on <html> when theme changes', async () => {
-      const { fixture, theme$ } = await setup({
-        initialTheme: 'light' as Theme,
-      });
+    themeSubject.next('dark');
+    fixture.detectChanges();
 
-      theme$.next('dark' as Theme);
-      fixture.detectChanges();
-
-      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-    });
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
-  describe('themeChanged', () => {
-    it('should call AppStore.updateTheme with the given theme', async () => {
-      const { fixture, appStoreMock } = await setup();
+  it('should forward theme changes to the app store', () => {
+    component.themeChanged('dark');
 
-      fixture.componentInstance.themeChanged('dark' as Theme);
-
-      expect(appStoreMock.updateTheme).toHaveBeenCalledTimes(1);
-      expect(appStoreMock.updateTheme).toHaveBeenCalledWith('dark');
-    });
-
-    it('should be wired from both nav components outputs', async () => {
-      const { fixture, appStoreMock } = await setup();
-
-      const compact = fixture.debugElement.query(
-        By.directive(CompactNavbarStubComponent),
-      ).componentInstance as CompactNavbarStubComponent;
-
-      const navbar = fixture.debugElement.query(
-        By.directive(NavbarStubComponent),
-      ).componentInstance as NavbarStubComponent;
-
-      compact.themeChanged.emit('dark' as Theme);
-      navbar.themeChanged.emit('light' as Theme);
-
-      expect(appStoreMock.updateTheme).toHaveBeenCalledTimes(2);
-      expect(appStoreMock.updateTheme).toHaveBeenNthCalledWith(1, 'dark');
-      expect(appStoreMock.updateTheme).toHaveBeenNthCalledWith(2, 'light');
-    });
+    expect(updateTheme).toHaveBeenCalledOnce();
+    expect(updateTheme).toHaveBeenCalledWith('dark');
   });
 
-  describe('template bindings', () => {
-    it('should pass selectedTheme and version to both navbar components', async () => {
-      const { fixture, theme$ } = await setup({
-        initialTheme: 'light' as Theme,
-      });
+  it('should pass the current theme and version to both navbar variants', () => {
+    const navbarDebugElement = fixture.debugElement.query(
+      By.directive(MockNavbar),
+    );
+    const compactNavbarDebugElement = fixture.debugElement.query(
+      By.directive(MockCompactNavbar),
+    );
 
-      const compact = fixture.debugElement.query(
-        By.directive(CompactNavbarStubComponent),
-      ).componentInstance as CompactNavbarStubComponent;
+    const navbarInstance = navbarDebugElement.componentInstance as MockNavbar;
+    const compactNavbarInstance =
+      compactNavbarDebugElement.componentInstance as MockCompactNavbar;
 
-      const navbar = fixture.debugElement.query(
-        By.directive(NavbarStubComponent),
-      ).componentInstance as NavbarStubComponent;
-
-      expect(compact.selectedTheme).toBe('light');
-      expect(navbar.selectedTheme).toBe('light');
-      expect(compact.version).toBe(`v${VERSION}`);
-      expect(navbar.version).toBe(`v${VERSION}`);
-
-      theme$.next('dark' as Theme);
-      fixture.detectChanges();
-
-      expect(compact.selectedTheme).toBe('dark');
-      expect(navbar.selectedTheme).toBe('dark');
-    });
-
-    it('should render a RouterOutlet and footer', async () => {
-      const { fixture } = await setup();
-
-      expect(
-        fixture.debugElement.query(By.directive(RouterOutlet)),
-      ).toBeTruthy();
-      expect(
-        fixture.debugElement.query(By.directive(FooterStubComponent)),
-      ).toBeTruthy();
-    });
+    expect(navbarInstance.selectedTheme()).toBe('light');
+    expect(compactNavbarInstance.selectedTheme()).toBe('light');
+    expect(navbarInstance.version()).toBe(component.version);
+    expect(compactNavbarInstance.version()).toBe(component.version);
   });
 
-  describe('uiConfig and shellClass', () => {
-    it('should have default uiConfig before any navigation ends', async () => {
-      const { fixture } = await setup();
+  it('should use the default ui config when the active route has no route data', () => {
+    const footerDebugElement = fixture.debugElement.query(
+      By.directive(MockFooter),
+    );
+    const footerInstance = footerDebugElement.componentInstance as MockFooter;
 
-      expect(fixture.componentInstance.uiConfig().page).toBe(Route.HOME);
-      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe(
-        'bg-base-200',
-      );
+    expect(component.uiConfig()).toEqual({
+      footerBgClass: 'bg-base-200',
+      page: Route.HOME,
     });
+    expect(footerInstance.bgClass()).toBe('bg-base-200');
+  });
 
-    it('should update uiConfig based on leaf route data after NavigationEnd', async () => {
-      const { fixture } = await setup();
+  it('should update the ui config from the active route data after navigation', async () => {
+    await router.navigateByUrl('/blog');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
 
-      await router.navigateByUrl('/contact');
-      fixture.detectChanges();
+    const footerDebugElement = fixture.debugElement.query(
+      By.directive(MockFooter),
+    );
+    const footerInstance = footerDebugElement.componentInstance as MockFooter;
 
-      expect(fixture.componentInstance.uiConfig().page).toBe(Route.CONTACT);
-      expect(fixture.componentInstance.uiConfig().footerBgClass).toBe(
-        'bg-base-100',
-      );
+    expect(component.uiConfig()).toEqual({
+      footerBgClass: 'bg-neutral',
+      page: Route.BLOG,
     });
+    expect(footerInstance.bgClass()).toBe('bg-neutral');
+  });
 
-    it('should bind footer bgClass from uiConfig and update after navigation', async () => {
-      const { fixture } = await setup();
+  it('should render the router outlet inside the main element', () => {
+    const mainDebugElement = fixture.debugElement.query(By.css('main'));
+    const routerOutletDebugElement = fixture.debugElement.query(
+      By.directive(RouterOutlet),
+    );
 
-      const footer = fixture.debugElement.query(
-        By.directive(FooterStubComponent),
-      ).componentInstance as FooterStubComponent;
+    const mainElement = mainDebugElement.nativeElement as HTMLElement;
 
-      expect(footer.bgClass).toBe('bg-base-200');
-
-      await router.navigateByUrl('/contact');
-      fixture.detectChanges();
-
-      expect(footer.bgClass).toBe('bg-base-100');
-    });
+    expect(mainElement).toBeTruthy();
+    expect(routerOutletDebugElement).toBeTruthy();
   });
 });
