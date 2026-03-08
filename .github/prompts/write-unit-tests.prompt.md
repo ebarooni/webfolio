@@ -26,6 +26,11 @@ Write unit tests for the provided Angular components, services, directives and p
 - Favor clarity, simplicity, and maintainability.
 - Use one descrive block per file.
 - Use the Angular TestBed and the beforeEach, beforeAll, afterEach and afterAll blocks for test setup.
+- Use parametric testing if needed.
+- Prefer using the ComponentFixture.debugElement.query(By) where possible to simulate interaction.
+- Ensure all test code is fully type safe.
+- Avoid unsafe access on implicitly typed values.
+- When querying DOM elements through `DebugElement`, cast `nativeElement` to the correct concrete HTML element type before reading properties or calling methods.
 
 ## Output Format
 
@@ -33,3 +38,4 @@ Write unit tests for the provided Angular components, services, directives and p
 - Do not add explanations.
 - Do not introduce unnecessary abstractions or overengineering.
 - Return only the improved component code.
+- The output must satisfy strict TypeScript and ESLint rules.
