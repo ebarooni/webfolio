@@ -1,11 +1,11 @@
 ---
 agent: 'agent'
-description: 'Refactor Angular components and services to modern best practices while strictly following the given guidelines'
+description: 'Refactor Angular components and services with modern best practices while strictly following the given guidelines'
 ---
 
 ## Objective
 
-Refactor the provided Angular component(s) and service(s) to improve structure, readability, maintainability, and architectural quality while preserving behavior and project conventions.
+Refactor the provided Angular components and services to improve structure, readability, maintainability, and architectural quality while preserving behavior and project conventions.
 
 ## Project Context
 
