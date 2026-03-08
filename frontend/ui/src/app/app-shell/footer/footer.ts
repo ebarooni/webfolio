@@ -5,7 +5,7 @@ import { Gitlab } from './gitlab/gitlab';
 import { Linkedin } from './linkedin/linkedin';
 import { Stackoverflow } from './stackoverflow/stackoverflow';
 
-type SocialId = 'github' | 'gitlab' | 'stackoverflow' | 'linkedin' | 'xing';
+type SocialId = 'github' | 'gitlab' | 'stackoverflow' | 'linkedin';
 
 type SocialLink = Readonly<{
   id: SocialId;
