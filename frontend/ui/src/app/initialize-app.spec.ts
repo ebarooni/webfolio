@@ -1,69 +1,69 @@
 import { TestBed } from '@angular/core/testing';
-import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import { DOCUMENT } from '@angular/common';
+import { AppStore, IState } from './store/app/app.store';
 import { initializeApp } from './initialize-app';
-import { AppStore } from './store/app/app.store';
-import { Theme } from './config/themes-array';
 
 describe('initializeApp', () => {
-  const setup = (opts?: { theme?: Theme; initReject?: unknown }) => {
-    const theme = opts?.theme ?? 'dark';
+  let appStore: Pick<AppStore, 'initialize'>;
+  let originalTheme: string | null;
 
-    const appStoreMock: Pick<AppStore, 'initialize'> = {
-      initialize: vi.fn(() => {
-        if (opts?.initReject !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/only-throw-error
-          throw opts.initReject;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
-        return { theme } as any;
-      }),
+  beforeAll(() => {
+    originalTheme = document.documentElement.getAttribute('data-theme');
+  });
+
+  beforeEach(() => {
+    appStore = {
+      initialize: vi.fn(),
     };
 
     TestBed.configureTestingModule({
-      providers: [{ provide: AppStore, useValue: appStoreMock }],
+      providers: [{ provide: AppStore, useValue: appStore }],
     });
 
-    const doc = TestBed.inject(DOCUMENT);
-    return { appStoreMock, doc };
-  };
-
-  beforeEach(() => {
-    vi.restoreAllMocks();
     document.documentElement.removeAttribute('data-theme');
   });
 
   afterEach(() => {
-    TestBed.resetTestingModule();
+    vi.restoreAllMocks();
+    document.documentElement.removeAttribute('data-theme');
   });
 
-  it('should call AppStore.initialize and set data-theme on <html>', () => {
-    const { appStoreMock } = setup({ theme: 'light' });
-
-    TestBed.runInInjectionContext(() => initializeApp());
-
-    expect(appStoreMock.initialize).toHaveBeenCalledTimes(1);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+  afterAll(() => {
+    if (originalTheme === null) {
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', originalTheme);
+    }
   });
 
-  it('should overwrite an existing data-theme attribute', () => {
-    const { appStoreMock } = setup({ theme: 'light' });
-    document.documentElement.setAttribute('data-theme', 'dark');
+  it('sets the document theme from the app store initialization result', () => {
+    vi.mocked(appStore.initialize).mockReturnValue({ theme: 'dark' } as IState);
 
-    TestBed.runInInjectionContext(() => initializeApp());
+    TestBed.runInInjectionContext(() => {
+      initializeApp();
+    });
 
-    expect(appStoreMock.initialize).toHaveBeenCalledTimes(1);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(appStore.initialize).toHaveBeenCalledTimes(1);
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
-  it('should call Log.debug when AppStore.initialize throws', () => {
-    const err = new Error('init failed');
-    const { appStoreMock } = setup({ initReject: err });
+  it('logs the error when app store initialization throws', () => {
+    const error = new Error('Initialization failed');
+    const debugSpy = vi
+      .spyOn(console, 'debug')
+      .mockImplementation(() => undefined);
+    vi.mocked(appStore.initialize).mockImplementation(() => {
+      throw error;
+    });
 
-    TestBed.runInInjectionContext(() => initializeApp());
+    expect(() => {
+      TestBed.runInInjectionContext(() => {
+        initializeApp();
+      });
+    }).not.toThrow();
 
-    expect(appStoreMock.initialize).toHaveBeenCalledTimes(1);
-
+    expect(appStore.initialize).toHaveBeenCalledTimes(1);
+    expect(debugSpy).toHaveBeenCalledTimes(1);
+    expect(debugSpy).toHaveBeenCalledWith(error);
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
   });
 });
