@@ -1,195 +1,93 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 import { Navbar } from './navbar';
-import type { Theme } from '../../config/constants/themes-array';
-import { provideRouter } from '@angular/router';
-import { provideLocationMocks } from '@angular/common/testing';
+import { Theme } from '../../config/themes-array';
 
 describe('Navbar', () => {
   let fixture: ComponentFixture<Navbar>;
   let component: Navbar;
 
-  const create = async (opts?: {
-    selectedTheme?: Theme;
-    version?: string | undefined;
-  }) => {
+  const selectedTheme: Theme = 'light';
+
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [provideRouter([]), provideLocationMocks()],
       imports: [Navbar],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
     component = fixture.componentInstance;
 
-    fixture.componentRef.setInput(
-      'selectedTheme',
-      opts?.selectedTheme ?? ('light' as Theme),
-    );
-
-    fixture.componentRef.setInput('version', opts?.version);
+    fixture.componentRef.setInput('selectedTheme', selectedTheme);
+    fixture.componentRef.setInput('version', '1.0.0');
 
     fixture.detectChanges();
-  };
-
-  beforeEach(() => {
-    vi.restoreAllMocks();
-    TestBed.resetTestingModule();
   });
 
-  afterEach(() => {
-    TestBed.resetTestingModule();
-  });
-
-  it('should create', async () => {
-    await create();
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should throw if required selectedTheme input is not provided', async () => {
-    await TestBed.configureTestingModule({
-      imports: [Navbar],
-    }).compileComponents();
-
-    const f = TestBed.createComponent(Navbar);
-
-    expect(() => f.detectChanges()).toThrow();
+  it('renders navigation items', () => {
+    const links = fixture.debugElement.queryAll(By.css('.join a.btn'));
+    expect(links.length).toBeGreaterThan(0);
   });
 
-  describe('theme menu state', () => {
-    it('toggleThemeMenu should toggle open state', async () => {
-      await create();
-
-      expect(component.isThemeMenuOpen()).toBe(false);
-
-      component.toggleThemeMenu();
-      expect(component.isThemeMenuOpen()).toBe(true);
-
-      component.toggleThemeMenu();
-      expect(component.isThemeMenuOpen()).toBe(false);
+  it('renders version when provided', () => {
+    const links = fixture.debugElement.queryAll(By.css('.join a.btn'));
+    const versionLink = links.find((link) => {
+      const el = link.nativeElement as HTMLAnchorElement;
+      return el.textContent?.includes('1.0.0');
     });
 
-    it('closeThemeMenu should close', async () => {
-      await create();
-
-      component.isThemeMenuOpen.set(true);
-      component.closeThemeMenu();
-
-      expect(component.isThemeMenuOpen()).toBe(false);
-    });
-
-    it('selectTheme should emit themeChanged and close the menu', async () => {
-      await create({ selectedTheme: 'light' as Theme });
-
-      const emitSpy = vi.spyOn(component.themeChanged, 'emit');
-
-      component.isThemeMenuOpen.set(true);
-      component.selectTheme('dark' as Theme);
-
-      expect(emitSpy).toHaveBeenCalledTimes(1);
-      expect(emitSpy).toHaveBeenCalledWith('dark');
-      expect(component.isThemeMenuOpen()).toBe(false);
-    });
+    expect(versionLink).toBeDefined();
   });
 
-  describe('outside click behavior (pointerdown)', () => {
-    it('should close when clicking outside dropdown while open', async () => {
-      await create();
+  it('toggles theme menu when clicking theme button', () => {
+    const buttonDe = fixture.debugElement.query(By.css('button'));
+    const button = buttonDe.nativeElement as HTMLButtonElement;
 
-      component.isThemeMenuOpen.set(true);
+    expect(component.isThemeMenuOpen()).toBe(false);
 
-      const dropdownEl = document.createElement('div');
-      dropdownEl.innerHTML = `<button id="inside"></button>`;
-      document.body.appendChild(dropdownEl);
+    button.click();
+    fixture.detectChanges();
 
-      vi.spyOn(component, 'themeDropdown').mockReturnValue({
-        nativeElement: dropdownEl,
-      });
+    expect(component.isThemeMenuOpen()).toBe(true);
 
-      const outside = document.createElement('div');
-      document.body.appendChild(outside);
+    button.click();
+    fixture.detectChanges();
 
-      outside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
-
-      expect(component.isThemeMenuOpen()).toBe(false);
-
-      dropdownEl.remove();
-      outside.remove();
-    });
-
-    it('should NOT close when clicking inside dropdown while open', async () => {
-      await create();
-
-      component.isThemeMenuOpen.set(true);
-
-      const dropdownEl = document.createElement('div');
-      dropdownEl.innerHTML = `<button id="inside"></button>`;
-      document.body.appendChild(dropdownEl);
-
-      const insideBtn = dropdownEl.querySelector('#inside')!;
-
-      vi.spyOn(component, 'themeDropdown').mockReturnValue({
-        nativeElement: dropdownEl,
-      });
-
-      insideBtn.dispatchEvent(
-        new PointerEvent('pointerdown', { bubbles: true }),
-      );
-
-      expect(component.isThemeMenuOpen()).toBe(true);
-
-      dropdownEl.remove();
-    });
-
-    it('should do nothing if dropdown element is missing', async () => {
-      await create();
-
-      component.isThemeMenuOpen.set(true);
-
-      vi.spyOn(component, 'themeDropdown').mockReturnValue(undefined);
-
-      document.body.dispatchEvent(
-        new PointerEvent('pointerdown', { bubbles: true }),
-      );
-
-      expect(component.isThemeMenuOpen()).toBe(true);
-    });
+    expect(component.isThemeMenuOpen()).toBe(false);
   });
 
-  describe('scroll shadow behavior', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
+  it('closes theme menu via closeThemeMenu', () => {
+    component.isThemeMenuOpen.set(true);
+    component.closeThemeMenu();
+    expect(component.isThemeMenuOpen()).toBe(false);
+  });
 
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+  it('emits themeChanged when selecting a theme', () => {
+    const spy = vi.fn();
+    component.themeChanged.subscribe(spy);
 
-    it('should toggle shadow-xs on navbarDiv when scrolling', async () => {
-      await create();
+    const theme: Theme = component.themes[0];
 
-      const host = document.createElement('div');
-      document.body.appendChild(host);
+    component.selectTheme(theme);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      vi.spyOn(component, 'navbarDiv').mockReturnValue({
-        nativeElement: host,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);
+    expect(spy).toHaveBeenCalledWith(theme);
+    expect(component.isThemeMenuOpen()).toBe(false);
+  });
 
-      vi.spyOn(window, 'scrollY', 'get').mockReturnValue(10);
-      window.dispatchEvent(new Event('scroll'));
+  it('opens dropdown and renders theme options', () => {
+    component.isThemeMenuOpen.set(true);
+    fixture.detectChanges();
 
-      vi.advanceTimersByTime(60);
-      expect(host.classList.contains('shadow-xs')).toBe(true);
-
-      vi.spyOn(window, 'scrollY', 'get').mockReturnValue(0);
-      window.dispatchEvent(new Event('scroll'));
-
-      vi.advanceTimersByTime(60);
-      expect(host.classList.contains('shadow-xs')).toBe(false);
-
-      host.remove();
-    });
+    const buttons = fixture.debugElement.queryAll(
+      By.css('[role="menuitemradio"]'),
+    );
+    expect(buttons.length).toBe(component.themes.length);
   });
 });

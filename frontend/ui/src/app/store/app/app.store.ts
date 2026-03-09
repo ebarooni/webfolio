@@ -1,9 +1,9 @@
 import { ComponentStore } from '@ngrx/component-store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Theme } from '../../config/constants/themes-array';
+import { Theme } from '../../config/themes-array';
 
-interface IState {
+export interface IState {
   theme: Theme;
   hasGeoAccess: boolean;
 }

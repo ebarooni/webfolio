@@ -1,4 +1,4 @@
-import { Route } from './config/constants/route';
+import { Route } from './config/route';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -18,7 +18,7 @@ export const routes: Routes = [
     children: [
       {
         path: Route.HOME,
-        loadComponent: () => import('./home/home').then((m) => m.HomeComponent),
+        loadComponent: () => import('./home/home').then((m) => m.Home),
         title: 'Ehsan Barooni | Full-Stack Software Engineer',
         data: {
           footerBgClass: 'bg-base-200',
@@ -36,7 +36,7 @@ export const routes: Routes = [
       {
         path: Route.PROJECTS,
         loadComponent: () =>
-          import('./projects/projects').then((m) => m.ProjectsComponent),
+          import('./projects/projects').then((m) => m.Projects),
         title: 'Projects | Ehsan Barooni',
         data: {
           page: Route.PROJECTS,
@@ -44,8 +44,7 @@ export const routes: Routes = [
       },
       {
         path: Route.CONTACT,
-        loadComponent: () =>
-          import('./contact/contact').then((m) => m.ContactComponent),
+        loadComponent: () => import('./contact/contact').then((m) => m.Contact),
         title: 'Contact | Ehsan Barooni',
         data: {
           page: Route.CONTACT,

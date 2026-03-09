@@ -2,17 +2,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  viewChild,
   input,
   output,
+  viewChild,
 } from '@angular/core';
 
-import { Theme, themesArray } from '../../../config/constants/themes-array';
-import { DataThemeDirective } from '../../../directives/data-theme/data-theme.directive';
+import { Theme, themesArray } from '../../../config/themes-array';
+import { DataTheme } from '../../data-theme/data-theme';
 
 @Component({
   selector: 'app-theme-selector-modal',
-  imports: [DataThemeDirective],
+  imports: [DataTheme],
   templateUrl: './theme-selector-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,11 +20,29 @@ export class ThemeSelectorModal {
   readonly selectedTheme = input.required<Theme>();
   readonly themeChanged = output<Theme>();
 
-  readonly themes: readonly Theme[] = themesArray;
+  readonly themes = themesArray;
 
-  private readonly modal = viewChild<ElementRef<HTMLDialogElement>>('modal');
+  private readonly modal =
+    viewChild.required<ElementRef<HTMLDialogElement>>('modal');
 
   showModal(): void {
-    this.modal()?.nativeElement.showModal();
+    const modal = this.modal().nativeElement;
+
+    if (!modal.open) {
+      modal.showModal();
+    }
+  }
+
+  closeModal(): void {
+    const modal = this.modal().nativeElement;
+
+    if (modal.open) {
+      modal.close();
+    }
+  }
+
+  selectTheme(theme: Theme): void {
+    this.themeChanged.emit(theme);
+    this.closeModal();
   }
 }

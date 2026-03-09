@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { HeroComponent } from '../components/hero/hero.component';
-import { ShowcaseComponent } from './showcase/showcase.component';
+import { Hero } from '../shared/components/hero/hero';
+import { Showcase } from './showcase/showcase';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.html',
-  imports: [HeroComponent, ShowcaseComponent],
+  imports: [Hero, Showcase],
   host: {
-    class: 'flex flex-col grow-1',
+    class: 'flex flex-col flex-1',
   },
 })
-export class ProjectsComponent {}
+export class Projects {}

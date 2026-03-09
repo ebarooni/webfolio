@@ -1,0 +1,11 @@
+<article
+  class="flex h-full flex-col gap-3 rounded-box bg-base-200 p-5 shadow-md md:p-6"
+>
+  <h2 class="text-cta-btn font-bold text-primary">
+    <ng-content select="[header]" />
+  </h2>
+
+  <p class="text-label text-neutral-content">
+    <ng-content select="[description]" />
+  </p>
+</article>

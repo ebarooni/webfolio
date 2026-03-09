@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+
 import { Github } from './github/github';
 import { Gitlab } from './gitlab/gitlab';
 import { Linkedin } from './linkedin/linkedin';
 import { Stackoverflow } from './stackoverflow/stackoverflow';
 
-type SocialId = 'github' | 'gitlab' | 'stackoverflow' | 'linkedin' | 'xing';
+type SocialId = 'github' | 'gitlab' | 'stackoverflow' | 'linkedin';
 
 type SocialLink = Readonly<{
   id: SocialId;
@@ -51,5 +52,7 @@ export class Footer {
     },
   ] as const);
 
-  trackById = (_: number, item: SocialLink) => item.id;
+  trackById(index: number, item: SocialLink): SocialId {
+    return item.id;
+  }
 }

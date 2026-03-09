@@ -1,0 +1,104 @@
+<section class="card mx-auto max-w-4xl bg-base-100 shadow-lg">
+  <div class="card-body p-6 sm:p-8">
+    <header class="mb-8 flex items-center gap-4 sm:mb-10">
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary"
+        aria-hidden="true"
+      >
+        <span class="text-xl">👨‍💻</span>
+      </div>
+
+      <h2 class="text-2xl font-bold text-primary sm:text-3xl">Get in Touch</h2>
+    </header>
+
+    <form
+      class="flex flex-col gap-7 sm:gap-8"
+      [formGroup]="contactForm"
+      (ngSubmit)="submit()"
+    >
+      <div class="grid gap-6 md:grid-cols-2 md:gap-8">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend pb-2 text-lg font-medium">Name</legend>
+
+          <input
+            type="text"
+            class="input w-full"
+            placeholder="Max Mustermann"
+            autocomplete="name"
+            formControlName="name"
+            [class.input-error]="
+              nameControl.invalid && (nameControl.touched || nameControl.dirty)
+            "
+            [attr.aria-invalid]="
+              nameControl.invalid && (nameControl.touched || nameControl.dirty)
+                ? true
+                : null
+            "
+          />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend pb-2 text-lg font-medium">
+            Email
+          </legend>
+
+          <input
+            type="email"
+            class="input w-full"
+            placeholder="max@mustermann.de"
+            autocomplete="email"
+            formControlName="email"
+            [class.input-error]="
+              emailControl.invalid &&
+              (emailControl.touched || emailControl.dirty)
+            "
+            [attr.aria-invalid]="
+              emailControl.invalid &&
+              (emailControl.touched || emailControl.dirty)
+                ? true
+                : null
+            "
+          />
+        </fieldset>
+      </div>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend pb-2 text-lg font-medium">
+          Message
+        </legend>
+
+        <textarea
+          class="textarea h-52 w-full"
+          placeholder="Describe your project or say hello!"
+          formControlName="message"
+          [class.textarea-error]="
+            messageControl.invalid &&
+            (messageControl.touched || messageControl.dirty)
+          "
+          [attr.aria-invalid]="
+            messageControl.invalid &&
+            (messageControl.touched || messageControl.dirty)
+              ? true
+              : null
+          "
+        ></textarea>
+
+        <div class="label">{{ message().length }}/{{ maxMessageLength }}</div>
+      </fieldset>
+
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-block sm:w-80"
+          [class.btn-outline]="contactForm.invalid"
+          [disabled]="contactForm.invalid || isSubmitting()"
+        >
+          @if (isSubmitting()) {
+          <span class="loading loading-spinner loading-sm"></span>
+          }
+          <span>{{ isSubmitting() ? "Sending..." : "Send Message" }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

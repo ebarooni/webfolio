@@ -1,10 +1,25 @@
+import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 import { Dependencies } from './dependencies';
 
-describe('DependenciesComponent', () => {
+describe('Dependencies', () => {
   let fixture: ComponentFixture<Dependencies>;
+  let component: Dependencies;
+
+  beforeAll(() => {
+    vi.clearAllMocks();
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -12,40 +27,95 @@ describe('DependenciesComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(Dependencies);
+    component = fixture.componentInstance;
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    TestBed.resetTestingModule();
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('creates the component', () => {
     fixture.componentRef.setInput('dependencies', {});
     fixture.detectChanges();
 
-    expect(fixture.componentInstance).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it('uses the default title when none provided', () => {
-    fixture.componentRef.setInput('dependencies', { angular: '21.0.0' });
+  it('renders the default title when no custom title is provided', () => {
+    fixture.componentRef.setInput('dependencies', {
+      angular: '21.0.0',
+    });
     fixture.detectChanges();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Runtime Dependencies',
-    );
+    const headingDebugElement = fixture.debugElement.query(By.css('h3'));
+    const headingElement =
+      headingDebugElement.nativeElement as HTMLHeadingElement;
+
+    expect(headingElement.textContent?.trim()).toBe('Runtime Dependencies');
   });
 
-  it('renders a custom title when provided', () => {
-    fixture.componentRef.setInput('title', 'Build time dependencies');
-    fixture.componentRef.setInput('dependencies', { vitest: '2.0.0' });
+  it('renders a custom title when one is provided', () => {
+    fixture.componentRef.setInput('title', 'Build Time Dependencies');
+    fixture.componentRef.setInput('dependencies', {
+      vite: '7.0.0',
+    });
     fixture.detectChanges();
 
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Build time dependencies',
-    );
+    const headingDebugElement = fixture.debugElement.query(By.css('h3'));
+    const headingElement =
+      headingDebugElement.nativeElement as HTMLHeadingElement;
+
+    expect(headingElement.textContent?.trim()).toBe('Build Time Dependencies');
   });
 
-  it('renders provided dependencies', () => {
-    fixture.componentRef.setInput('dependencies', { angular: '21.0.0' });
+  it('transforms dependency records into alphabetically sorted table rows', () => {
+    fixture.componentRef.setInput('dependencies', {
+      zod: '4.0.0',
+      angular: '21.0.0',
+      dayjs: '1.11.0',
+    });
     fixture.detectChanges();
 
-    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(text).toContain('angular');
-    expect(text).toContain('21.0.0');
+    const rowDebugElements = fixture.debugElement.queryAll(By.css('tbody tr'));
+
+    expect(rowDebugElements).toHaveLength(3);
+
+    const rowValues = rowDebugElements.map((rowDebugElement) => {
+      const cellDebugElements = rowDebugElement.queryAll(By.css('th, td'));
+      const packageCell = cellDebugElements[0]
+        .nativeElement as HTMLTableCellElement;
+      const versionCell = cellDebugElements[1]
+        .nativeElement as HTMLTableCellElement;
+
+      return {
+        name: packageCell.textContent?.trim(),
+        version: versionCell.textContent?.trim(),
+      };
+    });
+
+    expect(rowValues).toEqual([
+      { name: 'angular', version: '21.0.0' },
+      { name: 'dayjs', version: '1.11.0' },
+      { name: 'zod', version: '4.0.0' },
+    ]);
+  });
+
+  it('renders the title in the table caption for accessibility', () => {
+    fixture.componentRef.setInput('title', 'Selected Dependencies');
+    fixture.componentRef.setInput('dependencies', {
+      angular: '21.0.0',
+    });
+    fixture.detectChanges();
+
+    const captionDebugElement = fixture.debugElement.query(By.css('caption'));
+    const captionElement =
+      captionDebugElement.nativeElement as HTMLTableCaptionElement;
+
+    expect(captionElement.textContent?.trim()).toBe('Selected Dependencies');
   });
 });

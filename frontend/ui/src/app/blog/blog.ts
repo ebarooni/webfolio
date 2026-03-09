@@ -1,31 +1,32 @@
 import { Component, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { HeroComponent } from '../components/hero/hero.component';
-import { PostModalComponent } from './post-modal/post-modal.component';
-import { AstroToAngularComponent } from './posts/astro-to-angular/astro-to-angular.component';
+import { Hero } from '../shared/components/hero/hero';
+import { PostModal } from './post-modal/post-modal';
+import { AstroToAngular } from './posts/astro-to-angular/astro-to-angular';
 
 enum Posts {
   ASTRO_TO_ANGULAR,
 }
 
+type BlogPostPreview = Readonly<{
+  date: Date;
+  id: Posts;
+  readTime: number;
+  summary: string;
+  title: string;
+}>;
+
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.html',
-  imports: [
-    DatePipe,
-    HeroComponent,
-    PostModalComponent,
-    AstroToAngularComponent,
-  ],
+  imports: [DatePipe, Hero, PostModal, AstroToAngular],
   host: {
-    class: 'flex flex-col grow-1',
+    class: 'flex flex-col flex-1',
   },
 })
 export class BlogComponent {
-  readonly selectedPostId = signal<Posts>(Posts.ASTRO_TO_ANGULAR);
-
-  readonly posts = [
+  readonly posts: readonly BlogPostPreview[] = [
     {
       date: new Date('2024-12-01'),
       id: Posts.ASTRO_TO_ANGULAR,
@@ -36,11 +37,13 @@ export class BlogComponent {
     },
   ] as const;
 
+  readonly selectedPostId = signal<Posts>(this.posts[0].id);
+
   get Posts(): typeof Posts {
     return Posts;
   }
 
-  viewPost(postId: Posts, dialog: PostModalComponent): void {
+  viewPost(postId: Posts, dialog: PostModal): void {
     this.selectedPostId.set(postId);
     dialog.show();
   }

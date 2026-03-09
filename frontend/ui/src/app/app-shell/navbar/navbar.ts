@@ -1,3 +1,4 @@
+import { DOCUMENT, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,15 +10,20 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { fromEvent } from 'rxjs';
-import { auditTime, filter, startWith } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  distinctUntilChanged,
+  filter,
+  fromEvent,
+  map,
+  of,
+  startWith,
+} from 'rxjs';
 
-import { DataThemeDirective } from '../../directives/data-theme/data-theme.directive';
-import { Theme, themesArray } from '../../config/constants/themes-array';
-import { Route } from '../../config/constants/route';
+import { Route } from '../../config/route';
+import { Theme, themesArray } from '../../config/themes-array';
+import { DataTheme } from '../data-theme/data-theme';
 
 type NavItem = Readonly<{
   label: string;
@@ -27,24 +33,24 @@ type NavItem = Readonly<{
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, DataThemeDirective, NgClass],
+  imports: [RouterLink, RouterLinkActive, DataTheme, NgClass],
   templateUrl: './navbar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly document = inject(DOCUMENT);
+  private readonly window = this.document.defaultView;
 
   readonly selectedTheme = input.required<Theme>();
   readonly version = input<string | undefined>(undefined);
   readonly themeChanged = output<Theme>();
 
-  readonly navbarDiv = viewChild<ElementRef<HTMLDivElement>>('navbarDiv');
   readonly themeDropdown =
     viewChild<ElementRef<HTMLDivElement>>('themeDropdown');
 
-  readonly themes = themesArray;
   readonly Route = Route;
-
+  readonly themes = themesArray;
   readonly navItems: readonly NavItem[] = [
     { label: 'Home', route: Route.HOME, exact: true },
     { label: 'Blog', route: Route.BLOG },
@@ -54,19 +60,21 @@ export class Navbar {
 
   readonly isThemeMenuOpen = signal(false);
 
+  readonly isScrolled = toSignal(
+    this.window
+      ? fromEvent(this.window, 'scroll').pipe(
+          startWith(null),
+          map(() => this.window!.scrollY > 0),
+          distinctUntilChanged(),
+        )
+      : of(false),
+    {
+      initialValue: false,
+    },
+  );
+
   constructor() {
-    fromEvent(window, 'scroll')
-      .pipe(startWith(null), auditTime(50), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        const element = this.navbarDiv()?.nativeElement;
-        if (!element) {
-          return;
-        }
-
-        element.classList.toggle('shadow-xs', window.scrollY > 0);
-      });
-
-    fromEvent<PointerEvent>(document, 'pointerdown')
+    fromEvent<PointerEvent>(this.document, 'pointerdown')
       .pipe(
         filter(() => this.isThemeMenuOpen()),
         takeUntilDestroyed(this.destroyRef),
@@ -86,7 +94,7 @@ export class Navbar {
   }
 
   toggleThemeMenu(): void {
-    this.isThemeMenuOpen.update((open) => !open);
+    this.isThemeMenuOpen.update((isOpen) => !isOpen);
   }
 
   closeThemeMenu(): void {
