@@ -20,7 +20,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 /**
  * Endpoints for receiving contact requests from the website.
  */
-@Path("/v1/contact-form")
+@Path("/api/v1/contact-form")
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(description = "Endpoints for receiving contact requests from the website.", name = "Contact")
 public interface ContactFormResource {
