@@ -33,7 +33,6 @@
 
         <docker.image.namespace>ebarooni</docker.image.namespace>
         <docker.image.name>webfolio</docker.image.name>
-        <docker.image.tag>${project.version}</docker.image.tag>
         <docker.skip>false</docker.skip>
         <fabric8.docker.plugin.version>0.48.1</fabric8.docker.plugin.version>
     </properties>
