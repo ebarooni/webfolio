@@ -72,6 +72,11 @@
                                 <contextDir>${project.build.directory}/image-context</contextDir>
                                 <dockerFile>${project.build.directory}/image-context/Dockerfile</dockerFile>
 
+                                <args>
+                                    <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
+                                    <BUILD_DATE>${maven.build.timestamp}</BUILD_DATE>
+                                </args>
+
                                 <tags>
                                     <tag>latest</tag>
                                 </tags>

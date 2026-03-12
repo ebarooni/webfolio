@@ -1,0 +1,27 @@
+services:
+  webfolio:
+    image: ${WEBFOLIO_IMAGE:-ebarooni/webfolio:latest}
+    container_name: webfolio
+    restart: unless-stopped
+
+    ports:
+      - "${WEBFOLIO_BIND:-127.0.0.1:8080}:8080"
+
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      TZ: ${TZ:-Europe/Berlin}
+
+    security_opt:
+      - no-new-privileges:true
+
+    read_only: true
+
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
