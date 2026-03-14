@@ -115,6 +115,26 @@ paths:
           description: Too many requests. Rate limit exceeded.
         "500":
           description: Unexpected server error.
+  /api/{path}:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html: {}
+      summary: Index
+      tags:
+      - Fallback Resource
+  /{path}:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html: {}
+      summary: Index
+      tags:
+      - Fallback Resource
 info:
   title: webfolio-backend API
   version: 1.0.0-SNAPSHOT

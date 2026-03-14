@@ -12,7 +12,7 @@ import {
   vi,
 } from 'vitest';
 
-import { DEPENDENCIES, DEV_DEPENDENCIES } from '../../environments/build-info';
+import { BUILD_INFO } from '../../environments/build-info';
 import { BuildInfo } from './build-info';
 import { Dependencies } from './dependencies/dependencies';
 import { DeploymentDetails } from './deployment-details/deployment-details';
@@ -85,8 +85,8 @@ describe('BuildInfo', () => {
   });
 
   it('exposes the runtime and build time dependencies as signals', () => {
-    expect(component.dependencies()).toBe(DEPENDENCIES);
-    expect(component.devDependencies()).toBe(DEV_DEPENDENCIES);
+    expect(component.dependencies()).toBe(BUILD_INFO.dependencies);
+    expect(component.devDependencies()).toBe(BUILD_INFO.devDependencies);
   });
 
   it('renders the page heading and subtitle inside the hero component', () => {
@@ -119,12 +119,14 @@ describe('BuildInfo', () => {
       .componentInstance as MockDependencies;
 
     expect(runtimeDependenciesComponent.title()).toBe('Runtime Dependencies');
-    expect(runtimeDependenciesComponent.dependencies()).toBe(DEPENDENCIES);
+    expect(runtimeDependenciesComponent.dependencies()).toBe(
+      BUILD_INFO.dependencies,
+    );
     expect(buildTimeDependenciesComponent.title()).toBe(
       'Build Time Dependencies',
     );
     expect(buildTimeDependenciesComponent.dependencies()).toBe(
-      DEV_DEPENDENCIES,
+      BUILD_INFO.devDependencies,
     );
   });
 });

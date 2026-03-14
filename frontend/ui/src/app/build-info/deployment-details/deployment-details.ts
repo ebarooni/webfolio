@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import dayjs from 'dayjs';
 
-import { BUILD_TIME, VERSION } from '../../../environments/build-info';
+import { BUILD_INFO } from '../../../environments/build-info';
 
 function pluralize(value: number, unit: string): string {
   if (value === 1) {
@@ -16,11 +16,11 @@ function pluralize(value: number, unit: string): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeploymentDetails {
-  readonly version = computed(() => VERSION);
+  readonly version = computed(() => BUILD_INFO.version);
 
   readonly sinceLastBuild = computed(() => {
     const now = dayjs();
-    const buildTime = dayjs(BUILD_TIME);
+    const buildTime = dayjs(BUILD_INFO.buildTime);
 
     const hours = Math.max(0, now.diff(buildTime, 'hour'));
     if (hours < 24) {

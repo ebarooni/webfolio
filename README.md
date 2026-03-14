@@ -1,84 +1,147 @@
 # Webfolio
 
-Webfolio is a Maven-based monorepo containing:
+Webfolio is a Maven based monorepo containing:
 
-- A **Quarkus** backend (Java)
-- An **Angular** frontend (Angular 21, Tailwind, DaisyUI, Vitest)
+- A Quarkus backend
+- An Angular frontend with Tailwind, DaisyUI, and Vitest
 
-The repository is structured to provide a clean separation of concerns while keeping the developer experience simple: one repository, one build system, one entrypoint for local development.
+The repository is structured to keep backend and frontend concerns separated while still providing one build system and a simple local development flow.
 
 ## Architecture Overview
 
-### Monorepo (Maven parent project)
+### Monorepo
 
-The root project is a Maven parent (`pom.xml`) that:
+The root project is a Maven parent that:
 
-- Aggregates all modules
-- Centralizes dependency and plugin management
-- Keeps versions aligned across backend and frontend
+- aggregates all modules
+- centralizes dependency and plugin management
+- keeps versions aligned across backend and frontend
 
 ### Modules
 
-- **Backend**
-  - Quarkus application
-  - Java 21
-  - Runs in dev mode via `mvn quarkus:dev`
+#### Backend
 
-- **Frontend**
-  - Angular application
-  - Tailwind CSS + DaisyUI
-  - Vitest for unit testing
-  - Managed via npm (orchestrated by Maven plugins)
+- Quarkus application
+- Java 21
+- runs in dev mode via `mvn quarkus:dev`
+
+#### Frontend
+
+- Angular application
+- Tailwind CSS and DaisyUI
+- Vitest for unit testing
+- managed via npm and Maven plugins
 
 ## Prerequisites
 
 - Java 21
 - Maven
-- Node.js (LTS) via `nvm`
+- Node.js LTS via `nvm`
 
-macOS setup is described below.
+## Configuration
 
-## Environment Configuration
+This project uses two different configuration flows.
 
-At the root of the repository, create a `.env` file:
+### Local development
+
+For local development, create a `.env` file at the repository root.
+
+Example:
 
 ```bash
-TELEGRAM_BOT_TOKEN=your_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
+TELEGRAM_API_BASE_URL=https://api.telegram.org
+TELEGRAM_BOT_TOKEN=0000000000:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+TELEGRAM_CHAT_ID=00000000
+TZ=Europe/Berlin
+WEBFOLIO_IMAGE=ebarooni/webfolio:latest
+WEBFOLIO_BIND=127.0.0.1:8080
 ```
 
-These variables are required for Telegram integration.
+You can copy the values from `.env.example` and replace the Telegram placeholders with real values.
 
-The `.env` file must not be committed. If needed, provide an `.env.example` instead.
+The `.env` file is used for local development by `startup.sh`. In that flow, the script reads:
+
+- `TELEGRAM_API_BASE_URL`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+
+and passes them to Quarkus as JVM system properties.
+
+That means local development does not use Docker secrets.
+
+### Docker Compose
+
+Docker Compose uses the root `.env` file only for Compose level variables such as:
+
+- `WEBFOLIO_IMAGE`
+- `WEBFOLIO_BIND`
+- `TZ`
+
+The application secrets for the container do not come from `.env`.
+
+They come from the file configured in `compose.yaml`:
+
+```yaml
+secrets:
+  app_secrets:
+    file: ./secrets/application-secrets.properties
+```
+
+Create that file at:
+
+```text
+./secrets/application-secrets.properties
+```
+
+Example content:
+
+```properties
+telegram.chat.id=00000000
+quarkus.rest-client.telegram-api.url=https://api.telegram.org/bot0000000000:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+```
+
+Inside the container, Compose mounts that file as:
+
+```text
+/run/secrets/app_secrets.properties
+```
+
+Quarkus is configured to read it through:
+
+```yaml
+environment:
+  QUARKUS_CONFIG_LOCATIONS: file:/run/secrets/app_secrets.properties
+```
+
+Important:
+
+- the values inside `./secrets/application-secrets.properties` must be real resolved values
+- placeholders such as `${TELEGRAM_BOT_TOKEN}` inside that file are not expanded by Docker Compose
+- `.env` is not a templating mechanism for secret files
 
 ## Local Development
 
-### Recommended: Start Everything
+Start the local development environment from the repository root:
 
 ```bash
 ./startup.sh
 ```
 
-This script is the canonical way to start the development environment. It ensures:
+This is the canonical local development entrypoint. It reads `.env`, resolves the Telegram related values, and starts Quarkus with the required system properties.
 
-- Frontend dependencies are installed
-- Angular dev server is started
-- Quarkus runs in dev mode
-- Both modules are wired correctly
+## Manual Startup
 
-Use this instead of starting modules manually unless you have a specific reason.
+### Backend
 
-## Manual Startup (Optional)
-
-### Backend (Quarkus)
-
-From the backend module:
+From the repository root:
 
 ```bash
-mvn quarkus:dev
+mvn -pl backend quarkus:dev
 ```
 
-### Frontend (Angular)
+If you start the backend manually, you must pass the required Telegram properties yourself or provide them through another valid Quarkus config source.
+
+### Frontend
 
 From the frontend module:
 
@@ -87,15 +150,29 @@ npm install
 npm run start
 ```
 
+## Docker Compose
+
+To run the containerized application, make sure both of these files exist:
+
+- `.env`
+- `./secrets/application-secrets.properties`
+
+Then start Compose as usual.
+
+The responsibilities are split as follows:
+
+- `.env` provides Compose variables
+- `./secrets/application-secrets.properties` provides application secrets for Quarkus inside the container
+
 ## Build
 
-### Full Build (All Modules)
+### Full build
 
 ```bash
 mvn clean install
 ```
 
-### Frontend Tests
+### Frontend tests
 
 From the frontend module:
 
@@ -103,42 +180,42 @@ From the frontend module:
 npm test
 ```
 
-## macOS Setup (Recommended)
+## macOS Setup
 
-### 1. Install Homebrew
+### Install Homebrew
 
 If Homebrew is not installed, follow the official installation instructions.
 
-After installation:
+Then run:
 
 ```bash
 brew update
 ```
 
-### 2. Install Java
+### Install Java
 
 ```bash
 brew install openjdk
 java --version
 ```
 
-### 3. Install Maven
+### Install Maven
 
 ```bash
 brew install maven
 mvn -v
 ```
 
-### 4. Install nvm and Node (LTS)
+### Install nvm and Node.js
 
-Install nvm according to the official instructions, then run:
+Install `nvm` according to the official instructions, then run:
 
 ```bash
 nvm install
 nvm use
 ```
 
-Check the respective versions by running:
+Check the installed versions:
 
 ```bash
 node -v
@@ -159,4 +236,4 @@ Start the development environment:
 ./startup.sh
 ```
 
-Keep changes focused and cohesive. Prefer small, well-scoped pull requests.
+Keep changes focused and cohesive. Prefer small, well scoped pull requests.

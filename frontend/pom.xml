@@ -30,7 +30,7 @@
                             <workingDirectory>${project.basedir}/ui</workingDirectory>
                             <executable>npm</executable>
                             <arguments>
-                                <argument>ci</argument>
+                                <argument>i</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -47,6 +47,26 @@
                             <executable>npm</executable>
                             <arguments>
                                 <argument>test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- Build info -->
+                    <execution>
+                        <id>generate-build-info</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.basedir}/ui</workingDirectory>
+                            <executable>node</executable>
+                            <environmentVariables>
+                                <APP_VERSION>${project.version}</APP_VERSION>
+                                <BUILD_TIME>${maven.build.timestamp}</BUILD_TIME>
+                            </environmentVariables>
+                            <arguments>
+                                <argument>scripts/generate-build-info.js</argument>
                             </arguments>
                         </configuration>
                     </execution>
