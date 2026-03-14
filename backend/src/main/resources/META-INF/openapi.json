@@ -133,6 +133,34 @@
           }
         }
       }
+    },
+    "/api/{path}" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "text/html" : { }
+            }
+          }
+        },
+        "summary" : "Index",
+        "tags" : [ "Fallback Resource" ]
+      }
+    },
+    "/{path}" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "text/html" : { }
+            }
+          }
+        },
+        "summary" : "Index",
+        "tags" : [ "Fallback Resource" ]
+      }
     }
   },
   "info" : {

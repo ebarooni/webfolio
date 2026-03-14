@@ -1,0 +1,4 @@
+*
+!Dockerfile
+!quarkus-app/
+!quarkus-app/**

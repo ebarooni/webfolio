@@ -30,7 +30,7 @@
                             <workingDirectory>${project.basedir}/ui</workingDirectory>
                             <executable>npm</executable>
                             <arguments>
-                                <argument>ci</argument>
+                                <argument>i</argument>
                             </arguments>
                         </configuration>
                     </execution>

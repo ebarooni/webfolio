@@ -9,6 +9,13 @@ if [[ ! -f "${ENV_FILE}" ]]; then
   exit 1
 fi
 
+TELEGRAM_API_BASE_URL="$(grep -E '^TELEGRAM_API_BASE_URL=' "${ENV_FILE}" | cut -d= -f2-)"
+
+if [[ -z "${TELEGRAM_API_BASE_URL}" ]]; then
+  echo "❌ TELEGRAM_API_BASE_URL is missing in .env"
+  exit 1
+fi
+
 TELEGRAM_BOT_TOKEN="$(grep -E '^TELEGRAM_BOT_TOKEN=' "${ENV_FILE}" | cut -d= -f2-)"
 
 if [[ -z "${TELEGRAM_BOT_TOKEN}" ]]; then
@@ -26,5 +33,5 @@ fi
 cd "${ROOT_DIR}"
 
 exec mvn -pl backend quarkus:dev \
-  -DTELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}" \
-  -DTELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID}"
+  -Dtelegram.chat.id="${TELEGRAM_CHAT_ID}" \
+  -Dquarkus.rest-client.telegram-api.url="${TELEGRAM_API_BASE_URL}/bot${TELEGRAM_BOT_TOKEN}" 

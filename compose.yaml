@@ -1,0 +1,41 @@
+services:
+  webfolio:
+    image: ${WEBFOLIO_IMAGE}
+    container_name: webfolio
+    restart: unless-stopped
+
+    ports:
+      - "${WEBFOLIO_BIND}:8080"
+
+    environment:
+      TZ: ${TZ}
+      QUARKUS_CONFIG_LOCATIONS: file:/run/secrets/app_secrets.properties
+
+    secrets:
+      - source: app_secrets
+        target: app_secrets.properties
+
+    security_opt:
+      - no-new-privileges:true
+
+    read_only: true
+
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/q/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+secrets:
+  app_secrets:
+    file: ./secrets/application-secrets.properties
