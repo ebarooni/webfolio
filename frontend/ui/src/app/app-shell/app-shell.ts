@@ -14,7 +14,7 @@ import {
 } from '@angular/router';
 import { distinctUntilChanged, filter, map, merge, of } from 'rxjs';
 
-import { VERSION } from '../../environments/build-info';
+import { BUILD_INFO } from '../../environments/build-info';
 import { Route } from '../config/route';
 import { Theme } from '../config/themes-array';
 import { AppStore } from '../store/app/app.store';
@@ -46,7 +46,7 @@ export class AppShell {
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
 
-  readonly version = `v${VERSION}`;
+  readonly version = `v${BUILD_INFO.version}`;
 
   readonly theme = toSignal(this.appStore.selectTheme$, {
     initialValue: 'light' as Theme,

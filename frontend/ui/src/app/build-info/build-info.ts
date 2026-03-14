@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { DEPENDENCIES, DEV_DEPENDENCIES } from '../../environments/build-info';
+import { BUILD_INFO } from '../../environments/build-info';
 
 import { Hero } from '../shared/components/hero/hero';
 import { Dependencies } from './dependencies/dependencies';
@@ -15,6 +15,6 @@ import { DeploymentDetails } from './deployment-details/deployment-details';
   },
 })
 export class BuildInfo {
-  readonly dependencies = signal(DEPENDENCIES);
-  readonly devDependencies = signal(DEV_DEPENDENCIES);
+  readonly dependencies = signal(BUILD_INFO.dependencies);
+  readonly devDependencies = signal(BUILD_INFO.devDependencies);
 }
