@@ -28,4 +28,7 @@ buildNumber.properties
 .vscode
 
 # Environment variables
-.env
+**/.env
+!**/.env.example
+secrets/*
+!secrets/*.example.*

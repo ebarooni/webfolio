@@ -33,5 +33,5 @@ fi
 cd "${ROOT_DIR}"
 
 exec mvn -pl backend quarkus:dev \
-  -Dquarkus.rest-client.telegram-api.url="${TELEGRAM_API_BASE_URL}/bot${TELEGRAM_BOT_TOKEN}" \
-  -Dtelegram.chat.id="${TELEGRAM_CHAT_ID}"
+  -Dtelegram.chat.id="${TELEGRAM_CHAT_ID}" \
+  -Dquarkus.rest-client.telegram-api.url="${TELEGRAM_API_BASE_URL}/bot${TELEGRAM_BOT_TOKEN}" 

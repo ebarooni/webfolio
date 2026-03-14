@@ -1,16 +1,19 @@
 services:
   webfolio:
-    image: ${WEBFOLIO_IMAGE:-ebarooni/webfolio:latest}
+    image: ${WEBFOLIO_IMAGE}
     container_name: webfolio
     restart: unless-stopped
 
     ports:
-      - "${WEBFOLIO_BIND:-127.0.0.1:8080}:8080"
+      - "${WEBFOLIO_BIND}:8080"
 
     environment:
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
-      TZ: ${TZ:-Europe/Berlin}
+      TZ: ${TZ}
+      QUARKUS_CONFIG_LOCATIONS: file:/run/secrets/app_secrets.properties
+
+    secrets:
+      - source: app_secrets
+        target: app_secrets.properties
 
     security_opt:
       - no-new-privileges:true
@@ -32,3 +35,7 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+secrets:
+  app_secrets:
+    file: ./secrets/application-secrets.properties
