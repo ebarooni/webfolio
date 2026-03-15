@@ -44,7 +44,7 @@ export class Timeline {
       period: 'Q4 2017',
       title: 'Student',
       description:
-        'Began B.Sc. in Industrial Engineering with focus on Information Engineering.',
+        'Began studies in Industrial Engineering with focus on Information Engineering.',
       align: 'start',
     },
   ];
