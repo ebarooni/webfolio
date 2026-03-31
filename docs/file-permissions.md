@@ -2,7 +2,7 @@
 
 Ownership and permission reference for the deployment files on the VPS.
 
-All files and directories under `/opt/docker` are owned by the non-root user (`holu`) and the `docker` group. This allows running `docker compose` withuot `sudo` while keeping the files inaccessible to the other users on the syste.
+All files and directories under `/opt/docker` are owned by the non-root user (`holu`) and the `docker` group. This allows running `docker compose` without `sudo` while keeping the files inaccessible to the other users on the system.
 
 ## Ownership
 
@@ -28,11 +28,11 @@ Permissions are evaluated in order: **owner -> group -> others**. For a file wit
 0   -> everyone else        -> no access
 ```
 
-So if another user on the system is in the `docker`group, they could read the file. If they are not in the `docker`group, they get no access at all.
+So if another user on the system is in the `docker` group, they could read the file. If they are not in the `docker` group, they get no access at all.
 
 ### Example
 
-After creating `/opt/docker/`, it is initially owner by `root:root`:
+After creating `/opt/docker/`, it is initially owned by `root:root`:
 
 ```
 drwxr-xr-x root root /opt/docker

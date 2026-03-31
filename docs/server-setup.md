@@ -11,7 +11,7 @@ Head to Hetzner and open a project. Then create a server resource with the desir
 The following options can be used to install Docker on a Hetzner server:
 
 - Select Docker when setting up a server from the UI
-- Manual installtion: [Installing Docker on Ubuntu/Debian](https://community.hetzner.com/tutorials/howto-docker-install)
+- Manual installation: [Installing Docker on Ubuntu/Debian](https://community.hetzner.com/tutorials/howto-docker-install)
 
 ## Step 2: Firewall and SSH
 
@@ -53,7 +53,7 @@ Test logging in:
 ssh holu@<SERVER_IP>
 ```
 
-If successfull, disable root login and password authentication . Edit the SSH config:
+If successful, disable root login and password authentication . Edit the SSH config:
 
 ```bash
 sudo nano /etc/ssh/sshd_config
@@ -115,7 +115,7 @@ To prevent the config from being overwritten, create a local copy of the default
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 ```
 
-Open the local config. Look for `[sshd]` section and ensure its enabled:
+Open the local config. Look for `[sshd]` section and ensure it's enabled:
 
 ```bash
 [sshd]
@@ -139,21 +139,21 @@ Check the status of Fail2Ban:
 sudo fail2ban-client status sshd
 ```
 
-At this point, a new user with sudo privileges is create and SSH key login (no passwords, root login disabled), Firewall, and Fail2Ban protects the server against brute-force attempts.
+At this point, a new user with sudo privileges is created. SSH key login (no passwords, root login disabled), Firewall, and Fail2Ban protect the server against brute-force attempts.
 
 ## Step 3: Domain and DNS
 
 Point the domain to the server by creating an **A record** in the domain registrar's DNS settings:
 
-| Type | Name | Value         | TTl  |
+| Type | Name | Value         | TTI  |
 |------|------|---------------|------|
 | A    | @    | `<SERVER_IP>` | 3600 |
 
 To also handle `www`:
 
-| Type  | Name | Value       | TTl  |
+| Type  | Name | Value       | TTI  |
 |-------|------|-------------|------|
-| CNAME | @    | barooni.dev | 3600 |
+| CNAME | www  | barooni.dev | 3600 |
 
 Verify DNS propagation:
 
@@ -186,7 +186,7 @@ The source files are in the repository under `deploy/`. They mirror this layout.
 ```bash
 sudo mkdir -p /opt/docker/{caddy,webfolio/secrets}
 sudo chown -R $(whoami):docker /opt/docker
-chmod 750 /opt/docker /opt/docker/caddy /opt/docker/webfolio
+chmod 750 /opt/docker /opt/docker/caddy /opt/docker/webfolio /opt/docker/webfolio/secrets
 ```
 
 ### Copy the deployment files
@@ -277,7 +277,7 @@ sudo chown $(whoami):docker /opt/docker/another-app
 chmod 750 /opt/docker/another-app
 ```
 
-2. Add a `comopse.yaml` in `/opt/docker/another-app`:
+2. Add a `compose.yaml` in `/opt/docker/another-app`:
 
 ```yaml
 services:
@@ -290,9 +290,9 @@ services:
     networks:
       - proxy
 
-  networks:
-    proxy:
-      external: true
+networks:
+  proxy:
+    external: true
 ```
 
 3. Add a block to `/opt/docker/caddy/Caddyfile`:
@@ -303,7 +303,7 @@ another-domain.com {
 }
 ```
 
-4. Point `another-domain.com` DNS A record ti the same server IP.
+4. Point `another-domain.com` DNS A record to the same server IP.
 
 5. Reload Caddy and start the new app:
 

@@ -1,7 +1,7 @@
-example.com {
+barooni.dev {
     reverse_proxy webfolio:8080
 }
 
-www.example.com, example.de, www.example.de {
-    redir https://example.com{uri} permanent
+www.barooni.dev, barooni.de, www.barooni.de {
+    redir https://barooni.dev{uri} permanent
 }
