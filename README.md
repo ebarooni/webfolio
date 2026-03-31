@@ -54,7 +54,6 @@ TELEGRAM_BOT_TOKEN=0000000000:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 TELEGRAM_CHAT_ID=00000000
 TZ=Europe/Berlin
 WEBFOLIO_IMAGE=ebarooni/webfolio:latest
-WEBFOLIO_BIND=127.0.0.1:8080
 ```
 
 You can copy the values from `.env.example` and replace the Telegram placeholders with real values.
@@ -74,7 +73,6 @@ That means local development does not use Docker secrets.
 Docker Compose uses the root `.env` file only for Compose level variables such as:
 
 - `WEBFOLIO_IMAGE`
-- `WEBFOLIO_BIND`
 - `TZ`
 
 The application secrets for the container do not come from `.env`.
