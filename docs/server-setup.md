@@ -265,6 +265,24 @@ cd /opt/docker/caddy && docker compose ps
 cd /opt/docker/webfolio && docker compose logs -f
 ```
 
+### Updating a service
+
+To deploy a new version of an existing service, pull the latest image and recreate the container:
+
+```bash
+cd /opt/docker/webfolio
+docker compose pull
+docker compose up -d
+```
+
+`docker compose pull` fetches the latest version of the image specified in `.env`. `docker compose up -d` detects that the image has changed and recreates only the affected container. The other services are not touched.
+
+To remove old, unused images afterwards:
+
+```bash
+docker image prune -f
+```
+
 ### Adding another website
 
 To host an additional website on the same server:
