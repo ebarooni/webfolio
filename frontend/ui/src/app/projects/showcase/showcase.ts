@@ -54,7 +54,9 @@ const PROJECTS = [
       'A web application to generate access tokens to fetch user data from the Spotify web API.',
     features: ['Spotify', 'API', 'Angular'],
   },
-] as const satisfies readonly ProjectDescription[];
+]
+  .map((project) => ({ ...project, features: project.features.sort() }))
+  .sort((a, b) => a.title.localeCompare(b.title)) as ProjectDescription[];
 
 @Component({
   selector: 'app-showcase',

@@ -1,0 +1,7 @@
+barooni.dev {
+    reverse_proxy webfolio:8080
+}
+
+www.barooni.dev, barooni.de, www.barooni.de {
+    redir https://barooni.dev{uri} permanent
+}
