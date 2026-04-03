@@ -36,6 +36,12 @@ usermod -aG sudo holu
 usermod -aG docker holu
 ```
 
+Then switch to the newly created user:
+
+```bash
+su - holu
+```
+
 ### Setup SSH
 
 Copy the contents of `~/.ssh/id_ed25519.pub` and paste them into your server under:
