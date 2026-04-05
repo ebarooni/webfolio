@@ -36,6 +36,12 @@ usermod -aG sudo holu
 usermod -aG docker holu
 ```
 
+If the user is created without a password, configure passwordless sudo for the `sudo` group in `/etc/sudoers` via `visudo`:
+
+```bash
+%sudo   ALL=(ALL:ALL) NOPASSWD: ALL
+```
+
 Then switch to the newly created user:
 
 ```bash
@@ -236,13 +242,28 @@ nano /opt/docker/webfolio/secrets/application-secrets.properties
 
 ```bash
 # Config files – owner read/write, group read
-chmod 640 /opt/docker/caddy/compose.yaml
-chmod 640 /opt/docker/caddy/Caddyfile
-chmod 640 /opt/docker/webfolio/compose.yaml
+sudo chmod 640 /opt/docker/caddy/compose.yaml
+sudo chmod 640 /opt/docker/caddy/Caddyfile
+sudo chmod 640 /opt/docker/webfolio/compose.yaml
 
 # Sensitive files – owner read/write only
-chmod 600 /opt/docker/webfolio/.env
-chmod 600 /opt/docker/webfolio/secrets/application-secrets.properties
+sudo chmod 600 /opt/docker/webfolio/.env
+sudo chmod 600 /opt/docker/webfolio/secrets/application-secrets.properties
+```
+
+The `application-secrets.properties` file won't be readable by the app container if it's running as a non-root user.
+
+Run the following command to find out which user is the container running as:
+
+```bash
+docker inspect ebarooni/webfolio:latest | grep -i user
+```
+
+Then run the following command to change the ownership of the `application-secrets.properties` file to the user inside the container and the group of your user:
+
+```bash
+sudo chown 185:holu /opt/docker/webfolio/secrets/application-secrets.properties
+sudo chmod 660 /opt/docker/webfolio/secrets/application-secrets.properties
 ```
 
 ### Create the shared Docker network
