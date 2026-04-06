@@ -33,6 +33,13 @@ class MockPostModal {
 })
 class MockAstroToAngular {}
 
+@Component({
+  selector: 'app-vps-hosting',
+  template: '',
+  standalone: true,
+})
+class MockVpsHosting {}
+
 describe('BlogComponent', () => {
   let fixture: ComponentFixture<BlogComponent>;
   let component: BlogComponent;
@@ -45,11 +52,18 @@ describe('BlogComponent', () => {
         MockHero,
         MockPostModal,
         MockAstroToAngular,
+        MockVpsHosting,
       ],
     })
       .overrideComponent(BlogComponent, {
         set: {
-          imports: [DatePipe, MockHero, MockPostModal, MockAstroToAngular],
+          imports: [
+            DatePipe,
+            MockHero,
+            MockPostModal,
+            MockAstroToAngular,
+            MockVpsHosting,
+          ],
         },
       })
       .compileComponents();

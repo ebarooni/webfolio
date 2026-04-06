@@ -1,0 +1,326 @@
+<h1 class="text-3xl font-bold mb-6">Moving Away from Firebase Hosting</h1>
+
+<p class="mb-4">
+  For a while, Firebase Hosting was my go-to for deploying my portfolio. It's
+  fast to set up, integrates nicely with GitHub Actions, and the free tier is
+  generous enough for a personal site. For a long time, it felt like the obvious
+  choice.
+</p>
+
+<p class="mb-4">
+  But over time, I started feeling the limits of managed hosting. I wanted more
+  control over my infrastructure, the ability to run multiple services on a
+  single server, and a setup I could actually understand end to end. Firebase
+  was handling too much magic behind the scenes, and I found myself wanting to
+  own that layer myself.
+</p>
+
+<p class="mb-8">
+  So I moved everything to a VPS on Hetzner. This post explains why, and walks
+  through exactly how I set it up.
+</p>
+
+<h2 class="text-2xl font-semibold mb-4">Why I Left Firebase Hosting</h2>
+
+<p class="mb-4">
+  Firebase Hosting is genuinely great for what it is. Static files, global CDN,
+  automatic SSL — it works out of the box and you barely have to think about it.
+  If all you need is a static site, it's hard to argue against it.
+</p>
+
+<p class="mb-4">
+  My reasons for leaving were less about Firebase being bad and more about what
+  I wanted going forward. A few things pushed me over the edge:
+</p>
+
+<ul class="list-disc list-inside mb-4">
+  <li>
+    I wanted to host multiple services under one roof without juggling separate
+    Firebase projects
+  </li>
+  <li>
+    I wanted full control over the server environment, networking, and
+    deployment process
+  </li>
+  <li>I wanted to learn how this layer of infrastructure actually works</li>
+  <li>Running a VPS long-term works out cheaper for my use case</li>
+</ul>
+
+<p class="mb-8">
+  None of these are dealbreakers in isolation, but together they made the case
+  for moving to a self-hosted setup. I picked Hetzner because it's affordable,
+  well-regarded, and the interface is refreshingly no-nonsense.
+</p>
+
+<h2 class="text-2xl font-semibold mb-4">Step 1: Creating the Server</h2>
+
+<p class="mb-4">
+  Head to Hetzner, open a project, and create a new server resource. Pick a
+  location close to your audience, choose Ubuntu as the OS, and select Docker
+  from the setup options — it saves you the manual installation step.
+</p>
+
+<p class="mb-8">
+  If you prefer to install Docker yourself afterwards, the
+  <a
+    href="https://community.hetzner.com/tutorials/howto-docker-install"
+    class="link"
+    >Hetzner community tutorial</a
+  >
+  covers it well.
+</p>
+
+<h2 class="text-2xl font-semibold mb-4">Step 2: Firewall and SSH</h2>
+
+<p class="mb-4">
+  Before anything else, lock down access. From the Hetzner dashboard, open the
+  server's firewall rules and allow these TCP ports:
+</p>
+
+<ul class="list-disc list-inside mb-8">
+  <li><strong>22</strong> — SSH</li>
+  <li><strong>80</strong> — HTTP</li>
+  <li><strong>443</strong> — HTTPS</li>
+</ul>
+
+<h3 class="text-xl font-bold mt-6 mb-2">Create a Non-Root User</h3>
+
+<p class="mb-4">
+  Log in as root from the dashboard terminal, then immediately create a
+  dedicated user. Running everything as root is a risk you don't need to take.
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>adduser holu
+usermod -aG sudo holu
+usermod -aG docker holu</code></pre>
+
+<p class="mb-4">
+  If the user has no password, allow passwordless sudo by editing
+  <code>/etc/sudoers</code> via <code>visudo</code>:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>%sudo   ALL=(ALL:ALL) NOPASSWD: ALL</code></pre>
+
+<p class="mb-8">
+  Then switch to the new user with <code>su - holu</code> and continue from
+  there.
+</p>
+
+<h3 class="text-xl font-bold mt-6 mb-2">SSH Key Login</h3>
+
+<p class="mb-4">Copy your public key into the server's authorized keys file:</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>mkdir -p ~/.ssh
+nano ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh</code></pre>
+
+<p class="mb-4">
+  Test that key-based login works from your local machine before going any
+  further:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>ssh holu@&lt;SERVER_IP&gt;</code></pre>
+
+<p class="mb-4">
+  Once confirmed, disable root login and password authentication in
+  <code>/etc/ssh/sshd_config</code>:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>PermitRootLogin no
+PasswordAuthentication no</code></pre>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-8 overflow-x-auto text-sm"
+><code>sudo systemctl restart ssh</code></pre>
+
+<h3 class="text-xl font-bold mt-6 mb-2">UFW and Fail2Ban</h3>
+
+<p class="mb-4">Install UFW and allow only the ports you actually need:</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>sudo apt update && sudo apt install ufw -y
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable</code></pre>
+
+<p class="mb-4">
+  Then install Fail2Ban to automatically block repeated failed login attempts:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>sudo apt install fail2ban -y
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local</code></pre>
+
+<p class="mb-4">
+  Open <code>jail.local</code>, find the <code>[sshd]</code> section, and ensure
+  it's enabled:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>[sshd]
+enabled = true
+port    = ssh
+filter  = sshd
+logpath = /var/log/auth.log
+maxretry = 5</code></pre>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-8 overflow-x-auto text-sm"
+><code>sudo systemctl enable fail2ban
+sudo systemctl start fail2ban</code></pre>
+
+<h2 class="text-2xl font-semibold mb-4">Step 3: Domain and DNS</h2>
+
+<p class="mb-4">
+  This is the step that replaces what Firebase Hosting handled automatically. Go
+  to your domain registrar and create an A record pointing your domain to the
+  server IP. Add a CNAME for <code>www</code> if you need it.
+</p>
+
+<p class="mb-4">Verify propagation with:</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-8 overflow-x-auto text-sm"
+><code>dig +short yourdomain.com</code></pre>
+
+<h2 class="text-2xl font-semibold mb-4">
+  Step 4: Deployment with Docker and Caddy
+</h2>
+
+<p class="mb-4">
+  My setup uses Docker Compose for each service, with Caddy as the reverse
+  proxy. All deployment files live under <code>/opt/docker/</code>, and each
+  service gets its own subdirectory.
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-8 overflow-x-auto text-sm"
+><code>/opt/docker/
+|–– caddy/
+|   |–– compose.yaml
+|   |–– Caddyfile
+|–– webfolio/
+    |–– compose.yaml
+    |–– .env
+    |–– secrets/
+        |–– application-secrets.properties</code></pre>
+
+<h3 class="text-xl font-bold mt-6 mb-2">Why Caddy Instead of Nginx?</h3>
+
+<p class="mb-4">
+  Caddy handles TLS automatically. It talks to Let's Encrypt, fetches
+  certificates, and renews them — no cron jobs, no manual steps. Coming from
+  Firebase where HTTPS was just there, I wanted something that kept that
+  simplicity on the self-hosted side. Caddy delivers that.
+</p>
+
+<p class="mb-8">
+  A shared Docker network called <code>proxy</code> connects all services to
+  Caddy. You create it once, and every new service simply joins it.
+</p>
+
+<h3 class="text-xl font-bold mt-6 mb-2">Setting Up and Deploying</h3>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>sudo mkdir -p /opt/docker/&#123;caddy,webfolio/secrets&#125;
+sudo chown -R $(whoami):docker /opt/docker
+chmod 750 /opt/docker /opt/docker/caddy /opt/docker/webfolio /opt/docker/webfolio/secrets</code></pre>
+
+<p class="mb-4">
+  Copy your deployment files from your local machine with <code>scp</code>, SSH
+  in, fill in your domain, environment variables, and secrets. Then set the
+  right permissions — <code>640</code> for config files, <code>600</code> for
+  anything sensitive.
+</p>
+
+<p class="mb-4">
+  One thing to watch out for: if your app container runs as a non-root user, it
+  won't be able to read a secrets file owned entirely by your host user. Check
+  which UID the container runs as:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>docker inspect your-image:latest | grep -i user</code></pre>
+
+<p class="mb-4">Then adjust ownership so the container can read it:</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>sudo chown 185:holu /opt/docker/webfolio/secrets/application-secrets.properties
+sudo chmod 660 /opt/docker/webfolio/secrets/application-secrets.properties</code></pre>
+
+<p class="mb-4">Create the shared network, start Caddy first, then the app:</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>docker network create proxy
+cd /opt/docker/caddy && docker compose up -d
+cd /opt/docker/webfolio && docker compose up -d</code></pre>
+
+<p class="mb-8">
+  Caddy picks up the domain, fetches a certificate, and the site is live at
+  <code>https://yourdomain.com</code>. First deploy done.
+</p>
+
+<h2 class="text-2xl font-semibold mb-4">Updating and Adding Services</h2>
+
+<p class="mb-4">Deploying a new version is two commands:</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>cd /opt/docker/webfolio
+docker compose pull
+docker compose up -d</code></pre>
+
+<p class="mb-4">
+  Compose detects the image has changed and recreates only that container.
+  Everything else keeps running. Clean up old images afterwards with:
+</p>
+
+<pre
+  class="bg-base-200 rounded-lg p-4 mb-4 overflow-x-auto text-sm"
+><code>docker image prune -f</code></pre>
+
+<p class="mb-8">
+  Adding a second site to the same server is just as clean. New directory, new
+  <code>compose.yaml</code> joining the <code>proxy</code> network, a new block
+  in the Caddyfile, and you're done. No touching anything already running, and
+  Caddy provisions the certificate for the new domain automatically.
+</p>
+
+<h2 class="text-2xl font-semibold mb-4">Was It Worth It?</h2>
+
+<p class="mb-4">
+  For my use case, absolutely. I have one server running multiple services, full
+  visibility into how everything is wired together, and I'm paying less than I
+  would scaling up on a managed platform.
+</p>
+
+<p class="mb-4">
+  That said, Firebase Hosting is still the right call for a lot of situations.
+  If you just want a static site live with zero friction, it's hard to beat. The
+  migration only made sense for me because my needs had grown past what it was
+  designed for.
+</p>
+
+<p class="mb-4">
+  If you're thinking about making a similar move and have questions about any
+  part of this setup, feel free to reach out.
+</p>
