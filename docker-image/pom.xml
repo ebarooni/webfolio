@@ -80,6 +80,13 @@
                                 <tags>
                                     <tag>latest</tag>
                                 </tags>
+
+                                <buildx>
+                                    <platforms>
+                                        <platform>linux/amd64</platform>
+                                        <platform>linux/arm64</platform>
+                                    </platforms>
+                                </buildx>
                             </build>
                         </image>
                     </images>
@@ -93,6 +100,19 @@
                         <goals>
                             <goal>build</goal>
                         </goals>
+                    </execution>
+
+                    <execution>
+                        <id>docker-push</id>
+                        <phase>install</phase>
+
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+
+                        <configuration>
+                            <skip>${docker.skip.push}</skip>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

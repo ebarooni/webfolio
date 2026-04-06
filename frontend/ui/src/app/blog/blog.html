@@ -50,6 +50,8 @@
 <app-post-modal #postModalComponent>
   @switch (selectedPostId()) { @case (Posts.ASTRO_TO_ANGULAR) {
   <app-astro-to-angular />
+  } @case (Posts.VPS_HOSTING) {
+  <app-vps-hosting />
   } @default {
   <app-astro-to-angular />
   } }

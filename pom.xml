@@ -18,7 +18,7 @@
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <revision>1.0.0</revision>
+        <revision>1.1.0</revision>
         <skipITs>true</skipITs>
 
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
@@ -34,6 +34,7 @@
         <docker.image.namespace>ebarooni</docker.image.namespace>
         <docker.image.name>webfolio</docker.image.name>
         <docker.skip>false</docker.skip>
+        <docker.skip.push>true</docker.skip.push>
         <fabric8.docker.plugin.version>0.48.1</fabric8.docker.plugin.version>
     </properties>
 
