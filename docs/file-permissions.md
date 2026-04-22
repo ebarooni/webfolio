@@ -88,6 +88,7 @@ Owner can read and write, the `docker` group can read. These files do not contai
 | `/opt/docker/caddy/compose.yaml`    | `640` | Caddy service definitions   |
 | `/opt/docker/caddy/Caddyfile`       | `640` | Domain routing rules        |
 | `/opt/docker/webfolio/compose.yaml` | `640` | Webfolio service definition |
+| `/opt/docker/wg-easy/compose.yaml`  | `640` | wg-easy service definition  |
 
 ### Sensitive files – `600`
 
@@ -111,11 +112,13 @@ chmod 750 /opt/docker \
 # Configuration files
 chmod 640 /opt/docker/caddy/compose.yaml \
           /opt/docker/caddy/Caddyfile \
-          /opt/docker/webfolio/compose.yaml
+          /opt/docker/webfolio/compose.yaml \
+          /opt/docker/wg-easy/compose.yaml
 
 # Sensitive files
 chmod 600 /opt/docker/webfolio/.env \
           /opt/docker/webfolio/secrets/application-secrets.properties \
+          /opt/docker/wg-easy/.env
 ```
 
 ## Verify
