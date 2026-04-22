@@ -185,13 +185,13 @@ The deployment files live under `/opt/docker/`. Each service gets its own direct
 |   |–– compose.yaml
 |   |–– Caddyfile
 |–– webfolio/
-    |–– compose.yaml
-    |–– .env
-    |–– secrets/
-        |–– application-secrets.properties
+|   |–– compose.yaml
+|   |–– .env
+|   |–– secrets/
+|       |–– application-secrets.properties
 |–– wg-easy/
-    |–– compose.yaml
-    |–– .env
+|   |–– compose.yaml
+|   |–– .env
 ```
 
 The source files are in the repository under `deploy/`. They mirror this layout.
