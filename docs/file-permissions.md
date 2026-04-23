@@ -94,10 +94,10 @@ Owner can read and write, the `docker` group can read. These files do not contai
 
 Owner can read and write. No access for group or others. These files contain secrets or credentials.
 
-| File                                                          | Mode  | Contents                         |
-|---------------------------------------------------------------|-------|----------------------------------|
-| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone       |
-| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID   |
+| File                                                          | Mode  | Contents                        |
+|---------------------------------------------------------------|-------|---------------------------------|
+| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone      |
+| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID  |
 
 ## Apply permissions
 
