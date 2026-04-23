@@ -73,6 +73,7 @@ Directories use `750` – owner has full access, the `docker` group can read and
 | `/opt/docker/caddy`            | `750` | `holu` | `docker` |
 | `/opt/docker/webfolio`         | `750` | `holu` | `docker` |
 | `/opt/docker/webfolio/secrets` | `750` | `holu` | `docker` |
+| `/opt/docker/wg-easy`          | `750` | `holu` | `docker` |
 
 ## File permissions
 
@@ -87,15 +88,16 @@ Owner can read and write, the `docker` group can read. These files do not contai
 | `/opt/docker/caddy/compose.yaml`    | `640` | Caddy service definitions   |
 | `/opt/docker/caddy/Caddyfile`       | `640` | Domain routing rules        |
 | `/opt/docker/webfolio/compose.yaml` | `640` | Webfolio service definition |
+| `/opt/docker/wg-easy/compose.yaml`  | `640` | wg-easy service definition  |
 
 ### Sensitive files – `600`
 
 Owner can read and write. No access for group or others. These files contain secrets or credentials.
 
-| File                                                          | Mode  | Contents                       |
-|---------------------------------------------------------------|-------|--------------------------------|
-| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone     |
-| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID |
+| File                                                          | Mode  | Contents                        |
+|---------------------------------------------------------------|-------|---------------------------------|
+| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone      |
+| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID  |
 
 ## Apply permissions
 
@@ -109,11 +111,12 @@ chmod 750 /opt/docker \
 # Configuration files
 chmod 640 /opt/docker/caddy/compose.yaml \
           /opt/docker/caddy/Caddyfile \
-          /opt/docker/webfolio/compose.yaml
+          /opt/docker/webfolio/compose.yaml \
+          /opt/docker/wg-easy/compose.yaml
 
 # Sensitive files
 chmod 600 /opt/docker/webfolio/.env \
-          /opt/docker/webfolio/secrets/application-secrets.properties \
+          /opt/docker/webfolio/secrets/application-secrets.properties
 ```
 
 ## Verify
@@ -134,6 +137,8 @@ drwxr-x--- holu docker  /opt/docker/webfolio
 -rw------- holu docker  /opt/docker/webfolio/.env
 drwxr-x--- holu docker  /opt/docker/webfolio/secrets
 -rw------- holu docker  /opt/docker/webfolio/secrets/application-secrets.properties
+drwxr-x--- holu docker  /opt/docker/wg-easy
+-rw-r----- holu docker  /opt/docker/wg-easy/compose.yaml
 ```
 
 ## Adding a new service
