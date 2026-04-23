@@ -32,53 +32,24 @@ chmod 750 /opt/docker/wg-easy
 From your local machine:
 
 ```bash
-scp deploy/wg-easy/compose.yaml deploy/wg-easy/.env.example holu@<SERVER_IP>:/opt/docker/wg-easy
+scp deploy/wg-easy/compose.yaml holu@<SERVER_IP>:/opt/docker/wg-easy
 ```
 
-### 4. Generate the password hash
-
-On the server (or locally), generate a bcrypt hash for the wg-easy admin password:
-
-```bash
-docker run -it ghcr.io/wg-easy/wg-easy wgpw '<SOME_PASSWORD>'
-```
-
-This outputs something like `$2a$12$abcdef...`.
-
-### 5. Create the `.env` file
-
-On the server:
-
-```bash
-cp /opt/docker/wg-easy/.env.example /opt/docker/wg-easy/.env
-nano /opt/docker/wg-easy/.env
-```
-
-Fill in the values:
-
-``ènv
-WG_HOST=<SERVER_IP>
-PASSWORD_HASH=$2a$12$abcdef...
-```
-
-> **Important:** Double every `$`sign in the `.env` file. Docker Compose uses `$`for variable interpolation, so `$2a$12$abcdef` must be written as `$$2a$$12$$abcdef`.
-
-### 6. Set file permissions
+### 4. Set file permissions
 
 ```bash
 chmod 640 /opt/docker/wg-easy/compose.yaml
-chmod 600 /opt/docker/wg-easy/.env
 ```
 
-### 7. Start wg-easy
+### 5. Start wg-easy
 
 ```bash
-cd /opt/docker/wg-easy && compose up -d
+cd /opt/docker/wg-easy && docker compose up -d
 ```
 
 ## Accessing the admin UI
 
-The web UI is bound to `127.0.0.1:51821` on the server. To access it, open an SSh tunnel from your local machine:
+The web UI is bound to `127.0.0.1:51821` on the server. To access it, open an SSH tunnel from your local machine:
 
 ```bash
 ssh -L 51821:localhost:51821 -N holu

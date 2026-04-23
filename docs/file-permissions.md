@@ -98,7 +98,6 @@ Owner can read and write. No access for group or others. These files contain sec
 |---------------------------------------------------------------|-------|----------------------------------|
 | `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone       |
 | `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID   |
-| `/opt/docker/wg-easy/.env`                                    | `600` | WireGuard host and password hash |
 
 ## Apply permissions
 
@@ -117,8 +116,7 @@ chmod 640 /opt/docker/caddy/compose.yaml \
 
 # Sensitive files
 chmod 600 /opt/docker/webfolio/.env \
-          /opt/docker/webfolio/secrets/application-secrets.properties \
-          /opt/docker/wg-easy/.env
+          /opt/docker/webfolio/secrets/application-secrets.properties
 ```
 
 ## Verify
@@ -141,7 +139,6 @@ drwxr-x--- holu docker  /opt/docker/webfolio/secrets
 -rw------- holu docker  /opt/docker/webfolio/secrets/application-secrets.properties
 drwxr-x--- holu docker  /opt/docker/wg-easy
 -rw-r----- holu docker  /opt/docker/wg-easy/compose.yaml
--rw------- holu docker  /opt/docker/wg-easy/.env
 ```
 
 ## Adding a new service

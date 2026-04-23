@@ -191,7 +191,6 @@ The deployment files live under `/opt/docker/`. Each service gets its own direct
 |       |–– application-secrets.properties
 |–– wg-easy/
 |   |–– compose.yaml
-|   |–– .env
 ```
 
 The source files are in the repository under `deploy/`. They mirror this layout.
