@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/openjdk-21:1.23
+FROM registry.access.redhat.com/ubi9/openjdk-25:1.24
 
 ARG PROJECT_VERSION
 ARG BUILD_DATE
