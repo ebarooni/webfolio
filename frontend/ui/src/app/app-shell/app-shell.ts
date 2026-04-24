@@ -49,7 +49,7 @@ export class AppShell {
   readonly version = `v${BUILD_INFO.version}`;
 
   readonly theme = toSignal(this.appStore.selectTheme$, {
-    initialValue: 'light' as Theme,
+    initialValue: 'light',
   });
 
   readonly uiConfig = toSignal(
