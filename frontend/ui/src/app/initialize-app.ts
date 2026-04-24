@@ -8,6 +8,6 @@ export function initializeApp() {
     const { theme } = appStore.initialize();
     document.documentElement.setAttribute('data-theme', theme);
   } catch (error) {
-    console.debug(error as Error);
+    console.debug(error);
   }
 }
