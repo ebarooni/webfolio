@@ -32,6 +32,39 @@ The root project is a Maven parent that:
 - Vitest for unit testing
 - managed via npm and Maven plugins
 
+## MCP Server
+
+The backend exposes a [Model Context Protocol](https://modelcontextprotocol.io) server at `/mcp` using the Quarkus MCP Server extension with Streamable HTTP transport.
+
+The server provides the following capabilities:
+
+- **Resources** — the full OpenAPI specification of the WebFolio API, served as JSON at `webfolio://openapi`
+- **Tools** — search endpoints by keyword and retrieve detailed information about a specific path
+- **Prompts** — reusable prompt templates for API onboarding, contact form integration, debugging, and API review
+
+The MCP server is intended for local development and AI tooling only. It is not exposed publicly in the production Docker Compose setup.
+
+### Connecting locally
+
+Point your MCP client to:
+
+```
+http://localhost:8080/mcp
+```
+
+For VS Code, add the following to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "webfolio": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
 ## Prerequisites
 
 - Java 21
