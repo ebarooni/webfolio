@@ -40,6 +40,12 @@ docker compose up -d
 
 `docker compose pull` fetches the latest version of the image specified in `.env`. `docker compose up -d` detects that the image has changed and recreates only the affected container. Other services are not touched.
 
+In case of image architecure mismatch, specify the architecture of the image to pull:
+
+```bash
+docker pull --platform=linux/amd64 ebarooni/webfolio:latest
+```
+
 Remove old, unused images afterwards:
 
 ```bash
