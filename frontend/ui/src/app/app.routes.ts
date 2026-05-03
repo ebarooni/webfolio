@@ -1,9 +1,14 @@
+import {
+  accessDeniedGuard,
+  geoAccessGuard,
+} from './access-denied/geo-access-guard';
 import { Route } from './config/route';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
     path: Route.ACCESS_DENIED,
+    canActivate: [accessDeniedGuard],
     loadComponent: () =>
       import('./access-denied/access-denied').then((m) => m.AccessDenied),
     title: 'Access denied',
@@ -13,6 +18,8 @@ export const routes: Routes = [
   },
   {
     path: '',
+    canActivate: [geoAccessGuard],
+    canActivateChild: [geoAccessGuard],
     loadComponent: () =>
       import('./app-shell/app-shell').then((m) => m.AppShell),
     children: [
