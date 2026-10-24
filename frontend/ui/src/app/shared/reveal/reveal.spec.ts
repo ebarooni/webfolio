@@ -31,7 +31,7 @@ function installMatchMedia(matchesQuery: (query: string) => boolean): void {
 }
 
 describe('Reveal', () => {
-  let fixture: ComponentFixture<RevealHost>;
+  let fixture: ComponentFixture<RevealHost> | undefined;
 
   const originalObserver = window.IntersectionObserver;
 
@@ -42,8 +42,10 @@ describe('Reveal', () => {
   });
 
   afterEach(() => {
+    fixture?.destroy();
     window.IntersectionObserver = originalObserver;
     Reflect.deleteProperty(window, 'matchMedia');
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -104,5 +106,37 @@ describe('Reveal', () => {
 
     expect(element.classList.contains('bms-revealed')).toBe(true);
     expect(unobserve).toHaveBeenCalledOnce();
+  });
+
+  it('reveals after a timeout when the element never intersects', () => {
+    installMatchMedia(() => false);
+    vi.useFakeTimers();
+
+    class FakeObserver {
+      readonly root = null;
+      readonly rootMargin = '';
+      readonly thresholds = [0.12];
+
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+      takeRecords(): IntersectionObserverEntry[] {
+        return [];
+      }
+    }
+
+    window.IntersectionObserver = FakeObserver;
+
+    fixture = TestBed.createComponent(RevealHost);
+    fixture.detectChanges();
+
+    const paragraph = fixture.debugElement.query(By.css('p'));
+    const element = paragraph.nativeElement as HTMLParagraphElement;
+
+    expect(element.classList.contains('bms-revealed')).toBe(false);
+
+    vi.advanceTimersByTime(1500);
+
+    expect(element.classList.contains('bms-revealed')).toBe(true);
   });
 });

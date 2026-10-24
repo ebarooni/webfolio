@@ -121,10 +121,40 @@ export function isAppStoreUrlPlaceholder(url: string): boolean {
   return url === 'APP_STORE_URL';
 }
 
+export function storeLinkHref(url: string): string | null {
+  if (isAppStoreUrlPlaceholder(url)) {
+    return null;
+  }
+
+  return url;
+}
+
 export function blockPlaceholderAppStoreLink(event: Event): void {
   if (isAppStoreUrlPlaceholder(APP_STORE_URL)) {
     event.preventDefault();
   }
+}
+
+export function blockPlaceholderAppStoreKey(event: KeyboardEvent): void {
+  if (!isAppStoreUrlPlaceholder(APP_STORE_URL)) {
+    return;
+  }
+
+  if (event.key !== 'Enter' && event.key !== ' ') {
+    return;
+  }
+
+  event.preventDefault();
+}
+
+export function copyPartCode(
+  part: string | { readonly code: string },
+): string | null {
+  if (typeof part === 'string') {
+    return null;
+  }
+
+  return part.code;
 }
 
 const requirementItems = [
@@ -134,6 +164,7 @@ const requirementItems = [
 
 export const bookmarkStatusCopy = {
   appStoreUrl: APP_STORE_URL,
+  storeHref: storeLinkHref(APP_STORE_URL),
   secondaryHref: SECONDARY_CTA_URL ?? '#how',
   price: PRICE,
   requirements: requirementItems,
@@ -247,9 +278,15 @@ export const bookmarkStatusCopy = {
       title: 'A companion app that stays out of the way.',
       body: 'Browse and search all your bookmarks in a native sidebar. Close the window and Bookmark Status keeps working in the background, one click away in the menu bar.',
       checks: [
-        'Folder outline with bookmark counts',
-        'Sidebar search with the same site: and host: filters',
-        'Menu bar status, plus Open Bookmark Tree',
+        ['Folder outline with bookmark counts'],
+        [
+          'Sidebar search with the same ',
+          { code: 'site:' },
+          ' and ',
+          { code: 'host:' },
+          ' filters',
+        ],
+        ['Menu bar status, plus Open Bookmark Tree'],
       ],
       alt: 'The Bookmark Status app sidebar with Safari Bookmarks folders, counts and a context menu item Open 12 in New Tabs.',
       menuLabel:

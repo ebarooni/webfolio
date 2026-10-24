@@ -38,6 +38,20 @@ export class Reveal implements AfterViewInit {
     const element = this.elementRef.nativeElement as HTMLElement;
     element.classList.add('bms-reveal-pending');
 
+    let revealed = false;
+    let timeoutId = 0;
+
+    const finish = (observer: IntersectionObserver): void => {
+      if (revealed) {
+        return;
+      }
+
+      revealed = true;
+      element.classList.add('bms-revealed');
+      observer.unobserve(element);
+      view.clearTimeout(timeoutId);
+    };
+
     const observer = new view.IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -45,8 +59,7 @@ export class Reveal implements AfterViewInit {
             continue;
           }
 
-          element.classList.add('bms-revealed');
-          observer.unobserve(element);
+          finish(observer);
         }
       },
       {
@@ -56,8 +69,12 @@ export class Reveal implements AfterViewInit {
     );
 
     observer.observe(element);
+    timeoutId = view.setTimeout(() => {
+      finish(observer);
+    }, 1500);
 
     this.destroyRef.onDestroy(() => {
+      view.clearTimeout(timeoutId);
       observer.disconnect();
     });
   }

@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Reveal } from '../../../shared/reveal/reveal';
 import {
   BMS_ASSETS,
+  blockPlaceholderAppStoreKey,
   blockPlaceholderAppStoreLink,
   bookmarkStatusCopy,
 } from '../bookmark-status.copy';
@@ -17,4 +18,5 @@ export class BmsCta {
   readonly copy = bookmarkStatusCopy;
   readonly assets = BMS_ASSETS;
   readonly blockStore = blockPlaceholderAppStoreLink;
+  readonly blockStoreKey = blockPlaceholderAppStoreKey;
 }

@@ -29,4 +29,13 @@ describe('BmsBento', () => {
     expect(cards.length).toBe(6);
     expect(title.textContent).toContain('One small button.');
   });
+
+  it('renders search filters from the copy', () => {
+    const codes = fixture.debugElement.queryAll(By.css('.bms-checks code'));
+    const labels = codes.map((code) => {
+      return (code.nativeElement as HTMLElement).textContent;
+    });
+
+    expect(labels).toEqual(['site:', 'host:']);
+  });
 });

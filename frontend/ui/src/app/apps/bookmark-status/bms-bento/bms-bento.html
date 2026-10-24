@@ -146,7 +146,7 @@
           <h3>{{ copy.features.app.title }}</h3>
           <p>{{ copy.features.app.body }}</p>
           <ul class="bms-checks">
-            @for (check of copy.features.app.checks; track check) {
+            @for (check of copy.features.app.checks; track $index) {
             <li>
               <svg
                 width="16"
@@ -161,14 +161,14 @@
               >
                 <path d="M4.5 10.5l3.5 3.5 7.5-8" />
               </svg>
-              @if ($index === 1) {
-              <span
-                >Sidebar search with the same <code>site:</code> and
-                <code>host:</code> filters</span
-              >
-              } @else {
-              <span>{{ check }}</span>
-              }
+              <span>
+                @for (part of check; track $index) {
+                @if (partCode(part); as code) {
+                <code>{{ code }}</code>
+                } @else {
+                {{ part }}
+                } }
+              </span>
             </li>
             }
           </ul>

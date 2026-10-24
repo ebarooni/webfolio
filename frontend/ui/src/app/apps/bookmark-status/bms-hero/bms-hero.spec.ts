@@ -31,16 +31,26 @@ describe('BmsHero', () => {
     expect(link.getAttribute('aria-label')).toBe(
       'Download Bookmark Status on the Mac App Store',
     );
-    expect(link.getAttribute('href')).toBe('APP_STORE_URL');
+    expect(link.getAttribute('href')).toBeNull();
+    expect(link.getAttribute('role')).toBe('button');
   });
 
   it('does not follow the placeholder store link', () => {
     const badge = fixture.debugElement.query(By.css('.bms-badge'));
     const link = badge.nativeElement as HTMLAnchorElement;
-    const event = new MouseEvent('click', { cancelable: true });
+    const click = new MouseEvent('click', { cancelable: true });
+    const auxClick = new MouseEvent('auxclick', { cancelable: true });
+    const keydown = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      cancelable: true,
+    });
 
-    link.dispatchEvent(event);
+    link.dispatchEvent(click);
+    link.dispatchEvent(auxClick);
+    link.dispatchEvent(keydown);
 
-    expect(event.defaultPrevented).toBe(true);
+    expect(click.defaultPrevented).toBe(true);
+    expect(auxClick.defaultPrevented).toBe(true);
+    expect(keydown.defaultPrevented).toBe(true);
   });
 });

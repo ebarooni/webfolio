@@ -4,6 +4,7 @@ import type { Theme } from '../../../config/themes-array';
 import { Reveal } from '../../../shared/reveal/reveal';
 import {
   BMS_ASSETS,
+  blockPlaceholderAppStoreKey,
   blockPlaceholderAppStoreLink,
   bookmarkStatusCopy,
 } from '../bookmark-status.copy';
@@ -20,6 +21,7 @@ export class BmsHero {
   readonly copy = bookmarkStatusCopy;
   readonly assets = BMS_ASSETS;
   readonly blockStore = blockPlaceholderAppStoreLink;
+  readonly blockStoreKey = blockPlaceholderAppStoreKey;
 
   trustDelay(index: number): string {
     if (index === 1) {

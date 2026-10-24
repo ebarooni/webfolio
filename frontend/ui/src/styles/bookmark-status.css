@@ -1392,6 +1392,14 @@ html:has(.bms-page) {
   scroll-behavior: smooth;
 }
 
+@media print {
+  .bms-reveal-pending {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:has(.bms-page) {
     scroll-behavior: auto;

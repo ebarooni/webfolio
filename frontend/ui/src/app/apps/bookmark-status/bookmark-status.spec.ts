@@ -67,7 +67,8 @@ describe('BookmarkStatusPage', () => {
     expect(title.textContent).toContain('Now you’ll know.');
     expect(badges.length).toBe(1);
     expect(storeButtons.length).toBe(1);
-    expect(storeButton.getAttribute('href')).toBe(APP_STORE_URL);
+    expect(storeButton.getAttribute('href')).toBeNull();
+    expect(storeButton.getAttribute('role')).toBe('button');
     expect(storeButton.textContent).toContain('Get it on the Mac App Store');
   });
 

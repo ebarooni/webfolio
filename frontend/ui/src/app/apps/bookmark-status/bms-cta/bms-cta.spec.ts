@@ -26,6 +26,7 @@ describe('BmsCta', () => {
 
     expect(fixture.debugElement.query(By.css('.bms-badge'))).toBeNull();
     expect(link.getAttribute('aria-label')).toBe('Get it on the Mac App Store');
-    expect(link.getAttribute('href')).toBe('APP_STORE_URL');
+    expect(link.getAttribute('href')).toBeNull();
+    expect(link.getAttribute('role')).toBe('button');
   });
 });
