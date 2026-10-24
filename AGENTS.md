@@ -38,8 +38,6 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 
 ## Conventions
 
-- Commit messages follow `.agents/skills/generate-commit-message`.
 - Branches are `<type>/<short-description>`.
 - The version is the single `revision` property in the root `pom.xml`. Bump it in its own commit, `chore: raise version to X.Y.Z`.
-- Unresolved review threads are handled with `.agents/skills/resolve-review-threads`.
 - The only workflow, `.github/workflows/mirror-to-gitlab.yml`, mirrors `main` to GitLab. There is no CI build or test, so run the checks above locally.
