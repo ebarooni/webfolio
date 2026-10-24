@@ -23,7 +23,7 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 ## Gotchas
 
 - `src/environments/build-info.ts` is generated and gitignored. On a fresh clone, run `node scripts/generate-build-info.js` in `frontend/ui` before `npm start`, `npm test` or the first `mvn install`. Maven runs `npm test` (test phase) before it generates that file (prepare-package).
-- `docker.skip` defaults to `false`, so a plain `mvn install` builds a multi-arch buildx image (linux/amd64 and linux/arm64) and needs Docker running. Pass `-Ddocker.skip=true` unless you need the image. Push is off by default (`docker.skip.push=true`).
+- `docker.skip` defaults to `false`, so a plain `mvn install` builds a linux/amd64 image with buildx and needs Docker running. Buildx stays so an Apple Silicon machine does not emit a native arm64 image. Pass `-Ddocker.skip=true` unless you need the image. Local push stays off (`docker.skip.push=true`). Dispatch `.github/workflows/publish-docker-image.yml` from `main` to publish `ebarooni/webfolio` to Docker Hub.
 - The backend serves the SPA. In `process-resources` it copies `frontend/ui/dist/webfolio/browser` into `META-INF/resources`, so `mvn -pl backend ...` ships whatever frontend build already exists, or none at all.
 - `FallbackResource` catches every unmatched `GET` and returns `index.html`. New REST endpoints go under `/api/...`, which is also the only prefix `proxy.conf.json` forwards. `/mcp` and `/q/*` belong to Quarkus.
 - Telegram config is never in `application.properties`. Dev passes it as `-D` flags (`startup.sh`), containers read the secrets file (`QUARKUS_CONFIG_LOCATIONS`), and tests use WireMock (`WireMockTelegram`). Never commit `.env` or `secrets/*.properties`.
@@ -40,4 +40,4 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 
 - Branches are `<type>/<short-description>`.
 - The version is the single `revision` property in the root `pom.xml`. Bump it in its own commit, `chore: raise version to X.Y.Z`.
-- The only workflow, `.github/workflows/mirror-to-gitlab.yml`, mirrors `main` to GitLab. There is no CI build or test, so run the checks above locally.
+- `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. There is no CI build or test, so run the checks above locally.
