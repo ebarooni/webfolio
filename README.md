@@ -23,7 +23,7 @@ The root project is a Maven parent that:
 
 - Quarkus application
 - Java 25
-- runs in dev mode via `mvn quarkus:dev`
+- runs in dev mode via [`./startup.sh`](#local-development); the manual option is [`mvn -pl backend quarkus:dev`](#manual-startup)
 
 #### Frontend
 
@@ -202,6 +202,8 @@ The responsibilities are split as follows:
 ```bash
 mvn clean install
 ```
+
+Add `-Ddocker.skip=true` to skip the Docker image step.
 
 ### Frontend tests
 
