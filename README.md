@@ -22,7 +22,7 @@ The root project is a Maven parent that:
 #### Backend
 
 - Quarkus application
-- Java 21
+- Java 25
 - runs in dev mode via `mvn quarkus:dev`
 
 #### Frontend
@@ -67,7 +67,7 @@ For VS Code, add the following to `.vscode/mcp.json`:
 
 ## Prerequisites
 
-- Java 21
+- Java 25
 - Maven
 - Node.js LTS via `nvm`
 
