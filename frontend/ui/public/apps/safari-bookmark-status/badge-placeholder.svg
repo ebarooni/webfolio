@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="48" viewBox="0 0 168 48" role="img" aria-label="Placeholder for the official Download on the Mac App Store badge">
+  <rect x="1" y="1" width="166" height="46" rx="9" fill="none" stroke="currentColor" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="84" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="700" letter-spacing="1.4" fill="currentColor" fill-opacity=".6">PLACEHOLDER</text>
+  <text x="84" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="currentColor">Mac App Store badge</text>
+</svg>

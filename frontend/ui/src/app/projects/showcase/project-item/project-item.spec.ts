@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import { ProjectItem, type ProjectDescription } from './project-item';
 
@@ -25,6 +26,7 @@ describe('ProjectItem', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProjectItem, MockOpen],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectItem);
@@ -81,5 +83,24 @@ describe('ProjectItem', () => {
     fixture.detectChanges();
 
     expect(component.ariaLabel()).toBe('Custom label');
+  });
+
+  it('routes an internal project in the same tab', () => {
+    const internal: ProjectDescription = {
+      title: 'Bookmark Status',
+      description: 'Read-only Safari bookmarks',
+      internalPath: '/apps/safari-bookmark-status',
+      features: ['Safari'],
+    };
+
+    fixture.componentRef.setInput('project', internal);
+    fixture.detectChanges();
+
+    const link = fixture.debugElement.query(By.css('a'));
+    const anchor = link.nativeElement as HTMLAnchorElement;
+
+    expect(component.linkKind()).toBe('internal');
+    expect(anchor.getAttribute('target')).toBeNull();
+    expect(anchor.getAttribute('href')).toBe('/apps/safari-bookmark-status');
   });
 });

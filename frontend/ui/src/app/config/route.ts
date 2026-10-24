@@ -5,4 +5,5 @@ export enum Route {
   BUILD_INFO = 'build-info',
   BLOG = 'blog',
   ACCESS_DENIED = 'access-denied',
+  APPS_BOOKMARK_STATUS = 'apps/safari-bookmark-status',
 }

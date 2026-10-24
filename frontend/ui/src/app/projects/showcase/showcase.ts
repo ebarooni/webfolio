@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
+import { Route } from '../../config/route';
 import {
   ProjectItem,
   type ProjectDescription,
 } from './project-item/project-item';
 
 const PROJECTS = [
+  {
+    title: 'Bookmark Status',
+    internalPath: `/${Route.APPS_BOOKMARK_STATUS}`,
+    description:
+      'A Safari extension and Mac app that shows whether the page you’re on is already bookmarked, and where. Read-only and on this Mac.',
+    features: ['macOS', 'Read-only', 'Safari'],
+  },
   {
     title: 'Capacitor Calendar Plugin',
     href: 'https://github.com/ebarooni/capacitor-calendar',

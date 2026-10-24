@@ -7,7 +7,16 @@
         {{ project().title }}
       </h3>
 
-      @if (hasLink()) {
+      @if (linkKind() === 'internal') {
+      <a
+        class="btn btn-circle btn-ghost shrink-0 focus-visible:outline-none focus-visible:ring focus-visible:ring-primary/30"
+        [routerLink]="project().internalPath"
+        [attr.aria-label]="ariaLabel()"
+        title="Open"
+      >
+        <app-open />
+      </a>
+      } @else if (linkKind() === 'external') {
       <a
         class="btn btn-circle btn-ghost shrink-0 focus-visible:outline-none focus-visible:ring focus-visible:ring-primary/30"
         [href]="project().href"
