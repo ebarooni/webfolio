@@ -66,6 +66,11 @@ describe('BookmarkStatusPage', () => {
     expect(title.textContent).toContain('Already bookmarked?');
     expect(title.textContent).toContain('Now you’ll know.');
     expect(badges.length).toBe(1);
+    expect(
+      (badges[0]?.query(By.css('img')).nativeElement as HTMLImageElement).getAttribute(
+        'src',
+      ),
+    ).toContain('download-on-the-mac-app-store-black-en-us.svg');
     expect(storeButtons.length).toBe(1);
     expect(storeButton.getAttribute('href')).toBeNull();
     expect(storeButton.getAttribute('role')).toBe('button');
@@ -125,5 +130,12 @@ describe('BookmarkStatusPage', () => {
 
     expect(hero.getAttribute('src')).toContain('hero-tree-dark.webp');
     expect(hero.getAttribute('srcset')).toContain('hero-tree-dark@2x.webp');
+
+    const badge = fixture.debugElement.query(By.css('.bms-badge img'));
+    const badgeImage = badge.nativeElement as HTMLImageElement;
+
+    expect(badgeImage.getAttribute('src')).toContain(
+      'download-on-the-mac-app-store-white-en-us.svg',
+    );
   });
 });

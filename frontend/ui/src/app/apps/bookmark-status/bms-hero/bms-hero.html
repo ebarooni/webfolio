@@ -32,13 +32,12 @@
           (keydown)="blockStoreKey($event)"
         >
           <img
-            [src]="assets.badge"
-            width="168"
-            height="48"
+            [src]="theme() === 'dark' ? assets.badgeWhite : assets.badgeBlack"
+            width="156"
+            height="40"
             alt=""
             aria-hidden="true"
           />
-          <small>{{ copy.hero.badgeCaption }}</small>
         </a>
         <a class="bms-btn-ghost" [href]="copy.secondaryHref">
           {{ copy.hero.secondaryLabel }}

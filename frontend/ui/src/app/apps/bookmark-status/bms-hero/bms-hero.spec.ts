@@ -21,11 +21,13 @@ describe('BmsHero', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders the hero headline and placeholder badge', () => {
+  it('renders the hero headline and the official badge', () => {
     const title = fixture.debugElement.query(By.css('h1'));
     const heading = title.nativeElement as HTMLHeadingElement;
     const badge = fixture.debugElement.query(By.css('.bms-badge'));
     const link = badge.nativeElement as HTMLAnchorElement;
+    const image = badge.query(By.css('img'));
+    const badgeImage = image.nativeElement as HTMLImageElement;
 
     expect(heading.textContent).toContain('Already bookmarked?');
     expect(link.getAttribute('aria-label')).toBe(
@@ -33,6 +35,17 @@ describe('BmsHero', () => {
     );
     expect(link.getAttribute('href')).toBeNull();
     expect(link.getAttribute('role')).toBe('button');
+    expect(badgeImage.getAttribute('src')).toContain(
+      'download-on-the-mac-app-store-black-en-us.svg',
+    );
+    expect(link.textContent).not.toContain('Official Apple badge goes here');
+
+    fixture.componentRef.setInput('theme', 'dark');
+    fixture.detectChanges();
+
+    expect(badgeImage.getAttribute('src')).toContain(
+      'download-on-the-mac-app-store-white-en-us.svg',
+    );
   });
 
   it('does not follow the placeholder store link', () => {

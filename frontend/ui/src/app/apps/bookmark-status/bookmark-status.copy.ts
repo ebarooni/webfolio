@@ -15,7 +15,8 @@ export const PRICE: string | null = null;
 
 export const BMS_ASSETS = {
   appIcon: `${BMS_ASSET_BASE}/brand/app-icon-256.webp`,
-  badge: `${BMS_ASSET_BASE}/badge-placeholder.svg`,
+  badgeBlack: `${BMS_ASSET_BASE}/download-on-the-mac-app-store-black-en-us.svg`,
+  badgeWhite: `${BMS_ASSET_BASE}/download-on-the-mac-app-store-white-en-us.svg`,
   toolbarGrey: `${BMS_ASSET_BASE}/brand/toolbar-grey-32.png`,
   toolbarBlue: `${BMS_ASSET_BASE}/brand/toolbar-blue-32.png`,
   toolbarRed: `${BMS_ASSET_BASE}/brand/toolbar-red-32.png`,
@@ -178,7 +179,6 @@ export const bookmarkStatusCopy = {
     tagline:
       'Bookmark Status adds one quiet button to Safari’s toolbar. It turns blue when the page you’re on is already saved. Click it to see exactly where.',
     badgeLabel: 'Download Bookmark Status on the Mac App Store',
-    badgeCaption: 'Official Apple badge goes here',
     secondaryLabel: 'See how it works',
     shotAlt:
       'The Bookmark Status tree page in Safari. Favorites › Recipes is open and Classic Banana Bread Recipe is highlighted with a This page tag.',

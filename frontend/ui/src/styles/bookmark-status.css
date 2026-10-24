@@ -225,15 +225,6 @@ app-bms-keys {
   height: 48px;
 }
 
-.bms-badge small {
-  color: var(--bms-muted);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
 .bms-btn-store,
 .bms-btn-ghost {
   display: inline-flex;
