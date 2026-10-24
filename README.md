@@ -22,8 +22,8 @@ The root project is a Maven parent that:
 #### Backend
 
 - Quarkus application
-- Java 21
-- runs in dev mode via `mvn quarkus:dev`
+- Java 25
+- runs in dev mode via [`./startup.sh`](#local-development); the manual option is [`mvn -pl backend quarkus:dev`](#manual-startup)
 
 #### Frontend
 
@@ -67,7 +67,7 @@ For VS Code, add the following to `.vscode/mcp.json`:
 
 ## Prerequisites
 
-- Java 21
+- Java 25
 - Maven
 - Node.js LTS via `nvm`
 
@@ -202,6 +202,8 @@ The responsibilities are split as follows:
 ```bash
 mvn clean install
 ```
+
+Add `-Ddocker.skip=true` to skip the Docker image step.
 
 ### Frontend tests
 
