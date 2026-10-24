@@ -9,9 +9,9 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { distinctUntilChanged, fromEvent, map, of, startWith } from 'rxjs';
+import { fromEvent } from 'rxjs';
 
 import { Route } from '../../config/route';
 import { Theme } from '../../config/themes-array';
@@ -33,7 +33,6 @@ type NavItem = Readonly<{
 export class CompactNavbar {
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
-  private readonly window = this.document.defaultView;
 
   readonly selectedTheme = input.required<Theme>();
   readonly version = input<string | undefined>(undefined);
@@ -52,19 +51,6 @@ export class CompactNavbar {
     { label: 'Contact', route: Route.CONTACT },
     { label: 'Build', route: Route.BUILD_INFO, requiresVersion: true },
   ] as const;
-
-  readonly isScrolled = toSignal(
-    this.window
-      ? fromEvent(this.window, 'scroll').pipe(
-          startWith(null),
-          map(() => this.window!.scrollY > 0),
-          distinctUntilChanged(),
-        )
-      : of(false),
-    {
-      initialValue: false,
-    },
-  );
 
   constructor() {
     fromEvent<KeyboardEvent>(this.document, 'keydown')
