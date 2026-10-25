@@ -7,6 +7,7 @@ import { bookmarkStatusCopy } from '../bookmark-status.copy';
   selector: 'app-bms-privacy',
   imports: [Reveal],
   templateUrl: './bms-privacy.html',
+  styleUrl: './bms-privacy.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BmsPrivacy {

@@ -36,6 +36,7 @@ type PreviousMeta = Readonly<{
   selector: 'app-bookmark-status',
   imports: [BmsHero, BmsBento, BmsSteps, BmsPrivacy, BmsFaq, BmsCta],
   templateUrl: './bookmark-status.html',
+  styleUrl: './bookmark-status.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'bms-page flex flex-1 flex-col',
@@ -88,7 +89,10 @@ export class BookmarkStatusPage implements OnInit, OnDestroy {
         continue;
       }
 
-      this.meta.updateTag({ property: tag.key, content: tag.content }, selector);
+      this.meta.updateTag(
+        { property: tag.key, content: tag.content },
+        selector,
+      );
     }
 
     if (this.canonicalLink) {

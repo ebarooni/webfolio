@@ -17,6 +17,7 @@ import { BmsShot } from '../bms-shot/bms-shot';
   selector: 'app-bms-hero',
   imports: [NgTemplateOutlet, Reveal, RouterLink, BmsShot],
   templateUrl: './bms-hero.html',
+  styleUrls: ['./bms-hero.css', './bms-hero-actions.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BmsHero {

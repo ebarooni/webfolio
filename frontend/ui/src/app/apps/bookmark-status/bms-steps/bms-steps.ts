@@ -8,6 +8,7 @@ import { BmsKeys } from '../bms-keys/bms-keys';
   selector: 'app-bms-steps',
   imports: [Reveal, BmsKeys],
   templateUrl: './bms-steps.html',
+  styleUrl: './bms-steps.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BmsSteps {

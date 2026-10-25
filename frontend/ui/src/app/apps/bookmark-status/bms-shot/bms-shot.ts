@@ -11,6 +11,7 @@ import type { Theme } from '../../../config/themes-array';
 @Component({
   selector: 'app-bms-shot',
   templateUrl: './bms-shot.html',
+  styleUrl: './bms-shot.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'hostClass()',

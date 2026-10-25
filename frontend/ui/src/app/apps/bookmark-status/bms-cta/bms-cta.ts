@@ -12,6 +12,7 @@ import {
   selector: 'app-bms-cta',
   imports: [Reveal],
   templateUrl: './bms-cta.html',
+  styleUrl: './bms-cta.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BmsCta {

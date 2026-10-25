@@ -8,6 +8,7 @@ import { BmsKeys } from '../bms-keys/bms-keys';
   selector: 'app-bms-faq',
   imports: [Reveal, BmsKeys],
   templateUrl: './bms-faq.html',
+  styleUrl: './bms-faq.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BmsFaq {

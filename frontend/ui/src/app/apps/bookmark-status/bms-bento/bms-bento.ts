@@ -14,6 +14,11 @@ import { BmsShot } from '../bms-shot/bms-shot';
   selector: 'app-bms-bento',
   imports: [Reveal, BmsKeys, BmsShot],
   templateUrl: './bms-bento.html',
+  styleUrls: [
+    './bms-bento.css',
+    './bms-bento-shots.css',
+    './bms-bento-tree.css',
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BmsBento {
