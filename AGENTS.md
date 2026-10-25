@@ -41,3 +41,6 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 - Branches are `<type>/<short-description>`.
 - The version is the single `revision` property in the root `pom.xml`. Bump it in its own commit, `chore: raise version to X.Y.Z`.
 - `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. There is no CI build or test, so run the checks above locally.
+- Prose and comments: ASD-STE100 Simplified Technical English. Use plain words, short sentences, and one idea per sentence. Comments say why, not what.
+- No cryptic names (`d`, `m`, `bm`). Names state meaning.
+- Soft cap: hand-authored files stay at or under 250 lines unless you state a reason. Split an oversized file when you next touch it; no mass refactors. Generated files are exempt.
