@@ -24,6 +24,10 @@ describe('BmsSteps', () => {
     const steps = fixture.debugElement.queryAll(By.css('.bms-step'));
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
 
+    const section = fixture.debugElement.query(By.css('section'));
+    const how = section.nativeElement as HTMLElement;
+
+    expect(how.id).toBe('how');
     expect(steps.length).toBe(3);
     expect(text).toContain('Bookmarks.plist');
     expect(text).toContain('updates as you switch tabs');

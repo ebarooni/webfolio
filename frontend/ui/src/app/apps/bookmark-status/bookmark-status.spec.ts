@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Meta, Title } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Route } from '../../config/route';
@@ -18,6 +19,7 @@ describe('BookmarkStatusPage', () => {
 
     await TestBed.configureTestingModule({
       imports: [BookmarkStatusPage],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BookmarkStatusPage);
@@ -59,7 +61,9 @@ describe('BookmarkStatusPage', () => {
     const heading = fixture.debugElement.query(By.css('h1'));
     const title = heading.nativeElement as HTMLHeadingElement;
     const badges = fixture.debugElement.queryAll(By.css('.bms-badge'));
-    const storeButtons = fixture.debugElement.queryAll(By.css('.bms-btn-store'));
+    const storeButtons = fixture.debugElement.queryAll(
+      By.css('.bms-btn-store'),
+    );
     const storeButton = storeButtons[0]?.nativeElement as HTMLAnchorElement;
 
     expect(fixture.debugElement.queryAll(By.css('h1')).length).toBe(1);
@@ -67,9 +71,9 @@ describe('BookmarkStatusPage', () => {
     expect(title.textContent).toContain('Now you’ll know.');
     expect(badges.length).toBe(1);
     expect(
-      (badges[0]?.query(By.css('img')).nativeElement as HTMLImageElement).getAttribute(
-        'src',
-      ),
+      (
+        badges[0]?.query(By.css('img')).nativeElement as HTMLImageElement
+      ).getAttribute('src'),
     ).toContain('download-on-the-mac-app-store-black-en-us.svg');
     expect(storeButtons.length).toBe(1);
     expect(storeButton.getAttribute('href')).toBeNull();
@@ -78,8 +82,11 @@ describe('BookmarkStatusPage', () => {
   });
 
   it('hides the hero price and keeps seven FAQ answers', () => {
-    const requirements = fixture.debugElement.query(By.css('.bms-hero .bms-reqs'));
-    const requirementText = (requirements.nativeElement as HTMLElement).textContent ?? '';
+    const requirements = fixture.debugElement.query(
+      By.css('.bms-hero .bms-reqs'),
+    );
+    const requirementText =
+      (requirements.nativeElement as HTMLElement).textContent ?? '';
     const details = fixture.debugElement.queryAll(By.css('.bms-faq details'));
     const first = details[0]?.nativeElement as HTMLDetailsElement;
     const second = details[1]?.nativeElement as HTMLDetailsElement;

@@ -1,8 +1,32 @@
+import { Location } from '@angular/common';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import {
+  NavigationEnd,
+  provideRouter,
+  Router,
+  withInMemoryScrolling,
+} from '@angular/router';
+import { filter, firstValueFrom } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Route } from '../../../config/route';
 import { BmsHero } from './bms-hero';
+
+@Component({
+  selector: 'app-route-host',
+  template: '',
+})
+class RouteHost {}
+
+function nextNavigation(router: Router): Promise<NavigationEnd> {
+  return firstValueFrom(
+    router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+    ),
+  );
+}
 
 describe('BmsHero', () => {
   let fixture: ComponentFixture<BmsHero>;
@@ -10,6 +34,18 @@ describe('BmsHero', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BmsHero],
+      providers: [
+        provideRouter(
+          [
+            { path: Route.HOME, component: RouteHost },
+            { path: Route.APPS_BOOKMARK_STATUS, component: RouteHost },
+          ],
+          withInMemoryScrolling({
+            anchorScrolling: 'enabled',
+            scrollPositionRestoration: 'enabled',
+          }),
+        ),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BmsHero);
@@ -65,5 +101,27 @@ describe('BmsHero', () => {
     expect(click.defaultPrevented).toBe(true);
     expect(auxClick.defaultPrevented).toBe(true);
     expect(keydown.defaultPrevented).toBe(true);
+  });
+
+  it('scrolls to how it works on this page', async () => {
+    const router = TestBed.inject(Router);
+    const location = TestBed.inject(Location);
+    const link = fixture.debugElement.query(By.css('a.bms-btn-ghost'));
+    const anchor = link.nativeElement as HTMLAnchorElement;
+    const page = `/${Route.APPS_BOOKMARK_STATUS}`;
+
+    await router.navigateByUrl(page);
+
+    expect(anchor.textContent).toContain('See how it works');
+    expect(anchor.getAttribute('href')).toBe(`${page}#how`);
+
+    const toSection = nextNavigation(router);
+    anchor.click();
+    await toSection;
+
+    expect(router.url).toBe(`${page}#how`);
+    expect(location.path(true)).toBe(`${page}#how`);
+    expect(router.url).not.toBe('/');
+    expect(router.url).not.toBe('/#how');
   });
 });

@@ -19,7 +19,9 @@
         {{ copy.hero.titleLine1 }}<br />
         <span class="bms-gradient">{{ copy.hero.titleLine2 }}</span>
       </h1>
-      <p class="bms-lead" appReveal revealDelay="180ms">{{ copy.hero.tagline }}</p>
+      <p class="bms-lead" appReveal revealDelay="180ms">
+        {{ copy.hero.tagline }}
+      </p>
       <div class="bms-cta-row" appReveal revealDelay="240ms">
         <a
           class="bms-badge"
@@ -39,7 +41,20 @@
             aria-hidden="true"
           />
         </a>
-        <a class="bms-btn-ghost" [href]="copy.secondaryHref">
+        @if (copy.secondaryHref; as externalHref) {
+        <a class="bms-btn-ghost" [href]="externalHref">
+          <ng-container [ngTemplateOutlet]="howItWorksLabel" />
+        </a>
+        } @else {
+        <a
+          class="bms-btn-ghost"
+          [routerLink]="pageLink"
+          [fragment]="copy.howFragment"
+        >
+          <ng-container [ngTemplateOutlet]="howItWorksLabel" />
+        </a>
+        }
+        <ng-template #howItWorksLabel>
           {{ copy.hero.secondaryLabel }}
           <svg
             class="bms-ghost-arrow"
@@ -54,13 +69,12 @@
           >
             <path d="M10 4v12M5 11l5 5 5-5" />
           </svg>
-        </a>
+        </ng-template>
       </div>
       <p class="bms-reqs" appReveal revealDelay="300ms">
         @for (item of copy.requirements; track item) {
         <span>{{ item }}</span>
-        }
-        @if (copy.price) {
+        } @if (copy.price) {
         <span>Price: {{ copy.price }}</span>
         }
       </p>

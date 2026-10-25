@@ -1,5 +1,8 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
+import { Route } from '../../../config/route';
 import type { Theme } from '../../../config/themes-array';
 import { Reveal } from '../../../shared/reveal/reveal';
 import {
@@ -12,7 +15,7 @@ import { BmsShot } from '../bms-shot/bms-shot';
 
 @Component({
   selector: 'app-bms-hero',
-  imports: [Reveal, BmsShot],
+  imports: [NgTemplateOutlet, Reveal, RouterLink, BmsShot],
   templateUrl: './bms-hero.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,6 +23,7 @@ export class BmsHero {
   readonly theme = input.required<Theme>();
   readonly copy = bookmarkStatusCopy;
   readonly assets = BMS_ASSETS;
+  readonly pageLink = `/${Route.APPS_BOOKMARK_STATUS}`;
   readonly blockStore = blockPlaceholderAppStoreLink;
   readonly blockStoreKey = blockPlaceholderAppStoreKey;
 

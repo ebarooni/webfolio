@@ -7,8 +7,11 @@ export const BMS_ASSET_BASE = '/apps/safari-bookmark-status';
 /** Placeholder until the Mac App Store listing exists. Do not guess a URL. */
 export const APP_STORE_URL = 'APP_STORE_URL';
 
-/** Optional later override. Null keeps the secondary action on #how. */
+/** Optional later override. Null scrolls to the how-it-works section on this page. */
 export const SECONDARY_CTA_URL: string | null = null;
+
+/** Fragment for the how-it-works section. Matches the section id. */
+export const HOW_IT_WORKS_FRAGMENT = 'how';
 
 /** Hidden in the hero until a real price exists. Never render this while null. */
 export const PRICE: string | null = null;
@@ -24,8 +27,7 @@ export const BMS_ASSETS = {
 
 export const PAGE_TITLE = 'Bookmark Status for Safari on Mac | Ehsan Barooni';
 
-export const PAGE_CANONICAL =
-  'https://barooni.dev/apps/safari-bookmark-status';
+export const PAGE_CANONICAL = 'https://barooni.dev/apps/safari-bookmark-status';
 
 export type PageMetaTag = Readonly<{
   attr: 'name' | 'property';
@@ -166,7 +168,8 @@ const requirementItems = [
 export const bookmarkStatusCopy = {
   appStoreUrl: APP_STORE_URL,
   storeHref: storeLinkHref(APP_STORE_URL),
-  secondaryHref: SECONDARY_CTA_URL ?? '#how',
+  secondaryHref: SECONDARY_CTA_URL,
+  howFragment: HOW_IT_WORKS_FRAGMENT,
   price: PRICE,
   requirements: requirementItems,
   legal:
@@ -322,8 +325,7 @@ export const bookmarkStatusCopy = {
     fileKeys: ['⇧', '⌘', 'G'],
     fileHintAfter: ' and paste ',
     filePath: '~/Library/Safari/Bookmarks.plist',
-    crumb:
-      'Safari Settings › Extensions › Bookmark Status › All Websites: ',
+    crumb: 'Safari Settings › Extensions › Bookmark Status › All Websites: ',
     crumbStrong: 'Allow',
     notSaved: 'Not saved',
     saved: 'Saved',
