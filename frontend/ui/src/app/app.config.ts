@@ -1,5 +1,5 @@
 import { DOCUMENT, ViewportScroller } from '@angular/common';
-import { provideHttpClient, withXhr } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(initializeApp),
     provideAppInitializer(registerFixedHeaderScrollOffset),
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(withXhr()),
+    provideHttpClient(),
     provideRouter(
       routes,
       withInMemoryScrolling({
