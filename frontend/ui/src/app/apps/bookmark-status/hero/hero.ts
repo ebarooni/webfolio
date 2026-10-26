@@ -11,12 +11,12 @@ import {
   blockPlaceholderAppStoreLink,
   bookmarkStatusLinks,
 } from '../bookmark-status.copy';
-import { BookmarkStatusShot } from '../shot/shot';
 import { heroCopy } from './hero.copy';
+import { BookmarkStatusHeroVisual } from './hero-visual/hero-visual';
 
 @Component({
   selector: 'app-bookmark-status-hero',
-  imports: [NgTemplateOutlet, Reveal, RouterLink, BookmarkStatusShot],
+  imports: [NgTemplateOutlet, Reveal, RouterLink, BookmarkStatusHeroVisual],
   templateUrl: './hero.html',
   styleUrl: './hero.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

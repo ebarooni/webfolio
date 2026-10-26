@@ -1,4 +1,5 @@
 app-bookmark-status-hero,
+app-bookmark-status-hero-visual,
 app-bookmark-status-bento,
 app-bookmark-status-steps,
 app-bookmark-status-privacy,
@@ -99,14 +100,6 @@ app-bookmark-status-keys {
   letter-spacing: 0.02em;
 }
 
-.bookmark-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--bookmark-status-accent);
-  box-shadow: 0 0 0 3px rgb(10 132 255 / 25%);
-}
-
 .bookmark-status-kicker {
   display: inline-flex;
   letter-spacing: 0.04em;
@@ -201,12 +194,6 @@ app-bookmark-status-keys {
 [data-theme="light"] .bookmark-status-frame {
   box-shadow:
     0 0 0 0.5px rgb(0 0 0 / 16%),
-    var(--bookmark-status-shadow-lg);
-}
-
-[data-theme="light"] .bookmark-status-hero-shot {
-  box-shadow:
-    0 0 0 0.5px rgb(0 0 0 / 18%),
     var(--bookmark-status-shadow-lg);
 }
 
@@ -341,14 +328,6 @@ html:has(.bookmark-status-page) {
 }
 
 @media (width >= 1024px) {
-  .bookmark-status-card-toolbar {
-    grid-column: span 7;
-  }
-
-  .bookmark-status-card-search {
-    grid-column: span 5;
-  }
-
   .bookmark-status-card-tree,
   .bookmark-status-card-duplicates,
   .bookmark-status-card-tabs {

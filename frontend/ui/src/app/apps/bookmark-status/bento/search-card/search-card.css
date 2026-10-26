@@ -23,3 +23,9 @@
     width: 118%;
   }
 }
+
+@media (width >= 1024px) {
+  .bookmark-status-card-search {
+    grid-column: span 5;
+  }
+}
