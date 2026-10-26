@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import type { Theme } from '../../../config/themes-array';
 import { Reveal } from '../../../shared/reveal/reveal';
-import { bookmarkStatusCopy } from '../bookmark-status.copy';
+import { bentoCopy } from './bento.copy';
 import { BookmarkStatusCompanionCard } from './companion-card/companion-card';
 import { BookmarkStatusDuplicatesCard } from './duplicates-card/duplicates-card';
 import { BookmarkStatusSearchCard } from './search-card/search-card';
@@ -27,5 +27,7 @@ import { BookmarkStatusTreeCard } from './tree-card/tree-card';
 })
 export class BookmarkStatusBento {
   readonly theme = input.required<Theme>();
-  readonly copy = bookmarkStatusCopy;
+  readonly copy = {
+    features: bentoCopy,
+  };
 }

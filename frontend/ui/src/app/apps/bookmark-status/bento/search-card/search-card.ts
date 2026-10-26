@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import type { Theme } from '../../../../config/themes-array';
 import { Reveal } from '../../../../shared/reveal/reveal';
-import { bookmarkStatusCopy } from '../../bookmark-status.copy';
+import { searchCardCopy } from './search-card.copy';
 import { BookmarkStatusShot } from '../../shot/shot';
 
 @Component({
@@ -14,5 +14,9 @@ import { BookmarkStatusShot } from '../../shot/shot';
 })
 export class BookmarkStatusSearchCard {
   readonly theme = input.required<Theme>();
-  readonly copy = bookmarkStatusCopy;
+  readonly copy = {
+    features: {
+      search: searchCardCopy,
+    },
+  };
 }

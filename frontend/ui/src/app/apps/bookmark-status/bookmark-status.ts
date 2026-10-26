@@ -22,7 +22,7 @@ import {
   PAGE_JSON_LD,
   PAGE_META,
   PAGE_TITLE,
-  bookmarkStatusCopy,
+  pageCopy,
   type PageMetaTag,
 } from './bookmark-status.copy';
 
@@ -61,7 +61,7 @@ export class BookmarkStatusPage implements OnInit, OnDestroy {
   private canonicalLink: HTMLLinkElement | null = null;
   private jsonLdScript: HTMLScriptElement | null = null;
 
-  readonly copy = bookmarkStatusCopy;
+  readonly copy = pageCopy;
   readonly theme = toSignal(this.appStore.selectTheme$, {
     initialValue: 'light',
   });

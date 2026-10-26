@@ -5,8 +5,9 @@ import {
   BOOKMARK_STATUS_ASSETS,
   blockPlaceholderAppStoreKey,
   blockPlaceholderAppStoreLink,
-  bookmarkStatusCopy,
+  bookmarkStatusLinks,
 } from '../bookmark-status.copy';
+import { callToActionCopy } from './call-to-action.copy';
 
 @Component({
   selector: 'app-bookmark-status-call-to-action',
@@ -16,7 +17,11 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusCallToAction {
-  readonly copy = bookmarkStatusCopy;
+  readonly copy = {
+    storeHref: bookmarkStatusLinks.storeHref,
+    requirements: bookmarkStatusLinks.requirements,
+    finalCta: callToActionCopy,
+  };
   readonly assets = BOOKMARK_STATUS_ASSETS;
   readonly blockStore = blockPlaceholderAppStoreLink;
   readonly blockStoreKey = blockPlaceholderAppStoreKey;

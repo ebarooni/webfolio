@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { Reveal } from '../../../shared/reveal/reveal';
-import { bookmarkStatusCopy } from '../bookmark-status.copy';
+import { faqCopy } from './faq.copy';
 import { BookmarkStatusKeys } from '../keys/keys';
 
 @Component({
@@ -12,5 +12,7 @@ import { BookmarkStatusKeys } from '../keys/keys';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusFaq {
-  readonly copy = bookmarkStatusCopy;
+  readonly copy = {
+    faq: faqCopy,
+  };
 }

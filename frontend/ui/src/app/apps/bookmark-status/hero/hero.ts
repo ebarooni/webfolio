@@ -9,9 +9,10 @@ import {
   BOOKMARK_STATUS_ASSETS,
   blockPlaceholderAppStoreKey,
   blockPlaceholderAppStoreLink,
-  bookmarkStatusCopy,
+  bookmarkStatusLinks,
 } from '../bookmark-status.copy';
 import { BookmarkStatusShot } from '../shot/shot';
+import { heroCopy } from './hero.copy';
 
 @Component({
   selector: 'app-bookmark-status-hero',
@@ -22,7 +23,10 @@ import { BookmarkStatusShot } from '../shot/shot';
 })
 export class BookmarkStatusHero {
   readonly theme = input.required<Theme>();
-  readonly copy = bookmarkStatusCopy;
+  readonly copy = {
+    ...bookmarkStatusLinks,
+    hero: heroCopy,
+  };
   readonly assets = BOOKMARK_STATUS_ASSETS;
   readonly pageLink = `/${Route.APPS_BOOKMARK_STATUS}`;
   readonly blockStore = blockPlaceholderAppStoreLink;
