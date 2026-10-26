@@ -23,7 +23,7 @@ type BlogPostPreview = Readonly<{
   selector: 'app-blog',
   templateUrl: './blog.html',
   imports: [DatePipe, Hero, PostModal, AstroToAngular, VpsHosting],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-col flex-1',
   },

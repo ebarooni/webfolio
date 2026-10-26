@@ -69,7 +69,7 @@ const PROJECTS = [
 @Component({
   selector: 'app-showcase',
   imports: [ProjectItem],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './showcase.html',
 })
 export class Showcase {

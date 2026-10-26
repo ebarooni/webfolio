@@ -8,7 +8,7 @@ import {
 
 @Component({
   selector: 'app-modal',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './modal.html',
 })
 export class Modal {

@@ -6,7 +6,7 @@ import { Showcase } from './showcase/showcase';
   selector: 'app-projects',
   templateUrl: './projects.html',
   imports: [Hero, Showcase],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-col flex-1',
   },

@@ -21,7 +21,7 @@ export interface ContactFormData {
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-contact-form',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './contact-form.html',
 })
 export class ContactForm {

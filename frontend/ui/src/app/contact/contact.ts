@@ -17,7 +17,7 @@ import { Modal } from './modal/modal';
   selector: 'app-contact',
   templateUrl: './contact.html',
   imports: [Hero, ContactForm, Modal],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-col flex-1',
   },

@@ -19,7 +19,7 @@ export type ProjectDescription = Readonly<{
 @Component({
   selector: 'app-project-item',
   imports: [Open, RouterLink],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './project-item.html',
 })
 export class ProjectItem {
