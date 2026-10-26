@@ -40,6 +40,9 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 
 - Branches are `<type>/<short-description>`.
 - The version is the single `revision` property in the root `pom.xml`. Bump it in its own commit, `chore: raise version to X.Y.Z`.
+- Every commit message ends with this trailer, after one empty line:
+  `Co-authored-by: Ehsan Barooni <66495214+ebarooni@users.noreply.github.com>`
+  Do not add any other `Co-authored-by` line. Cursor's commit hook adds the session owner only when no trailer is present, and that adds the wrong email.
 - `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. There is no CI build or test, so run the checks above locally.
 - Prose and comments: ASD-STE100 Simplified Technical English. Use plain words, short sentences, and one idea per sentence. Comments say why, not what.
 - No cryptic names (`d`, `m`, `bm`). Names state meaning.
