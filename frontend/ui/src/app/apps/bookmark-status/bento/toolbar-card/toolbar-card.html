@@ -1,0 +1,37 @@
+<article class="bookmark-status-card bookmark-status-card-toolbar" appReveal>
+  <div class="bookmark-status-card-copy">
+    <span class="bookmark-status-kicker"
+      >{{ copy.features.toolbar.kicker }}</span
+    >
+    <h3>{{ copy.features.toolbar.title }}</h3>
+    <p>{{ copy.features.toolbar.body }}</p>
+    <div class="legend" [attr.aria-label]="copy.features.toolbar.legendLabel">
+      @for (label of copy.features.toolbar.legend; track label; let index =
+      $index) {
+      <span>
+        <img [src]="legendIcons[index]" alt="" width="16" height="16" />
+        {{ label }}
+      </span>
+      }
+    </div>
+  </div>
+  <div class="bookmark-status-card-visual toolbar-visual">
+    <div class="shot-stack">
+      <app-bookmark-status-shot
+        name="toolbar-tip"
+        [theme]="theme()"
+        [alt]="copy.features.toolbar.savedAlt"
+        [width]="533"
+        [height]="100"
+      />
+      <app-bookmark-status-shot
+        name="toolbar-site-tip"
+        [theme]="theme()"
+        [alt]="copy.features.toolbar.siteAlt"
+        [width]="533"
+        [height]="100"
+        frameClass="offset"
+      />
+    </div>
+  </div>
+</article>

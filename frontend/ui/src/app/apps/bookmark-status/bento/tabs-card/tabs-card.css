@@ -1,0 +1,22 @@
+:host {
+  display: contents;
+}
+
+.tabs-visual {
+  min-height: 250px;
+}
+
+.tabs-shot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 125%;
+  max-width: none;
+  transform: translateX(-50%);
+}
+
+@media (width >= 640px) {
+  .tabs-shot {
+    width: 112%;
+  }
+}

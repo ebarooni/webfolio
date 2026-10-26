@@ -1,0 +1,25 @@
+:host {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--bookmark-status-shadow-lg);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+:host(.bookmark-status-hero-shot) .image {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+@media (width >= 640px) {
+  :host(.bookmark-status-hero-shot) .image {
+    aspect-ratio: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+}

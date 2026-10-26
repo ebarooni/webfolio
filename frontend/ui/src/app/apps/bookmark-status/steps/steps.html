@@ -1,0 +1,58 @@
+<section
+  class="bookmark-status-section bookmark-status-section-follow"
+  [id]="copy.howFragment"
+  aria-labelledby="how-title"
+>
+  <div class="bookmark-status-wrap">
+    <div class="bookmark-status-section-head" appReveal>
+      <span class="bookmark-status-eyebrow">{{ copy.how.eyebrow }}</span>
+      <h2 id="how-title">
+        {{ copy.how.titleLead }}<br />
+        {{ copy.how.titleTail }}
+      </h2>
+    </div>
+    <ol class="setup-steps">
+      <li class="setup-step" appReveal>
+        <span class="number" aria-hidden="true">1</span>
+        <h3>{{ copy.how.steps[0].title }}</h3>
+        <p>{{ copy.how.steps[0].body }}</p>
+        <div class="hint">
+          {{ copy.how.fileHintBefore }}
+          <app-bookmark-status-keys
+            [label]="copy.how.fileKeysLabel"
+            [keys]="copy.how.fileKeys"
+          />
+          {{ copy.how.fileHintAfter }}
+          <code>{{ copy.how.filePath }}</code>
+        </div>
+      </li>
+      <li class="setup-step" appReveal revealDelay="80ms">
+        <span class="number" aria-hidden="true">2</span>
+        <h3>{{ copy.how.steps[1].title }}</h3>
+        <p>{{ copy.how.steps[1].body }}</p>
+        <div class="hint">
+          <span class="crumb">
+            {{ copy.how.crumb }}<strong>{{ copy.how.crumbStrong }}</strong>
+          </span>
+        </div>
+      </li>
+      <li class="setup-step" appReveal revealDelay="160ms">
+        <span class="number" aria-hidden="true">3</span>
+        <h3>{{ copy.how.steps[2].title }}</h3>
+        <p>{{ copy.how.steps[2].body }}</p>
+        <div class="hint">
+          <img [src]="assets.toolbarGrey" width="16" height="16" alt="" />
+          {{ copy.how.notSaved }}
+          <img
+            class="hint-gap"
+            [src]="assets.toolbarBlue"
+            width="16"
+            height="16"
+            alt=""
+          />
+          {{ copy.how.saved }}
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>

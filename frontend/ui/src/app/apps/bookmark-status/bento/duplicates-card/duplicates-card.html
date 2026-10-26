@@ -1,0 +1,26 @@
+<article
+  class="bookmark-status-card bookmark-status-card-duplicates"
+  appReveal
+  revealDelay="80ms"
+>
+  <div class="bookmark-status-card-copy">
+    <span class="bookmark-status-kicker"
+      >{{ copy.features.duplicates.kicker }}</span
+    >
+    <h3>{{ copy.features.duplicates.title }}</h3>
+    <p>
+      <strong>{{ copy.features.duplicates.lead }}</strong>{{
+      copy.features.duplicates.body }}
+    </p>
+  </div>
+  <div class="bookmark-status-card-visual">
+    <app-bookmark-status-shot
+      name="duplicates"
+      [theme]="theme()"
+      [alt]="copy.features.duplicates.alt"
+      [width]="900"
+      [height]="760"
+      frameClass="duplicates-shot"
+    />
+  </div>
+</article>

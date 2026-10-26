@@ -1,0 +1,31 @@
+:host {
+  display: contents;
+}
+
+.tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.search-shot {
+  position: absolute;
+  top: 0.25rem;
+  left: 1.25rem;
+  width: 175%;
+  max-width: none;
+}
+
+@media (width >= 640px) {
+  .search-shot {
+    left: 1.75rem;
+    width: 118%;
+  }
+}
+
+@media (width >= 1024px) {
+  .bookmark-status-card-search {
+    grid-column: span 5;
+  }
+}

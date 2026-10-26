@@ -1,0 +1,103 @@
+<section
+  class="bookmark-status-section bookmark-status-section-follow"
+  id="privacy"
+  aria-labelledby="privacy-title"
+>
+  <div class="bookmark-status-wrap">
+    <div class="panel" appReveal>
+      <div class="bookmark-status-section-head">
+        <span class="shield" aria-hidden="true">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 3l7 3v5c0 4.5-3 8.3-7 9.5-4-1.2-7-5-7-9.5V6z" />
+            <path d="M8.8 12.2l2.2 2.2 4.2-4.6" />
+          </svg>
+        </span>
+        <h2 id="privacy-title">{{ copy.privacy.title }}</h2>
+        <p class="bookmark-status-lead">{{ copy.privacy.lead }}</p>
+      </div>
+      <div class="grid">
+        @for (point of copy.privacy.points; track point.title; let index =
+        $index) {
+        <div class="item">
+          @switch (index) { @case (0) {
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M2.5 10s2.8-5 7.5-5 7.5 5 7.5 5-2.8 5-7.5 5-7.5-5-7.5-5z"
+            />
+            <circle cx="10" cy="10" r="2.2" />
+          </svg>
+          } @case (1) {
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M3 3l14 14" />
+            <path
+              d="M6.2 9.4a5 5 0 0 1 6.6-.4M3.8 6.9a8.5 8.5 0 0 1 3.2-2M16.2 6.9a8.5 8.5 0 0 0-6-2.4M10 15.5h.01"
+            />
+          </svg>
+          } @case (2) {
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="2.5" y="4" width="15" height="12" rx="2" />
+            <path d="M2.5 7.5h15" />
+          </svg>
+          } @default {
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3.5" width="14" height="13" rx="2" />
+            <path d="M6.5 8h7M6.5 11h4.5" />
+          </svg>
+          } }
+          <h3>{{ point.title }}</h3>
+          <p>{{ point.body }}</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,204 @@
+:host {
+  position: relative;
+  padding: 6.5rem 0 0;
+  isolation: isolate;
+  overflow: clip;
+  text-align: center;
+}
+
+:host::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0 0 30%;
+  background-image:
+    linear-gradient(var(--bookmark-status-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bookmark-status-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.7;
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 20%,
+    #000 30%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 20%,
+    #000 30%,
+    transparent 75%
+  );
+}
+
+.bookmark-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bookmark-status-accent);
+  box-shadow: 0 0 0 3px rgb(10 132 255 / 25%);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: var(--text-display);
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.gradient {
+  background-image: linear-gradient(
+    100deg,
+    #0a84ff 10%,
+    #4a5df9 55%,
+    #57adff 95%
+  );
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.trust {
+  display: grid;
+  max-width: 26rem;
+  margin: 3.5rem auto 0;
+  padding: 0;
+  gap: 1rem;
+}
+
+.trust li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-box);
+  background: var(--bookmark-status-surface);
+  box-shadow: inset 0 0 0 1px var(--bookmark-status-line);
+  color: var(--bookmark-status-ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.3;
+  list-style: none;
+}
+
+.trust li > span span {
+  display: block;
+  color: var(--bookmark-status-muted);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.trust-icon {
+  display: grid;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--bookmark-status-card);
+  box-shadow:
+    0 0 0 1px var(--bookmark-status-line),
+    var(--bookmark-status-shadow-sm);
+  color: var(--bookmark-status-accent);
+}
+
+@media (width >= 640px) {
+  :host {
+    padding-top: 8.5rem;
+  }
+
+  .bookmark-status-app-icon {
+    width: 104px;
+    height: 104px;
+  }
+
+  .trust {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 56rem;
+  }
+}
+
+:host-context([data-theme="dark"]) .gradient {
+  background-image: linear-gradient(
+    100deg,
+    #57adff 10%,
+    #93c5fd 55%,
+    #7c8cff 95%
+  );
+}
+
+.store-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 12px;
+  color: var(--bookmark-status-ink);
+  text-decoration: none;
+}
+
+.store-badge img {
+  width: auto;
+  height: 40px;
+}
+
+.ghost-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3rem;
+  padding: 0 1.25rem;
+  border-radius: var(--radius-field);
+  background: var(--bookmark-status-card);
+  box-shadow:
+    0 0 0 1px var(--bookmark-status-line-strong),
+    var(--bookmark-status-shadow-sm);
+  color: var(--bookmark-status-ink);
+  font-size: var(--text-cta-btn);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.2s var(--bookmark-status-ease);
+}
+
+.ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.ghost-arrow {
+  transition: transform 0.2s var(--bookmark-status-ease);
+}
+
+.ghost-button:hover .ghost-arrow {
+  transform: translateY(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ghost-button {
+    transition: none;
+  }
+
+  .ghost-arrow {
+    transition: none;
+  }
+
+  .ghost-button:hover {
+    transform: none;
+  }
+
+  .ghost-button:hover .ghost-arrow {
+    transform: none;
+  }
+}

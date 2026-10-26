@@ -1,0 +1,63 @@
+:host {
+  --bookmark-status-ink: #111318;
+  --bookmark-status-muted: #5b6472;
+  --bookmark-status-surface: #f8fafc;
+  --bookmark-status-card: #fff;
+  --bookmark-status-line: rgb(15 23 42 / 8%);
+  --bookmark-status-line-strong: rgb(15 23 42 / 14%);
+  --bookmark-status-accent: #0a84ff;
+  --bookmark-status-accent-ink: #06c;
+  --bookmark-status-accent-button: #0071e3;
+  --bookmark-status-accent-soft: rgb(10 132 255 / 9%);
+  --bookmark-status-glow-1: rgb(10 132 255 / 34%);
+  --bookmark-status-glow-2: rgb(74 93 249 / 24%);
+  --bookmark-status-glow-3: rgb(87 173 255 / 28%);
+  --bookmark-status-shadow-lg:
+    0 1px 2px rgb(15 23 42 / 6%), 0 12px 32px -8px rgb(15 23 42 / 14%),
+    0 40px 80px -24px rgb(15 23 42 / 22%);
+  --bookmark-status-shadow-sm:
+    0 1px 2px rgb(15 23 42 / 5%), 0 4px 14px -6px rgb(15 23 42 / 10%);
+  --bookmark-status-key: #fff;
+  --text-display: clamp(2.6rem, 6.2vw, 4.75rem);
+  --bookmark-status-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --color-primary: var(--bookmark-status-accent-ink);
+  --color-primary-content: #fff;
+
+  color: var(--color-base-content);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  text-rendering: optimizelegibility;
+}
+
+:host-context([data-theme="dark"]) {
+  --bookmark-status-ink: #f5f5f7;
+  --bookmark-status-muted: #a1a1aa;
+  --bookmark-status-surface: #16171f;
+  --bookmark-status-card: #1a1b26;
+  --bookmark-status-line: rgb(255 255 255 / 7%);
+  --bookmark-status-line-strong: rgb(255 255 255 / 12%);
+  --bookmark-status-accent-ink: #5aaeff;
+  --bookmark-status-accent-soft: rgb(10 132 255 / 16%);
+  --bookmark-status-glow-1: rgb(10 132 255 / 42%);
+  --bookmark-status-glow-2: rgb(99 102 241 / 30%);
+  --bookmark-status-glow-3: rgb(56 189 248 / 20%);
+  --bookmark-status-shadow-lg:
+    0 0 0 1px rgb(255 255 255 / 6%), 0 24px 60px -12px rgb(0 0 0 / 60%),
+    0 50px 100px -30px rgb(0 0 0 / 70%);
+  --bookmark-status-shadow-sm:
+    0 0 0 1px rgb(255 255 255 / 5%), 0 8px 24px -10px rgb(0 0 0 / 50%);
+  --bookmark-status-key: rgb(255 255 255 / 6%);
+  --color-primary: var(--bookmark-status-accent-ink);
+  --color-primary-content: #121212;
+}
+
+.legal {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 2.5rem;
+  color: var(--bookmark-status-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+}

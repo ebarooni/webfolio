@@ -1,0 +1,32 @@
+<article class="bookmark-status-card bookmark-status-card-tree" appReveal>
+  <div class="bookmark-status-card-copy">
+    <span class="bookmark-status-kicker">{{ copy.features.tree.kicker }}</span>
+    <h3>{{ copy.features.tree.title }}</h3>
+    <p>
+      {{ copy.features.tree.beforeKeys }}
+      <app-bookmark-status-keys
+        [label]="copy.features.tree.keysLabel"
+        [keys]="copy.features.tree.keys"
+      />
+      {{ copy.features.tree.afterKeys }}
+    </p>
+  </div>
+  <div class="tree" aria-hidden="true">
+    <div class="live">
+      <span>{{ copy.features.tree.path }}</span>
+      <span><i class="live-dot"></i>{{ copy.features.tree.live }}</span>
+    </div>
+    @for (row of copy.features.tree.rows; track row.name) {
+    <div class="row" [class.current]="row.current">
+      <span class="tile" [class.tile-green]="row.tile === 'green'"
+        >{{ row.letter }}</span
+      >
+      <span class="name">{{ row.name }}</span>
+      <span class="domain">{{ row.domain }}</span>
+      @if (row.current) {
+      <span class="tag">{{ copy.features.tree.currentTag }}</span>
+      }
+    </div>
+    }
+  </div>
+</article>

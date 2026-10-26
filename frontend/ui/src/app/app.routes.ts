@@ -66,6 +66,18 @@ export const routes: Routes = [
           page: Route.BUILD_INFO,
         },
       },
+      {
+        path: Route.APPS_BOOKMARK_STATUS,
+        loadComponent: () =>
+          import('./apps/bookmark-status/bookmark-status').then(
+            (m) => m.BookmarkStatusPage,
+          ),
+        title: 'Bookmark Status for Safari on Mac | Ehsan Barooni',
+        data: {
+          page: Route.APPS_BOOKMARK_STATUS,
+          footerBgClass: 'bg-base-100',
+        },
+      },
       { path: '**', redirectTo: Route.HOME, pathMatch: 'full' },
     ],
   },

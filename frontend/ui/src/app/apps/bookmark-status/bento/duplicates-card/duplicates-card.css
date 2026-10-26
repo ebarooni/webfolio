@@ -1,0 +1,18 @@
+:host {
+  display: contents;
+}
+
+.duplicates-shot {
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  width: 220%;
+  max-width: none;
+}
+
+@media (width >= 640px) {
+  .duplicates-shot {
+    left: 1.5rem;
+    width: 150%;
+  }
+}

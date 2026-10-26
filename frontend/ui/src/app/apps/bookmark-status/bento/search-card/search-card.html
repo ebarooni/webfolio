@@ -1,0 +1,28 @@
+<article
+  class="bookmark-status-card bookmark-status-card-search"
+  appReveal
+  revealDelay="80ms"
+>
+  <div class="bookmark-status-card-copy">
+    <span class="bookmark-status-kicker"
+      >{{ copy.features.search.kicker }}</span
+    >
+    <h3>{{ copy.features.search.title }}</h3>
+    <p>{{ copy.features.search.body }}</p>
+    <div class="tokens">
+      @for (token of copy.features.search.tokens; track token) {
+      <code>{{ token }}</code>
+      }
+    </div>
+  </div>
+  <div class="bookmark-status-card-visual">
+    <app-bookmark-status-shot
+      name="search-site-token"
+      [theme]="theme()"
+      [alt]="copy.features.search.alt"
+      [width]="620"
+      [height]="372"
+      frameClass="search-shot"
+    />
+  </div>
+</article>

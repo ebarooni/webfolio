@@ -1,0 +1,11 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+@media (width >= 640px) {
+  .grid {
+    gap: 1.25rem;
+  }
+}
