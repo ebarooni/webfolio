@@ -43,7 +43,7 @@
     "@ebarooni/stylelint-config": "^1.4.0",
     "@tailwindcss/postcss": "^4.2.4",
     "angular-eslint": "^22.6.0",
-    "daisyui": "^5.5.19",
+    "daisyui": "^5.7.50",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.4.0",
