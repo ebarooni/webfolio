@@ -9,7 +9,7 @@ Write unit tests for the provided Angular components, services, directives and p
 
 ## Project Context
 
-- Angular 21
+- Angular 22
 - Tailwind CSS 4
 - DaisyUI 5
 - Vitest for unit testing

@@ -9,7 +9,7 @@ Refactor the provided Angular components and services to improve structure, read
 
 ## Project Context
 
-- Angular 21
+- Angular 22
 - Tailwind CSS 4
 - DaisyUI 5
 - Vitest for unit testing
