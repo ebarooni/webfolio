@@ -1,0 +1,16 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { Reveal } from '../../../shared/reveal/reveal';
+import { bookmarkStatusCopy } from '../bookmark-status.copy';
+import { BookmarkStatusKeys } from '../keys/keys';
+
+@Component({
+  selector: 'app-bookmark-status-faq',
+  imports: [Reveal, BookmarkStatusKeys],
+  templateUrl: './faq.html',
+  styleUrl: './faq.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BookmarkStatusFaq {
+  readonly copy = bookmarkStatusCopy;
+}

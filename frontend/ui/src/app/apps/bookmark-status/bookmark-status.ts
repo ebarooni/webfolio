@@ -11,12 +11,12 @@ import { Meta, Title } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AppStore } from '../../store/app/app.store';
-import { BmsBento } from './bms-bento/bms-bento';
-import { BmsCta } from './bms-cta/bms-cta';
-import { BmsFaq } from './bms-faq/bms-faq';
-import { BmsHero } from './bms-hero/bms-hero';
-import { BmsPrivacy } from './bms-privacy/bms-privacy';
-import { BmsSteps } from './bms-steps/bms-steps';
+import { BookmarkStatusBento } from './bento/bento';
+import { BookmarkStatusCallToAction } from './call-to-action/call-to-action';
+import { BookmarkStatusFaq } from './faq/faq';
+import { BookmarkStatusHero } from './hero/hero';
+import { BookmarkStatusPrivacy } from './privacy/privacy';
+import { BookmarkStatusSteps } from './steps/steps';
 import {
   PAGE_CANONICAL,
   PAGE_JSON_LD,
@@ -34,12 +34,19 @@ type PreviousMeta = Readonly<{
 
 @Component({
   selector: 'app-bookmark-status',
-  imports: [BmsHero, BmsBento, BmsSteps, BmsPrivacy, BmsFaq, BmsCta],
+  imports: [
+    BookmarkStatusHero,
+    BookmarkStatusBento,
+    BookmarkStatusSteps,
+    BookmarkStatusPrivacy,
+    BookmarkStatusFaq,
+    BookmarkStatusCallToAction,
+  ],
   templateUrl: './bookmark-status.html',
   styleUrl: './bookmark-status.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'bms-page flex flex-1 flex-col',
+    class: 'bookmark-status-page flex flex-1 flex-col',
   },
 })
 export class BookmarkStatusPage implements OnInit, OnDestroy {

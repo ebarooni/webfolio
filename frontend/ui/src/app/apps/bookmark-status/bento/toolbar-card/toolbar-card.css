@@ -1,0 +1,69 @@
+:host {
+  display: contents;
+}
+
+.toolbar-visual {
+  min-height: 230px;
+}
+
+@media (width >= 640px) {
+  .toolbar-visual {
+    min-height: 250px;
+  }
+}
+
+.shot-stack {
+  position: absolute;
+  top: 0.25rem;
+  left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 150%;
+}
+
+.offset {
+  margin-left: 1.25rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.bookmark-status-card .legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.4rem;
+  border-radius: 999px;
+  background: var(--bookmark-status-card);
+  box-shadow: 0 0 0 1px var(--bookmark-status-line);
+  color: var(--bookmark-status-ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.legend img {
+  width: 16px;
+  height: 16px;
+}
+
+@media (width >= 640px) {
+  .shot-stack {
+    right: -8%;
+    left: 1.75rem;
+    width: auto;
+  }
+
+  .shot-stack app-bookmark-status-shot {
+    width: 88%;
+    max-width: 560px;
+  }
+
+  .offset {
+    margin-left: 2.5rem;
+  }
+}

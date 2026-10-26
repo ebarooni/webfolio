@@ -1,0 +1,5 @@
+<span class="keys" [attr.aria-label]="label()">
+  @for (key of keys(); track key) {
+  <span class="key" aria-hidden="true">{{ key }}</span>
+  }
+</span>

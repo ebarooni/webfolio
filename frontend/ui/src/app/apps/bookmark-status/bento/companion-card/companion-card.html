@@ -1,0 +1,77 @@
+<article class="bookmark-status-card bookmark-status-card-companion" appReveal>
+  <div class="bookmark-status-card-copy">
+    <span class="bookmark-status-kicker">{{ copy.features.app.kicker }}</span>
+    <h3>{{ copy.features.app.title }}</h3>
+    <p>{{ copy.features.app.body }}</p>
+    <ul class="checks">
+      @for (check of copy.features.app.checks; track $index) {
+      <li>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4.5 10.5l3.5 3.5 7.5-8" />
+        </svg>
+        <span>
+          @for (part of check; track $index) { @if (partCode(part); as code) {
+          <code>{{ code }}</code>
+          } @else { {{ part }} } }
+        </span>
+      </li>
+      }
+    </ul>
+  </div>
+  <div class="bookmark-status-card-visual companion-visual">
+    <div class="shots">
+      <app-bookmark-status-shot
+        name="sidebar-open-tabs"
+        [theme]="theme()"
+        [alt]="copy.features.app.alt"
+        [width]="620"
+        [height]="400"
+        frameClass="sidebar"
+      />
+      <div
+        class="menubar"
+        role="img"
+        [attr.aria-label]="copy.features.app.menuLabel"
+      >
+        <div class="strip">
+          <span>{{ copy.features.app.clock }}</span>
+          <span class="active">
+            <svg
+              width="13"
+              height="15"
+              viewBox="0 0 14 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 1.5h8a1 1 0 0 1 1 1v12l-5-3-5 3v-12a1 1 0 0 1 1-1z" />
+            </svg>
+          </span>
+        </div>
+        <div class="menu-panel">
+          <div class="disabled">{{ copy.features.app.status }}</div>
+          <hr />
+          <div>{{ copy.features.app.openApp }}</div>
+          <div class="highlight">{{ copy.features.app.openTree }}</div>
+          <hr />
+          <div>
+            {{ copy.features.app.quit }}
+            <span class="shortcut">{{ copy.features.app.quitShortcut }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

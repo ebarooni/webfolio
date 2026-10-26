@@ -1,0 +1,39 @@
+<section
+  class="bookmark-status-section bookmark-status-section-follow"
+  aria-labelledby="final-title"
+>
+  <div class="bookmark-status-wrap">
+    <div class="panel" appReveal>
+      <img
+        class="bookmark-status-app-icon"
+        [src]="assets.appIcon"
+        width="88"
+        height="88"
+        alt=""
+        loading="lazy"
+      />
+      <h2 id="final-title">{{ copy.finalCta.title }}</h2>
+      <p class="bookmark-status-lead panel-lead">{{ copy.finalCta.lead }}</p>
+      <div class="bookmark-status-action-row">
+        <a
+          class="store-button"
+          [attr.href]="copy.storeHref"
+          [attr.role]="copy.storeHref === null ? 'button' : null"
+          [attr.tabindex]="copy.storeHref === null ? 0 : null"
+          [attr.aria-label]="copy.finalCta.label"
+          (click)="blockStore($event)"
+          (auxclick)="blockStore($event)"
+          (keydown)="blockStoreKey($event)"
+        >
+          {{ copy.finalCta.label }}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <p class="bookmark-status-requirements">
+        @for (item of copy.requirements; track item) {
+        <span>{{ item }}</span>
+        }
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+<article
+  class="bookmark-status-card bookmark-status-card-tabs"
+  appReveal
+  revealDelay="160ms"
+>
+  <div class="bookmark-status-card-copy">
+    <span class="bookmark-status-kicker">{{ copy.features.tabs.kicker }}</span>
+    <h3>{{ copy.features.tabs.title }}</h3>
+    <p>{{ copy.features.tabs.body }}</p>
+  </div>
+  <div class="bookmark-status-card-visual tabs-visual">
+    <app-bookmark-status-shot
+      name="open-tabs-confirm"
+      [theme]="theme()"
+      [alt]="copy.features.tabs.alt"
+      [width]="620"
+      [height]="400"
+      frameClass="tabs-shot"
+    />
+  </div>
+</article>

@@ -60,10 +60,8 @@ describe('BookmarkStatusPage', () => {
   it('renders the final headline, one badge, and a text store button', () => {
     const heading = fixture.debugElement.query(By.css('h1'));
     const title = heading.nativeElement as HTMLHeadingElement;
-    const badges = fixture.debugElement.queryAll(By.css('.bms-badge'));
-    const storeButtons = fixture.debugElement.queryAll(
-      By.css('.bms-btn-store'),
-    );
+    const badges = fixture.debugElement.queryAll(By.css('.store-badge'));
+    const storeButtons = fixture.debugElement.queryAll(By.css('.store-button'));
     const storeButton = storeButtons[0]?.nativeElement as HTMLAnchorElement;
 
     expect(fixture.debugElement.queryAll(By.css('h1')).length).toBe(1);
@@ -83,11 +81,11 @@ describe('BookmarkStatusPage', () => {
 
   it('hides the hero price and keeps seven FAQ answers', () => {
     const requirements = fixture.debugElement.query(
-      By.css('.bms-hero .bms-reqs'),
+      By.css('app-bookmark-status-hero .bookmark-status-requirements'),
     );
     const requirementText =
       (requirements.nativeElement as HTMLElement).textContent ?? '';
-    const details = fixture.debugElement.queryAll(By.css('.bms-faq details'));
+    const details = fixture.debugElement.queryAll(By.css('.questions details'));
     const first = details[0]?.nativeElement as HTMLDetailsElement;
     const second = details[1]?.nativeElement as HTMLDetailsElement;
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -132,13 +130,15 @@ describe('BookmarkStatusPage', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const image = fixture.debugElement.query(By.css('.bms-hero-shot img'));
+    const image = fixture.debugElement.query(
+      By.css('.bookmark-status-hero-shot img'),
+    );
     const hero = image.nativeElement as HTMLImageElement;
 
     expect(hero.getAttribute('src')).toContain('hero-tree-dark.webp');
     expect(hero.getAttribute('srcset')).toContain('hero-tree-dark@2x.webp');
 
-    const badge = fixture.debugElement.query(By.css('.bms-badge img'));
+    const badge = fixture.debugElement.query(By.css('.store-badge img'));
     const badgeImage = badge.nativeElement as HTMLImageElement;
 
     expect(badgeImage.getAttribute('src')).toContain(

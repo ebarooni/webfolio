@@ -1,0 +1,25 @@
+<section
+  class="bookmark-status-section"
+  id="features"
+  aria-labelledby="features-title"
+>
+  <div class="bookmark-status-wrap">
+    <div class="bookmark-status-section-head" appReveal>
+      <span class="bookmark-status-eyebrow">{{ copy.features.eyebrow }}</span>
+      <h2 id="features-title">
+        {{ copy.features.titleLead }}<br />
+        {{ copy.features.titleTail }}
+      </h2>
+      <p class="bookmark-status-lead">{{ copy.features.lead }}</p>
+    </div>
+
+    <div class="grid">
+      <app-bookmark-status-toolbar-card [theme]="theme()" />
+      <app-bookmark-status-search-card [theme]="theme()" />
+      <app-bookmark-status-tree-card />
+      <app-bookmark-status-duplicates-card [theme]="theme()" />
+      <app-bookmark-status-tabs-card [theme]="theme()" />
+      <app-bookmark-status-companion-card [theme]="theme()" />
+    </div>
+  </div>
+</section>

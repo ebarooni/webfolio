@@ -61,7 +61,9 @@ describe('Reveal', () => {
     const element = paragraph.nativeElement as HTMLParagraphElement;
 
     expect(element.textContent).toContain('Visible copy');
-    expect(element.classList.contains('bms-reveal-pending')).toBe(false);
+    expect(element.classList.contains('bookmark-status-reveal-pending')).toBe(
+      false,
+    );
   });
 
   it('reveals once and then stops observing', () => {
@@ -96,7 +98,9 @@ describe('Reveal', () => {
     const paragraph = fixture.debugElement.query(By.css('p'));
     const element = paragraph.nativeElement as HTMLParagraphElement;
 
-    expect(element.classList.contains('bms-reveal-pending')).toBe(true);
+    expect(element.classList.contains('bookmark-status-reveal-pending')).toBe(
+      true,
+    );
     expect(observe).toHaveBeenCalledOnce();
 
     callback(
@@ -104,7 +108,7 @@ describe('Reveal', () => {
       {} as IntersectionObserver,
     );
 
-    expect(element.classList.contains('bms-revealed')).toBe(true);
+    expect(element.classList.contains('bookmark-status-revealed')).toBe(true);
     expect(unobserve).toHaveBeenCalledOnce();
   });
 
@@ -133,10 +137,10 @@ describe('Reveal', () => {
     const paragraph = fixture.debugElement.query(By.css('p'));
     const element = paragraph.nativeElement as HTMLParagraphElement;
 
-    expect(element.classList.contains('bms-revealed')).toBe(false);
+    expect(element.classList.contains('bookmark-status-revealed')).toBe(false);
 
     vi.advanceTimersByTime(1500);
 
-    expect(element.classList.contains('bms-revealed')).toBe(true);
+    expect(element.classList.contains('bookmark-status-revealed')).toBe(true);
   });
 });

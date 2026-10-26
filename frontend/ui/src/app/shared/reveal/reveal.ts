@@ -11,7 +11,7 @@ import {
 @Directive({
   selector: '[appReveal]',
   host: {
-    '[style.--d]': 'revealDelay()',
+    '[style.--bookmark-status-reveal-delay]': 'revealDelay()',
   },
 })
 export class Reveal implements AfterViewInit {
@@ -36,7 +36,7 @@ export class Reveal implements AfterViewInit {
     }
 
     const element = this.elementRef.nativeElement as HTMLElement;
-    element.classList.add('bms-reveal-pending');
+    element.classList.add('bookmark-status-reveal-pending');
 
     let revealed = false;
     let timeoutId = 0;
@@ -47,7 +47,7 @@ export class Reveal implements AfterViewInit {
       }
 
       revealed = true;
-      element.classList.add('bms-revealed');
+      element.classList.add('bookmark-status-revealed');
       observer.unobserve(element);
       view.clearTimeout(timeoutId);
     };

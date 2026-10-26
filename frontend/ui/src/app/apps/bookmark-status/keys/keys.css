@@ -1,0 +1,24 @@
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6em;
+  height: 1.6em;
+  padding: 0 0.4em;
+  border-radius: 0.4em;
+  background: var(--bookmark-status-key);
+  box-shadow:
+    0 0 0 1px var(--bookmark-status-line-strong),
+    0 1px 0 var(--bookmark-status-line-strong);
+  color: var(--bookmark-status-ink);
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1;
+  vertical-align: 0.08em;
+}
+
+.keys {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
