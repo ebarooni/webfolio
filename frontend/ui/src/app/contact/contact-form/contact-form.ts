@@ -1,4 +1,10 @@
-import { Component, inject, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  output,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
@@ -15,6 +21,7 @@ export interface ContactFormData {
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-contact-form',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './contact-form.html',
 })
 export class ContactForm {

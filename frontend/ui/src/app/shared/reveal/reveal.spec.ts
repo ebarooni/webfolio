@@ -76,6 +76,7 @@ describe('Reveal', () => {
     class FakeObserver {
       readonly root = null;
       readonly rootMargin = '';
+      readonly scrollMargin = '';
       readonly thresholds = [0.12];
 
       constructor(next: IntersectionObserverCallback) {
@@ -119,6 +120,7 @@ describe('Reveal', () => {
     class FakeObserver {
       readonly root = null;
       readonly rootMargin = '';
+      readonly scrollMargin = '';
       readonly thresholds = [0.12];
 
       observe = vi.fn();

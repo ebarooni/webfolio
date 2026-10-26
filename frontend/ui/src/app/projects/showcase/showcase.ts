@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Route } from '../../config/route';
 import {
   ProjectItem,
@@ -69,6 +69,7 @@ const PROJECTS = [
 @Component({
   selector: 'app-showcase',
   imports: [ProjectItem],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './showcase.html',
 })
 export class Showcase {
