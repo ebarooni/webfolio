@@ -15,6 +15,9 @@
 @plugin "daisyui/theme" {
   name: "dark";
 
+  /* DaisyUI 5.7 copies the built-in color scheme when this line is absent. */
+  color-scheme: normal;
+
   --color-primary: #93c5fd;
   --color-primary-content: #121212;
   --color-secondary: #455a64;
@@ -45,6 +48,9 @@
 
 @plugin "daisyui/theme" {
   name: "light";
+
+  /* DaisyUI 5.7 copies the built-in color scheme when this line is absent. */
+  color-scheme: normal;
 
   --color-primary: #4a5df9;
   --color-primary-content: #fff;
