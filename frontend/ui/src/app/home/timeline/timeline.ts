@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Checkmark } from './checkmark/checkmark';
 
@@ -13,7 +13,6 @@ type TimelineItem = Readonly<{
   selector: 'app-timeline',
   templateUrl: './timeline.html',
   imports: [Checkmark],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'block bg-base-200 px-4 py-20 sm:px-8',
   },

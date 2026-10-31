@@ -1,5 +1,5 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { Route } from '../../../config/route';
@@ -16,10 +16,15 @@ import { BookmarkStatusHeroVisual } from './hero-visual/hero-visual';
 
 @Component({
   selector: 'app-bookmark-status-hero',
-  imports: [NgTemplateOutlet, Reveal, RouterLink, BookmarkStatusHeroVisual],
+  imports: [
+    NgOptimizedImage,
+    NgTemplateOutlet,
+    Reveal,
+    RouterLink,
+    BookmarkStatusHeroVisual,
+  ],
   templateUrl: './hero.html',
   styleUrl: './hero.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusHero {
   readonly theme = input.required<Theme>();

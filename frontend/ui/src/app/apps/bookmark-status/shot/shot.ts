@@ -1,18 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-} from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { Component, computed, input } from '@angular/core';
 
 import { BOOKMARK_STATUS_ASSET_BASE } from '../bookmark-status.copy';
 import type { Theme } from '../../../config/themes-array';
 
 @Component({
   selector: 'app-bookmark-status-shot',
+  imports: [NgOptimizedImage],
   templateUrl: './shot.html',
   styleUrl: './shot.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'hostClass()',
   },
@@ -26,6 +22,18 @@ export class BookmarkStatusShot {
   readonly frameClass = input('');
   readonly eager = input(false);
   readonly priority = input(false);
+
+  readonly imageLoading = computed((): 'eager' | 'lazy' | undefined => {
+    if (this.priority()) {
+      return undefined;
+    }
+
+    if (this.eager()) {
+      return 'eager';
+    }
+
+    return 'lazy';
+  });
 
   readonly hostClass = computed(() => {
     return `bookmark-status-frame ${this.frameClass()}`.trim();

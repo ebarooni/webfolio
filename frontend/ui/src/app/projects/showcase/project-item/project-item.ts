@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-} from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Open } from './open/open';
 
@@ -19,7 +14,6 @@ export type ProjectDescription = Readonly<{
 @Component({
   selector: 'app-project-item',
   imports: [Open, RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './project-item.html',
 })
 export class ProjectItem {

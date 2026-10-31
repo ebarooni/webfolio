@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DOCUMENT,
-  effect,
-  inject,
-} from '@angular/core';
+import { Component, DOCUMENT, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ActivatedRouteSnapshot,
@@ -36,7 +30,6 @@ const DEFAULT_UI_CONFIG: UiConfig = {
   selector: 'app-shell',
   imports: [Navbar, CompactNavbar, Footer, RouterOutlet],
   templateUrl: './app-shell.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex min-h-screen w-full flex-col bg-base-100',
   },

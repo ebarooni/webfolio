@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -28,7 +27,6 @@ type HomeHighlight = Readonly<{
   selector: 'app-home',
   templateUrl: './home.html',
   imports: [About, InfoCard, ScrollIndicator, Timeline],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-1 flex-col',
   },

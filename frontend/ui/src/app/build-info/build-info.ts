@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { BUILD_INFO } from '../../environments/build-info';
 
 import { Hero } from '../shared/components/hero/hero';
@@ -9,7 +9,6 @@ import { DeploymentDetails } from './deployment-details/deployment-details';
   selector: 'app-build-info',
   templateUrl: './build-info.html',
   imports: [Hero, DeploymentDetails, Dependencies],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-col flex-1',
   },

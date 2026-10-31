@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { Component } from '@angular/core';
 
 import { Reveal } from '../../../shared/reveal/reveal';
 import {
@@ -10,10 +11,9 @@ import { stepsCopy } from './steps.copy';
 
 @Component({
   selector: 'app-bookmark-status-steps',
-  imports: [Reveal, BookmarkStatusKeys],
+  imports: [NgOptimizedImage, Reveal, BookmarkStatusKeys],
   templateUrl: './steps.html',
   styleUrl: './steps.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusSteps {
   readonly copy = {

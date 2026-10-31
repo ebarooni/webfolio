@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import type { Theme } from '../../../config/themes-array';
 import { Reveal } from '../../../shared/reveal/reveal';
@@ -23,7 +23,6 @@ import { BookmarkStatusTreeCard } from './tree-card/tree-card';
   ],
   templateUrl: './bento.html',
   styleUrl: './bento.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusBento {
   readonly theme = input.required<Theme>();

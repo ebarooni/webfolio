@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { Github } from './github/github';
 import { Gitlab } from './gitlab/gitlab';
@@ -18,7 +18,6 @@ type SocialLink = Readonly<{
   selector: 'app-footer',
   imports: [Gitlab, Github, Linkedin, Stackoverflow],
   templateUrl: './footer.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Footer {
   readonly bgClass = input.required<string>();

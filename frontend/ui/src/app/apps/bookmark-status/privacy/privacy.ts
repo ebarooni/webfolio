@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Reveal } from '../../../shared/reveal/reveal';
 import { privacyCopy } from './privacy.copy';
@@ -8,7 +8,6 @@ import { privacyCopy } from './privacy.copy';
   imports: [Reveal],
   templateUrl: './privacy.html',
   styleUrl: './privacy.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusPrivacy {
   readonly copy = {

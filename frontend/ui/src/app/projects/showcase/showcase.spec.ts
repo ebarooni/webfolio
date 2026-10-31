@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -12,7 +12,7 @@ import type { ProjectDescription } from './project-item/project-item';
   template: '',
 })
 class MockProjectItem {
-  @Input() project!: ProjectDescription;
+  readonly project = input.required<ProjectDescription>();
 }
 
 describe('Showcase', () => {

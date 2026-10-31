@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import type { Theme } from '../../../../config/themes-array';
 import { Reveal } from '../../../../shared/reveal/reveal';
@@ -10,7 +10,6 @@ import { BookmarkStatusShot } from '../../shot/shot';
   imports: [Reveal, BookmarkStatusShot],
   templateUrl: './companion-card.html',
   styleUrl: './companion-card.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusCompanionCard {
   readonly theme = input.required<Theme>();

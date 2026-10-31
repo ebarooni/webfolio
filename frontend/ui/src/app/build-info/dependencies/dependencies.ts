@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 export type DependencyRow = Readonly<{
   name: string;
@@ -14,7 +14,6 @@ function toRows(deps: Record<string, string>): DependencyRow[] {
 @Component({
   selector: 'app-dependencies',
   templateUrl: './dependencies.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dependencies {
   readonly title = input<string>('Runtime Dependencies');
