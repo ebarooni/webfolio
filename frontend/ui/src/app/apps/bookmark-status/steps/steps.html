@@ -41,14 +41,21 @@
         <h3>{{ copy.how.steps[2].title }}</h3>
         <p>{{ copy.how.steps[2].body }}</p>
         <div class="hint">
-          <img [src]="assets.toolbarGrey" width="16" height="16" alt="" />
-          {{ copy.how.notSaved }}
           <img
-            class="hint-gap"
-            [src]="assets.toolbarBlue"
+            [ngSrc]="assets.toolbarGrey"
             width="16"
             height="16"
             alt=""
+            loading="eager"
+          />
+          {{ copy.how.notSaved }}
+          <img
+            class="hint-gap"
+            [ngSrc]="assets.toolbarBlue"
+            width="16"
+            height="16"
+            alt=""
+            loading="eager"
           />
           {{ copy.how.saved }}
         </div>

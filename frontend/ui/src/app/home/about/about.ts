@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { Route } from '../../config/route';
@@ -6,8 +7,7 @@ import { Route } from '../../config/route';
 @Component({
   selector: 'app-about',
   templateUrl: './about.html',
-  imports: [RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgOptimizedImage, RouterLink],
 })
 export class About {
   readonly Route = Route;

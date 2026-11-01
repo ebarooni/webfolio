@@ -22,6 +22,9 @@
   },
   "private": true,
   "packageManager": "npm@11.6.2",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
   "dependencies": {
     "@angular/common": "^22.2.3",
     "@angular/compiler": "^22.2.3",
@@ -38,13 +41,14 @@
     "@angular/build": "^22.2.4",
     "@angular/cli": "^22.2.4",
     "@angular/compiler-cli": "^22.2.3",
-    "@ebarooni/angular-eslint-config": "^1.0.0",
+    "@ebarooni/angular-eslint-config": "^2.0.0",
     "@ebarooni/prettier-config": "^1.4.0",
     "@ebarooni/stylelint-config": "^1.4.0",
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.2.4",
     "angular-eslint": "^22.6.0",
     "daisyui": "^5.7.50",
-    "eslint": "^9.39.4",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.4.0",
     "postcss": "^8.5.10",

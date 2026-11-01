@@ -1,12 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  inject,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -44,7 +37,6 @@ type PreviousMeta = Readonly<{
   ],
   templateUrl: './bookmark-status.html',
   styleUrl: './bookmark-status.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'bookmark-status-page flex flex-1 flex-col',
   },

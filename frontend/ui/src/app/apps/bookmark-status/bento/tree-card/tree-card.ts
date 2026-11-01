@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Reveal } from '../../../../shared/reveal/reveal';
 import { treeCardCopy } from './tree-card.copy';
@@ -9,7 +9,6 @@ import { BookmarkStatusKeys } from '../../keys/keys';
   imports: [Reveal, BookmarkStatusKeys],
   templateUrl: './tree-card.html',
   styleUrl: './tree-card.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusTreeCard {
   readonly copy = {

@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -17,7 +10,6 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-access-denied',
   templateUrl: './access-denied.html',
   imports: [FormsModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'min-h-dvh flex',
   },

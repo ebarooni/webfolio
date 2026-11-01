@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -28,7 +27,6 @@ type NavItem = Readonly<{
   selector: 'app-compact-navbar',
   imports: [RouterLink, RouterLinkActive, ThemeSelectorModal],
   templateUrl: './compact-navbar.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompactNavbar {
   private readonly destroyRef = inject(DestroyRef);

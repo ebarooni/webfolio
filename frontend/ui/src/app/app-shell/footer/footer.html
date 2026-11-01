@@ -1,6 +1,8 @@
 <footer
-  class="footer footer-horizontal footer-center gap gap-y-5 p-8 text-base-content"
-  [class]="bgClass()"
+  [class]="
+    'footer footer-horizontal footer-center gap gap-y-5 p-8 text-base-content ' +
+    bgClass()
+  "
 >
   <nav aria-label="Social links">
     <ul class="grid grid-flow-col gap-5">

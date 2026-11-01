@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { Component, input } from '@angular/core';
 
 import type { Theme } from '../../../../config/themes-array';
 import { Reveal } from '../../../../shared/reveal/reveal';
@@ -8,10 +9,9 @@ import { BookmarkStatusShot } from '../../shot/shot';
 
 @Component({
   selector: 'app-bookmark-status-toolbar-card',
-  imports: [Reveal, BookmarkStatusShot],
+  imports: [NgOptimizedImage, Reveal, BookmarkStatusShot],
   templateUrl: './toolbar-card.html',
   styleUrl: './toolbar-card.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusToolbarCard {
   readonly theme = input.required<Theme>();

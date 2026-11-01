@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { Hero } from '../shared/components/hero/hero';
@@ -23,7 +23,6 @@ type BlogPostPreview = Readonly<{
   selector: 'app-blog',
   templateUrl: './blog.html',
   imports: [DatePipe, Hero, PostModal, AstroToAngular, VpsHosting],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-col flex-1',
   },

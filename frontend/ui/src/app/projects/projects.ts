@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Hero } from '../shared/components/hero/hero';
 import { Showcase } from './showcase/showcase';
 
@@ -6,7 +6,6 @@ import { Showcase } from './showcase/showcase';
   selector: 'app-projects',
   templateUrl: './projects.html',
   imports: [Hero, Showcase],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-col flex-1',
   },

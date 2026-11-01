@@ -11,8 +11,8 @@ import { PostModal } from './post-modal/post-modal';
   standalone: true,
 })
 class MockHero {
-  backgroundClass = input<string>();
-  subtitleClass = input<string>();
+  readonly backgroundClass = input<string>();
+  readonly subtitleClass = input<string>();
 }
 
 @Component({

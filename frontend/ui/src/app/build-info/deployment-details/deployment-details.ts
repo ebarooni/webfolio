@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import dayjs from 'dayjs';
 
 import { BUILD_INFO } from '../../../environments/build-info';
@@ -13,7 +13,6 @@ function pluralize(value: number, unit: string): string {
 @Component({
   selector: 'app-deployment-details',
   templateUrl: './deployment-details.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeploymentDetails {
   readonly version = computed(() => BUILD_INFO.version);

@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  input,
-  output,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, input, output, viewChild } from '@angular/core';
 
 import { Theme, themesArray } from '../../../config/themes-array';
 import { DataTheme } from '../../data-theme/data-theme';
@@ -14,7 +7,6 @@ import { DataTheme } from '../../data-theme/data-theme';
   selector: 'app-theme-selector-modal',
   imports: [DataTheme],
   templateUrl: './theme-selector-modal.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemeSelectorModal {
   readonly selectedTheme = input.required<Theme>();

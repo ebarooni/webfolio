@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { Component } from '@angular/core';
 
 import { Reveal } from '../../../shared/reveal/reveal';
 import {
@@ -11,10 +12,9 @@ import { callToActionCopy } from './call-to-action.copy';
 
 @Component({
   selector: 'app-bookmark-status-call-to-action',
-  imports: [Reveal],
+  imports: [NgOptimizedImage, Reveal],
   templateUrl: './call-to-action.html',
   styleUrl: './call-to-action.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarkStatusCallToAction {
   readonly copy = {

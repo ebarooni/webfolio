@@ -4,7 +4,7 @@
       <img
         class="bookmark-status-app-icon"
         appReveal
-        [src]="assets.appIcon"
+        [ngSrc]="assets.appIcon"
         [attr.srcset]="assets.appIcon + ' 2x'"
         width="104"
         height="104"
@@ -34,11 +34,12 @@
           (keydown)="blockStoreKey($event)"
         >
           <img
-            [src]="theme() === 'dark' ? assets.badgeWhite : assets.badgeBlack"
+            [ngSrc]="theme() === 'dark' ? assets.badgeWhite : assets.badgeBlack"
             width="156"
             height="40"
             alt=""
             aria-hidden="true"
+            loading="eager"
           />
         </a>
         @if (copy.secondaryHref; as externalHref) {

@@ -9,7 +9,13 @@
       @for (label of copy.features.toolbar.legend; track label; let index =
       $index) {
       <span>
-        <img [src]="legendIcons[index]" alt="" width="16" height="16" />
+        <img
+          [ngSrc]="legendIcons[index]"
+          alt=""
+          width="16"
+          height="16"
+          loading="eager"
+        />
         {{ label }}
       </span>
       }
