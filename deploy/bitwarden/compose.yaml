@@ -1,0 +1,52 @@
+# Based on the "rootless, read-only" example in bitwarden/self-host
+# bitwarden-lite/docker-compose.yml. SQLite needs no database service.
+services:
+  bitwarden:
+    # The digest pins the image. The tag is only for people to read.
+    image: ghcr.io/bitwarden/lite:2026.10.1@sha256:f2d693cc9ebf73f22c969dae3c36b3747b06edbd1fe2fca7291e5b61e309b960
+    container_name: bitwarden
+    restart: unless-stopped
+
+    env_file:
+      - settings.env
+
+    environment:
+      # Written into the backup manifest. Keep it equal to the image tag.
+      BACKUP_LITE_TAG: "2026.10.1"
+
+    # Same UID and GID as the image default (PUID/PGID 911).
+    user: "911:911"
+
+    expose:
+      - "8080"
+
+    volumes:
+      - ./bwdata:/etc/bitwarden
+      - ./logs:/var/log/bitwarden
+      - ./backups:/backups
+
+    networks:
+      - proxy
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    read_only: true
+
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=768m
+
+    mem_limit: 1g
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  proxy:
+    external: true
