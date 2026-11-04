@@ -1,0 +1,42 @@
+# Based on louislam/uptime-kuma compose.yaml, with the rootless image variant.
+services:
+  uptime-kuma:
+    # The digest pins the image. The tag is only for people to read.
+    image: louislam/uptime-kuma:2.5.9-rootless@sha256:0add9e7dc85f91ce0094721a104fdb7f40d155931a1f7844964cb6262801bf19
+    container_name: uptime-kuma
+    restart: unless-stopped
+
+    # The rootless image runs as user "node", UID/GID 1000. The host folder
+    # data must be owned by 1000:1000. Setup step 3 in docs/setup-monitoring.md does the chown.
+    user: "1000:1000"
+
+    # Web UI over an SSH tunnel only. Never remove "127.0.0.1:".
+    ports:
+      - "127.0.0.1:3001:3001"
+
+    volumes:
+      - ./data:/app/data
+
+    # On the proxy network, Uptime Kuma can check the other containers by
+    # name (for example http://webfolio:8080), without public ports.
+    # Bitwarden has its own network, so its check uses the public URL.
+    networks:
+      - proxy
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 512m
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  proxy:
+    external: true
