@@ -14,11 +14,21 @@ services:
       # Written into the backup manifest. Keep it equal to the image tag.
       BACKUP_LITE_TAG: "2026.10.1"
 
-    # Same UID and GID as the image default (PUID/PGID 911).
+    # Runs as UID/GID 911, the image's default PUID/PGID. The host folders
+    # bwdata, logs and backups must be owned by 911:911, or the container
+    # cannot write to them. Setup step 5 in docs/setup-bitwarden.md does the chown.
     user: "911:911"
 
     expose:
       - "8080"
+
+    # Admin panel access over an SSH tunnel only (see "Reach the admin panel
+    # safely" in docs/setup-bitwarden.md). 127.0.0.1 is the loopback address:
+    # only programs on the server itself can connect to it. Never remove
+    # "127.0.0.1:". Without it, Docker publishes port 8081 on every address
+    # of the server, the internet included, and ufw does not stop that.
+    ports:
+      - "127.0.0.1:8081:8080"
 
     volumes:
       - ./bwdata:/etc/bitwarden
