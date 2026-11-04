@@ -14,8 +14,12 @@ services:
       - caddy_data:/data
       - caddy_config:/config
 
+    # "proxy" is shared by all services. "bitwarden" is shared with Bitwarden
+    # only, so no other container can reach the vault. Both networks must
+    # exist before Caddy starts (see docs/setup-server.md).
     networks:
       - proxy
+      - bitwarden
     
     security_opt:
       - no-new-privileges:true
@@ -32,4 +36,6 @@ volumes:
 
 networks:
   proxy:
+    external: true
+  bitwarden:
     external: true

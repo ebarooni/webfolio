@@ -35,8 +35,12 @@ services:
       - ./logs:/var/log/bitwarden
       - ./backups:/backups
 
+    # Own network, shared only with Caddy. Other containers on "proxy" cannot
+    # reach Bitwarden. It is a normal bridge network (not "internal"), so
+    # Bitwarden can still send mail over SMTP and reach the Bitwarden cloud
+    # for license and push services.
     networks:
-      - proxy
+      - bitwarden
 
     security_opt:
       - no-new-privileges:true
@@ -58,5 +62,5 @@ services:
         max-file: "3"
 
 networks:
-  proxy:
+  bitwarden:
     external: true

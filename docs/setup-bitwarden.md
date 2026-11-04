@@ -8,7 +8,7 @@ Follow the steps in sequence. Each step tells you **where** you do it, **what** 
 
 - **One container** – web vault, API, admin panel, notifications and icons. An internal nginx serves them on port 8080.
 - **SQLite** – the database is one file in the data folder. There is no database container.
-- **No public ports** – Caddy terminates TLS and sends plain HTTP to `bitwarden:8080` over the `proxy` network. The only published port is `8081` on the loopback address `127.0.0.1`, for the admin panel over an SSH tunnel.
+- **No public ports** – Caddy terminates TLS and sends plain HTTP to `bitwarden:8080` over the `bitwarden` network. Only Caddy and Bitwarden are on this network, see [Why a separate network](#why-a-separate-network). The only published port is `8081` on the loopback address `127.0.0.1`, for the admin panel over an SSH tunnel.
 - **Rootless and read-only** – the container runs as UID `911` with a read-only root file system and no capabilities.
 - **Pinned image** – `ghcr.io/bitwarden/lite` is pinned by tag and digest. It never uses `latest`.
 - **Mail** – a transactional mail provider sends the mail over SMTP. No mail server runs on the VPS.
@@ -20,7 +20,7 @@ Bitwarden says that lite is for personal use and home labs, not for businesses.
 ```mermaid
 flowchart LR
     apps[Apps and browser] -- "HTTPS vault.example.com" --> caddy[Caddy on the VPS]
-    caddy -- "HTTP bitwarden:8080" --> bw[Bitwarden lite]
+    caddy -- "HTTP bitwarden:8080, network bitwarden" --> bw[Bitwarden lite]
     you[Your computer] -. "SSH tunnel to 127.0.0.1:8081, admin only" .-> bw
     bw -- "SMTP with TLS" --> mail[Mail provider]
     mail -- "from no-reply@notify.example.com" --> inbox[Your inbox]
@@ -47,7 +47,7 @@ The setup has **two separate DNS parts**. Both are records in the DNS settings o
 
 ## Before you start
 
-- [ ] The server runs as in [setup-server.md](setup-server.md): Docker, Caddy, the `proxy` network, ports 80 and 443 open.
+- [ ] The server runs as in [setup-server.md](setup-server.md): Docker, Caddy, the `proxy` network, ports 80 and 443 open. If Caddy already runs, step 7 adds the `bitwarden` network.
 - [ ] You can log in over SSH, either with a Host alias from `~/.ssh/config` (`ssh myserver`) or typed out (`ssh holu@<SERVER_IP>`). This guide shows both forms where you type an SSH command.
 - [ ] You can edit the DNS records of `example.com` at your DNS provider. This is often the company where you bought the domain.
 - [ ] You have an account at a transactional mail provider. This guide uses Resend as a worked example. Other providers have similar screens.
@@ -64,7 +64,7 @@ Write down these values while you work. You need them in step 7. Keep the secret
 | SMTP host and port  | `smtp.resend.com`, `2465`     | No     | Mail provider docs (step 2)        |
 | SMTP user and key   | `resend`, the API key         | Key    | Mail provider (step 2)             |
 | Installation ID/key | `<INSTALLATION_ID>`, `<INSTALLATION_KEY>` | Yes | bitwarden.com/host (step 3) |
-| Proxy subnet        | `<PROXY_SUBNET>`              | No     | Server command (step 7)            |
+| Bitwarden subnet    | `<BITWARDEN_SUBNET>`          | No     | Server command (step 7)            |
 | Admin address       | Your own email address        | No     | Your choice (step 7)               |
 
 New to DNS words such as A, MX, TXT, SPF or TTL? Read [DNS words in plain English](setup-mail-sending.md#dns-words-in-plain-english) first.
@@ -163,19 +163,59 @@ scp deploy/bitwarden/compose.yaml deploy/bitwarden/settings.env.example holu@<SE
 
 With a Host alias, write `myserver:/opt/docker/bitwarden/` instead of `holu@<SERVER_IP>:/opt/docker/bitwarden/`.
 
-### 7. Configure settings.env
+### 7. Create the Bitwarden network and configure settings.env
 
 **Where:** VPS over SSH.
 
-Find the subnet of the `proxy` network:
+A Docker network is a private virtual network between containers. Containers on the same network can reach each other by name. Bitwarden gets its own network, `bitwarden`, and only Caddy joins it. See [Why a separate network](#why-a-separate-network).
+
+1. Create the network. This is a one-time setup, like `proxy` in [setup-server.md](setup-server.md):
 
 ```bash
-docker network inspect proxy --format '{{range .IPAM.Config}}{{.Subnet}}{{end}}'
+docker network create bitwarden
 ```
 
-**Expected result:** one subnet in CIDR form: an address, a slash and a number. This is your `<PROXY_SUBNET>`. Bitwarden trusts the client IP that Caddy forwards only from this subnet.
+**Expected result:** a long ID. If Docker says that the network already exists, that is fine: [setup-server.md](setup-server.md) creates it too.
 
-Create `settings.env` and replace every placeholder in angle brackets:
+2. Connect Caddy to the network. Check that `/opt/docker/caddy/compose.yaml` lists both networks, as in `deploy/caddy/compose.yaml` in the repository:
+
+```yaml
+    networks:
+      - proxy
+      - bitwarden
+```
+
+and at the end of the file:
+
+```yaml
+networks:
+  proxy:
+    external: true
+  bitwarden:
+    external: true
+```
+
+If they are missing, copy the file from the repository again (local machine: `scp deploy/caddy/compose.yaml myserver:/opt/docker/caddy/`, or typed out `holu@<SERVER_IP>:/opt/docker/caddy/`). Then recreate Caddy:
+
+```bash
+cd /opt/docker/caddy
+docker compose up -d
+docker inspect caddy --format '{{range $name, $net := .NetworkSettings.Networks}}{{$name}} {{end}}'
+```
+
+**Expected result:** the last command prints `bitwarden proxy`. Caddy restarts for a few seconds, so your website is briefly unavailable.
+
+3. Find the subnet of the `bitwarden` network:
+
+```bash
+docker network inspect bitwarden --format '{{range .IPAM.Config}}{{.Subnet}}{{end}}'
+```
+
+**Expected result:** one subnet in CIDR form: an address, a slash and a number. This is your `<BITWARDEN_SUBNET>`. Bitwarden trusts the client IP that Caddy forwards only from this subnet.
+
+4. Create `settings.env`:
+
+Replace every placeholder in angle brackets:
 
 ```bash
 cd /opt/docker/bitwarden
@@ -187,7 +227,7 @@ nano settings.env
 |---------------------------------------------|------------------------------------------|
 | `BW_DOMAIN`                                 | `vault.example.com`                      |
 | `BW_INSTALLATION_ID`, `BW_INSTALLATION_KEY` | From step 3                              |
-| `BW_REAL_IPS`                               | The proxy subnet                         |
+| `BW_REAL_IPS`                               | The Bitwarden subnet                     |
 | `globalSettings__mail__replyToEmail`        | `no-reply@notify.example.com`            |
 | `globalSettings__mail__smtp__*`             | Host, port, `ssl`, user and key (step 2) |
 | `adminSettings__admins`                     | Your own email address                   |
@@ -257,7 +297,13 @@ docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 curl -s https://vault.example.com/alive
 ```
 
-**Expected result:** `docker compose ps` in `/opt/docker/bitwarden` shows `healthy` for `bitwarden`, and the `curl` command prints a timestamp.
+**Expected result:** `docker compose ps` in `/opt/docker/bitwarden` shows `healthy` for `bitwarden`, and the `curl` command prints a timestamp. Check the network:
+
+```bash
+docker network inspect bitwarden --format '{{range .Containers}}{{.Name}} {{end}}'
+```
+
+It must print only `caddy` and `bitwarden` (in any order).
 
 ### 12. Create your account and close registration
 
@@ -294,6 +340,20 @@ Install the official desktop, mobile or browser app. On the login screen, open t
 ```bash
 cd /opt/docker/caddy && docker compose logs caddy | grep -i vault.example.com
 ```
+
+**Caddy returns `502 Bad Gateway` for vault.example.com.** Caddy cannot reach `bitwarden:8080`. Usually Caddy is not on the `bitwarden` network. Run:
+
+```bash
+docker network inspect bitwarden --format '{{range .Containers}}{{.Name}} {{end}}'
+```
+
+If `caddy` is missing, add the network to `/opt/docker/caddy/compose.yaml` ([step 7](#7-create-the-bitwarden-network-and-configure-settingsenv)) and run `docker compose up -d` in `/opt/docker/caddy`. If `bitwarden` is missing, run `docker compose up -d` in `/opt/docker/bitwarden`. A `caddy reload` is not enough: networks change only when the container is recreated.
+
+**Caddy does not start: `network bitwarden declared as external, but could not be found`.** Create it once with `docker network create bitwarden`, then run `docker compose up -d` again.
+
+**Mail stopped after the network change.** The `bitwarden` network is a normal bridge network with internet access, so it is not the cause. Follow the mail troubleshooting link above. Check outbound access from the container with `docker compose exec bitwarden curl -sI https://api.bitwarden.com` in `/opt/docker/bitwarden`. Any HTTP status line means that the container has internet access.
+
+**Client IPs in the Bitwarden logs show a Docker address.** `BW_REAL_IPS` is not the subnet of the `bitwarden` network. Check it with the command in step 7, fix `settings.env`, and run `docker compose up -d --force-recreate`.
 
 **You cannot open the admin panel.** Your address must be in `adminSettings__admins` exactly as you type it. The login link comes by mail, so mail must work first. After [Reach the admin panel safely](#reach-the-admin-panel-safely), `https://vault.example.com/admin` always shows 403. This is correct. Open `http://localhost:8081/admin` through the SSH tunnel instead, and change the start of the mailed login link to `http://localhost:8081`.
 
@@ -336,6 +396,34 @@ It must print `true`. The web vault can still show the **Create account** link. 
 - **HTTPS only** – `curl -sI http://vault.example.com` must return a redirect to HTTPS.
 - **SSH** – a file in `/etc/ssh/sshd_config.d/` can override `sshd_config`. Check the effective values with `sudo sshd -T | grep -Ei 'permitrootlogin|passwordauthentication|pubkeyauthentication'`.
 - **Security updates** – run `sudo apt install unattended-upgrades -y`, then `sudo dpkg-reconfigure -plow unattended-upgrades`.
+
+### Why a separate network
+
+All services that Caddy serves share the `proxy` network. On a shared network, every container can open connections to every other container, for example to `bitwarden:8080`. If one of those services gets compromised, the attacker could attack the vault from inside, past Caddy.
+
+Bitwarden therefore uses its own network, `bitwarden`. Only Caddy is on both networks. Caddy forwards HTTP requests and nothing else, so a compromised container on `proxy` has no direct path to the vault. This is defense in depth: Bitwarden has its own login and encryption, and the network keeps one more door closed.
+
+The network is **not** `internal: true`. An internal network has no internet access, and Bitwarden needs it to send mail over SMTP and to reach the Bitwarden cloud for push and license services.
+
+Uptime checks for the vault use the public address `https://vault.example.com/alive`, not `bitwarden:8080`. See [setup-monitoring.md](setup-monitoring.md).
+
+### Move an existing install to its own network
+
+Only for a server where Bitwarden already runs on the `proxy` network. **Where:** VPS over SSH.
+
+1. Create the network: `docker network create bitwarden`.
+2. Copy the new `deploy/caddy/compose.yaml` and `deploy/bitwarden/compose.yaml` to the server, or make the same changes by hand.
+3. Find the new subnet (step 7) and set it as `BW_REAL_IPS` in `/opt/docker/bitwarden/settings.env`.
+4. Recreate Caddy first, then Bitwarden:
+
+```bash
+cd /opt/docker/caddy && docker compose up -d
+cd /opt/docker/bitwarden && docker compose up -d --force-recreate
+```
+
+Docker recreates Bitwarden with only the `bitwarden` network. It leaves `proxy` by itself. Your data stays in `bwdata`.
+
+5. Check: `docker network inspect bitwarden` lists only `caddy` and `bitwarden`, `docker network inspect proxy` does not list `bitwarden`, and `curl -s https://vault.example.com/alive` prints a timestamp.
 
 ### Reach the admin panel safely
 
@@ -396,7 +484,7 @@ docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 **Where:** VPS over SSH, in `/opt/docker/bitwarden/compose.yaml`.
 
-Inside the container, Bitwarden's web server listens on port `8080` (the default of `BW_PORT_HTTP`). Caddy already uses this port over the `proxy` network (`reverse_proxy bitwarden:8080`). Now you also give the server itself a door to it on port `8081`.
+Inside the container, Bitwarden's web server listens on port `8080` (the default of `BW_PORT_HTTP`). Caddy already uses this port over the `bitwarden` network (`reverse_proxy bitwarden:8080`). Now you also give the server itself a door to it on port `8081`.
 
 1. Check that `compose.yaml` has these lines under the `bitwarden` service. The file in this repository already has them. If your copy on the server is older, add them below `expose`:
 
