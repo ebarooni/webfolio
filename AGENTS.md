@@ -33,7 +33,7 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 
 - `backend/src/main/java/dev/barooni/`: `contactform` (REST API), `telegram` (REST client), `openapi` and `mcp` (MCP server), `fallback` (SPA routing)
 - `frontend/ui/src/app/`: one folder per screen, and every screen is wrapped by `app-shell`. Routes are in `app.routes.ts`, with the path enum in `config/route.ts`. App state is in `store/app` (NgRx ComponentStore).
-- Root `compose.yaml` and `Caddyfile` are for local container runs. `deploy/{caddy,webfolio,wg-easy}` holds the production files copied to `/opt/docker` on the VPS (see [docs/](docs)).
+- Root `compose.yaml` and `Caddyfile` are for local container runs. `deploy/{caddy,webfolio,wg-easy,bitwarden}` holds the production files copied to `/opt/docker` on the VPS (see [docs/](docs)).
 - The Angular coding and test conventions are in `.github/prompts/*.prompt.md`. Follow them and don't restate them.
 
 ## Conventions

@@ -74,6 +74,19 @@ Directories use `750` – owner has full access, the `docker` group can read and
 | `/opt/docker/webfolio`         | `750` | `holu` | `docker` |
 | `/opt/docker/webfolio/secrets` | `750` | `holu` | `docker` |
 | `/opt/docker/wg-easy`          | `750` | `holu` | `docker` |
+| `/opt/docker/bitwarden`        | `750` | `holu` | `docker` |
+
+### Container data directories – `700`
+
+Some containers run as a fixed non-root user and write to a bind mount. These directories belong to that user. Only that user has access.
+
+| Path                            | Mode  | Owner | Group | Contents                              |
+|---------------------------------|-------|-------|-------|---------------------------------------|
+| `/opt/docker/bitwarden/bwdata`  | `700` | `911` | `911` | Vault database, data-protection keys  |
+| `/opt/docker/bitwarden/logs`    | `700` | `911` | `911` | Bitwarden logs                        |
+| `/opt/docker/bitwarden/backups` | `700` | `911` | `911` | Built-in daily backup archives        |
+
+To read these directories from the host, use `sudo`.
 
 ## File permissions
 
@@ -83,21 +96,23 @@ Files are split into two categories based on sensitivity:
 
 Owner can read and write, the `docker` group can read. These files do not contain credentials.
 
-| File                                | Mode  | Contents                    |
-|-------------------------------------|-------|-----------------------------|
-| `/opt/docker/caddy/compose.yaml`    | `640` | Caddy service definitions   |
-| `/opt/docker/caddy/Caddyfile`       | `640` | Domain routing rules        |
-| `/opt/docker/webfolio/compose.yaml` | `640` | Webfolio service definition |
-| `/opt/docker/wg-easy/compose.yaml`  | `640` | wg-easy service definition  |
+| File                                 | Mode  | Contents                     |
+|--------------------------------------|-------|------------------------------|
+| `/opt/docker/caddy/compose.yaml`     | `640` | Caddy service definitions    |
+| `/opt/docker/caddy/Caddyfile`        | `640` | Domain routing rules         |
+| `/opt/docker/webfolio/compose.yaml`  | `640` | Webfolio service definition  |
+| `/opt/docker/wg-easy/compose.yaml`   | `640` | wg-easy service definition   |
+| `/opt/docker/bitwarden/compose.yaml` | `640` | Bitwarden service definition |
 
 ### Sensitive files – `600`
 
 Owner can read and write. No access for group or others. These files contain secrets or credentials.
 
-| File                                                          | Mode  | Contents                        |
-|---------------------------------------------------------------|-------|---------------------------------|
-| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone      |
-| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID  |
+| File                                                          | Mode  | Contents                                   |
+|---------------------------------------------------------------|-------|--------------------------------------------|
+| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone                 |
+| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID             |
+| `/opt/docker/bitwarden/settings.env`                          | `600` | Installation ID and key, SMTP credential   |
 
 ## Apply permissions
 
@@ -106,17 +121,24 @@ Owner can read and write. No access for group or others. These files contain sec
 chmod 750 /opt/docker \
           /opt/docker/caddy \
           /opt/docker/webfolio \
-          /opt/docker/webfolio/secrets
+          /opt/docker/webfolio/secrets \
+          /opt/docker/bitwarden
+
+# Container data directories
+sudo chown 911:911 /opt/docker/bitwarden/{bwdata,logs,backups}
+sudo chmod 700 /opt/docker/bitwarden/{bwdata,logs,backups}
 
 # Configuration files
 chmod 640 /opt/docker/caddy/compose.yaml \
           /opt/docker/caddy/Caddyfile \
           /opt/docker/webfolio/compose.yaml \
-          /opt/docker/wg-easy/compose.yaml
+          /opt/docker/wg-easy/compose.yaml \
+          /opt/docker/bitwarden/compose.yaml
 
 # Sensitive files
 chmod 600 /opt/docker/webfolio/.env \
-          /opt/docker/webfolio/secrets/application-secrets.properties
+          /opt/docker/webfolio/secrets/application-secrets.properties \
+          /opt/docker/bitwarden/settings.env
 ```
 
 ## Verify
@@ -129,6 +151,12 @@ Expected output:
 
 ```
 drwxr-x--- holu docker  /opt/docker
+drwxr-x--- holu docker  /opt/docker/bitwarden
+drwx------ 911  911     /opt/docker/bitwarden/backups
+drwx------ 911  911     /opt/docker/bitwarden/bwdata
+-rw-r----- holu docker  /opt/docker/bitwarden/compose.yaml
+drwx------ 911  911     /opt/docker/bitwarden/logs
+-rw------- holu docker  /opt/docker/bitwarden/settings.env
 drwxr-x--- holu docker  /opt/docker/caddy
 -rw-r----- holu docker  /opt/docker/caddy/compose.yaml
 -rw-r----- holu docker  /opt/docker/caddy/Caddyfile
@@ -140,6 +168,8 @@ drwxr-x--- holu docker  /opt/docker/webfolio/secrets
 drwxr-x--- holu docker  /opt/docker/wg-easy
 -rw-r----- holu docker  /opt/docker/wg-easy/compose.yaml
 ```
+
+`find` shows `Permission denied` for the three Bitwarden data directories. This is correct: only UID `911` can read them.
 
 ## Adding a new service
 

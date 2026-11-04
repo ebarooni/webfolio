@@ -175,7 +175,7 @@ dig +short barooni.dev
 
 ## Step 4: Deployment
 
-The deployment files live under `/opt/docker/`. Each service gets its own directory with an independent `compose.yaml`. A shared external Docker network (`proxy`) connects all services to the Caddy reverse proxy.
+The deployment files live under `/opt/docker/`. Each service gets its own directory with an independent `compose.yaml`. A shared external Docker network (`proxy`) connects the services to the Caddy reverse proxy. Bitwarden uses its own network (`bitwarden`), shared only with Caddy.
 
 ### Folder structure on the VPS
 
@@ -268,13 +268,16 @@ sudo chown 185:holu /opt/docker/webfolio/secrets/application-secrets.properties
 sudo chmod 660 /opt/docker/webfolio/secrets/application-secrets.properties
 ```
 
-### Create the shared Docker network
+### Create the Docker networks
 
-This is a one-time setup. All services use this network to communicate with Caddy:
+This is a one-time setup. Most services use the shared `proxy` network to communicate with Caddy. Bitwarden gets its own network `bitwarden`, which only Caddy joins (see [setup-bitwarden.md](setup-bitwarden.md#why-a-separate-network)). Caddy's `compose.yaml` lists both networks, so both must exist before Caddy starts, even if you do not install Bitwarden yet:
 
 ```bash
 docker network create proxy
+docker network create bitwarden
 ```
+
+**Expected result:** each command prints a long ID. `docker network ls` shows `proxy` and `bitwarden`. If a network exists already, Docker prints an error that says so. That is fine.
 
 ### Start the stack
 
