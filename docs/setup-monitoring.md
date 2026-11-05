@@ -220,7 +220,7 @@ status.example.com {
         reverse_proxy uptime-kuma:3001
     }
     handle / {
-        redir /status/status 302
+        redir * /status/status
     }
     handle {
         respond 404
