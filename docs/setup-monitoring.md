@@ -202,7 +202,9 @@ If the entry already exists, add only the `LocalForward 3001` line. Then `ssh -N
 
 Uptime Kuma can show a read-only status page (for example `status.example.com`). It is optional. Do it only if other people need it. The page shows the names of your monitors, so give them neutral names.
 
-1. In Uptime Kuma: **Status Pages > New Status Page**, slug for example `status`. Add the monitors.
+1. In Uptime Kuma: **Status Pages > New Status Page**. Write `status` in **Slug**. The `/status/` prefix is already there, so the full path becomes `/status/status`. Write a neutral title in **Name**, for example `Service status`. Then add the monitors.
+
+![Add New Status Page form with slug status](images/monitoring/status-page-new.png)
 2. Point `status.example.com` to the server (A record, as in [step 1 of setup-bitwarden.md](setup-bitwarden.md#1-point-vaultexamplecom-to-the-server)).
 3. Add this block to `/opt/docker/caddy/Caddyfile`. It sends only the status page and the files it needs to Uptime Kuma. Everything else, the login and dashboard included, gets `404`:
 
@@ -218,7 +220,7 @@ status.example.com {
         reverse_proxy uptime-kuma:3001
     }
     handle / {
-        redir /status/status
+        redir /status/status 302
     }
     handle {
         respond 404
