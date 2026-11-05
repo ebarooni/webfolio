@@ -75,6 +75,7 @@ Directories use `750` – owner has full access, the `docker` group can read and
 | `/opt/docker/webfolio/secrets` | `750` | `holu` | `docker` |
 | `/opt/docker/wg-easy`          | `750` | `holu` | `docker` |
 | `/opt/docker/bitwarden`        | `750` | `holu` | `docker` |
+| `/opt/docker/uptime-kuma`      | `750` | `holu` | `docker` |
 
 ### Container data directories – `700`
 
@@ -85,6 +86,7 @@ Some containers run as a fixed non-root user and write to a bind mount. These di
 | `/opt/docker/bitwarden/bwdata`  | `700` | `911` | `911` | Vault database, data-protection keys  |
 | `/opt/docker/bitwarden/logs`    | `700` | `911` | `911` | Bitwarden logs                        |
 | `/opt/docker/bitwarden/backups` | `700` | `911` | `911` | Built-in daily backup archives        |
+| `/opt/docker/uptime-kuma/data` | `700` | `1000` | `1000` | Uptime Kuma database, notification credentials |
 
 To read these directories from the host, use `sudo`.
 
@@ -103,6 +105,7 @@ Owner can read and write, the `docker` group can read. These files do not contai
 | `/opt/docker/webfolio/compose.yaml`  | `640` | Webfolio service definition  |
 | `/opt/docker/wg-easy/compose.yaml`   | `640` | wg-easy service definition   |
 | `/opt/docker/bitwarden/compose.yaml` | `640` | Bitwarden service definition |
+| `/opt/docker/uptime-kuma/compose.yaml` | `640` | Uptime Kuma service definition |
 
 ### Sensitive files – `600`
 
@@ -122,18 +125,23 @@ chmod 750 /opt/docker \
           /opt/docker/caddy \
           /opt/docker/webfolio \
           /opt/docker/webfolio/secrets \
-          /opt/docker/bitwarden
+          /opt/docker/wg-easy \
+          /opt/docker/bitwarden \
+          /opt/docker/uptime-kuma
 
 # Container data directories
 sudo chown 911:911 /opt/docker/bitwarden/{bwdata,logs,backups}
 sudo chmod 700 /opt/docker/bitwarden/{bwdata,logs,backups}
+sudo chown 1000:1000 /opt/docker/uptime-kuma/data
+sudo chmod 700 /opt/docker/uptime-kuma/data
 
 # Configuration files
 chmod 640 /opt/docker/caddy/compose.yaml \
           /opt/docker/caddy/Caddyfile \
           /opt/docker/webfolio/compose.yaml \
           /opt/docker/wg-easy/compose.yaml \
-          /opt/docker/bitwarden/compose.yaml
+          /opt/docker/bitwarden/compose.yaml \
+          /opt/docker/uptime-kuma/compose.yaml
 
 # Sensitive files
 chmod 600 /opt/docker/webfolio/.env \
@@ -160,6 +168,9 @@ drwx------ 911  911     /opt/docker/bitwarden/logs
 drwxr-x--- holu docker  /opt/docker/caddy
 -rw-r----- holu docker  /opt/docker/caddy/compose.yaml
 -rw-r----- holu docker  /opt/docker/caddy/Caddyfile
+drwxr-x--- holu docker  /opt/docker/uptime-kuma
+-rw-r----- holu docker  /opt/docker/uptime-kuma/compose.yaml
+drwx------ 1000 1000    /opt/docker/uptime-kuma/data
 drwxr-x--- holu docker  /opt/docker/webfolio
 -rw-r----- holu docker  /opt/docker/webfolio/compose.yaml
 -rw------- holu docker  /opt/docker/webfolio/.env
@@ -169,7 +180,7 @@ drwxr-x--- holu docker  /opt/docker/wg-easy
 -rw-r----- holu docker  /opt/docker/wg-easy/compose.yaml
 ```
 
-`find` shows `Permission denied` for the three Bitwarden data directories. This is correct: only UID `911` can read them.
+`find` shows `Permission denied` for the Bitwarden and Uptime Kuma data directories. This is correct: only the container user can read them. If `holu` has UID `1000`, `holu` can read `uptime-kuma/data` and `ls` shows `holu holu` for it. That is also correct.
 
 ## Adding a new service
 
