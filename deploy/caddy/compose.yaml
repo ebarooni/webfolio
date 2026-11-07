@@ -15,11 +15,13 @@ services:
       - caddy_config:/config
 
     # "proxy" is shared by all services. "bitwarden" is shared with Bitwarden
-    # only, so no other container can reach the vault. Both networks must
-    # exist before Caddy starts (see docs/setup-server.md).
+    # only, and "passbolt" with Passbolt only, so no other container can
+    # reach a vault. All networks must exist before Caddy starts (see
+    # docs/setup-server.md).
     networks:
       - proxy
       - bitwarden
+      - passbolt
     
     security_opt:
       - no-new-privileges:true
@@ -38,4 +40,6 @@ networks:
   proxy:
     external: true
   bitwarden:
+    external: true
+  passbolt:
     external: true
