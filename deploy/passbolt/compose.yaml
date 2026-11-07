@@ -1,0 +1,110 @@
+# Based on the official Passbolt CE Docker stack
+# (https://www.passbolt.com/docs/hosting/install/ce/docker/), changed for
+# this VPS: Caddy terminates TLS, no port is published, and Passbolt gets
+# its own network like Bitwarden. See docs/setup-passbolt.md.
+services:
+  db:
+    # The digest pins the image. The tag is only for people to read.
+    image: mariadb:10.11@sha256:d769e37960821dfdcf096954f6e7ac89f747e116c1bba98e48edd265dfc7deae
+    container_name: passbolt-db
+    restart: unless-stopped
+
+    env_file:
+      - settings.env
+
+    volumes:
+      - database_volume:/var/lib/mysql
+
+    # The database is reachable only from the passbolt container on the
+    # passbolt network. It publishes no port, not even on loopback.
+    networks:
+      - passbolt
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 512m
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  passbolt:
+    # The non-root variant listens on 8080 (HTTP) and 4433 (HTTPS) inside
+    # the container. Caddy uses 8080. No port is published: the setup link
+    # and the web UI are only reachable through Caddy.
+    image: passbolt/passbolt:5.17.0-1-ce-non-root@sha256:ef8f2cb58b671ff9ad888ce05d0f48d788dd3538bb09b1d4fc07f4c026c1d70b
+    container_name: passbolt
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    env_file:
+      - settings.env
+
+    environment:
+      DATASOURCES_DEFAULT_HOST: "db"
+
+    volumes:
+      - gpg_volume:/etc/passbolt/gpg
+      - jwt_volume:/etc/passbolt/jwt
+
+    command:
+      [
+        "/usr/bin/wait-for.sh",
+        "-t",
+        "0",
+        "db:3306",
+        "--",
+        "/docker-entrypoint.sh",
+      ]
+
+    expose:
+      - "8080"
+
+    # Own network, shared only with Caddy and the database. Other
+    # containers on "proxy" cannot reach Passbolt or its database. It is
+    # a normal bridge network (not "internal"), so Passbolt can still
+    # send mail over SMTP.
+    networks:
+      - passbolt
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 1g
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Named volumes, not bind mounts: the two images run as different
+# non-root users, and Docker then owns the permissions. Back up all
+# three volumes (see "Backups" in docs/setup-passbolt.md). Losing
+# gpg_volume loses every stored secret, even with a database backup.
+volumes:
+  database_volume:
+  gpg_volume:
+  jwt_volume:
+
+networks:
+  passbolt:
+    external: true

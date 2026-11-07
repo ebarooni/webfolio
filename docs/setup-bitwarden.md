@@ -598,7 +598,7 @@ The new image migrates the database on start. An old image may not work with the
 
 ## Premium license
 
-Self-hosting is free. Premium features need a license file from a Bitwarden cloud account in the region from step 3, for example TOTP codes, file attachments and emergency access.
+Self-hosting is free. Premium features need a license file from a Bitwarden cloud account in the region from step 3, for example TOTP codes stored inside vault items, file attachments and emergency access. TOTP as a second factor for your login (see Hardening) is free and needs no license. Only the TOTP seeds inside items are Premium. Passbolt CE gives those for free; see [setup-passbolt.md](setup-passbolt.md).
 
 1. Buy Premium on a cloud account with the same email address as the self-hosted account.
 2. In the cloud web vault, go to **Settings > Subscription** and download the license.
