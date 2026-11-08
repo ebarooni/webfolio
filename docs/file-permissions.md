@@ -176,6 +176,9 @@ drwx------ 911  911     /opt/docker/bitwarden/logs
 drwxr-x--- holu docker  /opt/docker/caddy
 -rw-r----- holu docker  /opt/docker/caddy/compose.yaml
 -rw-r----- holu docker  /opt/docker/caddy/Caddyfile
+drwxr-x--- holu docker  /opt/docker/passbolt
+-rw-r----- holu docker  /opt/docker/passbolt/compose.yaml
+-rw------- holu docker  /opt/docker/passbolt/settings.env
 drwxr-x--- holu docker  /opt/docker/uptime-kuma
 -rw-r----- holu docker  /opt/docker/uptime-kuma/compose.yaml
 drwx------ 1000 1000    /opt/docker/uptime-kuma/data

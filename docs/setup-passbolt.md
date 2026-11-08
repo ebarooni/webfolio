@@ -314,6 +314,8 @@ docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt healthche
 
 This command creates the account. It does not set a password. It prints a one-time setup link, and the browser flow sets your passphrase and creates your private key.
 
+The non-root image already runs as `www-data`, so no `su` is needed:
+
 ```bash
 cd /opt/docker/passbolt
 docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt register_user \
@@ -323,7 +325,7 @@ docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt register_
   -r admin
 ```
 
-If your image variant asks for the `www-data` user, use the form from the [official Docker guide](https://www.passbolt.com/docs/hosting/install/ce/docker/) instead:
+Only if you switch to the root image (which this guide does not use), wrap the command in `su` as in the [official Docker guide](https://www.passbolt.com/docs/hosting/install/ce/docker/):
 
 ```bash
 docker compose exec passbolt su -m -c "/usr/share/php/passbolt/bin/cake passbolt register_user -u <YOUR_EMAIL> -f <YOUR_FIRST_NAME> -l <YOUR_LAST_NAME> -r admin" -s /bin/sh www-data
@@ -421,6 +423,8 @@ The `openssl` command must show a TLS connection. If the log shows an authentica
 **The healthcheck reports GPG errors, or login fails after a restore.** The server GPG key and the database do not belong together, or the key is not in the keyring. See the restore notes in [Backups](#backups). Do not delete the GPG volume to "start fresh" while the database holds items you need. That deletes the only way to decrypt them.
 
 **The page loads but shows a security warning or a redirect loop.** Check that `APP_FULL_BASE_URL` starts with `https://`, that Caddy serves the site (not the container's own 4433 port), and that `PASSBOLT_SSL_FORCE=true` is set. Then run the healthcheck from step 9 again. If you changed the URL, clear the browser site data for `passbolt.example.com` and set up the extension again.
+
+**The browser shows `ERR_TOO_MANY_REDIRECTS`.** The app sees plain HTTP and redirects to HTTPS, while Caddy keeps sending HTTP. This means the app does not trust the proxy headers. Check that `PASSBOLT_SECURITY_PROXIES_ACTIVE=true` is set in `settings.env` (step 6), then recreate the container: `docker compose up -d --force-recreate`. A restart does not read the file again. Do not "fix" it by setting `PASSBOLT_SSL_FORCE=false`. That only trades the loop for an unsafe-mode warning while the real cause stays.
 
 **The database container restarts or reports access denied.** `MYSQL_PASSWORD` and `DATASOURCES_DEFAULT_PASSWORD` differ, or the password was changed after the first start. MariaDB sets the password only when it creates the database. Changing `settings.env` later does not change the stored password. Either set both lines back to the first password, or change the password inside MariaDB. For a fresh trial with no items yet, the clean path is `docker compose down -v` and a new first start. That deletes the trial data.
 
