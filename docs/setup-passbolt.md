@@ -23,9 +23,9 @@ So Passbolt CE does give you the second row for free. That is the reason for thi
 
 - **Two containers** – `passbolt` (web UI, API, mail queue cron) and `passbolt-db` (MariaDB 10.11). Unlike Bitwarden lite, Passbolt has no SQLite mode. A database container is mandatory.
 - **Three named volumes** – `database_volume` (MariaDB files), `gpg_volume` (server OpenPGP key) and `jwt_volume` (login token keys). Lose the GPG volume and every stored secret is lost, even with a database backup. See [Backups](passbolt-maintenance.md#backups).
-- **No public ports** – neither container publishes a port. Caddy terminates TLS and sends plain HTTP to `passbolt:8080` over the `passbolt` network. Only Caddy and Passbolt are on this network.
+- **No public ports** – neither container publishes a port. Caddy holds the public certificate and sends requests to `passbolt:4433` over the `passbolt` network. Only Caddy and Passbolt are on this network.
 - **Database on its own network** – MariaDB is only on `passbolt-db`, an internal network that it shares with Passbolt. Caddy is the internet-facing container and cannot reach the database. The database has no route to the internet.
-- **Non-root image** – the pinned image is the `-ce-non-root` variant. It listens on 8080 inside the container, so nothing runs as root to bind a low port.
+- **Non-root image** – the pinned image is the `-ce-non-root` variant. It listens on 8080 and 4433 inside the container, so nothing runs as root to bind a low port.
 - **Pinned images** – both images are pinned by tag and digest. They never use `latest`.
 - **Mail** – the same transactional mail setup as Bitwarden, with its own API key. See [Reuse your mail setup](#reuse-your-mail-setup).
 - **Browser extension is required** – on a computer you log in through the Passbolt browser extension, not with a standalone web form like the Bitwarden web vault. The web UI at `passbolt.example.com` is the admin and account screen. It works with the extension. Mobile uses the Passbolt app. Plan for this change in step 11.
@@ -37,7 +37,7 @@ Passbolt CE is free and open source (AGPLv3) with no user limit. Paid Pro adds S
 ```mermaid
 flowchart LR
     ext[Browser extension and mobile app] -- "HTTPS passbolt.example.com" --> caddy[Caddy on the VPS]
-    caddy -- "HTTP passbolt:8080, network passbolt" --> pb[Passbolt CE]
+    caddy -- "HTTPS passbolt:4433, network passbolt" --> pb[Passbolt CE]
     pb -- "MySQL, network passbolt-db" --> db[(MariaDB)]
     pb -- "SMTP with TLS" --> mail[Mail provider]
     mail -- "from no-reply@notify.example.com" --> inbox[Your inbox]
@@ -152,26 +152,21 @@ df -h /opt/docker
 
 Passbolt gets its own network, `passbolt`, for the same reason Bitwarden has one: on the shared `proxy` network, every container can reach every other container. Only Caddy and Passbolt join `passbolt`. See [Why a separate network](setup-bitwarden.md#why-a-separate-network). The database network `passbolt-db` needs no step here. Compose creates it in step 9.
 
-1. Create the network with a fixed subnet. This is a one-time setup:
+1. Create the network. This is a one-time setup:
 
 ```bash
-docker network create --subnet 10.84.0.0/24 passbolt
+docker network create passbolt
 ```
 
-**Expected result:** a long ID. If Docker says that the subnet overlaps with another network, select a different private `/24` and use it in all places in this step and in step 6.
+**Expected result:** a long ID. If Docker says that the network already exists, that is fine.
 
-If the network exists already without this subnet (from an earlier version of [setup-server.md](setup-server.md)), stop Caddy, remove the network with `docker network rm passbolt` and create it again.
-
-**Why a fixed subnet:** Passbolt must know the address of the proxy that it trusts (`PASSBOLT_SECURITY_PROXIES_TRUSTED_PROXIES`, step 6). Without that value, Passbolt ignores the `X-Forwarded-Proto` header from Caddy and redirects to HTTPS in a loop. Docker gives a fixed address only on a network with a user-defined subnet.
-
-2. Connect Caddy. `/opt/docker/caddy/compose.yaml` must list all three networks and the fixed address, as in `deploy/caddy/compose.yaml` in this repository:
+2. Connect Caddy. `/opt/docker/caddy/compose.yaml` must list all three networks, as in `deploy/caddy/compose.yaml` in this repository:
 
 ```yaml
     networks:
-      proxy:
-      bitwarden:
-      passbolt:
-        ipv4_address: 10.84.0.2
+      - proxy
+      - bitwarden
+      - passbolt
 ```
 
 The top-level `networks` list at the end of the file must also have `passbolt` with `external: true`.
@@ -181,10 +176,10 @@ If these lines are missing, copy the file from the repository (local machine: `s
 ```bash
 cd /opt/docker/caddy
 docker compose up -d
-docker inspect caddy --format '{{range $name, $net := .NetworkSettings.Networks}}{{$name}}={{$net.IPAddress}} {{end}}'
+docker inspect caddy --format '{{range $name, $net := .NetworkSettings.Networks}}{{$name}} {{end}}'
 ```
 
-**Expected result:** the last command prints the three networks `bitwarden`, `passbolt` and `proxy` in any order, and `passbolt=10.84.0.2`. Caddy restarts for a few seconds, so your website and vault are briefly unavailable.
+**Expected result:** the last command prints `bitwarden passbolt proxy` in any order. Caddy restarts for a few seconds, so your website and vault are briefly unavailable.
 
 ### 5. Create the directory and copy the files
 
@@ -229,7 +224,6 @@ Replace every placeholder in angle brackets:
 | Variable | Value |
 |---|---|
 | `APP_FULL_BASE_URL` | `https://passbolt.example.com`. Must match the Caddy block in step 8 exactly |
-| `PASSBOLT_SECURITY_PROXIES_TRUSTED_PROXIES` | `10.84.0.2`, the fixed address of Caddy from step 4. Change it only if you selected a different subnet |
 | `MYSQL_PASSWORD` and `DATASOURCES_DEFAULT_PASSWORD` | The same generated password, in both lines |
 | `EMAIL_DEFAULT_FROM` | `no-reply@notify.example.com` |
 | `EMAIL_TRANSPORT_DEFAULT_HOST` | `ssl://smtp.resend.com` for implicit TLS on 2465 |
@@ -266,13 +260,19 @@ passbolt.example.com {
         -Server
     }
 
-    reverse_proxy passbolt:8080
+    reverse_proxy https://passbolt:4433 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
 }
 ```
 
 Add no `/admin` block. Passbolt has no separate admin panel to hide. Add no more headers than these two. Passbolt sends its own security headers (for example `Content-Security-Policy`), and a second, different set from Caddy can conflict.
 
-**Why port 8080:** the non-root image serves plain HTTP on 8080 inside the container. Caddy is the only client, over the `passbolt` network, and Caddy terminates TLS. The container also offers HTTPS on 4433. Do not use it here. It would need its own certificate, and Caddy already handles that job.
+**Why port 4433 and not 8080:** Passbolt redirects every plain HTTP request to HTTPS (`PASSBOLT_SSL_FORCE=true`). On port 8080, Caddy sends plain HTTP, and Passbolt redirects in a loop. Passbolt accepts the `X-Forwarded-Proto` header from Caddy only if `settings.env` lists the IP address of Caddy, and Docker can change that address. On port 4433, Passbolt sees HTTPS directly and needs no address.
+
+**Why `tls_insecure_skip_verify`:** the container makes its own self-signed certificate at each start, so Caddy cannot verify it. This is safe here: only Caddy and Passbolt are on the `passbolt` network. The certificate that browsers see is the public one from Caddy.
 
 ### 9. Start Passbolt and reload Caddy
 

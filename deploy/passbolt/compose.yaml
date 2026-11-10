@@ -1,8 +1,8 @@
 # Based on the official Passbolt CE Docker stack
 # (https://www.passbolt.com/docs/hosting/install/ce/docker/), changed for
-# this VPS: Caddy terminates TLS, no port is published, Passbolt gets its
-# own network like Bitwarden, and the database gets a second network that
-# Caddy cannot reach. See docs/setup-passbolt.md.
+# this VPS: Caddy holds the public certificate, no port is published,
+# Passbolt gets its own network like Bitwarden, and the database gets a
+# second network that Caddy cannot reach. See docs/setup-passbolt.md.
 services:
   db:
     # The digest pins the image. The tag is only for people to read.
@@ -50,8 +50,9 @@ services:
 
   passbolt:
     # The non-root variant listens on 8080 (HTTP) and 4433 (HTTPS) inside
-    # the container. Caddy uses 8080. No port is published: the setup link
-    # and the web UI are only reachable through Caddy.
+    # the container. Caddy uses 4433, so Passbolt sees HTTPS and does not
+    # redirect in a loop. No port is published: the setup link and the
+    # web UI are only reachable through Caddy.
     image: passbolt/passbolt:5.17.0-1-ce-non-root@sha256:ef8f2cb58b671ff9ad888ce05d0f48d788dd3538bb09b1d4fc07f4c026c1d70b
     container_name: passbolt
     restart: unless-stopped
@@ -81,7 +82,7 @@ services:
       ]
 
     expose:
-      - "8080"
+      - "4433"
 
     # "passbolt" is shared only with Caddy. Other containers on "proxy"
     # cannot reach Passbolt. It is a normal bridge network (not

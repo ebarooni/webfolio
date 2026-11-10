@@ -18,14 +18,10 @@ services:
     # only, and "passbolt" with Passbolt only, so no other container can
     # reach a vault. All networks must exist before Caddy starts (see
     # docs/setup-server.md).
-    # The address on "passbolt" is fixed because Passbolt must list the
-    # proxy that it trusts (PASSBOLT_SECURITY_PROXIES_TRUSTED_PROXIES).
-    # The network needs the subnet 10.84.0.0/24 for this.
     networks:
-      proxy:
-      bitwarden:
-      passbolt:
-        ipv4_address: 10.84.0.2
+      - proxy
+      - bitwarden
+      - passbolt
     
     security_opt:
       - no-new-privileges:true

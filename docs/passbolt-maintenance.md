@@ -14,19 +14,17 @@ timeout 5 openssl s_client -connect smtp.resend.com:2465 -brief </dev/null
 
 The `openssl` command must show a TLS connection. If the log shows an authentication error, the API key is wrong or limited to another domain. If it shows a TLS or connection error, check the two forms in [Reuse your mail setup](setup-passbolt.md#reuse-your-mail-setup): `ssl://` host with port 2465, or plain host with port 587 and `EMAIL_TRANSPORT_DEFAULT_TLS=true`. Recreate the container after every `settings.env` change: `docker compose up -d --force-recreate`. A restart does not read the file again.
 
-**Caddy returns `502 Bad Gateway`.** Caddy cannot reach `passbolt:8080`. Check `docker network inspect passbolt`. If `caddy` is missing, Caddy is not on the network (setup step 4) and needs `docker compose up -d` in `/opt/docker/caddy`, not a reload. If `passbolt` is missing, run `docker compose up -d` in `/opt/docker/passbolt` and read its logs.
+**Caddy returns `502 Bad Gateway`.** Caddy cannot reach `passbolt:4433`. Check `docker network inspect passbolt`. If `caddy` is missing, Caddy is not on the network (setup step 4) and needs `docker compose up -d` in `/opt/docker/caddy`, not a reload. If `passbolt` is missing, run `docker compose up -d` in `/opt/docker/passbolt` and read its logs.
 
-**Caddy does not start: `network passbolt declared as external, but could not be found`.** Create it once with `docker network create --subnet 10.84.0.0/24 passbolt`, then start Caddy again.
-
-**Caddy does not start: `user specified IP address is supported only when connecting to networks with user configured subnets`.** The `passbolt` network was created without a subnet. Stop every container on it, run `docker network rm passbolt`, and create it again as in setup step 4.
+**Caddy does not start: `network passbolt declared as external, but could not be found`.** Create it once with `docker network create passbolt`, then start Caddy again.
 
 **Setup or recovery links in mail point to `passbolt.local` or the wrong name.** `APP_FULL_BASE_URL` is wrong. Fix `settings.env`, recreate the container, and request a new link. Old links keep the old address.
 
 **The healthcheck reports GPG errors, or login fails after a restore.** The server GPG key and the database do not belong together, or the key is not in the keyring. See [Restore](#restore). Do not delete the GPG volume to "start fresh" while the database holds items you need. That deletes the only way to decrypt them.
 
-**The browser shows `ERR_TOO_MANY_REDIRECTS`, or `curl` on the status URL returns `302` to the same URL.** Passbolt sees plain HTTP from Caddy and redirects to HTTPS without end. It reads the `X-Forwarded-Proto` header from Caddy only when both proxy lines in `settings.env` are set: `PASSBOLT_SECURITY_PROXIES_ACTIVE=true` and `PASSBOLT_SECURITY_PROXIES_TRUSTED_PROXIES` with the address of Caddy (setup steps 4 and 6). The first line alone is not sufficient. Then recreate the container: `docker compose up -d --force-recreate`. Do not set `PASSBOLT_SSL_FORCE=false` to stop the loop. That hides the cause and makes the setup less safe.
+**The browser shows `ERR_TOO_MANY_REDIRECTS`, or `curl` on the status URL returns `302` to the same URL.** Caddy sends plain HTTP to port 8080, and Passbolt redirects to HTTPS without end. Use the Caddy block from setup step 8, which connects to `https://passbolt:4433`, then reload Caddy. Do not set `PASSBOLT_SSL_FORCE=false` to stop the loop. That hides the cause and makes the setup less safe.
 
-**The page loads but shows a security warning.** Check that `APP_FULL_BASE_URL` starts with `https://`, that `PASSBOLT_SSL_FORCE=true` is set, and that Caddy sends requests to port 8080, not to the container's own 4433 port. Then run the healthcheck from setup step 9 again. If you changed the URL, clear the browser site data for `passbolt.example.com` and set up the extension again.
+**The page loads but shows a security warning.** Check that `APP_FULL_BASE_URL` starts with `https://`, that `PASSBOLT_SSL_FORCE=true` is set, and that the Caddy block is the one from setup step 8. Then run the healthcheck from setup step 9 again. If you changed the URL, clear the browser site data for `passbolt.example.com` and set up the extension again.
 
 **The healthcheck reports `The server OpenPGP key is not set` on a stack that works.** The command ran without `source /etc/environment`. Use the full command from setup step 9.
 

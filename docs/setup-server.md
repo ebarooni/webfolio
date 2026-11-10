@@ -270,12 +270,12 @@ sudo chmod 660 /opt/docker/webfolio/secrets/application-secrets.properties
 
 ### Create the Docker networks
 
-This is a one-time setup. Most services use the shared `proxy` network to communicate with Caddy. Bitwarden gets its own network `bitwarden`, which only Caddy joins (see [setup-bitwarden.md](setup-bitwarden.md#why-a-separate-network)). Passbolt gets its own network `passbolt` in the same way. It has a fixed subnet, because Caddy needs a fixed address on it (see [setup-passbolt.md](setup-passbolt.md)). Caddy's `compose.yaml` lists all three networks, so all three must exist before Caddy starts, even if you do not install Bitwarden or Passbolt yet:
+This is a one-time setup. Most services use the shared `proxy` network to communicate with Caddy. Bitwarden gets its own network `bitwarden`, which only Caddy joins (see [setup-bitwarden.md](setup-bitwarden.md#why-a-separate-network)). Passbolt gets its own network `passbolt` in the same way. See [setup-passbolt.md](setup-passbolt.md). Caddy's `compose.yaml` lists all three networks, so all three must exist before Caddy starts, even if you do not install Bitwarden or Passbolt yet:
 
 ```bash
 docker network create proxy
 docker network create bitwarden
-docker network create --subnet 10.84.0.0/24 passbolt
+docker network create passbolt
 ```
 
 **Expected result:** each command prints a long ID. `docker network ls` shows `proxy`, `bitwarden` and `passbolt`. If a network exists already, Docker prints an error that says so. That is fine.
