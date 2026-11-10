@@ -1,7 +1,8 @@
 # Based on the official Passbolt CE Docker stack
 # (https://www.passbolt.com/docs/hosting/install/ce/docker/), changed for
-# this VPS: Caddy terminates TLS, no port is published, and Passbolt gets
-# its own network like Bitwarden. See docs/setup-passbolt.md.
+# this VPS: Caddy terminates TLS, no port is published, Passbolt gets its
+# own network like Bitwarden, and the database gets a second network that
+# Caddy cannot reach. See docs/setup-passbolt.md.
 services:
   db:
     # The digest pins the image. The tag is only for people to read.
@@ -9,16 +10,23 @@ services:
     container_name: passbolt-db
     restart: unless-stopped
 
+    # The image starts as root by default, changes the owner of the data
+    # directory, and then switches to "mysql". That needs capabilities,
+    # and all of them are dropped below. Start as "mysql" directly. A new
+    # named volume already has the correct owner from the image.
+    user: mysql
+
     env_file:
       - settings.env
 
     volumes:
       - database_volume:/var/lib/mysql
 
-    # The database is reachable only from the passbolt container on the
-    # passbolt network. It publishes no port, not even on loopback.
+    # Only the passbolt container shares this network. Caddy is not on
+    # it, so the internet-facing container cannot reach port 3306. The
+    # database publishes no port, not even on loopback.
     networks:
-      - passbolt
+      - passbolt-db
 
     security_opt:
       - no-new-privileges:true
@@ -75,12 +83,13 @@ services:
     expose:
       - "8080"
 
-    # Own network, shared only with Caddy and the database. Other
-    # containers on "proxy" cannot reach Passbolt or its database. It is
-    # a normal bridge network (not "internal"), so Passbolt can still
-    # send mail over SMTP.
+    # "passbolt" is shared only with Caddy. Other containers on "proxy"
+    # cannot reach Passbolt. It is a normal bridge network (not
+    # "internal"), so Passbolt can still send mail over SMTP.
+    # "passbolt-db" is shared only with the database.
     networks:
       - passbolt
+      - passbolt-db
 
     security_opt:
       - no-new-privileges:true
@@ -108,3 +117,9 @@ volumes:
 networks:
   passbolt:
     external: true
+  # Compose creates this network. "internal" gives the database no route
+  # to the internet. The fixed name keeps the check in
+  # docs/setup-passbolt.md independent of the project name.
+  passbolt-db:
+    name: passbolt-db
+    internal: true

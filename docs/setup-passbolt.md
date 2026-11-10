@@ -6,7 +6,9 @@ Follow the steps in sequence. Each step tells you **where** you do it, **what** 
 
 This is a trial beside Bitwarden, not a replacement yet. Do not delete Bitwarden when Passbolt works. See [Run both, then decide](#run-both-then-decide).
 
-## First, a correction on TOTP
+Troubleshooting, hardening, updates and backups are in [passbolt-maintenance.md](passbolt-maintenance.md).
+
+## The two meanings of TOTP
 
 "TOTP" means two different things. Keep them apart before you switch:
 
@@ -20,12 +22,13 @@ So Passbolt CE does give you the second row for free. That is the reason for thi
 ## Overview
 
 - **Two containers** – `passbolt` (web UI, API, mail queue cron) and `passbolt-db` (MariaDB 10.11). Unlike Bitwarden lite, Passbolt has no SQLite mode. A database container is mandatory.
-- **Three named volumes** – `database_volume` (MariaDB files), `gpg_volume` (server OpenPGP key) and `jwt_volume` (login token keys). Lose the GPG volume and every stored secret is lost, even with a database backup. See [Backups](#backups).
-- **No public ports** – neither container publishes a port. Caddy terminates TLS and sends plain HTTP to `passbolt:8080` over the `passbolt` network. Only Caddy, Passbolt and its database are on this network.
+- **Three named volumes** – `database_volume` (MariaDB files), `gpg_volume` (server OpenPGP key) and `jwt_volume` (login token keys). Lose the GPG volume and every stored secret is lost, even with a database backup. See [Backups](passbolt-maintenance.md#backups).
+- **No public ports** – neither container publishes a port. Caddy terminates TLS and sends plain HTTP to `passbolt:8080` over the `passbolt` network. Only Caddy and Passbolt are on this network.
+- **Database on its own network** – MariaDB is only on `passbolt-db`, an internal network that it shares with Passbolt. Caddy is the internet-facing container and cannot reach the database. The database has no route to the internet.
 - **Non-root image** – the pinned image is the `-ce-non-root` variant. It listens on 8080 inside the container, so nothing runs as root to bind a low port.
 - **Pinned images** – both images are pinned by tag and digest. They never use `latest`.
 - **Mail** – the same transactional mail setup as Bitwarden, with its own API key. See [Reuse your mail setup](#reuse-your-mail-setup).
-- **Browser extension is required** – on a computer you log in through the Passbolt browser extension, not with a standalone web form like the Bitwarden web vault. The web UI at `passbolt.example.com` is the admin and account screen. It works with the extension. Mobile uses the Passbolt app. Plan for this change in step 12.
+- **Browser extension is required** – on a computer you log in through the Passbolt browser extension, not with a standalone web form like the Bitwarden web vault. The web UI at `passbolt.example.com` is the admin and account screen. It works with the extension. Mobile uses the Passbolt app. Plan for this change in step 11.
 
 Passbolt CE is free and open source (AGPLv3) with no user limit. Paid Pro adds SSO, directory sync and support. None of that is needed here.
 
@@ -35,7 +38,7 @@ Passbolt CE is free and open source (AGPLv3) with no user limit. Paid Pro adds S
 flowchart LR
     ext[Browser extension and mobile app] -- "HTTPS passbolt.example.com" --> caddy[Caddy on the VPS]
     caddy -- "HTTP passbolt:8080, network passbolt" --> pb[Passbolt CE]
-    pb -- "MySQL, network passbolt only" --> db[(MariaDB)]
+    pb -- "MySQL, network passbolt-db" --> db[(MariaDB)]
     pb -- "SMTP with TLS" --> mail[Mail provider]
     mail -- "from no-reply@notify.example.com" --> inbox[Your inbox]
 ```
@@ -70,7 +73,7 @@ Write down these values while you work. Keep the secret values out of chats, not
 | Sender address | `no-reply@notify.example.com` | No | Already exists (step 2) |
 | SMTP host and port | `ssl://smtp.resend.com`, `2465` | No | Already known (step 2) |
 | Passbolt SMTP API key | A new key named `passbolt` | Yes | Mail provider (step 2) |
-| Database password | `openssl rand -base64 32` | Yes | You create it (step 6) |
+| Database password | `openssl rand -hex 32` | Yes | You create it (step 6) |
 | Admin email | Your own email address | No | Your choice (step 10) |
 
 ## Reuse your mail setup
@@ -147,46 +150,41 @@ df -h /opt/docker
 
 **Where:** VPS over SSH.
 
-Passbolt gets its own network, `passbolt`, for the same reason Bitwarden has one: on the shared `proxy` network, every container can reach every other container. Only Caddy joins `passbolt`, plus Passbolt and its database. See [Why a separate network](setup-bitwarden.md#why-a-separate-network).
+Passbolt gets its own network, `passbolt`, for the same reason Bitwarden has one: on the shared `proxy` network, every container can reach every other container. Only Caddy and Passbolt join `passbolt`. See [Why a separate network](setup-bitwarden.md#why-a-separate-network). The database network `passbolt-db` needs no step here. Compose creates it in step 9.
 
-1. Create the network. This is a one-time setup:
+1. Create the network with a fixed subnet. This is a one-time setup:
 
 ```bash
-docker network create passbolt
+docker network create --subnet 10.84.0.0/24 passbolt
 ```
 
-**Expected result:** a long ID. If Docker says that the network already exists, that is fine.
+**Expected result:** a long ID. If Docker says that the subnet overlaps with another network, select a different private `/24` and use it in all places in this step and in step 6.
 
-2. Connect Caddy. `/opt/docker/caddy/compose.yaml` must list all three networks, as in `deploy/caddy/compose.yaml` in this repository:
+If the network exists already without this subnet (from an earlier version of [setup-server.md](setup-server.md)), stop Caddy, remove the network with `docker network rm passbolt` and create it again.
+
+**Why a fixed subnet:** Passbolt must know the address of the proxy that it trusts (`PASSBOLT_SECURITY_PROXIES_TRUSTED_PROXIES`, step 6). Without that value, Passbolt ignores the `X-Forwarded-Proto` header from Caddy and redirects to HTTPS in a loop. Docker gives a fixed address only on a network with a user-defined subnet.
+
+2. Connect Caddy. `/opt/docker/caddy/compose.yaml` must list all three networks and the fixed address, as in `deploy/caddy/compose.yaml` in this repository:
 
 ```yaml
     networks:
-      - proxy
-      - bitwarden
-      - passbolt
+      proxy:
+      bitwarden:
+      passbolt:
+        ipv4_address: 10.84.0.2
 ```
 
-and at the end of the file:
+The top-level `networks` list at the end of the file must also have `passbolt` with `external: true`.
 
-```yaml
-networks:
-  proxy:
-    external: true
-  bitwarden:
-    external: true
-  passbolt:
-    external: true
-```
-
-If they are missing, copy the file from the repository (local machine: `scp deploy/caddy/compose.yaml myserver:/opt/docker/caddy/`, or typed out `holu@<SERVER_IP>:/opt/docker/caddy/`). Then recreate Caddy:
+If these lines are missing, copy the file from the repository (local machine: `scp deploy/caddy/compose.yaml myserver:/opt/docker/caddy/`, or typed out `holu@<SERVER_IP>:/opt/docker/caddy/`). Then recreate Caddy:
 
 ```bash
 cd /opt/docker/caddy
 docker compose up -d
-docker inspect caddy --format '{{range $name, $net := .NetworkSettings.Networks}}{{$name}} {{end}}'
+docker inspect caddy --format '{{range $name, $net := .NetworkSettings.Networks}}{{$name}}={{$net.IPAddress}} {{end}}'
 ```
 
-**Expected result:** the last command prints `bitwarden passbolt proxy` in any order. Caddy restarts for a few seconds, so your website and vault are briefly unavailable.
+**Expected result:** the last command prints the three networks `bitwarden`, `passbolt` and `proxy` in any order, and `passbolt=10.84.0.2`. Caddy restarts for a few seconds, so your website and vault are briefly unavailable.
 
 ### 5. Create the directory and copy the files
 
@@ -204,7 +202,7 @@ scp deploy/passbolt/compose.yaml deploy/passbolt/settings.env.example myserver:/
 
 With no Host alias, write `holu@<SERVER_IP>:/opt/docker/passbolt/` instead of `myserver:/opt/docker/passbolt/`.
 
-There are no data folders to create here. The stack uses three named Docker volumes (`database_volume`, `gpg_volume`, `jwt_volume`), which Docker creates on first start. This is a deliberate difference to Bitwarden: MariaDB and Passbolt run as different non-root users, and named volumes let Docker set the ownership. Bind mounts would need two different `chown` lines and break in the same way as a wrong UID always breaks.
+There are no data folders to create here. The stack uses three named Docker volumes (`database_volume`, `gpg_volume`, `jwt_volume`), which Docker creates on first start. This is a deliberate difference to Bitwarden: MariaDB and Passbolt run as different non-root users, and a new named volume gets the correct owner from the image. Bind mounts would need two different `chown` lines.
 
 ### 6. Configure settings.env
 
@@ -213,8 +211,10 @@ There are no data folders to create here. The stack uses three named Docker volu
 1. Create the database password and keep it in your password manager:
 
 ```bash
-openssl rand -base64 32
+openssl rand -hex 32
 ```
+
+Use `-hex`, not `-base64`. A base64 value can contain `/`, `+` and `=`, and an `env_file` passes quotes and such characters on without change. A hex value has no special characters.
 
 2. Create and edit `settings.env`:
 
@@ -229,6 +229,7 @@ Replace every placeholder in angle brackets:
 | Variable | Value |
 |---|---|
 | `APP_FULL_BASE_URL` | `https://passbolt.example.com`. Must match the Caddy block in step 8 exactly |
+| `PASSBOLT_SECURITY_PROXIES_TRUSTED_PROXIES` | `10.84.0.2`, the fixed address of Caddy from step 4. Change it only if you selected a different subnet |
 | `MYSQL_PASSWORD` and `DATASOURCES_DEFAULT_PASSWORD` | The same generated password, in both lines |
 | `EMAIL_DEFAULT_FROM` | `no-reply@notify.example.com` |
 | `EMAIL_TRANSPORT_DEFAULT_HOST` | `ssl://smtp.resend.com` for implicit TLS on 2465 |
@@ -252,7 +253,7 @@ rm /opt/docker/passbolt/settings.env.example
 
 See [file-permissions.md](file-permissions.md) for the full list. Then store a copy of the finished `settings.env` in a safe place off the server, for example as a secure note in Bitwarden.
 
-**Why:** no backup in this guide includes `settings.env`. Without it, a restore needs a new database password and a new SMTP key. See [Backups](#backups).
+**Why:** `settings.env` is in no Docker volume. Without it, a restore needs a new database password and a new SMTP key. See [Backups](passbolt-maintenance.md#backups).
 
 ### 8. Add the Caddy site block
 
@@ -269,7 +270,7 @@ passbolt.example.com {
 }
 ```
 
-Add no `/admin` block. Passbolt has no separate admin panel to hide. Add no extra header block either. Passbolt sends its own security headers, and a second, different set from Caddy can conflict.
+Add no `/admin` block. Passbolt has no separate admin panel to hide. Add no more headers than these two. Passbolt sends its own security headers (for example `Content-Security-Policy`), and a second, different set from Caddy can conflict.
 
 **Why port 8080:** the non-root image serves plain HTTP on 8080 inside the container. Caddy is the only client, over the `passbolt` network, and Caddy terminates TLS. The container also offers HTTPS on 4433. Do not use it here. It would need its own certificate, and Caddy already handles that job.
 
@@ -295,18 +296,21 @@ docker compose exec caddy caddy validate --config /etc/caddy/Caddyfile
 docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 curl -s https://passbolt.example.com/healthcheck/status.json
 docker network inspect passbolt --format '{{range .Containers}}{{.Name}} {{end}}'
+docker network inspect passbolt-db --format '{{.Internal}}: {{range .Containers}}{{.Name}} {{end}}'
 ```
 
-**Expected result:** `docker compose ps` shows `passbolt` and `passbolt-db`, the database as `healthy`. The `curl` command prints a JSON status. The network lists only `caddy`, `passbolt` and `passbolt-db`. Opening `https://passbolt.example.com` in a browser shows the Passbolt page, not a Caddy error.
+**Expected result:** `docker compose ps` shows `passbolt` and `passbolt-db`, the database as `healthy`. The `curl` command prints a JSON status. The `passbolt` network lists only `caddy` and `passbolt`. The `passbolt-db` network prints `true:` and lists only `passbolt` and `passbolt-db`. Opening `https://passbolt.example.com` in a browser shows the Passbolt page, not a Caddy error and not a redirect error.
 
 Run the built-in check inside the container. It tests the database, the GPG key, mail and the application settings in one go:
 
 ```bash
 cd /opt/docker/passbolt
-docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt healthcheck
+docker compose exec passbolt bash -c 'source /etc/environment; /usr/share/php/passbolt/bin/cake passbolt healthcheck'
 ```
 
-**Expected result:** the sections end with `[PASS]`, in particular for GPG, database and application. A `[FAIL]` line names the broken part. Fix that part before you continue. SMTP failures appear when the first mail is sent, in step 10.
+**Why `source /etc/environment`:** the container start script finds the fingerprint of the server key and writes it to this file. A plain `docker compose exec` does not have that value. Without it, the check reports false GPG failures such as `The server OpenPGP key is not set`.
+
+**Expected result:** the lines show `[PASS]`, in particular for GPG, database and application. A `[FAIL]` line names the broken part. Fix that part before you continue. One failure is normal with the non-root image and needs no action: `The /etc/passbolt/jwt/ directory should not be writable`. The proposed fix needs root, and the image has no root user. SMTP failures appear when the first mail is sent, in step 10.
 
 ### 10. Create the first admin account
 
@@ -314,7 +318,7 @@ docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt healthche
 
 This command creates the account. It does not set a password. It prints a one-time setup link, and the browser flow sets your passphrase and creates your private key.
 
-The non-root image already runs as `www-data`, so no `su` is needed:
+The non-root image already runs as `www-data`. The `su` wrapper from the official Docker guide is only for the root image:
 
 ```bash
 cd /opt/docker/passbolt
@@ -325,13 +329,7 @@ docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt register_
   -r admin
 ```
 
-Only if you switch to the root image (which this guide does not use), wrap the command in `su` as in the [official Docker guide](https://www.passbolt.com/docs/hosting/install/ce/docker/):
-
-```bash
-docker compose exec passbolt su -m -c "/usr/share/php/passbolt/bin/cake passbolt register_user -u <YOUR_EMAIL> -f <YOUR_FIRST_NAME> -l <YOUR_LAST_NAME> -r admin" -s /bin/sh www-data
-```
-
-**Expected result:** a link like `https://passbolt.example.com/setup/install/<id>/<token>`. Open it promptly. It is a credential.
+**Expected result:** a link like `https://passbolt.example.com/setup/start/<id>/<token>`. Open it promptly. It is a credential.
 
 Then, in the browser:
 
@@ -340,7 +338,7 @@ Then, in the browser:
 3. Download the **recovery kit** when offered and store it offline. Do not skip this screen.
 4. Finish the setup and log in.
 
-This is also the first mail test in part: Passbolt sends a confirmation mail for the account. If no mail arrives, see [Troubleshooting](#troubleshooting) before you go on.
+This is also the first mail test: Passbolt sends the same setup link by mail. If no mail arrives, see [Troubleshooting](passbolt-maintenance.md#troubleshooting) before you go on.
 
 **Why an admin first:** self-registration is off (`PASSBOLT_PLUGINS_SELF_REGISTRATION_ENABLED=false`). Only an admin can create further users, and each new user gets a setup mail. For a single-user trial, this one account is enough.
 
@@ -357,7 +355,7 @@ Keep Bitwarden installed on every device during the trial. You need it for the e
 
 **Where:** browser, at home.
 
-Your account private key lives in the browser extension. The recovery kit from step 10 restores it on a new browser. Without the kit and your passphrase, a lost browser profile means a lost vault. The server backup in [Backups](#backups) cannot fix that. It holds the server key, not your user key.
+Your account private key lives in the browser extension. The recovery kit from step 10 restores it on a new browser. Without the kit and your passphrase, a lost browser profile means a lost vault. The server backup in [Backups](passbolt-maintenance.md#backups) cannot fix that. It holds the server key, not your user key.
 
 1. Store the recovery kit file offline, for example on an encrypted USB stick, with a note of which account it belongs to.
 2. Keep a second copy in a different place.
@@ -369,13 +367,13 @@ Your account private key lives in the browser extension. The recovery kit from s
 
 **Where:** browser, logged in as admin.
 
-1. Open your profile security settings (MFA) and enable **TOTP**. Scan the code with your authenticator app and confirm with a 6-digit code. `PASSBOLT_PLUGINS_MFA_PROVIDERS_TOTP=true` in `settings.env` makes this provider available. Save the MFA recovery codes offline, next to the recovery kit.
+1. Open your profile security settings (MFA) and enable **TOTP**. Scan the code with your authenticator app and confirm with a 6-digit code. `PASSBOLT_PLUGINS_MFA_PROVIDERS_TOTP=true` in `settings.env` makes this provider available. Passbolt gives no MFA recovery codes. Before you scan the code, save the setup key (the text form of the QR code) offline, next to the recovery kit. With that key you can set up a new authenticator. Without it, a lost phone locks out the only admin, and only a change in the database on the server removes the MFA setting.
 2. As an admin, check the administration MFA settings. For a single user, requiring MFA for your own account is enough. Do not enable Duo or YubiKey unless you have those accounts and keys. They need extra credentials in `settings.env`.
 3. Create a test item of type **TOTP** for a throwaway service, or add a TOTP to a test password item. Log out, log in, and read the code.
 
 **Expected result:** login asks for the authenticator code, and the test item shows a changing 6-digit code. This is the feature Bitwarden holds behind Premium, here at no cost.
 
-If MFA setup is missing from the UI, recreate the container so it reads `settings.env` again (`docker compose up -d --force-recreate`), then check the healthcheck output from step 9.
+If MFA setup is missing from the UI, recreate the container so that it reads `settings.env` again (`docker compose up -d --force-recreate`), then run the healthcheck from step 9 again.
 
 ### 14. Optional: import your Bitwarden vault for the trial
 
@@ -398,122 +396,6 @@ Do not import everything on day one if you only want to test TOTP. Import ten it
 Run Passbolt beside Bitwarden for a fixed trial, for example two weeks.
 
 - **One vault changes.** During the trial, add and change passwords in Passbolt only for the imported items, and in Bitwarden for everything else. Write down which is which. A password changed in both places will silently disagree.
-- **Bitwarden stays your fallback.** Keep its backups, its admin block and its mail key as they are. The trial costs one extra subdomain, one network and about 1 GB of RAM. It changes nothing in the Bitwarden setup.
-- **Decide at the end of the trial.** If you keep Passbolt: import the rest, change passwords only in Passbolt for a week, then stop Bitwarden (`docker compose down` in `/opt/docker/bitwarden`) but keep its data and backups for at least a month before you delete anything. If you drop Passbolt: `docker compose down -v` in `/opt/docker/passbolt` removes its volumes, remove the Caddy block and the `passbolt` API key, and Bitwarden is untouched.
+- **Bitwarden stays your fallback.** Keep its backups, its admin block and its mail key as they are. Set up the Bitwarden offsite backup ([Backups (planned)](setup-bitwarden.md#backups-planned)) before you trust a second vault. A tested restore matters more than a second vault. The trial costs one extra subdomain, one network and about 1 GB of RAM. It changes nothing in the Bitwarden setup.
+- **Decide at the end of the trial.** If you keep Passbolt: import the rest, change passwords only in Passbolt for a week, then stop Bitwarden (`docker compose down` in `/opt/docker/bitwarden`) but keep its data and backups for at least a month before you delete anything. If you drop Passbolt: `docker compose down -v` in `/opt/docker/passbolt` removes its volumes and the `passbolt-db` network. Then remove the Caddy block, the DNS record and the `passbolt` API key. Bitwarden is untouched.
 - **Never run both as equals for months.** Two vaults double the backup, update and recovery work, and the drift risk above is the usual way people lock themselves out.
-
-## Troubleshooting
-
-**Mail problems** (no setup mail, mail in spam, domain pending). The DNS side is shared with Bitwarden, so work through [Troubleshooting in setup-mail-sending.md](setup-mail-sending.md#troubleshooting) first. Then check the Passbolt side:
-
-```bash
-cd /opt/docker/passbolt
-docker compose logs passbolt | grep -i -E "smtp|mail" | tail -20
-timeout 5 openssl s_client -connect smtp.resend.com:2465 -brief </dev/null
-```
-
-The `openssl` command must show a TLS connection. If the log shows an authentication error, the API key is wrong or limited to another domain. If it shows a TLS or connection error, check the two forms in step 6: `ssl://` host with port 2465, or plain host with port 587 and `EMAIL_TRANSPORT_DEFAULT_TLS=true`. Recreate the container after every `settings.env` change: `docker compose up -d --force-recreate`. A restart does not read the file again.
-
-**Caddy returns `502 Bad Gateway`.** Caddy cannot reach `passbolt:8080`. Check `docker network inspect passbolt`. If `caddy` is missing, Caddy is not on the network (step 4) and needs `docker compose up -d` in `/opt/docker/caddy`, not a reload. If `passbolt` is missing, run `docker compose up -d` in `/opt/docker/passbolt` and read its logs.
-
-**Caddy does not start: `network passbolt declared as external, but could not be found`.** Create it once with `docker network create passbolt`, then start Caddy again.
-
-**Setup or recovery links in mail point to `passbolt.local` or the wrong name.** `APP_FULL_BASE_URL` is wrong. Fix `settings.env`, recreate the container, and request a new link. Old links keep the old address.
-
-**The healthcheck reports GPG errors, or login fails after a restore.** The server GPG key and the database do not belong together, or the key is not in the keyring. See the restore notes in [Backups](#backups). Do not delete the GPG volume to "start fresh" while the database holds items you need. That deletes the only way to decrypt them.
-
-**The page loads but shows a security warning or a redirect loop.** Check that `APP_FULL_BASE_URL` starts with `https://`, that Caddy serves the site (not the container's own 4433 port), and that `PASSBOLT_SSL_FORCE=true` is set. Then run the healthcheck from step 9 again. If you changed the URL, clear the browser site data for `passbolt.example.com` and set up the extension again.
-
-**The browser shows `ERR_TOO_MANY_REDIRECTS`.** The app sees plain HTTP and redirects to HTTPS, while Caddy keeps sending HTTP. This means the app does not trust the proxy headers. Check that `PASSBOLT_SECURITY_PROXIES_ACTIVE=true` is set in `settings.env` (step 6), then recreate the container: `docker compose up -d --force-recreate`. A restart does not read the file again. Do not "fix" it by setting `PASSBOLT_SSL_FORCE=false`. That only trades the loop for an unsafe-mode warning while the real cause stays.
-
-**The database container restarts or reports access denied.** `MYSQL_PASSWORD` and `DATASOURCES_DEFAULT_PASSWORD` differ, or the password was changed after the first start. MariaDB sets the password only when it creates the database. Changing `settings.env` later does not change the stored password. Either set both lines back to the first password, or change the password inside MariaDB. For a fresh trial with no items yet, the clean path is `docker compose down -v` and a new first start. That deletes the trial data.
-
-**TOTP codes are always wrong.** The server clock or the phone clock is off. Check `timedatectl status` on the VPS (step 3) and the time setting on the phone. Both must be automatic.
-
-## Hardening
-
-- **MFA on, recovery codes offline** – step 13. An admin account without MFA is the weakest point of this setup, because there is no separate admin panel to hide.
-- **Recovery kit offline** – step 12. It is a password equivalent. It does not belong in cloud storage or in the vault itself.
-- **No published ports** – `sudo ss -tulpn` must show no `3306`, `8080` or `4433` from this stack. MariaDB must not be reachable from any other container than `passbolt`: `docker network inspect passbolt` lists only `caddy`, `passbolt` and `passbolt-db`, and the database is not on `proxy`.
-- **Self-registration off** – keep `PASSBOLT_PLUGINS_SELF_REGISTRATION_ENABLED=false`. Create users by hand as admin.
-- **Separate SMTP key** – step 2. Revoke the `passbolt` key alone if it leaks.
-- **HTTPS only** – `curl -sI http://passbolt.example.com` must return a redirect to HTTPS, and the healthcheck from step 9 must pass its SSL section.
-- **Server basics** – the SSH, update and firewall lines in [setup-bitwarden.md](setup-bitwarden.md), Hardening, protect this stack in the same way. They are not repeated here.
-
-## Updating
-
-Check the [Passbolt releases](https://github.com/passbolt/passbolt_api/releases) about once a month, and at once for security releases.
-
-1. Take a backup first (see [Backups](#backups)) and copy it off the server.
-2. Run the healthcheck (step 9) and save the output.
-3. Find the new `-ce-non-root` tag on [Docker Hub](https://hub.docker.com/r/passbolt/passbolt/tags) and its digest:
-
-```bash
-docker buildx imagetools inspect passbolt/passbolt:<NEW_TAG>-ce-non-root | grep -m1 Digest
-```
-
-4. Change the tag and the digest in `deploy/passbolt/compose.yaml`, copy it to the server, then:
-
-```bash
-cd /opt/docker/passbolt
-docker compose pull
-docker compose up -d
-docker compose exec passbolt /usr/share/php/passbolt/bin/cake passbolt healthcheck
-curl -s https://passbolt.example.com/healthcheck/status.json
-docker image prune -f
-```
-
-5. Log in through the extension and open an item, including one TOTP item.
-
-The new image migrates the database on start. An old image may not work with a migrated database. To roll back, restore the backup from step 1 and use the old image. Update MariaDB 10.11 only within its supported line, and back up before any database image change.
-
-## Backups
-
-A Passbolt restore needs **four** parts. Missing one makes the rest useless:
-
-| Part | Where it is | Why you need it |
-|---|---|---|
-| Database dump | MariaDB in `database_volume` | Users, permissions and the encrypted secrets |
-| Server GPG key | `gpg_volume`, `/etc/passbolt/gpg` | Decrypts what the database holds |
-| JWT keys | `jwt_volume`, `/etc/passbolt/jwt` | Login tokens. Less critical than GPG, still back it up |
-| `settings.env` | `/opt/docker/passbolt/settings.env` | Database password, SMTP key, public URL |
-
-Take a manual backup before every change, and store it off the server with the same care as the Bitwarden backups:
-
-```bash
-cd /opt/docker/passbolt
-mkdir -p ~/passbolt-backup-$(date +%F)
-cd ~/passbolt-backup-$(date +%F)
-docker compose -f /opt/docker/passbolt/compose.yaml exec -T db \
-  mariadb-dump -upassbolt -p<DATABASE_PASSWORD> passbolt > passbolt-db.sql
-docker compose -f /opt/docker/passbolt/compose.yaml cp passbolt:/etc/passbolt/gpg ./gpg
-docker compose -f /opt/docker/passbolt/compose.yaml cp passbolt:/etc/passbolt/jwt ./jwt
-cp /opt/docker/passbolt/settings.env ./settings.env
-```
-
-Replace `<DATABASE_PASSWORD>` with the value from `settings.env`. The dump command puts the password in your shell history. Run it with a leading space if your shell keeps history, or read the password from the file first. Then copy the whole folder off the server and delete the copy on the server. The GPG folder holds a private key. Encrypt the backup folder before it leaves the server if your offsite storage is not already encrypted.
-
-For a restore on a fresh stack: start the stack once (step 9), stop the `passbolt` container, load the dump into MariaDB, copy the `gpg` and `jwt` folders back into the volumes with `docker compose cp`, restore `settings.env`, start again, and run `passbolt healthcheck`. If the healthcheck reports that the GPG key is not in the keyring, run the keyring import and the GPG check from the [official backup guide](https://www.passbolt.com/docs/hosting/backup/from-docker/), then repeat the healthcheck. Only a restore test proves the backup: restore on a scratch server or a second stack, log in and open an item.
-
-Note the difference to Bitwarden: there is no built-in daily backup archive here. Until you add a scheduled job (for example the same restic plan as in [setup-bitwarden.md](setup-bitwarden.md#backups-planned), with scope `/opt/docker/passbolt` plus a nightly dump of the database and the two key volumes), backups are manual. Do that scheduled job before the end of the trial if you keep Passbolt.
-
-## Remarks on the existing Bitwarden setup
-
-This section is the review you asked for. Your Bitwarden setup is sound: pinned digest, read-only root file system, no capabilities, separate network, loopback-only admin port with a permanent Caddy block, registration closed after setup, and a scoped SMTP key. Keep it as it is while Passbolt runs beside it. Five remarks, in order of value:
-
-1. **Backups are the one real gap.** [setup-bitwarden.md](setup-bitwarden.md#backups-planned) still says "Not set up yet." A vault without a tested offsite backup is one disk or one bad update away from total loss. Do the restic plan before you invest in a second vault, and include Passbolt in the same job if you keep it. A restore test matters more than the schedule.
-2. **The TOTP reason is narrower than it looks.** As the table at the top shows, only TOTP seeds inside items need Premium. If that single feature is the whole reason to switch, price it against a Premium license before you migrate everything. Passbolt still wins on cost and on open source. The trial tells you whether it also wins on daily use, where the required browser extension is its main cost.
-3. **No monitoring alert reaches you if the vault dies.** If you followed [setup-monitoring.md](setup-monitoring.md), check that the vault monitor alerts an address you read, and add a monitor for `https://passbolt.example.com/healthcheck/status.json` during the trial. A password manager that is down is usually discovered at the worst moment.
-4. **Two vaults double the secret surface.** During the trial, the VPS holds two vault databases and two SMTP keys. That is acceptable for two weeks. It is not a steady state. The decision rule in [Run both, then decide](#run-both-then-decide) exists for this reason.
-5. **Small checks worth repeating once.** `settings.env` copies tend to spread. Search your computer and your notes for extra copies and delete all but the one offline copy. And confirm the recovery code for Bitwarden two-step login and the master password are both offline. Passbolt will need the same discipline for its recovery kit, so the habit transfers.
-
-No change to the Bitwarden containers, network or Caddy block is needed for Passbolt. The only shared change is that Caddy joins one more network (`passbolt`, step 4), which does not widen Bitwarden's network: Caddy was already the only bridge, and it still forwards HTTP only.
-
-## Why Passbolt CE?
-
-- **TOTP items at no cost** – the feature that started this trial, free in CE, for stored seeds and for login MFA.
-- **Open source, self-hosted** – AGPLv3, no license file, no cloud account, no user limit.
-- **Sharing is its home ground** – Passbolt was built for teams, so folders and sharing are stronger than in a personal vault if you ever add a second person.
-- **The honest costs** – a mandatory MariaDB container, a server GPG key that must never be lost, a required browser extension instead of a standalone web vault, and manual backups. This guide exists to make those four costs small and visible.
-
-

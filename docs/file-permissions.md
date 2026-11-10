@@ -155,7 +155,7 @@ chmod 600 /opt/docker/webfolio/.env \
           /opt/docker/passbolt/settings.env
 ```
 
-Passbolt uses named Docker volumes for its data (`database_volume`, `gpg_volume`, `jwt_volume`). There is no host data folder to `chown`. Docker owns the volume permissions for the two non-root image users.
+Passbolt uses named Docker volumes for its data (`database_volume`, `gpg_volume`, `jwt_volume`). There is no host data folder to `chown`. A new named volume gets the correct owner from the image.
 
 ## Verify
 
