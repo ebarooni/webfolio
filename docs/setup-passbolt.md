@@ -127,8 +127,6 @@ dig +short passbolt.example.com
 3. Limit the key to the domain `notify.example.com`.
 4. Copy the key and put it in your password manager at once. The provider shows it only once.
 
-Do not reuse the Bitwarden key, and do not change any DNS record. See [Reuse your mail setup](#reuse-your-mail-setup).
-
 **Expected result:** you have a new secret key, and the key list shows two keys, `bitwarden` and `passbolt`, both for `notify.example.com`.
 
 ### 3. Check Docker and the clock
