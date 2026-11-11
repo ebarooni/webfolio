@@ -75,6 +75,7 @@ Directories use `750` – owner has full access, the `docker` group can read and
 | `/opt/docker/webfolio/secrets` | `750` | `holu` | `docker` |
 | `/opt/docker/wg-easy`          | `750` | `holu` | `docker` |
 | `/opt/docker/bitwarden`        | `750` | `holu` | `docker` |
+| `/opt/docker/passbolt`         | `750` | `holu` | `docker` |
 | `/opt/docker/uptime-kuma`      | `750` | `holu` | `docker` |
 
 ### Container data directories – `700`
@@ -105,6 +106,7 @@ Owner can read and write, the `docker` group can read. These files do not contai
 | `/opt/docker/webfolio/compose.yaml`  | `640` | Webfolio service definition  |
 | `/opt/docker/wg-easy/compose.yaml`   | `640` | wg-easy service definition   |
 | `/opt/docker/bitwarden/compose.yaml` | `640` | Bitwarden service definition |
+| `/opt/docker/passbolt/compose.yaml` | `640` | Passbolt service definitions |
 | `/opt/docker/uptime-kuma/compose.yaml` | `640` | Uptime Kuma service definition |
 
 ### Sensitive files – `600`
@@ -116,6 +118,7 @@ Owner can read and write. No access for group or others. These files contain sec
 | `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone                 |
 | `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID             |
 | `/opt/docker/bitwarden/settings.env`                          | `600` | Installation ID and key, SMTP credential   |
+| `/opt/docker/passbolt/settings.env`                           | `600` | Database password, SMTP credential         |
 
 ## Apply permissions
 
@@ -127,6 +130,7 @@ chmod 750 /opt/docker \
           /opt/docker/webfolio/secrets \
           /opt/docker/wg-easy \
           /opt/docker/bitwarden \
+          /opt/docker/passbolt \
           /opt/docker/uptime-kuma
 
 # Container data directories
@@ -141,13 +145,17 @@ chmod 640 /opt/docker/caddy/compose.yaml \
           /opt/docker/webfolio/compose.yaml \
           /opt/docker/wg-easy/compose.yaml \
           /opt/docker/bitwarden/compose.yaml \
+          /opt/docker/passbolt/compose.yaml \
           /opt/docker/uptime-kuma/compose.yaml
 
 # Sensitive files
 chmod 600 /opt/docker/webfolio/.env \
           /opt/docker/webfolio/secrets/application-secrets.properties \
-          /opt/docker/bitwarden/settings.env
+          /opt/docker/bitwarden/settings.env \
+          /opt/docker/passbolt/settings.env
 ```
+
+Passbolt uses named Docker volumes for its data (`database_volume`, `gpg_volume`, `jwt_volume`). There is no host data folder to `chown`. A new named volume gets the correct owner from the image.
 
 ## Verify
 
@@ -168,6 +176,9 @@ drwx------ 911  911     /opt/docker/bitwarden/logs
 drwxr-x--- holu docker  /opt/docker/caddy
 -rw-r----- holu docker  /opt/docker/caddy/compose.yaml
 -rw-r----- holu docker  /opt/docker/caddy/Caddyfile
+drwxr-x--- holu docker  /opt/docker/passbolt
+-rw-r----- holu docker  /opt/docker/passbolt/compose.yaml
+-rw------- holu docker  /opt/docker/passbolt/settings.env
 drwxr-x--- holu docker  /opt/docker/uptime-kuma
 -rw-r----- holu docker  /opt/docker/uptime-kuma/compose.yaml
 drwx------ 1000 1000    /opt/docker/uptime-kuma/data

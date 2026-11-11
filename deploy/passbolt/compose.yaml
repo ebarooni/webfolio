@@ -1,0 +1,126 @@
+# Based on the official Passbolt CE Docker stack
+# (https://www.passbolt.com/docs/hosting/install/ce/docker/), changed for
+# this VPS: Caddy holds the public certificate, no port is published,
+# Passbolt gets its own network like Bitwarden, and the database gets a
+# second network that Caddy cannot reach. See docs/setup-passbolt.md.
+services:
+  db:
+    # The digest pins the image. The tag is only for people to read.
+    image: mariadb:10.11@sha256:d769e37960821dfdcf096954f6e7ac89f747e116c1bba98e48edd265dfc7deae
+    container_name: passbolt-db
+    restart: unless-stopped
+
+    # The image starts as root by default, changes the owner of the data
+    # directory, and then switches to "mysql". That needs capabilities,
+    # and all of them are dropped below. Start as "mysql" directly. A new
+    # named volume already has the correct owner from the image.
+    user: mysql
+
+    env_file:
+      - settings.env
+
+    volumes:
+      - database_volume:/var/lib/mysql
+
+    # Only the passbolt container shares this network. Caddy is not on
+    # it, so the internet-facing container cannot reach port 3306. The
+    # database publishes no port, not even on loopback.
+    networks:
+      - passbolt-db
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 512m
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  passbolt:
+    # The non-root variant listens on 8080 (HTTP) and 4433 (HTTPS) inside
+    # the container. Caddy uses 4433, so Passbolt sees HTTPS and does not
+    # redirect in a loop. No port is published: the setup link and the
+    # web UI are only reachable through Caddy.
+    image: passbolt/passbolt:5.17.0-1-ce-non-root@sha256:ef8f2cb58b671ff9ad888ce05d0f48d788dd3538bb09b1d4fc07f4c026c1d70b
+    container_name: passbolt
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    env_file:
+      - settings.env
+
+    environment:
+      DATASOURCES_DEFAULT_HOST: "db"
+
+    volumes:
+      - gpg_volume:/etc/passbolt/gpg
+      - jwt_volume:/etc/passbolt/jwt
+
+    command:
+      [
+        "/usr/bin/wait-for.sh",
+        "-t",
+        "0",
+        "db:3306",
+        "--",
+        "/docker-entrypoint.sh",
+      ]
+
+    expose:
+      - "4433"
+
+    # "passbolt" is shared only with Caddy. Other containers on "proxy"
+    # cannot reach Passbolt. It is a normal bridge network (not
+    # "internal"), so Passbolt can still send mail over SMTP.
+    # "passbolt-db" is shared only with the database.
+    networks:
+      - passbolt
+      - passbolt-db
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 1g
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Named volumes, not bind mounts: the two images run as different
+# non-root users, and Docker then owns the permissions. Back up all
+# three volumes (see "Backups" in docs/setup-passbolt.md). Losing
+# gpg_volume loses every stored secret, even with a database backup.
+volumes:
+  database_volume:
+  gpg_volume:
+  jwt_volume:
+
+networks:
+  passbolt:
+    external: true
+  # Compose creates this network. "internal" gives the database no route
+  # to the internet. The fixed name keeps the check in
+  # docs/setup-passbolt.md independent of the project name.
+  passbolt-db:
+    name: passbolt-db
+    internal: true
