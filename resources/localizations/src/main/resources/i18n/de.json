@@ -1,0 +1,107 @@
+{
+  "shell": {
+    "brand": {
+      "homeLabel": "Ehsan Barooni, zur Startseite"
+    },
+    "nav": {
+      "label": "Hauptnavigation",
+      "work": "Projekte",
+      "writing": "Blog",
+      "about": "Über mich",
+      "contact": "Kontakt"
+    },
+    "language": {
+      "switchLabel": "Sprache auf Englisch umstellen"
+    },
+    "theme": {
+      "switchLabel": "Zwischen hellem und dunklem Design wechseln"
+    },
+    "footer": {
+      "copyright": "© 2022 bis {{year}} Ehsan Barooni",
+      "socialLabel": "Soziale Netzwerke",
+      "buildInfo": "Build-Info",
+      "tapsLeft": "Noch {{count}}",
+      "developerMode": "Entwicklermodus aktiviert"
+    }
+  },
+  "home": {
+    "hero": {
+      "portraitAlt": "Porträt von Ehsan Barooni",
+      "eyebrow": "Full-Stack-Softwareentwickler · seit 2021",
+      "titleBefore": "Hi, ich bin Ehsan. Ich entwickle Cross-Platform-Apps, die sich ",
+      "titleAccent": "nativ anfühlen",
+      "titleAfter": ".",
+      "lead": "Seit über {{years}} Jahren entwickle ich Web- und Mobile-Produkte mit Angular, Ionic und Capacitor, von eigenen nativen Plugins bis zu den Cloud-Diensten dahinter.",
+      "ctaWork": "Projekte ansehen",
+      "ctaContact": "Kontakt aufnehmen"
+    },
+    "work": {
+      "label": "Ausgewählte Projekte",
+      "all": "Alle Projekte",
+      "featured": {
+        "description": "Eine Safari-Erweiterung und Mac-App, die zeigt, ob die aktuelle Seite schon als Lesezeichen gespeichert ist, und wo.",
+        "tags": "macOS · Safari · Nur lesend",
+        "link": "Zur App",
+        "iconAlt": "App-Symbol von Bookmark Status",
+        "shotAlt": "Die Seite von Bookmark Status in Safari. Die aktuelle Seite ist im Lesezeichenbaum hervorgehoben.",
+        "bookmarkHint": "Symbolleisten-Schaltfläche von Bookmark Status"
+      },
+      "items": {
+        "calendar": {
+          "description": "Native Kalendereinträge auf iOS und Android erstellen, ändern, löschen und abfragen."
+        },
+        "capawesome": {
+          "description": "Enterprise-Lösungen und Services für Cross-Platform-Apps mit Capacitor."
+        }
+      }
+    },
+    "focus": {
+      "label": "Was ich mache",
+      "frontends": {
+        "title": "Enterprise-Frontends",
+        "body": "Modulare, performante Frontends mit Angular und Ionic, die wartbar bleiben, wenn das Produkt wächst."
+      },
+      "hybrid": {
+        "title": "Hybride Apps und native Plugins",
+        "body": "Cross-Platform-Apps für Mobile und Web mit Capacitor, mit viel Erfahrung in der Entwicklung eigener nativer Plugins."
+      },
+      "fullStack": {
+        "title": "Full-Stack-Umsetzung",
+        "body": "Skalierbare Webanwendungen und Cloud-Architekturen, über Frontend, Backend und DevOps hinweg."
+      }
+    },
+    "experience": {
+      "label": "Werdegang",
+      "engineer": {
+        "period": "2021 bis heute",
+        "title": "Full-Stack-Softwareentwickler",
+        "body": "Frontend, Backend und DevOps in mehreren Webanwendungen."
+      },
+      "graduate": {
+        "period": "2021",
+        "title": "B.Sc. Wirtschaftsingenieurwesen",
+        "body": "Studium mit Schwerpunkt Informationstechnik abgeschlossen."
+      },
+      "intern": {
+        "period": "2020",
+        "title": "Praktikant KI und ML",
+        "body": "Praktikum und Bachelorarbeit im Bereich Künstliche Intelligenz und Machine Learning."
+      },
+      "student": {
+        "period": "2017",
+        "title": "Student",
+        "body": "Beginn des Studiums Wirtschaftsingenieurwesen."
+      }
+    },
+    "writing": {
+      "label": "Blog",
+      "all": "Alle Artikel",
+      "readTime": "{{minutes}} Min. Lesezeit"
+    },
+    "contact": {
+      "title": "Zusammenarbeiten oder einfach Hallo sagen?",
+      "body": "Ich helfe Teams und Einzelpersonen, aus Ideen funktionierende Produkte zu machen. Deine Nachricht landet direkt bei mir, ohne Formular-Team und ohne Ticketnummer.",
+      "cta": "Schreib mir"
+    }
+  }
+}

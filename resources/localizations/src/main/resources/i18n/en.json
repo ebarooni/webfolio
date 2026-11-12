@@ -1,0 +1,107 @@
+{
+  "shell": {
+    "brand": {
+      "homeLabel": "Ehsan Barooni, go to the home screen"
+    },
+    "nav": {
+      "label": "Primary",
+      "work": "Work",
+      "writing": "Writing",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "language": {
+      "switchLabel": "Switch language to German"
+    },
+    "theme": {
+      "switchLabel": "Switch between light and dark theme"
+    },
+    "footer": {
+      "copyright": "© 2022 to {{year}} Ehsan Barooni",
+      "socialLabel": "Social links",
+      "buildInfo": "build info",
+      "tapsLeft": "{{count}} more to go",
+      "developerMode": "Developer mode enabled"
+    }
+  },
+  "home": {
+    "hero": {
+      "portraitAlt": "Portrait of Ehsan Barooni",
+      "eyebrow": "Full stack software engineer · since 2021",
+      "titleBefore": "Hi, I am Ehsan. I build cross-platform apps that ",
+      "titleAccent": "feel native",
+      "titleAfter": ".",
+      "lead": "For {{years}}+ years I have built web and mobile products with Angular, Ionic and Capacitor, from custom native plugins to the cloud services behind them.",
+      "ctaWork": "View my work",
+      "ctaContact": "Get in touch"
+    },
+    "work": {
+      "label": "Selected work",
+      "all": "All projects",
+      "featured": {
+        "description": "A Safari extension and Mac app that shows whether the page you are on is already bookmarked, and where.",
+        "tags": "macOS · Safari · Read-only",
+        "link": "View the app",
+        "iconAlt": "Bookmark Status app icon",
+        "shotAlt": "The Bookmark Status page in Safari, with the current page highlighted in the bookmark tree.",
+        "bookmarkHint": "Bookmark Status toolbar button"
+      },
+      "items": {
+        "calendar": {
+          "description": "Create, update, delete and query native calendar events on iOS and Android."
+        },
+        "capawesome": {
+          "description": "Enterprise-grade solutions and services for cross-platform apps built with Capacitor."
+        }
+      }
+    },
+    "focus": {
+      "label": "What I do",
+      "frontends": {
+        "title": "Enterprise frontends",
+        "body": "Modular, high performance frontends with Angular and Ionic, built to stay maintainable as the product grows."
+      },
+      "hybrid": {
+        "title": "Hybrid apps and native plugins",
+        "body": "Cross-platform mobile and web apps with Capacitor, with deep experience in custom native plugin development."
+      },
+      "fullStack": {
+        "title": "Full stack delivery",
+        "body": "Scalable web applications and cloud based architectures, across frontend, backend and DevOps."
+      }
+    },
+    "experience": {
+      "label": "Experience",
+      "engineer": {
+        "period": "2021 to today",
+        "title": "Full Stack Software Engineer",
+        "body": "Frontend, backend and DevOps across multiple web applications."
+      },
+      "graduate": {
+        "period": "2021",
+        "title": "B.Sc. Industrial Engineering",
+        "body": "Completed studies with a focus on Information Engineering."
+      },
+      "intern": {
+        "period": "2020",
+        "title": "AI and ML Intern",
+        "body": "Internship and Bachelor thesis in Artificial Intelligence and Machine Learning."
+      },
+      "student": {
+        "period": "2017",
+        "title": "Student",
+        "body": "Began studies in Industrial Engineering."
+      }
+    },
+    "writing": {
+      "label": "Writing",
+      "all": "All posts",
+      "readTime": "{{minutes}} min read"
+    },
+    "contact": {
+      "title": "Want to work together, or just say hello?",
+      "body": "I help teams and individuals turn ideas into working products. Your message comes straight to me, no forms team and no ticket number.",
+      "cta": "Write to me"
+    }
+  }
+}
