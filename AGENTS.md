@@ -32,7 +32,8 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 ## Where things live
 
 - `backend/src/main/java/dev/barooni/`: `contactform` (REST API), `telegram` (REST client), `openapi` and `mcp` (MCP server), `fallback` (SPA routing)
-- `frontend/ui/src/app/`: one folder per screen, and every screen is wrapped by `app-shell`. Routes are in `app.routes.ts`, with the path enum in `config/route.ts`. App state is in `store/app` (NgRx ComponentStore).
+- `frontend/ui/src/app/`: one folder per screen, and every screen is wrapped by `app-shell`. Screen text comes from Transloco (`*transloco="let t; prefix: '...'"`); tests import `localizationTestingModule()` from `src/testing`. Only the shell and the home screen are translated so far. Routes are in `app.routes.ts`, with the path enum in `config/route.ts`. App state is in `store/app` (NgRx ComponentStore).
+- `resources/localizations/src/main/resources/i18n/`: one JSON file per language (`en.json`, `de.json`). This Maven module owns all translated text. The frontend imports the files with the `@localizations/*` alias and Transloco loads them. `mvn -pl resources/localizations test` fails when a language does not have the same keys as English. To add a language, add its file there and its code to `frontend/ui/src/app/config/languages.ts`.
 - Root `compose.yaml` and `Caddyfile` are for local container runs. `deploy/{caddy,webfolio,wg-easy,bitwarden,passbolt,uptime-kuma}` holds the production files copied to `/opt/docker` on the VPS (see [docs/](docs)).
 - The Angular coding and test conventions are in `.github/prompts/*.prompt.md`. Follow them and don't restate them.
 
