@@ -1,85 +1,44 @@
-import { DOCUMENT, NgClass } from '@angular/common';
-import {
-  Component,
-  DestroyRef,
-  ElementRef,
-  inject,
-  input,
-  output,
-  signal,
-  viewChild,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { filter, fromEvent } from 'rxjs';
+import { TranslocoDirective } from '@jsverse/transloco';
 
+import { Language } from '../../config/languages';
 import { Route } from '../../config/route';
-import { Theme, themesArray } from '../../config/themes-array';
-import { DataTheme } from '../data-theme/data-theme';
+import { Theme } from '../../config/themes-array';
+import { Brand } from '../brand/brand';
+import { LanguageSwitch } from '../language-switch/language-switch';
+import { ThemeSwitch } from '../theme-switch/theme-switch';
 
 type NavItem = Readonly<{
-  label: string;
-  route: Route;
-  exact?: boolean;
+  labelKey: string;
+  link: string;
+  fragment?: string;
 }>;
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, DataTheme, NgClass],
+  imports: [
+    Brand,
+    LanguageSwitch,
+    NgTemplateOutlet,
+    RouterLink,
+    RouterLinkActive,
+    ThemeSwitch,
+    TranslocoDirective,
+  ],
   templateUrl: './navbar.html',
 })
 export class Navbar {
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly document = inject(DOCUMENT);
-
   readonly selectedTheme = input.required<Theme>();
-  readonly version = input<string | undefined>(undefined);
+  readonly selectedLanguage = input.required<Language>();
   readonly themeChanged = output<Theme>();
+  readonly languageChanged = output<Language>();
 
-  readonly themeDropdown =
-    viewChild<ElementRef<HTMLDivElement>>('themeDropdown');
-
-  readonly Route = Route;
-  readonly themes = themesArray;
   readonly navItems: readonly NavItem[] = [
-    { label: 'Home', route: Route.HOME, exact: true },
-    { label: 'Blog', route: Route.BLOG },
-    { label: 'Projects', route: Route.PROJECTS },
-    { label: 'Contact', route: Route.CONTACT },
-  ] as const;
-
-  readonly isThemeMenuOpen = signal(false);
-
-  constructor() {
-    fromEvent<PointerEvent>(this.document, 'pointerdown')
-      .pipe(
-        filter(() => this.isThemeMenuOpen()),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((event) => {
-        const dropdownElement = this.themeDropdown()?.nativeElement;
-        const targetNode = event.target as Node | null;
-
-        if (!dropdownElement || !targetNode) {
-          return;
-        }
-
-        if (!dropdownElement.contains(targetNode)) {
-          this.closeThemeMenu();
-        }
-      });
-  }
-
-  toggleThemeMenu(): void {
-    this.isThemeMenuOpen.update((isOpen) => !isOpen);
-  }
-
-  closeThemeMenu(): void {
-    this.isThemeMenuOpen.set(false);
-  }
-
-  selectTheme(theme: Theme): void {
-    this.themeChanged.emit(theme);
-    this.closeThemeMenu();
-  }
+    { labelKey: 'work', link: `/${Route.PROJECTS}` },
+    { labelKey: 'writing', link: `/${Route.BLOG}` },
+    { labelKey: 'about', link: `/${Route.HOME}`, fragment: 'experience' },
+    { labelKey: 'contact', link: `/${Route.CONTACT}` },
+  ];
 }

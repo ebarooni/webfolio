@@ -1,0 +1,88 @@
+<section
+  *transloco="let t; prefix: 'home.work'"
+  class="page-container flex flex-col gap-8 pb-24 lg:pb-32"
+>
+  <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+    <h2 class="meta-label font-medium">{{ t('label') }}</h2>
+
+    <a
+      class="focus-ring inline-flex min-h-11 items-center gap-1.5 rounded-lg text-[0.9375rem] font-medium text-ink hover:text-primary"
+      [routerLink]="projectsLink"
+    >
+      {{ t('all') }}
+      <app-arrow-icon />
+    </a>
+  </header>
+
+  <a
+    class="focus-ring grid items-end gap-x-12 gap-y-8 overflow-hidden rounded-3xl bg-base-200 px-6 pt-6 md:grid-cols-2 md:px-12 md:pt-12"
+    [routerLink]="featured.internalPath"
+  >
+    <article class="flex flex-col items-start gap-4 pb-6 md:pb-12">
+      <img
+        class="size-14 rounded-[0.8125rem]"
+        width="56"
+        height="56"
+        [ngSrc]="appIconSource"
+        [alt]="t('featured.iconAlt')"
+      />
+
+      <h3
+        class="mt-2 text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.1] font-semibold tracking-[-0.03em] text-ink"
+      >
+        {{ featured.title }}
+      </h3>
+
+      <p class="max-w-[40ch]">{{ t('featured.description') }}</p>
+
+      <p class="meta-label flex items-center gap-2">
+        <img
+          class="size-4"
+          width="16"
+          height="16"
+          [ngSrc]="toolbarIconSource()"
+          [alt]="t('featured.bookmarkHint')"
+        />
+        {{ t('featured.tags') }}
+      </p>
+
+      <span
+        class="mt-2 inline-flex items-center gap-2 text-[0.9375rem] font-semibold text-primary"
+      >
+        {{ t('featured.link') }}
+        <app-arrow-icon />
+      </span>
+    </article>
+
+    <img
+      class="w-full rounded-t-[0.875rem] border border-b-0 border-base-300 shadow-[0_24px_48px_-24px_rgb(11_13_18/0.25)]"
+      width="1280"
+      height="916"
+      [ngSrc]="screenshotSource()"
+      [alt]="t('featured.shotAlt')"
+    />
+  </a>
+
+  <ul>
+    @for (row of rows; track row.translationKey) {
+    <li class="border-t border-base-300 last:border-b">
+      <a
+        class="group focus-ring flex flex-wrap items-baseline gap-x-8 gap-y-2 py-7 transition-[padding] hover:pl-3"
+        [href]="row.href"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <h3
+          class="flex-[1_1_16rem] text-[1.375rem] font-semibold tracking-tight text-ink group-hover:text-primary"
+        >
+          {{ row.title }}
+        </h3>
+        <p class="flex-[2_1_20rem]">
+          {{ t('items.' + row.translationKey + '.description') }}
+        </p>
+        <p class="meta-label">{{ row.tags }}</p>
+      </a>
+    </li>
+    }
+  </ul>
+</section>

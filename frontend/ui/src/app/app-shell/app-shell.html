@@ -1,22 +1,18 @@
 <header class="fixed top-0 z-10 w-full">
-  <div class="sm:hidden">
-    <app-compact-navbar
-      [selectedTheme]="theme()"
-      [version]="version"
-      (themeChanged)="themeChanged($event)"
-    />
-  </div>
-
-  <div class="hidden sm:block">
-    <app-navbar
-      [selectedTheme]="theme()"
-      [version]="version"
-      (themeChanged)="themeChanged($event)"
-    />
-  </div>
+  <app-navbar
+    [selectedTheme]="theme()"
+    [selectedLanguage]="language()"
+    (themeChanged)="themeChanged($event)"
+    (languageChanged)="languageChanged($event)"
+  />
 </header>
 
 <main class="flex flex-1 flex-col">
   <router-outlet />
-  <app-footer [bgClass]="uiConfig().footerBgClass" />
+  <app-footer
+    [bgClass]="uiConfig().footerBgClass"
+    [version]="version"
+    [developerMode]="developerMode()"
+    (developerModeEnabled)="developerModeEnabled()"
+  />
 </main>

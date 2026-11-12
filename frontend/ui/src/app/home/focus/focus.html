@@ -1,0 +1,19 @@
+<section
+  *transloco="let t; prefix: 'home.focus'"
+  class="page-container flex flex-col gap-8 pb-24 lg:pb-32"
+>
+  <h2 class="meta-label font-medium">{{ t('label') }}</h2>
+
+  <ul class="grid gap-x-12 gap-y-10 md:grid-cols-3">
+    @for (areaKey of areaKeys; track areaKey) {
+    <li class="flex flex-col gap-3 border-t-2 border-ink pt-6">
+      <h3
+        class="text-[1.375rem] leading-tight font-semibold tracking-tight text-ink"
+      >
+        {{ t(areaKey + '.title') }}
+      </h3>
+      <p>{{ t(areaKey + '.body') }}</p>
+    </li>
+    }
+  </ul>
+</section>

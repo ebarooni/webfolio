@@ -8,11 +8,13 @@ import {
 } from '@angular/router';
 import { distinctUntilChanged, filter, map, merge, of } from 'rxjs';
 
+import { TranslocoService } from '@jsverse/transloco';
+
 import { BUILD_INFO } from '../../environments/build-info';
+import { DEFAULT_LANGUAGE, Language } from '../config/languages';
 import { Route } from '../config/route';
 import { Theme } from '../config/themes-array';
 import { AppStore } from '../store/app/app.store';
-import { CompactNavbar } from './compact-navbar/compact-navbar';
 import { Footer } from './footer/footer';
 import { Navbar } from './navbar/navbar';
 
@@ -28,7 +30,7 @@ const DEFAULT_UI_CONFIG: UiConfig = {
 
 @Component({
   selector: 'app-shell',
-  imports: [Navbar, CompactNavbar, Footer, RouterOutlet],
+  imports: [Navbar, Footer, RouterOutlet],
   templateUrl: './app-shell.html',
   host: {
     class: 'flex min-h-screen w-full flex-col bg-base-100',
@@ -38,11 +40,20 @@ export class AppShell {
   private readonly appStore = inject(AppStore);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
+  private readonly translocoService = inject(TranslocoService);
 
   readonly version = `v${BUILD_INFO.version}`;
 
   readonly theme = toSignal(this.appStore.selectTheme$, {
     initialValue: 'light',
+  });
+
+  readonly language = toSignal(this.appStore.selectLanguage$, {
+    initialValue: DEFAULT_LANGUAGE,
+  });
+
+  readonly developerMode = toSignal(this.appStore.selectDeveloperMode$, {
+    initialValue: false,
   });
 
   readonly uiConfig = toSignal(
@@ -70,6 +81,22 @@ export class AppShell {
     effect(() => {
       this.document.documentElement.setAttribute('data-theme', this.theme());
     });
+
+    effect(() => {
+      const language = this.language();
+
+      this.document.documentElement.setAttribute('lang', language);
+      this.translocoService.setActiveLang(language);
+    });
+  }
+
+  languageChanged(language: Language): void {
+    this.appStore.updateLanguage(language);
+  }
+
+  developerModeEnabled(): void {
+    this.appStore.enableDeveloperMode();
+    void this.router.navigate([Route.BUILD_INFO]);
   }
 
   themeChanged(theme: Theme): void {

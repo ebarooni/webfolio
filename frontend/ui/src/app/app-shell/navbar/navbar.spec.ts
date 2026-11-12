@@ -1,29 +1,39 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { describe, beforeEach, it, expect, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { localizationTestingModule } from '../../../testing/localization-testing';
+import type { Language } from '../../config/languages';
+import type { Theme } from '../../config/themes-array';
+import { LanguageSwitch } from '../language-switch/language-switch';
+import { ThemeSwitch } from '../theme-switch/theme-switch';
 import { Navbar } from './navbar';
-import { Theme } from '../../config/themes-array';
 
 describe('Navbar', () => {
   let fixture: ComponentFixture<Navbar>;
   let component: Navbar;
 
-  const selectedTheme: Theme = 'light';
+  function linkTexts(navIndex: number): string[] {
+    const nav = fixture.debugElement.queryAll(By.css('nav'))[navIndex];
+
+    return nav
+      .queryAll(By.css('a'))
+      .map((link) =>
+        (link.nativeElement as HTMLAnchorElement).textContent.trim(),
+      );
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Navbar],
+      imports: [Navbar, localizationTestingModule()],
       providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
     component = fixture.componentInstance;
-
-    fixture.componentRef.setInput('selectedTheme', selectedTheme);
-    fixture.componentRef.setInput('version', '1.0.0');
-
+    fixture.componentRef.setInput('selectedTheme', 'light');
+    fixture.componentRef.setInput('selectedLanguage', 'en');
     fixture.detectChanges();
   });
 
@@ -31,63 +41,52 @@ describe('Navbar', () => {
     expect(component).toBeTruthy();
   });
 
-  it('renders navigation items', () => {
-    const links = fixture.debugElement.queryAll(By.css('.join a.btn'));
-    expect(links.length).toBeGreaterThan(0);
+  it.each([
+    { name: 'top bar', navIndex: 0 },
+    { name: 'bottom bar', navIndex: 1 },
+  ])('should render every link in the $name', ({ navIndex }) => {
+    expect(linkTexts(navIndex)).toEqual([
+      'Work',
+      'Writing',
+      'About',
+      'Contact',
+    ]);
   });
 
-  it('renders version when provided', () => {
-    const links = fixture.debugElement.queryAll(By.css('.join a.btn'));
-    const versionLink = links.find((link) => {
-      const el = link.nativeElement as HTMLAnchorElement;
-      return el.textContent?.includes('1.0.0');
-    });
+  it('should link the about entry to the experience section', () => {
+    const aboutLink = fixture.debugElement
+      .queryAll(By.css('nav a'))
+      .map((link) => link.nativeElement as HTMLAnchorElement)
+      .find((link) => link.textContent.trim() === 'About');
 
-    expect(versionLink).toBeDefined();
+    expect(aboutLink?.getAttribute('href')).toBe('/#experience');
   });
 
-  it('toggles theme menu when clicking theme button', () => {
-    const buttonDe = fixture.debugElement.query(By.css('button'));
-    const button = buttonDe.nativeElement as HTMLButtonElement;
+  it('should pass the inputs to both switches', () => {
+    const themeSwitch = fixture.debugElement.query(By.directive(ThemeSwitch))
+      .componentInstance as ThemeSwitch;
+    const languageSwitch = fixture.debugElement.query(
+      By.directive(LanguageSwitch),
+    ).componentInstance as LanguageSwitch;
 
-    expect(component.isThemeMenuOpen()).toBe(false);
-
-    button.click();
-    fixture.detectChanges();
-
-    expect(component.isThemeMenuOpen()).toBe(true);
-
-    button.click();
-    fixture.detectChanges();
-
-    expect(component.isThemeMenuOpen()).toBe(false);
+    expect(themeSwitch.theme()).toBe('light');
+    expect(languageSwitch.language()).toBe('en');
   });
 
-  it('closes theme menu via closeThemeMenu', () => {
-    component.isThemeMenuOpen.set(true);
-    component.closeThemeMenu();
-    expect(component.isThemeMenuOpen()).toBe(false);
-  });
+  it('should forward the events of both switches', () => {
+    const themeChanged = vi.fn<(theme: Theme) => void>();
+    const languageChanged = vi.fn<(language: Language) => void>();
+    component.themeChanged.subscribe(themeChanged);
+    component.languageChanged.subscribe(languageChanged);
 
-  it('emits themeChanged when selecting a theme', () => {
-    const spy = vi.fn();
-    component.themeChanged.subscribe(spy);
+    fixture.debugElement
+      .query(By.css('app-theme-switch button'))
+      .triggerEventHandler('click');
+    fixture.debugElement
+      .query(By.css('app-language-switch button'))
+      .triggerEventHandler('click');
 
-    const theme: Theme = component.themes[0];
-
-    component.selectTheme(theme);
-
-    expect(spy).toHaveBeenCalledWith(theme);
-    expect(component.isThemeMenuOpen()).toBe(false);
-  });
-
-  it('opens dropdown and renders theme options', () => {
-    component.isThemeMenuOpen.set(true);
-    fixture.detectChanges();
-
-    const buttons = fixture.debugElement.queryAll(
-      By.css('[role="menuitemradio"]'),
-    );
-    expect(buttons.length).toBe(component.themes.length);
+    expect(themeChanged).toHaveBeenCalledExactlyOnceWith('dark');
+    expect(languageChanged).toHaveBeenCalledExactlyOnceWith('de');
   });
 });

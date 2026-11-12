@@ -1,0 +1,51 @@
+<section
+  *transloco="let t; prefix: 'home.hero'"
+  class="page-container flex flex-wrap items-center gap-x-14 gap-y-10 pt-28 pb-16 lg:pt-44 lg:pb-32"
+>
+  <div class="flex min-w-0 flex-[1_1_32rem] flex-col items-start gap-7">
+    <div class="flex flex-wrap items-center gap-x-3.5 gap-y-3">
+      <app-portrait
+        class="size-13 rounded-full lg:hidden"
+        [alt]="t('portraitAlt')"
+      />
+      <p class="meta-label">{{ t('eyebrow') }}</p>
+    </div>
+
+    <h1
+      class="max-w-[16ch] text-display leading-[1.04] font-semibold tracking-[-0.035em] text-balance text-ink hyphens-auto"
+    >
+      {{ t('titleBefore') }}<span
+        class="text-primary"
+        [style.font-family]="accentFontFamily"
+        >{{ t('titleAccent') }}</span
+      >{{ t('titleAfter') }}
+    </h1>
+
+    <p class="max-w-[56ch] text-lead leading-[1.55] text-pretty">
+      {{ t('lead', { years: yearsOfExperience }) }}
+    </p>
+
+    <nav class="mt-2 flex flex-wrap items-center gap-x-7 gap-y-3">
+      <a
+        class="focus-ring inline-flex min-h-13 items-center gap-2.5 rounded-[0.875rem] bg-ink px-6 font-semibold text-base-100 hover:opacity-85"
+        [routerLink]="projectsLink"
+      >
+        {{ t('ctaWork') }}
+        <app-arrow-icon />
+      </a>
+
+      <a
+        class="focus-ring inline-flex min-h-11 items-center rounded-lg font-semibold text-ink underline decoration-base-300 decoration-2 underline-offset-[6px] hover:text-primary"
+        [routerLink]="contactLink"
+      >
+        {{ t('ctaContact') }}
+      </a>
+    </nav>
+  </div>
+
+  <app-portrait
+    class="hidden aspect-[4/5] w-75 rounded-[1.75rem] lg:block"
+    [alt]="t('portraitAlt')"
+    isPriority
+  />
+</section>

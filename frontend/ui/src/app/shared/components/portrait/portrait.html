@@ -1,0 +1,18 @@
+@if (hasFailed()) {
+<span
+  role="img"
+  class="grid size-full place-items-center font-semibold text-muted"
+  [attr.aria-label]="alt()"
+>
+  EB
+</span>
+} @else {
+<img
+  ngSrc="profile.webp"
+  fill
+  class="object-cover"
+  [alt]="alt()"
+  [priority]="isPriority()"
+  (error)="hasFailed.set(true)"
+/>
+}

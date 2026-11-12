@@ -1,65 +1,36 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { describe, expect, it } from 'vitest';
 
+import { localizationTestingModule } from '../../testing/localization-testing';
+import { AppStore } from '../store/app/app.store';
 import { Home } from './home';
-import { About } from './about/about';
-import { InfoCard } from './info-card/info-card';
-import { Timeline } from './timeline/timeline';
-import { ScrollIndicator } from './scroll-indicator/scroll-indicator';
-
-class ResizeObserverMock {
-  observe(): void {
-    void 0;
-  }
-  disconnect(): void {
-    void 0;
-  }
-}
 
 describe('Home', () => {
-  let fixture: ComponentFixture<Home>;
-  let component: Home;
-
-  beforeAll(() => {
-    (
-      globalThis as typeof globalThis & {
-        ResizeObserver: typeof ResizeObserver;
-      }
-    ).ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
-  });
-
-  beforeEach(async () => {
+  it('should render the sections in reading order', async () => {
     await TestBed.configureTestingModule({
-      imports: [Home, About, InfoCard, Timeline, ScrollIndicator],
-      providers: [provideRouter([])],
+      imports: [Home, localizationTestingModule()],
+      providers: [
+        provideRouter([]),
+        { provide: AppStore, useValue: { selectTheme$: of('light') } },
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Home);
-    component = fixture.componentInstance;
+    const fixture = TestBed.createComponent(Home);
     fixture.detectChanges();
-  });
 
-  it('creates the component', () => {
-    expect(component).toBeTruthy();
-  });
+    const sections = fixture.debugElement.children.map(
+      (section) => (section.nativeElement as HTMLElement).localName,
+    );
 
-  it('renders the about component', () => {
-    const about = fixture.debugElement.query(By.directive(About));
-    expect(about).not.toBeNull();
-  });
-
-  it('renders info cards for highlights', () => {
-    const cards = fixture.debugElement.queryAll(By.directive(InfoCard));
-    expect(cards.length).toBe(component.highlights.length);
-  });
-
-  it('renders the timeline component', () => {
-    const timeline = fixture.debugElement.query(By.directive(Timeline));
-    expect(timeline).not.toBeNull();
-  });
-
-  it('computes years of experience', () => {
-    expect(component.yearsOfExperience).toBeGreaterThanOrEqual(0);
+    expect(sections).toEqual([
+      'app-home-hero',
+      'app-selected-work',
+      'app-focus',
+      'app-experience',
+      'app-latest-posts',
+      'app-contact-panel',
+    ]);
   });
 });

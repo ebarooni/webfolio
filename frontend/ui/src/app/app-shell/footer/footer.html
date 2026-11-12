@@ -1,32 +1,67 @@
 <footer
-  [class]="
-    'footer footer-horizontal footer-center gap gap-y-5 p-8 text-base-content ' +
-    bgClass()
-  "
+  *transloco="let t; prefix: 'shell.footer'"
+  class="pb-24 text-sm text-muted lg:pb-0"
+  [ngClass]="bgClass()"
 >
-  <nav aria-label="Social links">
-    <ul class="grid grid-flow-col gap-5">
-      @for (link of links(); track trackById($index, link)) {
-      <li class="tooltip" [attr.data-tip]="link.label">
-        <a
-          class="link rounded focus:outline-none focus-visible:ring focus-visible:ring-base-content/30"
-          [href]="link.href"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="link.label"
-          [attr.title]="link.label"
-        >
-          @switch (link.icon) { @case ('github') { <app-github /> } @case
-          ('gitlab') { <app-gitlab /> } @case ('stackoverflow') {
-          <app-stackoverflow /> } @case ('linkedin') { <app-linkedin /> }
-          @default { <span class="font-medium">{{ link.label }}</span> } }
-        </a>
-      </li>
-      }
-    </ul>
-  </nav>
+  <div
+    class="page-container flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-10"
+  >
+    <p>{{ t('copyright', { year: currentYear }) }}</p>
 
-  <aside>
-    <p>&copy; 2022–{{ currentYear }} Ehsan Barooni. All rights reserved.</p>
-  </aside>
+    <nav [attr.aria-label]="t('socialLabel')">
+      <ul class="flex gap-1">
+        @for (link of links; track link.id) {
+        <li>
+          <a
+            class="focus-ring grid size-11 place-items-center rounded-xl opacity-70 grayscale transition hover:bg-base-300 hover:opacity-100 hover:grayscale-0 [[data-theme=dark]_&]:invert [[data-theme=dark]_&]:hover:grayscale"
+            [href]="link.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="link.label"
+            [attr.title]="link.label"
+          >
+            @switch (link.id) { @case ('github') {
+            <app-github />
+            } @case ('gitlab') {
+            <app-gitlab />
+            } @case ('stackoverflow') {
+            <app-stackoverflow />
+            } @case ('linkedin') {
+            <app-linkedin />
+            } }
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+
+    @if (version()) {
+    <div class="relative">
+      @if (developerMode()) {
+      <a
+        class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
+        [routerLink]="buildInfoLink"
+      >
+        {{ version() }} · {{ t('buildInfo') }}
+      </a>
+      } @else {
+      <button
+        type="button"
+        class="meta-label focus-ring min-h-11 cursor-pointer rounded-lg hover:text-ink"
+        (click)="tapVersion()"
+      >
+        {{ version() }}
+      </button>
+      } @if (versionToast(); as toast) {
+      <p
+        role="status"
+        class="absolute bottom-full left-0 rounded-lg bg-ink px-3 py-2 text-xs whitespace-nowrap text-base-100 lg:right-0 lg:left-auto"
+      >
+        @if (toast.kind === 'tapsLeft') { {{ t('tapsLeft', { count: toast.count
+        }) }} } @else { {{ t('developerMode') }} }
+      </p>
+      }
+    </div>
+    }
+  </div>
 </footer>

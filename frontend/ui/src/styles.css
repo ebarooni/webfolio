@@ -8,6 +8,47 @@
   --text-sub-headline: clamp(1rem, 1.75vw, 1.5rem);
   --text-subtitle: clamp(1.25rem, 2vw, 1.75rem);
   --text-title: clamp(1.5rem, 3vw, 2.25rem);
+  --text-display: clamp(2.375rem, 6.2vw, 4.5rem);
+  --text-panel-title: clamp(2rem, 5vw, 3.5rem);
+  --text-lead: clamp(1.0625rem, 1.9vw, 1.25rem);
+  --text-meta: 0.8125rem;
+}
+
+/* Ink is for headlines. Muted is for labels. Both change with the theme. */
+@theme inline {
+  --color-ink: var(--webfolio-ink);
+  --color-muted: var(--webfolio-muted);
+}
+
+:root {
+  --webfolio-ink: #0b0d12;
+  --webfolio-muted: #5e6573;
+}
+
+[data-theme="dark"] {
+  --webfolio-ink: #f3f4f6;
+  --webfolio-muted: #9299a6;
+}
+
+@utility page-container {
+  width: 100%;
+  max-width: 70rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+}
+
+@utility meta-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
 }
 
 @plugin "daisyui";
@@ -18,18 +59,18 @@
   /* DaisyUI 5.7 copies the built-in color scheme when this line is absent. */
   color-scheme: normal;
 
-  --color-primary: #93c5fd;
-  --color-primary-content: #121212;
+  --color-primary: #9db4ff;
+  --color-primary-content: #0b0c0f;
   --color-secondary: #455a64;
   --color-secondary-content: #fff;
   --color-accent: #ff8a65;
   --color-accent-content: #121212;
   --color-neutral: #1c1c28;
   --color-neutral-content: #e4e4e7;
-  --color-base-100: #121212;
-  --color-base-200: #1a1b26;
-  --color-base-300: #282a36;
-  --color-base-content: #d1d5db;
+  --color-base-100: #0b0c0f;
+  --color-base-200: #14161b;
+  --color-base-300: #23262e;
+  --color-base-content: #c2c7d0;
   --color-info: #42a5f5;
   --color-info-content: #121212;
   --color-success: #388e3c;
@@ -52,7 +93,7 @@
   /* DaisyUI 5.7 copies the built-in color scheme when this line is absent. */
   color-scheme: normal;
 
-  --color-primary: #4a5df9;
+  --color-primary: #3d50f2;
   --color-primary-content: #fff;
   --color-secondary: #5b7290;
   --color-secondary-content: #fff;
@@ -61,9 +102,9 @@
   --color-neutral: #f9fafb;
   --color-neutral-content: #2d3748;
   --color-base-100: #fff;
-  --color-base-200: #f1f5f9;
-  --color-base-300: #e2e8f0;
-  --color-base-content: #374151;
+  --color-base-200: #f5f6f8;
+  --color-base-300: #e4e7ec;
+  --color-base-content: #3a404c;
   --color-info: #1e88e5;
   --color-info-content: #fff;
   --color-success: #43a047;

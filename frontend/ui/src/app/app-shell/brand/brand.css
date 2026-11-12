@@ -1,0 +1,45 @@
+.monogram {
+  display: block;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  perspective: 200px;
+}
+
+.monogram-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.5, 1.4, 0.5, 1);
+}
+
+.monogram-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backface-visibility: hidden;
+}
+
+.monogram-back {
+  border-radius: 50%;
+  transform: rotateY(180deg);
+}
+
+/* The monogram turns over and shows the portrait. */
+.brand:hover .monogram-card,
+.brand:focus-visible .monogram-card {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .monogram-card {
+    transition: none;
+  }
+}

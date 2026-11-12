@@ -1,0 +1,42 @@
+<section
+  *transloco="let t; prefix: 'home.writing'"
+  class="page-container flex flex-col gap-8 pb-24 lg:pb-32"
+>
+  <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+    <h2 class="meta-label font-medium">{{ t('label') }}</h2>
+
+    <a
+      class="focus-ring inline-flex min-h-11 items-center gap-1.5 rounded-lg text-[0.9375rem] font-medium text-ink hover:text-primary"
+      [routerLink]="blogLink"
+    >
+      {{ t('all') }}
+      <app-arrow-icon />
+    </a>
+  </header>
+
+  <ul>
+    @for (post of posts; track post.id) {
+    <li class="border-t border-base-300 last:border-b">
+      <a
+        class="group focus-ring flex flex-wrap items-baseline gap-x-8 gap-y-1.5 py-6 transition-[padding] hover:pl-3"
+        [routerLink]="blogLink"
+      >
+        <time
+          class="meta-label basis-35"
+          [attr.datetime]="post.date.toISOString()"
+        >
+          {{ dateFormatter().format(post.date) }}
+        </time>
+        <h3
+          class="flex-[3_1_20rem] text-[1.375rem] font-semibold tracking-tight text-ink group-hover:text-primary"
+        >
+          {{ post.title }}
+        </h3>
+        <p class="meta-label">
+          {{ t('readTime', { minutes: post.readTime }) }}
+        </p>
+      </a>
+    </li>
+    }
+  </ul>
+</section>

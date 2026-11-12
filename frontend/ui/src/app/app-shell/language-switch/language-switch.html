@@ -1,0 +1,54 @@
+<button
+  *transloco="let t; prefix: 'shell.language'"
+  type="button"
+  class="language-switch focus-ring"
+  [class.is-german]="isGerman()"
+  [attr.aria-label]="t('switchLabel')"
+  (click)="toggle()"
+  (pointerdown)="startHold()"
+  (pointerup)="cancelHold()"
+  (pointerleave)="cancelHold()"
+>
+  <span class="flag" aria-hidden="true">
+    <svg class="european-stars" width="34" height="34" viewBox="-17 -17 34 34">
+      @for (star of europeanStars; track star.transform) {
+      <path
+        [attr.transform]="star.transform"
+        d="M0-1.7.4-.55 1.617-.525.647.21.999 1.375 0 .68-.999 1.375-.647.21-1.617-.525-.4-.55Z"
+      />
+      }
+    </svg>
+
+    <span class="flag-window">
+      <span class="roll">
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <rect width="20" height="20" fill="#012169" />
+          <path d="M0 0 20 20M20 0 0 20" stroke="#fff" stroke-width="4" />
+          <path d="M0 0 20 20M20 0 0 20" stroke="#c8102e" stroke-width="1.4" />
+          <path d="M10 0V20M0 10H20" stroke="#fff" stroke-width="6.4" />
+          <path d="M10 0V20M0 10H20" stroke="#c8102e" stroke-width="3.6" />
+        </svg>
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <rect width="20" height="7" fill="#000" />
+          <rect y="6.67" width="20" height="7" fill="#d00" />
+          <rect y="13.33" width="20" height="6.67" fill="#ffce00" />
+        </svg>
+      </span>
+    </span>
+  </span>
+
+  @if (extraGreeting(); as greeting) {
+  <span class="greeting" aria-hidden="true">{{ greeting }}</span>
+  } @else {
+  <span class="word" aria-hidden="true">
+    <span>H</span>
+    <span class="letter-window">
+      <span class="roll">
+        <span>e</span>
+        <span>a</span>
+      </span>
+    </span>
+    <span>llo</span>
+  </span>
+  }
+</button>

@@ -9,8 +9,10 @@ import {
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
+import { greetCuriousVisitors } from './easter-eggs/console-greeting';
 import { fixedHeaderScrollOffset } from './fixed-header-scroll-offset';
 import { initializeApp } from './initialize-app';
+import { provideLocalization } from './localization/provide-localization';
 
 function registerFixedHeaderScrollOffset(): void {
   const documentRef = inject(DOCUMENT);
@@ -23,8 +25,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(initializeApp),
     provideAppInitializer(registerFixedHeaderScrollOffset),
+    provideAppInitializer(greetCuriousVisitors),
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(),
+    provideLocalization(),
     provideRouter(
       routes,
       withInMemoryScrolling({

@@ -1,15 +1,25 @@
 import { ComponentStore } from '@ngrx/component-store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import {
+  DEFAULT_LANGUAGE,
+  detectLanguage,
+  isLanguage,
+  Language,
+} from '../../config/languages';
 import { Theme } from '../../config/themes-array';
 
 export interface IState {
   theme: Theme;
   hasGeoAccess: boolean;
+  language: Language;
+  developerMode: boolean;
 }
 
 const INITIAL_STATE: IState = {
+  developerMode: false,
   hasGeoAccess: false,
+  language: DEFAULT_LANGUAGE,
   theme: 'light',
 };
 
@@ -24,6 +34,34 @@ export class AppStore extends ComponentStore<IState> {
   readonly selectHasGeoAccess$: Observable<boolean> = this.select(
     (state) => state.hasGeoAccess,
   );
+
+  readonly selectLanguage$: Observable<Language> = this.select(
+    (state) => state.language,
+  );
+
+  readonly selectDeveloperMode$: Observable<boolean> = this.select(
+    (state) => state.developerMode,
+  );
+
+  readonly updateLanguage = this.updater((state, value: Language) => {
+    const update = {
+      ...state,
+      language: value,
+    };
+
+    AppStore.persistState(update);
+    return update;
+  });
+
+  readonly enableDeveloperMode = this.updater((state) => {
+    const update = {
+      ...state,
+      developerMode: true,
+    };
+
+    AppStore.persistState(update);
+    return update;
+  });
 
   readonly updateTheme = this.updater((state, value: Theme) => {
     const update = {
@@ -46,10 +84,18 @@ export class AppStore extends ComponentStore<IState> {
   });
 
   initialize(): IState {
-    const state = AppStore.lookupPersistedState() ?? INITIAL_STATE;
+    const state = AppStore.lookupPersistedState() ?? AppStore.defaultState();
     this.setState(state);
     AppStore.persistState(state);
     return state;
+  }
+
+  // A first visit follows the language of the browser.
+  private static defaultState(): IState {
+    return {
+      ...INITIAL_STATE,
+      language: detectLanguage(navigator.languages),
+    };
   }
 
   private static persistState(state: IState): void {
@@ -73,9 +119,17 @@ export class AppStore extends ComponentStore<IState> {
       }, {} as IState);
 
       const mergedState = {
-        ...INITIAL_STATE,
+        ...AppStore.defaultState(),
         ...sanitizedState,
       };
+
+      if (typeof mergedState.developerMode !== 'boolean') {
+        mergedState.developerMode = INITIAL_STATE.developerMode;
+      }
+
+      if (!isLanguage(mergedState.language)) {
+        mergedState.language = AppStore.defaultState().language;
+      }
 
       if (typeof mergedState.hasGeoAccess !== 'boolean') {
         mergedState.hasGeoAccess = INITIAL_STATE.hasGeoAccess;

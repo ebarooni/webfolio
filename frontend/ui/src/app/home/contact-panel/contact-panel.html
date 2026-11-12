@@ -1,0 +1,22 @@
+<div class="page-container">
+  <section
+    *transloco="let t; prefix: 'home.contact'"
+    class="flex flex-col items-start gap-6 rounded-3xl bg-base-200 p-8 md:p-18"
+  >
+    <h2
+      class="max-w-[18ch] text-panel-title leading-[1.05] font-semibold tracking-[-0.035em] text-balance text-ink hyphens-auto"
+    >
+      {{ t('title') }}
+    </h2>
+
+    <p class="max-w-[52ch] text-[1.0625rem]">{{ t('body') }}</p>
+
+    <a
+      class="focus-ring mt-2 inline-flex min-h-13 items-center gap-2.5 rounded-[0.875rem] bg-ink px-6 font-semibold text-base-100 hover:opacity-85"
+      [routerLink]="contactLink"
+    >
+      {{ t('cta') }}
+      <app-arrow-icon />
+    </a>
+  </section>
+</div>

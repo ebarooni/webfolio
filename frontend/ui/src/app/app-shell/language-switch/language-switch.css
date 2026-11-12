@@ -1,0 +1,136 @@
+:host {
+  display: block;
+  flex: none;
+}
+
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px 0 12px;
+  border: 1px solid var(--color-base-300);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.language-switch:hover {
+  background: var(--color-base-200);
+}
+
+.flag {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.flag-window {
+  display: block;
+  height: 20px;
+  overflow: hidden;
+  border-radius: 50%;
+  outline: 1px solid var(--color-base-300);
+}
+
+.word {
+  display: flex;
+  height: 20px;
+}
+
+.letter-window {
+  display: block;
+  height: 20px;
+  overflow: hidden;
+  color: var(--color-primary);
+}
+
+.greeting {
+  color: var(--color-primary);
+}
+
+.roll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.6s cubic-bezier(0.5, 1.5, 0.5, 1);
+}
+
+.roll > * {
+  display: block;
+  flex: none;
+  height: 20px;
+}
+
+.is-german .roll {
+  transform: translateY(-20px);
+}
+
+/* The European stars show only with the German flag. */
+.european-stars {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  opacity: 0;
+  fill: #f2b600;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+@keyframes language-switch-stars-once {
+  0% {
+    opacity: 0;
+    transform: rotate(-60deg) scale(0.6);
+  }
+
+  25% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  75% {
+    opacity: 1;
+    transform: rotate(30deg) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: rotate(60deg) scale(1);
+  }
+}
+
+@keyframes language-switch-stars-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.is-german .european-stars {
+  animation: language-switch-stars-once 2.6s ease both;
+}
+
+.is-german:hover .european-stars,
+.is-german:focus-visible .european-stars {
+  opacity: 1;
+  animation: language-switch-stars-orbit 16s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll {
+    transition: none;
+  }
+
+  .is-german .european-stars,
+  .is-german:hover .european-stars,
+  .is-german:focus-visible .european-stars {
+    animation: none;
+  }
+}

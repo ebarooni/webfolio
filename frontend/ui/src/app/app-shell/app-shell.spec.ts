@@ -1,26 +1,18 @@
 import { Component, input, output } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter, Router, RouterOutlet } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import {
-  beforeAll,
-  beforeEach,
-  afterEach,
-  afterAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { BehaviorSubject } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AppShell } from './app-shell';
+import { localizationTestingModule } from '../../testing/localization-testing';
+import type { Language } from '../config/languages';
 import { Route } from '../config/route';
 import type { Theme } from '../config/themes-array';
 import { AppStore } from '../store/app/app.store';
-import { Navbar } from './navbar/navbar';
+import { AppShell } from './app-shell';
 import { Footer } from './footer/footer';
-import { CompactNavbar } from './compact-navbar/compact-navbar';
+import { Navbar } from './navbar/navbar';
 
 @Component({
   selector: 'app-navbar',
@@ -28,18 +20,9 @@ import { CompactNavbar } from './compact-navbar/compact-navbar';
 })
 class MockNavbar {
   readonly selectedTheme = input.required<Theme>();
-  readonly version = input.required<string>();
+  readonly selectedLanguage = input.required<Language>();
   readonly themeChanged = output<Theme>();
-}
-
-@Component({
-  selector: 'app-compact-navbar',
-  template: '',
-})
-class MockCompactNavbar {
-  readonly selectedTheme = input.required<Theme>();
-  readonly version = input.required<string>();
-  readonly themeChanged = output<Theme>();
+  readonly languageChanged = output<Language>();
 }
 
 @Component({
@@ -48,70 +31,78 @@ class MockCompactNavbar {
 })
 class MockFooter {
   readonly bgClass = input.required<string>();
+  readonly version = input.required<string>();
+  readonly developerMode = input.required<boolean>();
+  readonly developerModeEnabled = output();
 }
 
 @Component({
-  selector: 'app-default-route-test',
+  selector: 'app-route-test',
   template: '',
 })
-class DefaultRouteComponent {}
-
-@Component({
-  selector: 'app-blog-route-test',
-  template: '',
-})
-class BlogRouteComponent {}
+class RouteComponent {}
 
 describe('AppShell', () => {
   let fixture: ComponentFixture<AppShell>;
   let component: AppShell;
   let router: Router;
   let themeSubject: BehaviorSubject<Theme>;
-  let updateTheme: ReturnType<
-    typeof vi.fn<(observableOrValue: Theme | Observable<Theme>) => Subscription>
-  >;
+  let languageSubject: BehaviorSubject<Language>;
+  let developerModeSubject: BehaviorSubject<boolean>;
 
-  beforeAll(() => {
-    document.documentElement.removeAttribute('data-theme');
-  });
+  const appStore = {
+    enableDeveloperMode: vi.fn(),
+    updateLanguage: vi.fn(),
+    updateTheme: vi.fn(),
+  };
+
+  async function settle(): Promise<void> {
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+  }
+
+  function footer(): MockFooter {
+    return fixture.debugElement.query(By.directive(MockFooter))
+      .componentInstance as MockFooter;
+  }
+
+  function navbar(): MockNavbar {
+    return fixture.debugElement.query(By.directive(MockNavbar))
+      .componentInstance as MockNavbar;
+  }
 
   beforeEach(async () => {
     themeSubject = new BehaviorSubject<Theme>('light');
-    updateTheme = vi.fn();
+    languageSubject = new BehaviorSubject<Language>('en');
+    developerModeSubject = new BehaviorSubject<boolean>(false);
 
     await TestBed.configureTestingModule({
-      imports: [AppShell],
+      imports: [AppShell, localizationTestingModule()],
       providers: [
         provideRouter([
+          { path: '', component: RouteComponent },
+          { path: Route.BUILD_INFO, component: RouteComponent },
           {
-            path: '',
-            component: DefaultRouteComponent,
-          },
-          {
-            path: 'blog',
-            component: BlogRouteComponent,
-            data: {
-              footerBgClass: 'bg-neutral',
-              page: Route.BLOG,
-            },
+            path: Route.BLOG,
+            component: RouteComponent,
+            data: { footerBgClass: 'bg-neutral', page: Route.BLOG },
           },
         ]),
         {
           provide: AppStore,
           useValue: {
+            ...appStore,
+            selectDeveloperMode$: developerModeSubject.asObservable(),
+            selectLanguage$: languageSubject.asObservable(),
             selectTheme$: themeSubject.asObservable(),
-            updateTheme,
-          } satisfies Pick<AppStore, 'selectTheme$' | 'updateTheme'>,
+          },
         },
       ],
     })
       .overrideComponent(AppShell, {
-        remove: {
-          imports: [Navbar, CompactNavbar, Footer, RouterOutlet],
-        },
-        add: {
-          imports: [MockNavbar, MockCompactNavbar, MockFooter, RouterOutlet],
-        },
+        remove: { imports: [Navbar, Footer, RouterOutlet] },
+        add: { imports: [MockNavbar, MockFooter, RouterOutlet] },
       })
       .compileComponents();
 
@@ -120,26 +111,20 @@ describe('AppShell', () => {
 
     fixture = TestBed.createComponent(AppShell);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
+    await settle();
   });
 
   afterEach(() => {
-    themeSubject.complete();
     vi.clearAllMocks();
     document.documentElement.removeAttribute('data-theme');
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
+    document.documentElement.removeAttribute('lang');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the document theme attribute from the current theme signal', () => {
+  it('should set the document theme attribute from the current theme', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
     themeSubject.next('dark');
@@ -148,71 +133,66 @@ describe('AppShell', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
-  it('should forward theme changes to the app store', () => {
-    component.themeChanged('dark');
+  it('should set the document language from the current language', () => {
+    expect(document.documentElement.getAttribute('lang')).toBe('en');
 
-    expect(updateTheme).toHaveBeenCalledOnce();
-    expect(updateTheme).toHaveBeenCalledWith('dark');
+    languageSubject.next('de');
+    fixture.detectChanges();
+
+    expect(document.documentElement.getAttribute('lang')).toBe('de');
   });
 
-  it('should pass the current theme and version to both navbar variants', () => {
-    const navbarDebugElement = fixture.debugElement.query(
-      By.directive(MockNavbar),
-    );
-    const compactNavbarDebugElement = fixture.debugElement.query(
-      By.directive(MockCompactNavbar),
-    );
+  it('should forward theme and language changes to the app store', () => {
+    navbar().themeChanged.emit('dark');
+    navbar().languageChanged.emit('de');
 
-    const navbarInstance = navbarDebugElement.componentInstance as MockNavbar;
-    const compactNavbarInstance =
-      compactNavbarDebugElement.componentInstance as MockCompactNavbar;
-
-    expect(navbarInstance.selectedTheme()).toBe('light');
-    expect(compactNavbarInstance.selectedTheme()).toBe('light');
-    expect(navbarInstance.version()).toBe(component.version);
-    expect(compactNavbarInstance.version()).toBe(component.version);
+    expect(appStore.updateTheme).toHaveBeenCalledExactlyOnceWith('dark');
+    expect(appStore.updateLanguage).toHaveBeenCalledExactlyOnceWith('de');
   });
 
-  it('should use the default ui config when the active route has no route data', () => {
-    const footerDebugElement = fixture.debugElement.query(
-      By.directive(MockFooter),
-    );
-    const footerInstance = footerDebugElement.componentInstance as MockFooter;
+  it('should pass the theme and the language to the navbar', () => {
+    expect(navbar().selectedTheme()).toBe('light');
+    expect(navbar().selectedLanguage()).toBe('en');
+  });
 
+  it('should pass the version and the developer mode to the footer', async () => {
+    developerModeSubject.next(true);
+    await settle();
+
+    expect(footer().version()).toBe(component.version);
+    expect(footer().developerMode()).toBe(true);
+  });
+
+  it('should store the developer mode and open the build details', async () => {
+    footer().developerModeEnabled.emit();
+    await settle();
+
+    expect(appStore.enableDeveloperMode).toHaveBeenCalledOnce();
+    expect(router.url).toBe(`/${Route.BUILD_INFO}`);
+  });
+
+  it('should use the default ui config when the route has no data', () => {
     expect(component.uiConfig()).toEqual({
       footerBgClass: 'bg-base-200',
       page: Route.HOME,
     });
-    expect(footerInstance.bgClass()).toBe('bg-base-200');
+    expect(footer().bgClass()).toBe('bg-base-200');
   });
 
-  it('should update the ui config from the active route data after navigation', async () => {
-    await router.navigateByUrl('/blog');
-    fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    const footerDebugElement = fixture.debugElement.query(
-      By.directive(MockFooter),
-    );
-    const footerInstance = footerDebugElement.componentInstance as MockFooter;
+  it('should read the ui config from the route data after navigation', async () => {
+    await router.navigateByUrl(`/${Route.BLOG}`);
+    await settle();
 
     expect(component.uiConfig()).toEqual({
       footerBgClass: 'bg-neutral',
       page: Route.BLOG,
     });
-    expect(footerInstance.bgClass()).toBe('bg-neutral');
+    expect(footer().bgClass()).toBe('bg-neutral');
   });
 
   it('should render the router outlet inside the main element', () => {
-    const mainDebugElement = fixture.debugElement.query(By.css('main'));
-    const routerOutletDebugElement = fixture.debugElement.query(
-      By.directive(RouterOutlet),
-    );
+    const outlet = fixture.debugElement.query(By.css('main router-outlet'));
 
-    const mainElement = mainDebugElement.nativeElement as HTMLElement;
-
-    expect(mainElement).toBeTruthy();
-    expect(routerOutletDebugElement).toBeTruthy();
+    expect(outlet).toBeTruthy();
   });
 });

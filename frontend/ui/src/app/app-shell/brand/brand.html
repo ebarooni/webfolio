@@ -1,0 +1,17 @@
+<a
+  *transloco="let t; prefix: 'shell.brand'"
+  class="brand focus-ring flex min-h-11 items-center gap-3 rounded-lg text-ink"
+  [routerLink]="homeLink"
+  [attr.aria-label]="t('homeLabel')"
+>
+  <span class="monogram" aria-hidden="true">
+    <span class="monogram-card">
+      <span class="monogram-face bg-ink text-base-100">EB</span>
+      <app-portrait class="monogram-face monogram-back" alt="" />
+    </span>
+  </span>
+
+  <span class="hidden font-semibold tracking-tight min-[26rem]:inline">
+    Ehsan Barooni
+  </span>
+</a>

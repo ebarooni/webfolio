@@ -28,7 +28,7 @@ export const routes: Routes = [
         loadComponent: () => import('./home/home').then((m) => m.Home),
         title: 'Ehsan Barooni | Full-Stack Software Engineer',
         data: {
-          footerBgClass: 'bg-base-200',
+          footerBgClass: 'bg-base-100',
           page: Route.HOME,
         },
       },
