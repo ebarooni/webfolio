@@ -14,11 +14,9 @@ describe('Navbar', () => {
   let fixture: ComponentFixture<Navbar>;
   let component: Navbar;
 
-  function linkTexts(navIndex: number): string[] {
-    const nav = fixture.debugElement.queryAll(By.css('nav'))[navIndex];
-
-    return nav
-      .queryAll(By.css('a'))
+  function linkTexts(): string[] {
+    return fixture.debugElement
+      .queryAll(By.css('nav a'))
       .map((link) =>
         (link.nativeElement as HTMLAnchorElement).textContent.trim(),
       );
@@ -41,16 +39,9 @@ describe('Navbar', () => {
     expect(component).toBeTruthy();
   });
 
-  it.each([
-    { name: 'top bar', navIndex: 0 },
-    { name: 'bottom bar', navIndex: 1 },
-  ])('should render every link in the $name', ({ navIndex }) => {
-    expect(linkTexts(navIndex)).toEqual([
-      'Work',
-      'Writing',
-      'About',
-      'Contact',
-    ]);
+  it('should render every link once', () => {
+    expect(fixture.debugElement.queryAll(By.css('nav'))).toHaveLength(1);
+    expect(linkTexts()).toEqual(['Work', 'Writing', 'About', 'Contact']);
   });
 
   it('should link the about entry to the experience section', () => {

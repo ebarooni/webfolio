@@ -1,46 +1,38 @@
-<ng-container *transloco="let t; prefix: 'shell.nav'">
-  <div class="bg-base-100/80 backdrop-blur-xl backdrop-saturate-150">
-    <div class="page-container flex items-center justify-between gap-4 py-3">
-      <app-brand />
+<div
+  *transloco="let t; prefix: 'shell.nav'"
+  class="bg-base-100/80 backdrop-blur-xl backdrop-saturate-150"
+>
+  <div
+    class="page-container flex flex-wrap items-center justify-between gap-x-4 gap-y-3 py-3"
+  >
+    <app-brand />
 
-      <nav
-        class="hidden gap-0.5 rounded-[0.875rem] border border-base-300 bg-base-100 p-1 lg:flex"
-        [attr.aria-label]="t('label')"
+    <!-- Small screens show the links as a second row below the brand. -->
+    <nav
+      class="order-last flex w-full gap-0.5 rounded-[0.875rem] border border-base-300 bg-base-100 p-1 lg:order-none lg:w-auto"
+      [attr.aria-label]="t('label')"
+    >
+      @for (item of navItems; track item.labelKey) {
+      <a
+        class="focus-ring flex min-h-10 flex-1 items-center justify-center rounded-[0.625rem] px-1 text-sm font-medium whitespace-nowrap hover:bg-base-300 hover:text-ink lg:min-h-9 lg:flex-none lg:px-4"
+        [routerLink]="item.link"
+        [fragment]="item.fragment"
+        [routerLinkActive]="item.fragment ? '' : ['bg-base-200', 'text-ink']"
       >
-        <ng-container [ngTemplateOutlet]="links" />
-      </nav>
+        {{ t(item.labelKey) }}
+      </a>
+      }
+    </nav>
 
-      <div class="flex items-center gap-2">
-        <app-language-switch
-          [language]="selectedLanguage()"
-          (languageChanged)="languageChanged.emit($event)"
-        />
-        <app-theme-switch
-          [theme]="selectedTheme()"
-          (themeChanged)="themeChanged.emit($event)"
-        />
-      </div>
+    <div class="flex items-center gap-2">
+      <app-language-switch
+        [language]="selectedLanguage()"
+        (languageChanged)="languageChanged.emit($event)"
+      />
+      <app-theme-switch
+        [theme]="selectedTheme()"
+        (themeChanged)="themeChanged.emit($event)"
+      />
     </div>
   </div>
-
-  <!-- Small screens get the links as a bar at the bottom, in reach of the thumb. -->
-  <nav
-    class="fixed inset-x-4 bottom-4 flex gap-0.5 rounded-2xl border border-base-300 bg-base-100/85 p-1 shadow-lg shadow-black/10 backdrop-blur-xl backdrop-saturate-150 lg:hidden"
-    [attr.aria-label]="t('label')"
-  >
-    <ng-container [ngTemplateOutlet]="links" />
-  </nav>
-
-  <ng-template #links>
-    @for (item of navItems; track item.labelKey) {
-    <a
-      class="focus-ring flex min-h-11 flex-1 items-center justify-center rounded-[0.625rem] px-1 text-sm font-medium whitespace-nowrap hover:bg-base-300 hover:text-ink lg:min-h-9 lg:flex-none lg:px-4"
-      [routerLink]="item.link"
-      [fragment]="item.fragment"
-      [routerLinkActive]="item.fragment ? '' : ['bg-base-200', 'text-ink']"
-    >
-      {{ t(item.labelKey) }}
-    </a>
-    }
-  </ng-template>
-</ng-container>
+</div>

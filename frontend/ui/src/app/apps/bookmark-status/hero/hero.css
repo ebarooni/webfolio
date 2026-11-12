@@ -1,6 +1,6 @@
 :host {
   position: relative;
-  padding: 6.5rem 0 0;
+  padding: 10rem 0 0;
   isolation: isolate;
   overflow: clip;
   text-align: center;
@@ -115,7 +115,7 @@ h1 {
 
 @media (width >= 640px) {
   :host {
-    padding-top: 8.5rem;
+    padding-top: 11rem;
   }
 
   .bookmark-status-app-icon {
@@ -200,5 +200,12 @@ h1 {
 
   .ghost-button:hover .ghost-arrow {
     transform: none;
+  }
+}
+
+/* The top bar has one row from this width. */
+@media (width >= 1024px) {
+  :host {
+    padding-top: 8.5rem;
   }
 }

@@ -1,4 +1,3 @@
-import { NgTemplateOutlet } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -21,7 +20,6 @@ type NavItem = Readonly<{
   imports: [
     Brand,
     LanguageSwitch,
-    NgTemplateOutlet,
     RouterLink,
     RouterLinkActive,
     ThemeSwitch,
