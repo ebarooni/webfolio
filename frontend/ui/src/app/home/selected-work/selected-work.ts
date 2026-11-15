@@ -20,12 +20,18 @@ type WorkRow = Readonly<{
 const BOOKMARK_STATUS_ASSETS = 'apps/safari-bookmark-status';
 const TAG_SEPARATOR = ' · ';
 
-function createWorkRow(translationKey: string, projectId: string): WorkRow {
+// The home screen shows a short tag list in a fixed order.
+// The projects screen shows the full list from the catalog.
+function createWorkRow(
+  translationKey: string,
+  projectId: string,
+  tags: readonly string[],
+): WorkRow {
   const project = findProject(projectId);
 
   return {
     href: project.href ?? '',
-    tags: project.features.join(TAG_SEPARATOR),
+    tags: tags.join(TAG_SEPARATOR),
     title: project.title,
     translationKey,
   };
@@ -46,8 +52,12 @@ export class SelectedWork {
   readonly appIconSource = `${BOOKMARK_STATUS_ASSETS}/brand/app-icon-256.webp`;
 
   readonly rows: readonly WorkRow[] = [
-    createWorkRow('calendar', 'capacitor-calendar'),
-    createWorkRow('capawesome', 'capawesome'),
+    createWorkRow('calendar', 'capacitor-calendar', [
+      'Capacitor',
+      'iOS',
+      'Android',
+    ]),
+    createWorkRow('capawesome', 'capawesome', ['Capacitor', 'Enterprise']),
   ];
 
   // The toolbar button turns blue as it does in the real app.

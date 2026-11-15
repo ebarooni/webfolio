@@ -54,7 +54,7 @@ describe('LatestPosts', () => {
     TestBed.inject(TranslocoService).setActiveLang('de');
     fixture.detectChanges();
 
-    expect(rowTexts()[0]).toContain('04.04.2026');
+    expect(rowTexts()[0]).toContain('4. Apr. 2026');
     expect(rowTexts()[0]).toContain('10 Min. Lesezeit');
   });
 });

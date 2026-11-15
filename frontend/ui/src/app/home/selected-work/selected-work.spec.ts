@@ -72,6 +72,17 @@ describe('SelectedWork', () => {
     expect(rows[0].rel).toContain('noopener');
   });
 
+  it('should show the short tag list of the other projects', () => {
+    const tags = fixture.debugElement
+      .queryAll(By.css('li a p.meta-label'))
+      .map((tag) => (tag.nativeElement as HTMLElement).textContent.trim());
+
+    expect(tags).toEqual([
+      'Capacitor · iOS · Android',
+      'Capacitor · Enterprise',
+    ]);
+  });
+
   it.each(['light', 'dark'] as const)(
     'should show the %s screenshot for the %s theme',
     (theme) => {

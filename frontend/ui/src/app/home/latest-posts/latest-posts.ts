@@ -24,7 +24,13 @@ export class LatestPosts {
   readonly blogLink = `/${Route.BLOG}`;
   readonly posts = BLOG_POSTS.slice(0, POST_COUNT_ON_HOME);
 
+  // The short month name reads better than digits in every language.
   readonly dateFormatter = computed(
-    () => new Intl.DateTimeFormat(this.language(), { dateStyle: 'medium' }),
+    () =>
+      new Intl.DateTimeFormat(this.language(), {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }),
   );
 }
