@@ -1,0 +1,51 @@
+<a
+  *transloco="let t; prefix: 'projects.featured'"
+  class="group focus-ring grid items-end gap-x-12 gap-y-8 overflow-hidden rounded-3xl bg-base-200 px-6 pt-6 md:grid-cols-2 md:px-12 md:pt-12"
+  [routerLink]="featured.internalPath"
+>
+  <article class="flex flex-col items-start gap-4 pb-6 md:pb-12">
+    <img
+      class="size-14 rounded-[0.8125rem]"
+      width="56"
+      height="56"
+      [ngSrc]="appIconSource"
+      [alt]="t('iconAlt')"
+    />
+
+    <h3
+      class="mt-2 text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.1] font-semibold tracking-[-0.03em] text-ink"
+    >
+      {{ featured.title }}
+    </h3>
+
+    <p class="max-w-[40ch]">{{ t('description') }}</p>
+
+    <p class="meta-label flex items-center gap-2">
+      <img
+        class="size-4"
+        width="16"
+        height="16"
+        [ngSrc]="toolbarIconSource()"
+        [alt]="t('bookmarkHint')"
+      />
+      {{ t('tags') }}
+    </p>
+
+    <span
+      class="mt-2 inline-flex items-center gap-2 text-[0.9375rem] font-semibold text-primary"
+    >
+      {{ t('link') }}
+      <app-arrow-icon
+        class="transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+      />
+    </span>
+  </article>
+
+  <img
+    class="w-full rounded-t-[0.875rem] border border-b-0 border-base-300 shadow-[0_24px_48px_-24px_rgb(11_13_18/0.25)] transition-transform duration-500 group-hover:-translate-y-1.5 motion-reduce:transition-none"
+    width="1280"
+    height="916"
+    [ngSrc]="screenshotSource()"
+    [alt]="t('shotAlt')"
+  />
+</a>

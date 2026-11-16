@@ -37,23 +37,7 @@
     },
     "work": {
       "label": "Ausgewählte Projekte",
-      "all": "Alle Projekte",
-      "featured": {
-        "description": "Eine Safari-Erweiterung und Mac-App, die zeigt, ob die aktuelle Seite schon als Lesezeichen gespeichert ist, und wo.",
-        "tags": "macOS · Safari · Nur lesend",
-        "link": "Zur App",
-        "iconAlt": "App-Symbol von Bookmark Status",
-        "shotAlt": "Die Seite von Bookmark Status in Safari. Die aktuelle Seite ist im Lesezeichenbaum hervorgehoben.",
-        "bookmarkHint": "Symbolleisten-Schaltfläche von Bookmark Status"
-      },
-      "items": {
-        "calendar": {
-          "description": "Native Kalendereinträge auf iOS und Android erstellen, ändern, löschen und abfragen."
-        },
-        "capawesome": {
-          "description": "Enterprise-Lösungen und Services für Cross-Platform-Apps mit Capacitor."
-        }
-      }
+      "all": "Alle Projekte"
     },
     "focus": {
       "label": "Was ich mache",
@@ -98,10 +82,100 @@
       "all": "Alle Artikel",
       "readTime": "{{minutes}} Min. Lesezeit"
     },
-    "contact": {
-      "title": "Zusammenarbeiten oder einfach Hallo sagen?",
-      "body": "Ich helfe Teams und Einzelpersonen, aus Ideen funktionierende Produkte zu machen. Deine Nachricht landet direkt bei mir, ohne Formular-Team und ohne Ticketnummer.",
+    "contactPanel": {
       "cta": "Schreib mir"
     }
+  },
+  "projects": {
+    "eyebrow": "Projekte · {{count}} Projekte",
+    "title": "Was ich gebaut und veröffentlicht habe.",
+    "lead": "Eine Mac-App, Open-Source-Plugins und die Werkzeuge drumherum. Jedes Projekt führt zum Code oder zur eigenen Seite.",
+    "featuredLabel": "Im Fokus",
+    "moreLabel": "Open Source und Werkzeuge",
+    "externalHint": "öffnet in einem neuen Tab",
+    "items": {
+      "capacitor-calendar": {
+        "description": "Native Kalendereinträge auf iOS und Android erstellen, ändern, löschen und abfragen."
+      },
+      "capawesome": {
+        "description": "Enterprise-Lösungen und Services für Cross-Platform-Apps mit Capacitor."
+      },
+      "cloudcost-tracker": {
+        "description": "Sammelt die Abrechnungsdaten mehrerer Google-Cloud-Projekte über Pub/Sub an einem Ort."
+      },
+      "repo-sync": {
+        "description": "Ein GitHub-Workflow, der ein Repository bei jedem Push auf ein zweites Remote spiegelt."
+      },
+      "spotify-auth": {
+        "description": "Eine Web-App, die Zugriffstoken für Nutzerdaten aus der Spotify-Web-API erzeugt."
+      },
+      "web-configs": {
+        "description": "Gemeinsame Konfiguration für ESLint, Prettier, Stylelint und SwiftLint."
+      },
+      "webfolio": {
+        "description": "Diese Website, gebaut mit Angular und Tailwind CSS, ausgeliefert von Quarkus."
+      }
+    },
+    "featured": {
+      "description": "Eine Safari-Erweiterung und Mac-App, die zeigt, ob die aktuelle Seite schon als Lesezeichen gespeichert ist, und wo.",
+      "tags": "macOS · Safari · Nur lesend",
+      "link": "Zur App",
+      "iconAlt": "App-Symbol von Bookmark Status",
+      "shotAlt": "Die Seite von Bookmark Status in Safari. Die aktuelle Seite ist im Lesezeichenbaum hervorgehoben.",
+      "bookmarkHint": "Symbolleisten-Schaltfläche von Bookmark Status"
+    }
+  },
+  "blog": {
+    "eyebrow": "Blog · {{count}} Artikel",
+    "title": "Notizen aus der Web-Entwicklung.",
+    "lead": "Technische Artikel über Web-Entwicklung, Frameworks und meine Werkzeuge. Die Artikel sind auf Englisch.",
+    "readTime": "{{minutes}} Min. Lesezeit",
+    "back": "Alle Artikel",
+    "contents": "Auf dieser Seite"
+  },
+  "contact": {
+    "eyebrow": "Kontakt",
+    "title": "Zusammenarbeiten oder einfach Hallo sagen?",
+    "lead": "Ich helfe Teams und Einzelpersonen, aus Ideen funktionierende Produkte zu machen. Deine Nachricht landet direkt bei mir, ohne Formular-Team und ohne Ticketnummer.",
+    "elsewhere": "Anderswo",
+    "form": {
+      "label": "Kontaktformular",
+      "name": "Name",
+      "namePlaceholder": "Max Mustermann",
+      "nameError": "Gib deinen Namen mit 2 bis 50 Buchstaben ein.",
+      "email": "E-Mail",
+      "emailPlaceholder": "max@mustermann.de",
+      "emailError": "Gib eine gültige E-Mail-Adresse ein.",
+      "message": "Nachricht",
+      "messagePlaceholder": "Beschreib dein Projekt oder sag einfach Hallo.",
+      "messageError": "Schreib eine Nachricht mit 2 bis {{max}} Zeichen.",
+      "send": "Nachricht senden",
+      "sending": "Wird gesendet"
+    },
+    "status": {
+      "sentTitle": "Nachricht gesendet",
+      "sentBody": "Danke für deine Nachricht. Ich melde mich bald bei dir.",
+      "failedTitle": "Die Nachricht wurde nicht gesendet",
+      "failedBody": "Dein Text steht noch im Formular. Versuch es später noch einmal oder schreib mir über eines der Profile auf dieser Seite."
+    }
+  },
+  "buildInfo": {
+    "eyebrow": "Build-Info · Entwicklermodus",
+    "title": "Was diese Website antreibt.",
+    "lead": "Die aktuelle Version, das letzte Deployment und die Pakete hinter diesem Build.",
+    "version": "Version",
+    "lastDeployment": "Letztes Deployment",
+    "builtOn": "Gebaut am",
+    "runtime": "Laufzeit-Abhängigkeiten",
+    "buildTime": "Build-Abhängigkeiten",
+    "package": "Paket",
+    "packageVersion": "Version"
+  },
+  "accessDenied": {
+    "eyebrow": "Zugriff verweigert",
+    "title": "Diese Website ist in deiner Region nicht verfügbar.",
+    "lead": "Wenn du ein Passwort hast, gib es ein, um fortzufahren.",
+    "password": "Passwort",
+    "submit": "Weiter"
   }
 }

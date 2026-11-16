@@ -1,0 +1,15 @@
+<header
+  class="page-container flex flex-col items-start gap-7 pt-40 pb-16 lg:pt-44 lg:pb-24"
+>
+  <p class="meta-label">{{ eyebrow() }}</p>
+
+  <h1
+    class="max-w-[18ch] text-page-title leading-[1.04] font-semibold tracking-[-0.035em] text-balance text-ink hyphens-auto"
+  >
+    {{ title() }}
+  </h1>
+
+  @if (lead()) {
+  <p class="max-w-[56ch] text-lead leading-[1.55] text-pretty">{{ lead() }}</p>
+  }
+</header>

@@ -18,14 +18,14 @@
     @for (post of posts; track post.id) {
     <li class="border-t border-base-300 last:border-b">
       <a
-        class="group focus-ring flex flex-wrap items-baseline gap-x-8 gap-y-1.5 py-6 transition-[padding] hover:pl-3"
-        [routerLink]="blogLink"
+        class="group focus-ring flex flex-wrap items-baseline gap-x-8 gap-y-1.5 py-6 transition-[padding] hover:pl-3 motion-reduce:transition-none"
+        [routerLink]="[blogLink, post.slug]"
       >
         <time
           class="meta-label basis-35"
           [attr.datetime]="post.date.toISOString()"
         >
-          {{ dateFormatter().format(post.date) }}
+          {{ post.date | shortDate: language() }}
         </time>
         <h3
           class="flex-[3_1_20rem] text-[1.375rem] font-semibold tracking-tight text-ink group-hover:text-primary"

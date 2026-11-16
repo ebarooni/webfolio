@@ -1,31 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
-import { Hero } from '../shared/components/hero/hero';
-import { BLOG_POSTS, Posts } from './post-catalog';
-import { PostModal } from './post-modal/post-modal';
-import { AstroToAngular } from './posts/astro-to-angular/astro-to-angular';
-import { VpsHosting } from './posts/vps-hosting/vps-hosting';
+import { Route } from '../config/route';
+import { PageHeader } from '../shared/components/page-header/page-header';
+import { ShortDate } from '../shared/short-date/short-date';
+import { BLOG_POSTS } from './post-catalog';
 
 @Component({
   selector: 'app-blog',
+  imports: [PageHeader, RouterLink, ShortDate, TranslocoDirective],
   templateUrl: './blog.html',
-  imports: [DatePipe, Hero, PostModal, AstroToAngular, VpsHosting],
-  host: {
-    class: 'flex flex-col flex-1',
-  },
 })
 export class BlogComponent {
+  private readonly translocoService = inject(TranslocoService);
+
+  readonly language = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
+
+  readonly blogLink = `/${Route.BLOG}`;
   readonly posts = BLOG_POSTS;
-
-  readonly selectedPostId = signal<Posts>(this.posts[0].id);
-
-  get Posts(): typeof Posts {
-    return Posts;
-  }
-
-  viewPost(postId: Posts, dialog: PostModal): void {
-    this.selectedPostId.set(postId);
-    dialog.show();
-  }
 }

@@ -38,14 +38,18 @@ describe('LatestPosts', () => {
     expect(rowTexts()[0]).toContain('10 min read');
   });
 
-  it('should link every row and the header to the blog', () => {
+  it('should link the header to the blog and every row to its post', () => {
     const links = fixture.debugElement
       .queryAll(By.css('a'))
       .map((link) =>
         (link.nativeElement as HTMLAnchorElement).getAttribute('href'),
       );
 
-    expect(links).toEqual(Array(3).fill(`/${Route.BLOG}`));
+    expect(links).toEqual([
+      `/${Route.BLOG}`,
+      `/${Route.BLOG}/${BLOG_POSTS[0].slug}`,
+      `/${Route.BLOG}/${BLOG_POSTS[1].slug}`,
+    ]);
   });
 
   it('should format the dates for the active language', () => {

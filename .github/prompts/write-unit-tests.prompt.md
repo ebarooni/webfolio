@@ -11,7 +11,6 @@ Write unit tests for the provided Angular components, services, directives and p
 
 - Angular 22
 - Tailwind CSS 4
-- DaisyUI 5
 - Vitest for unit testing
 - Zoneless
 - Uses tandalone components by default

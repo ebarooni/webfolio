@@ -173,10 +173,10 @@ describe('AppShell', () => {
 
   it('should use the default ui config when the route has no data', () => {
     expect(component.uiConfig()).toEqual({
-      footerBgClass: 'bg-base-200',
+      footerBgClass: 'bg-base-100',
       page: Route.HOME,
     });
-    expect(footer().bgClass()).toBe('bg-base-200');
+    expect(footer().bgClass()).toBe('bg-base-100');
   });
 
   it('should read the ui config from the route data after navigation', async () => {

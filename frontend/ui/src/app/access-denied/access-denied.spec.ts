@@ -16,6 +16,7 @@ import {
 import { AccessDenied } from './access-denied';
 import { AppStore } from '../store/app/app.store';
 import { Route } from '../config/route';
+import { localizationTestingModule } from '../../testing/localization-testing';
 
 describe('AccessDenied', () => {
   let fixture: ComponentFixture<AccessDenied>;
@@ -47,7 +48,7 @@ describe('AccessDenied', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccessDenied],
+      imports: [AccessDenied, localizationTestingModule()],
       providers: [
         { provide: AppStore, useValue: store },
         { provide: Router, useValue: router },
@@ -78,7 +79,9 @@ describe('AccessDenied', () => {
     );
     const titleElement = titleDebugElement.nativeElement as HTMLElement;
 
-    expect(titleElement.textContent).toContain('Access Denied');
+    expect(titleElement.textContent).toContain(
+      'This website is not available in your region.',
+    );
   });
 
   it('disables submit button when password is invalid', () => {

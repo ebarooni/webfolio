@@ -1,58 +1,37 @@
-<section class="bg-base-200 flex-1">
-  <app-hero
-    backgroundClass="bg-gradient-to-b from-base-100 to-base-200"
-    subtitleClass="text-neutral-content"
-  >
-    <h1 heroTitle>Blog Posts</h1>
-    <p heroSubtitle>
-      Insights and technical write-ups on web development, frameworks and modern
-      tooling.
-    </p>
-  </app-hero>
+<ng-container *transloco="let t; prefix: 'blog'">
+  <app-page-header
+    [eyebrow]="t('eyebrow', { count: posts.length })"
+    [title]="t('title')"
+    [lead]="t('lead')"
+  />
 
-  <div
-    class="container mx-auto max-w-3xl px-4 py-6 pb-10 sm:px-6 sm:pb-16 lg:px-0"
-  >
-    <div class="flex flex-col gap-6 sm:gap-8">
+  <section class="page-container pb-24 lg:pb-32" [attr.aria-label]="t('title')">
+    <ul>
       @for (post of posts; track post.id) {
-      <article
-        class="card bg-base-100 shadow-md transition-shadow hover:shadow-xl"
-      >
-        <div class="card-body gap-4">
-          <div
-            class="text-secondary flex flex-wrap items-center justify-between gap-2 text-sm"
-          >
-            <time [attr.datetime]="post.date.toISOString()">
-              {{ post.date | date: 'mediumDate' }}
-            </time>
-            <span>{{ post.readTime }} min read</span>
-          </div>
+      <li class="border-t border-base-300 last:border-b">
+        <a
+          class="group focus-ring grid gap-x-8 gap-y-2.5 py-8 transition-[padding] hover:pl-3 motion-reduce:transition-none md:grid-cols-[8.75rem_minmax(0,1fr)_auto] md:items-baseline"
+          [routerLink]="[blogLink, post.slug]"
+        >
+          <time class="meta-label" [attr.datetime]="post.date.toISOString()">
+            {{ post.date | shortDate: language() }}
+          </time>
 
-          <h2 class="card-title text-xl">{{ post.title }}</h2>
-          <p class="text-base-content">{{ post.summary }}</p>
-
-          <div class="card-actions justify-end">
-            <button
-              type="button"
-              class="btn btn-sm btn-primary"
-              (click)="viewPost(post.id, postModalComponent)"
+          <div class="flex flex-col gap-2.5">
+            <h2
+              class="text-[clamp(1.5rem,2.4vw,1.75rem)] leading-[1.2] font-semibold tracking-[-0.025em] text-ink group-hover:text-primary"
             >
-              Read More
-            </button>
+              {{ post.title }}
+            </h2>
+            <p class="max-w-[60ch]" lang="en">{{ post.summary }}</p>
           </div>
-        </div>
-      </article>
-      }
-    </div>
-  </div>
-</section>
 
-<app-post-modal #postModalComponent>
-  @switch (selectedPostId()) { @case (Posts.ASTRO_TO_ANGULAR) {
-  <app-astro-to-angular />
-  } @case (Posts.VPS_HOSTING) {
-  <app-vps-hosting />
-  } @default {
-  <app-astro-to-angular />
-  } }
-</app-post-modal>
+          <p class="meta-label">
+            {{ t('readTime', { minutes: post.readTime }) }}
+          </p>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+</ng-container>

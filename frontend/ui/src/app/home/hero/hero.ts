@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
-import dayjs from 'dayjs';
 
 import { Route } from '../../config/route';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
 import { Portrait } from '../../shared/components/portrait/portrait';
 import { nativeFontFamily } from './native-font';
 
-const CAREER_START = '2021-01-01';
+const CAREER_START_YEAR = 2021;
 
 @Component({
   selector: 'app-home-hero',
@@ -18,6 +17,6 @@ const CAREER_START = '2021-01-01';
 export class HomeHero {
   readonly projectsLink = `/${Route.PROJECTS}`;
   readonly contactLink = `/${Route.CONTACT}`;
-  readonly yearsOfExperience = dayjs().diff(dayjs(CAREER_START), 'year');
+  readonly yearsOfExperience = new Date().getFullYear() - CAREER_START_YEAR;
   readonly accentFontFamily = nativeFontFamily(navigator.userAgent);
 }

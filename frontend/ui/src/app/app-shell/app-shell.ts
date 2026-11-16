@@ -24,7 +24,7 @@ type UiConfig = Readonly<{
 }>;
 
 const DEFAULT_UI_CONFIG: UiConfig = {
-  footerBgClass: 'bg-base-200',
+  footerBgClass: 'bg-base-100',
   page: Route.HOME,
 };
 

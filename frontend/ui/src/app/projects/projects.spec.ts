@@ -1,41 +1,60 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
+import { of } from 'rxjs';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { localizationTestingModule } from '../../testing/localization-testing';
+import { AppStore } from '../store/app/app.store';
+import { PROJECTS } from './project-catalog';
 import { Projects } from './projects';
 
 describe('Projects', () => {
   let fixture: ComponentFixture<Projects>;
-  let component: Projects;
+
+  function texts(selector: string): string[] {
+    return fixture.debugElement
+      .queryAll(By.css(selector))
+      .map((element) =>
+        (element.nativeElement as HTMLElement).textContent.trim(),
+      );
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Projects],
-      providers: [provideRouter([])],
-      schemas: [NO_ERRORS_SCHEMA],
+      imports: [Projects, localizationTestingModule()],
+      providers: [
+        provideRouter([]),
+        { provide: AppStore, useValue: { selectTheme$: of('light') } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Projects);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  it('should show the number of projects in the header', () => {
+    expect(texts('app-page-header p')[0]).toBe(
+      `Work · ${PROJECTS.length} projects`,
+    );
+    expect(texts('h1')).toEqual(['Things I have built and shipped.']);
   });
 
-  it('creates the component', () => {
-    expect(component).toBeTruthy();
+  it('should show the featured project once', () => {
+    expect(
+      fixture.debugElement.queryAll(By.css('app-featured-project')),
+    ).toHaveLength(1);
   });
 
-  it('renders hero component', () => {
-    const hero = fixture.debugElement.query(By.css('app-hero'));
-    expect(hero).not.toBeNull();
-  });
+  it('should list every other project by title', () => {
+    const titles = PROJECTS.filter(
+      (project) => project.id !== 'bookmark-status',
+    ).map((project) => project.title);
 
-  it('renders showcase component', () => {
-    const showcase = fixture.debugElement.query(By.css('app-showcase'));
-    expect(showcase).not.toBeNull();
+    const rowTitles = texts('li h3').map((title) =>
+      title.replace(/\s*\(.*\)$/, ''),
+    );
+
+    expect(rowTitles).toEqual(titles);
   });
 });

@@ -1,113 +1,76 @@
-import { Component, input, output } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import { localizationTestingModule } from '../../testing/localization-testing';
+import { SOCIAL_LINKS } from '../config/social-links';
 import { Contact } from './contact';
-import { ContactFormData } from './contact-form/contact-form';
-import { Hero } from '../shared/components/hero/hero';
-import { ContactForm } from './contact-form/contact-form';
-import { Modal } from './modal/modal';
-
-@Component({
-  selector: 'app-hero',
-  template: '<ng-content />',
-})
-class MockHero {
-  readonly backgroundClass = input('');
-  readonly titleClass = input('');
-  readonly subtitleClass = input('');
-}
-
-@Component({
-  selector: 'app-contact-form',
-  template: '',
-})
-class MockContactForm {
-  readonly isSubmitting = input(false);
-  readonly formSubmitted = output<ContactFormData>();
-}
-
-@Component({
-  selector: 'app-modal',
-  template: '',
-})
-class MockModal {
-  showModal(title: string, message: string): void {
-    void title;
-    void message;
-  }
-}
+import { ContactForm, ContactFormData } from './contact-form/contact-form';
 
 describe('Contact', () => {
+  const data: ContactFormData = {
+    email: 'max@example.com',
+    message: 'Hello',
+    name: 'Max Mustermann',
+  };
+
   let fixture: ComponentFixture<Contact>;
-  let component: Contact;
   let httpTestingController: HttpTestingController;
 
-  beforeAll(() => {
-    TestBed.resetTestingModule();
-  });
+  function form(): ContactForm {
+    return fixture.debugElement.query(By.directive(ContactForm))
+      .componentInstance as ContactForm;
+  }
+
+  function submit(): void {
+    form().formSubmitted.emit(data);
+    fixture.detectChanges();
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Contact],
+      imports: [Contact, localizationTestingModule()],
       providers: [provideHttpClient(), provideHttpClientTesting()],
-    })
-      .overrideComponent(Contact, {
-        remove: {
-          imports: [Hero, ContactForm, Modal],
-        },
-        add: {
-          imports: [MockHero, MockContactForm, MockModal],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Contact);
-    component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
+    fixture = TestBed.createComponent(Contact);
     fixture.detectChanges();
   });
 
   afterEach(() => {
     httpTestingController.verify();
-    vi.restoreAllMocks();
   });
 
-  afterAll(() => {
-    TestBed.resetTestingModule();
-  });
+  it('should show the headline of the screen', () => {
+    const headline = fixture.debugElement.query(By.css('h1'))
+      .nativeElement as HTMLElement;
 
-  it('submits the form successfully and shows a success modal', () => {
-    const data: ContactFormData = {
-      email: 'max@example.com',
-      message: 'Hello there',
-      name: 'Max Mustermann',
-    };
-    const modalDebugElement = fixture.debugElement.query(
-      By.directive(MockModal),
+    expect(headline.textContent.trim()).toBe(
+      'Want to work together, or just say hello?',
     );
-    const modalComponent = modalDebugElement.componentInstance as Modal;
-    const showModalSpy = vi.spyOn(modalComponent, 'showModal');
+  });
 
-    component.submitForm(data, modalComponent);
-    fixture.detectChanges();
+  it('should list every profile as a safe external link', () => {
+    const links = fixture.debugElement
+      .queryAll(By.css('section.lg\\:hidden a'))
+      .map((link) => link.nativeElement as HTMLAnchorElement);
 
-    expect(component.isSubmitting()).toBe(true);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(
+      SOCIAL_LINKS.map((link) => link.href),
+    );
+    expect(links.every((link) => link.rel.includes('noopener'))).toBe(true);
+  });
+
+  it('should send the form data and report success', () => {
+    submit();
+
+    expect(form().isSubmitting()).toBe(true);
 
     const request = httpTestingController.expectOne('/api/v1/contact-form');
     expect(request.request.method).toBe('POST');
@@ -116,115 +79,26 @@ describe('Contact', () => {
     request.flush({});
     fixture.detectChanges();
 
-    expect(showModalSpy).toHaveBeenCalledWith(
-      'Message sent ✅',
-      'Thanks for reaching out. I will get back to you soon.',
-    );
-    expect(component.isSubmitting()).toBe(false);
+    expect(form().isSubmitting()).toBe(false);
+    expect(form().status()).toBe('sent');
   });
 
-  it('shows an error modal when the submission fails', () => {
-    const data: ContactFormData = {
-      email: 'max@example.com',
-      message: 'Hello there',
-      name: 'Max Mustermann',
-    };
-    const modalDebugElement = fixture.debugElement.query(
-      By.directive(MockModal),
-    );
-    const modalComponent = modalDebugElement.componentInstance as Modal;
-    const showModalSpy = vi.spyOn(modalComponent, 'showModal');
+  it('should report a failure when the server refuses the message', () => {
+    submit();
 
-    component.submitForm(data, modalComponent);
-
-    const request = httpTestingController.expectOne('/api/v1/contact-form');
-    request.flush('Request failed', {
-      status: 500,
-      statusText: 'Server Error',
-    });
+    httpTestingController
+      .expectOne('/api/v1/contact-form')
+      .flush(null, { status: 503, statusText: 'Service Unavailable' });
     fixture.detectChanges();
 
-    expect(showModalSpy).toHaveBeenCalledWith(
-      'Error ⚠️',
-      'Submissions are currently disabled. Please reach out using one of the social links below.',
-    );
-    expect(component.isSubmitting()).toBe(false);
+    expect(form().isSubmitting()).toBe(false);
+    expect(form().status()).toBe('failed');
   });
 
-  it('does not submit again while a submission is already in progress', () => {
-    const data: ContactFormData = {
-      email: 'max@example.com',
-      message: 'Hello there',
-      name: 'Max Mustermann',
-    };
-    const modalDebugElement = fixture.debugElement.query(
-      By.directive(MockModal),
-    );
-    const modalComponent = modalDebugElement.componentInstance as Modal;
+  it('should not send a second request while one is in progress', () => {
+    submit();
+    submit();
 
-    component.isSubmitting.set(true);
-
-    component.submitForm(data, modalComponent);
-
-    httpTestingController.expectNone('/api/v1/contact-form');
-  });
-
-  it('passes the submitting state to the contact form component', () => {
-    const contactFormDebugElement = fixture.debugElement.query(
-      By.directive(MockContactForm),
-    );
-    const contactFormComponent =
-      contactFormDebugElement.componentInstance as MockContactForm;
-
-    expect(contactFormComponent.isSubmitting()).toBe(false);
-
-    const modalDebugElement = fixture.debugElement.query(
-      By.directive(MockModal),
-    );
-    const modalComponent = modalDebugElement.componentInstance as Modal;
-
-    component.submitForm(
-      {
-        email: 'max@example.com',
-        message: 'Hello there',
-        name: 'Max Mustermann',
-      },
-      modalComponent,
-    );
-    fixture.detectChanges();
-
-    expect(contactFormComponent.isSubmitting()).toBe(true);
-
-    const request = httpTestingController.expectOne('/api/v1/contact-form');
-    request.flush({});
-    fixture.detectChanges();
-
-    expect(contactFormComponent.isSubmitting()).toBe(false);
-  });
-
-  it('submits the emitted form data from the contact form component with the modal instance', () => {
-    const submitFormSpy = vi
-      .spyOn(component, 'submitForm')
-      .mockImplementation(() => undefined);
-
-    const contactFormDebugElement = fixture.debugElement.query(
-      By.directive(MockContactForm),
-    );
-    const contactFormComponent =
-      contactFormDebugElement.componentInstance as MockContactForm;
-    const modalDebugElement = fixture.debugElement.query(
-      By.directive(MockModal),
-    );
-    const modalComponent = modalDebugElement.componentInstance as MockModal;
-
-    const data: ContactFormData = {
-      email: 'max@example.com',
-      message: 'Hello there',
-      name: 'Max Mustermann',
-    };
-
-    contactFormComponent.formSubmitted.emit(data);
-
-    expect(submitFormSpy).toHaveBeenCalledWith(data, modalComponent);
+    httpTestingController.expectOne('/api/v1/contact-form').flush({});
   });
 });

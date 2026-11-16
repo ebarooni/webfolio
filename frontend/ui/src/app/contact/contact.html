@@ -1,29 +1,67 @@
-<section class="flex-1 bg-base-200">
-  <app-hero
-    backgroundClass="bg-gradient-to-b from-base-100 to-base-200"
-    titleClass="text-primary"
-    subtitleClass="text-neutral-content"
-  >
-    <h1 heroTitle>Contact</h1>
-    <p heroSubtitle>
-      I help teams and individuals turn ideas into working products. If that’s
-      what you’re looking for, let’s connect.
-    </p>
-  </app-hero>
+<div
+  *transloco="let t; prefix: 'contact'"
+  class="page-container grid gap-x-18 gap-y-14 pt-40 pb-24 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-start lg:pt-44 lg:pb-32"
+>
+  <div class="flex flex-col items-start gap-7">
+    <p class="meta-label">{{ t('eyebrow') }}</p>
 
-  <hr
-    class="h-1 border-0 bg-gradient-to-r from-primary via-accent to-secondary"
+    <h1
+      class="max-w-[14ch] text-page-title leading-[1.04] font-semibold tracking-[-0.035em] text-balance text-ink hyphens-auto"
+    >
+      {{ t('title') }}
+    </h1>
+
+    <p class="max-w-[44ch] text-lead leading-[1.55] text-pretty">
+      {{ t('lead') }}
+    </p>
+
+    <section
+      class="mt-5 hidden w-full max-w-sm lg:block"
+      aria-labelledby="elsewhere-label"
+    >
+      <ng-container [ngTemplateOutlet]="elsewhere" />
+    </section>
+  </div>
+
+  <app-contact-form
+    [isSubmitting]="isSubmitting()"
+    [status]="status()"
+    (formSubmitted)="submitForm($event)"
   />
 
-  <section
-    class="w-full bg-gradient-to-b from-base-200 via-base-300 to-base-200 px-4 py-10 sm:px-6 md:py-14 lg:px-24 lg:py-20"
-    aria-label="Contact form"
-  >
-    <app-contact-form
-      [isSubmitting]="isSubmitting()"
-      (formSubmitted)="submitForm($event, modalComponent)"
-    />
+  <!-- Small screens show the form before the profile links. -->
+  <section class="lg:hidden" aria-labelledby="elsewhere-label-compact">
+    <h2 id="elsewhere-label-compact" class="meta-label mb-3 font-medium">
+      {{ t('elsewhere') }}
+    </h2>
+    <ng-container [ngTemplateOutlet]="profileLinks" />
   </section>
-</section>
 
-<app-modal #modalComponent></app-modal>
+  <ng-template #elsewhere>
+    <h2 id="elsewhere-label" class="meta-label mb-3 font-medium">
+      {{ t('elsewhere') }}
+    </h2>
+    <ng-container [ngTemplateOutlet]="profileLinks" />
+  </ng-template>
+
+  <ng-template #profileLinks>
+    <ul>
+      @for (link of links; track link.id) {
+      <li class="border-t border-base-300 last:border-b">
+        <a
+          class="group focus-ring flex min-h-13 items-center justify-between gap-4 font-medium text-ink hover:text-primary"
+          [href]="link.href"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ link.label }}
+          <span class="meta-label flex items-center gap-2">
+            {{ link.handle }}
+            <app-arrow-icon class="-rotate-45 text-[0.875rem]" />
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </ng-template>
+</div>

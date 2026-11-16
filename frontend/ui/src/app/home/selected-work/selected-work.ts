@@ -1,91 +1,29 @@
-import { DOCUMENT, NgOptimizedImage } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { filter, fromEvent } from 'rxjs';
 
 import { Route } from '../../config/route';
+import { FeaturedProject } from '../../projects/featured-project/featured-project';
 import { findProject } from '../../projects/project-catalog';
+import { ProjectRow } from '../../projects/project-row/project-row';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
-import { AppStore } from '../../store/app/app.store';
-
-type WorkRow = Readonly<{
-  translationKey: string;
-  title: string;
-  href: string;
-  tags: string;
-}>;
-
-const BOOKMARK_STATUS_ASSETS = 'apps/safari-bookmark-status';
-const TAG_SEPARATOR = ' · ';
-
-// The home screen shows a short tag list in a fixed order.
-// The projects screen shows the full list from the catalog.
-function createWorkRow(
-  translationKey: string,
-  projectId: string,
-  tags: readonly string[],
-): WorkRow {
-  const project = findProject(projectId);
-
-  return {
-    href: project.href ?? '',
-    tags: tags.join(TAG_SEPARATOR),
-    title: project.title,
-    translationKey,
-  };
-}
 
 @Component({
   selector: 'app-selected-work',
-  imports: [ArrowIcon, NgOptimizedImage, RouterLink, TranslocoDirective],
+  imports: [
+    ArrowIcon,
+    FeaturedProject,
+    ProjectRow,
+    RouterLink,
+    TranslocoDirective,
+  ],
   templateUrl: './selected-work.html',
 })
 export class SelectedWork {
-  private readonly theme = toSignal(inject(AppStore).selectTheme$, {
-    initialValue: 'light',
-  });
-
   readonly projectsLink = `/${Route.PROJECTS}`;
-  readonly featured = findProject('bookmark-status');
-  readonly appIconSource = `${BOOKMARK_STATUS_ASSETS}/brand/app-icon-256.webp`;
 
-  readonly rows: readonly WorkRow[] = [
-    createWorkRow('calendar', 'capacitor-calendar', [
-      'Capacitor',
-      'iOS',
-      'Android',
-    ]),
-    createWorkRow('capawesome', 'capawesome', ['Capacitor', 'Enterprise']),
+  readonly rows = [
+    findProject('capacitor-calendar'),
+    findProject('capawesome'),
   ];
-
-  // The toolbar button turns blue as it does in the real app.
-  readonly isBookmarked = signal(false);
-
-  readonly toolbarIconSource = computed(() => {
-    const color = this.isBookmarked() ? 'blue' : 'grey';
-
-    return `${BOOKMARK_STATUS_ASSETS}/brand/toolbar-${color}-32.png`;
-  });
-
-  // The large file keeps the screenshot sharp on dense screens.
-  readonly screenshotSource = computed(
-    () => `${BOOKMARK_STATUS_ASSETS}/shots/hero-tree-${this.theme()}@2x.webp`,
-  );
-
-  constructor() {
-    // The page can see the bookmark shortcut. It cannot see the bookmark.
-    fromEvent<KeyboardEvent>(inject(DOCUMENT), 'keydown')
-      .pipe(
-        filter(
-          (event) =>
-            (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'd',
-        ),
-        takeUntilDestroyed(),
-      )
-      .subscribe(() => {
-        this.isBookmarked.set(true);
-      });
-  }
 }

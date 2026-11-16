@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 export type DependencyRow = Readonly<{
   name: string;
@@ -13,10 +14,11 @@ function toRows(deps: Record<string, string>): DependencyRow[] {
 
 @Component({
   selector: 'app-dependencies',
+  imports: [TranslocoDirective],
   templateUrl: './dependencies.html',
 })
 export class Dependencies {
-  readonly title = input<string>('Runtime Dependencies');
+  readonly title = input.required<string>();
 
   readonly dependencies = input.required<
     DependencyRow[],

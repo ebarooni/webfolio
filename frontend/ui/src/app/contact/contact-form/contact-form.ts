@@ -1,10 +1,16 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { TranslocoDirective } from '@jsverse/transloco';
+
+import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
+
+export type SubmissionStatus = 'idle' | 'sent' | 'failed';
 
 export interface ContactFormData {
   email: string;
@@ -13,7 +19,7 @@ export interface ContactFormData {
 }
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ArrowIcon, ReactiveFormsModule, TranslocoDirective],
   selector: 'app-contact-form',
   templateUrl: './contact-form.html',
 })
@@ -21,6 +27,7 @@ export class ContactForm {
   private readonly fb = inject(NonNullableFormBuilder);
 
   readonly isSubmitting = input(false);
+  readonly status = input<SubmissionStatus>('idle');
   readonly formSubmitted = output<ContactFormData>();
 
   readonly maxMessageLength = 1000;
@@ -59,6 +66,19 @@ export class ContactForm {
     initialValue: '',
   });
 
+  constructor() {
+    // The text stays in the form until the server has accepted it.
+    effect(() => {
+      if (this.status() === 'sent') {
+        this.contactForm.reset({ email: '', message: '', name: '' });
+      }
+    });
+  }
+
+  isInvalid(control: AbstractControl): boolean {
+    return control.invalid && (control.touched || control.dirty);
+  }
+
   submit(): void {
     if (this.isSubmitting()) {
       return;
@@ -81,11 +101,5 @@ export class ContactForm {
       .replace(/^[ \t]+|[ \t]+$/gm, '');
 
     this.formSubmitted.emit({ email, name, message: sanitizedMessage });
-
-    this.contactForm.reset({
-      email: '',
-      message: '',
-      name: '',
-    });
   }
 }

@@ -11,18 +11,11 @@ import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Route } from '../../config/route';
+import { SOCIAL_LINKS } from '../../config/social-links';
 import { Github } from './github/github';
 import { Gitlab } from './gitlab/gitlab';
 import { Linkedin } from './linkedin/linkedin';
 import { Stackoverflow } from './stackoverflow/stackoverflow';
-
-type SocialId = 'github' | 'gitlab' | 'stackoverflow' | 'linkedin';
-
-type SocialLink = Readonly<{
-  id: SocialId;
-  label: string;
-  href: string;
-}>;
 
 type VersionToast = Readonly<
   { kind: 'tapsLeft'; count: number } | { kind: 'developerMode' }
@@ -61,20 +54,7 @@ export class Footer {
   readonly buildInfoLink = `/${Route.BUILD_INFO}`;
   readonly versionToast = signal<VersionToast | null>(null);
 
-  readonly links: readonly SocialLink[] = [
-    { id: 'github', label: 'GitHub', href: 'https://github.com/ebarooni' },
-    { id: 'gitlab', label: 'GitLab', href: 'https://gitlab.com/ebarooni' },
-    {
-      id: 'stackoverflow',
-      label: 'Stack Overflow',
-      href: 'https://stackoverflow.com/users/13690331/ebarooni',
-    },
-    {
-      id: 'linkedin',
-      label: 'LinkedIn',
-      href: 'https://linkedin.com/in/barooni',
-    },
-  ];
+  readonly links = SOCIAL_LINKS;
 
   constructor() {
     this.destroyRef.onDestroy(() => {

@@ -2,8 +2,16 @@ import {
   accessDeniedGuard,
   geoAccessGuard,
 } from './access-denied/geo-access-guard';
+import { findPostBySlug } from './blog/post-catalog';
+import { postExistsGuard } from './blog/post/post-exists-guard';
 import { Route } from './config/route';
-import { Routes } from '@angular/router';
+import { ResolveFn, Routes } from '@angular/router';
+
+const postTitle: ResolveFn<string> = (route) => {
+  const post = findPostBySlug(route.paramMap.get('slug') ?? '');
+
+  return `${post?.title ?? 'Blog'} | Ehsan Barooni`;
+};
 
 export const routes: Routes = [
   {
@@ -28,7 +36,6 @@ export const routes: Routes = [
         loadComponent: () => import('./home/home').then((m) => m.Home),
         title: 'Ehsan Barooni | Full-Stack Software Engineer',
         data: {
-          footerBgClass: 'bg-base-100',
           page: Route.HOME,
         },
       },
@@ -36,6 +43,15 @@ export const routes: Routes = [
         path: Route.BLOG,
         loadComponent: () => import('./blog/blog').then((m) => m.BlogComponent),
         title: 'Blog | Ehsan Barooni',
+        data: {
+          page: Route.BLOG,
+        },
+      },
+      {
+        path: `${Route.BLOG}/:slug`,
+        canActivate: [postExistsGuard],
+        loadComponent: () => import('./blog/post/post').then((m) => m.BlogPost),
+        title: postTitle,
         data: {
           page: Route.BLOG,
         },
@@ -75,7 +91,6 @@ export const routes: Routes = [
         title: 'Bookmark Status for Safari on Mac | Ehsan Barooni',
         data: {
           page: Route.APPS_BOOKMARK_STATUS,
-          footerBgClass: 'bg-base-100',
         },
       },
       { path: '**', redirectTo: Route.HOME, pathMatch: 'full' },

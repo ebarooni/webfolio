@@ -37,23 +37,7 @@
     },
     "work": {
       "label": "Selected work",
-      "all": "All projects",
-      "featured": {
-        "description": "A Safari extension and Mac app that shows whether the page you are on is already bookmarked, and where.",
-        "tags": "macOS · Safari · Read-only",
-        "link": "View the app",
-        "iconAlt": "Bookmark Status app icon",
-        "shotAlt": "The Bookmark Status page in Safari, with the current page highlighted in the bookmark tree.",
-        "bookmarkHint": "Bookmark Status toolbar button"
-      },
-      "items": {
-        "calendar": {
-          "description": "Create, update, delete and query native calendar events on iOS and Android."
-        },
-        "capawesome": {
-          "description": "Enterprise-grade solutions and services for cross-platform apps built with Capacitor."
-        }
-      }
+      "all": "All projects"
     },
     "focus": {
       "label": "What I do",
@@ -98,10 +82,100 @@
       "all": "All posts",
       "readTime": "{{minutes}} min read"
     },
-    "contact": {
-      "title": "Want to work together, or just say hello?",
-      "body": "I help teams and individuals turn ideas into working products. Your message comes straight to me, no forms team and no ticket number.",
+    "contactPanel": {
       "cta": "Write to me"
     }
+  },
+  "projects": {
+    "eyebrow": "Work · {{count}} projects",
+    "title": "Things I have built and shipped.",
+    "lead": "A Mac app, open source plugins and the tools around them. Each project links to its code or its own page.",
+    "featuredLabel": "Featured",
+    "moreLabel": "Open source and tools",
+    "externalHint": "opens in a new tab",
+    "items": {
+      "capacitor-calendar": {
+        "description": "Create, update, delete and query native calendar events on iOS and Android."
+      },
+      "capawesome": {
+        "description": "Enterprise-grade solutions and services for cross-platform apps built with Capacitor."
+      },
+      "cloudcost-tracker": {
+        "description": "Collects the billing data of several Google Cloud projects in one place with Pub/Sub topics."
+      },
+      "repo-sync": {
+        "description": "A GitHub workflow that mirrors a repository to another remote on every push."
+      },
+      "spotify-auth": {
+        "description": "A web app that creates access tokens to read user data from the Spotify web API."
+      },
+      "web-configs": {
+        "description": "Shared configuration for ESLint, Prettier, Stylelint and SwiftLint."
+      },
+      "webfolio": {
+        "description": "This website, built with Angular and Tailwind CSS and served by Quarkus."
+      }
+    },
+    "featured": {
+      "description": "A Safari extension and Mac app that shows whether the page you are on is already bookmarked, and where.",
+      "tags": "macOS · Safari · Read-only",
+      "link": "View the app",
+      "iconAlt": "Bookmark Status app icon",
+      "shotAlt": "The Bookmark Status page in Safari, with the current page highlighted in the bookmark tree.",
+      "bookmarkHint": "Bookmark Status toolbar button"
+    }
+  },
+  "blog": {
+    "eyebrow": "Writing · {{count}} posts",
+    "title": "Notes from building for the web.",
+    "lead": "Technical write-ups on web development, frameworks and the tooling I use.",
+    "readTime": "{{minutes}} min read",
+    "back": "All posts",
+    "contents": "On this page"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Want to work together, or just say hello?",
+    "lead": "I help teams and individuals turn ideas into working products. Your message comes straight to me, no forms team and no ticket number.",
+    "elsewhere": "Elsewhere",
+    "form": {
+      "label": "Contact form",
+      "name": "Name",
+      "namePlaceholder": "Max Mustermann",
+      "nameError": "Enter your name with 2 to 50 letters.",
+      "email": "Email",
+      "emailPlaceholder": "max@mustermann.de",
+      "emailError": "Enter a valid email address.",
+      "message": "Message",
+      "messagePlaceholder": "Describe your project or say hello.",
+      "messageError": "Write a message with 2 to {{max}} characters.",
+      "send": "Send message",
+      "sending": "Sending"
+    },
+    "status": {
+      "sentTitle": "Message sent",
+      "sentBody": "Thanks for reaching out. I will get back to you soon.",
+      "failedTitle": "The message was not sent",
+      "failedBody": "Your text is still in the form. Try again later, or reach me through one of the profiles on this page."
+    }
+  },
+  "buildInfo": {
+    "eyebrow": "Build info · developer mode",
+    "title": "What runs this website.",
+    "lead": "The current version, the last deployment and the packages behind this build.",
+    "version": "Version",
+    "lastDeployment": "Last deployment",
+    "builtOn": "Built on",
+    "runtime": "Runtime dependencies",
+    "buildTime": "Build time dependencies",
+    "package": "Package",
+    "packageVersion": "Version"
+  },
+  "accessDenied": {
+    "eyebrow": "Access denied",
+    "title": "This website is not available in your region.",
+    "lead": "If you have a password, enter it to continue.",
+    "password": "Password",
+    "submit": "Continue"
   }
 }
