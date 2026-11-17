@@ -6,13 +6,18 @@ import {
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import {
+  provideRouter,
+  withInMemoryScrolling,
+  withViewTransitions,
+} from '@angular/router';
 
 import { routes } from './app.routes';
 import { greetCuriousVisitors } from './easter-eggs/console-greeting';
 import { fixedHeaderScrollOffset } from './fixed-header-scroll-offset';
 import { initializeApp } from './initialize-app';
 import { provideLocalization } from './localization/provide-localization';
+import { skipViewTransitionForReducedMotion } from './reduced-motion-view-transition';
 
 function registerFixedHeaderScrollOffset(): void {
   const documentRef = inject(DOCUMENT);
@@ -34,6 +39,11 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
+      }),
+      // Browsers without the View Transitions API navigate without animation.
+      withViewTransitions({
+        onViewTransitionCreated: skipViewTransitionForReducedMotion,
+        skipInitialTransition: true,
       }),
     ),
   ],

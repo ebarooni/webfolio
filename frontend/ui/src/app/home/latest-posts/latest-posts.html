@@ -30,7 +30,12 @@
         <h3
           class="flex-[3_1_20rem] text-[1.375rem] font-semibold tracking-tight text-ink group-hover:text-primary"
         >
-          {{ post.title }}
+          <span
+            class="post-title-transition inline-block"
+            [style.view-transition-name]="'post-title-' + post.slug"
+          >
+            {{ post.title }}
+          </span>
         </h3>
         <p class="meta-label">
           {{ t('readTime', { minutes: post.readTime }) }}

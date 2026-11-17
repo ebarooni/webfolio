@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./styles/post-prose.css";
+@import "./styles/view-transitions.css";
 
 @theme {
   --text-body: clamp(0.9rem, 1.5vw, 1.125rem);
