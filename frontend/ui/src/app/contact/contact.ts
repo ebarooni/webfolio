@@ -7,6 +7,7 @@ import { finalize } from 'rxjs';
 
 import { SOCIAL_LINKS } from '../config/social-links';
 import { ArrowIcon } from '../shared/components/arrow-icon/arrow-icon';
+import { PageIntro } from '../shared/components/page-intro/page-intro';
 import {
   ContactForm,
   ContactFormData,
@@ -15,7 +16,13 @@ import {
 
 @Component({
   selector: 'app-contact',
-  imports: [ArrowIcon, ContactForm, NgTemplateOutlet, TranslocoDirective],
+  imports: [
+    ArrowIcon,
+    ContactForm,
+    NgTemplateOutlet,
+    PageIntro,
+    TranslocoDirective,
+  ],
   templateUrl: './contact.html',
 })
 export class Contact {

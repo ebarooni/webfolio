@@ -11,10 +11,7 @@
 
     <p class="max-w-[52ch] text-[1.0625rem]">{{ t('contact.lead') }}</p>
 
-    <a
-      class="focus-ring mt-2 inline-flex min-h-13 items-center gap-2.5 rounded-[0.875rem] bg-ink px-6 font-semibold text-base-100 hover:opacity-85"
-      [routerLink]="contactLink"
-    >
+    <a appButton class="mt-2" [routerLink]="contactLink">
       {{ t('home.contactPanel.cta') }}
       <app-arrow-icon />
     </a>

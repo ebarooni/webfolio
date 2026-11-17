@@ -7,8 +7,12 @@
   (ngSubmit)="submit()"
 >
   <div class="grid gap-6 sm:grid-cols-2 sm:gap-5">
-    <div class="flex flex-col gap-2">
-      <label class="field-label" for="contact-name">{{ t('form.name') }}</label>
+    <app-form-field
+      #nameField
+      controlId="contact-name"
+      [label]="t('form.name')"
+      [error]="isInvalid(nameControl) ? t('form.nameError') : ''"
+    >
       <input
         id="contact-name"
         type="text"
@@ -18,20 +22,17 @@
         [placeholder]="t('form.namePlaceholder')"
         [attr.aria-invalid]="isInvalid(nameControl) ? true : null"
         [attr.aria-describedby]="
-          isInvalid(nameControl) ? 'contact-name-error' : null
+          isInvalid(nameControl) ? nameField.errorId() : null
         "
       />
-      @if (isInvalid(nameControl)) {
-      <p id="contact-name-error" class="field-error">
-        {{ t('form.nameError') }}
-      </p>
-      }
-    </div>
+    </app-form-field>
 
-    <div class="flex flex-col gap-2">
-      <label class="field-label" for="contact-email">
-        {{ t('form.email') }}
-      </label>
+    <app-form-field
+      #emailField
+      controlId="contact-email"
+      [label]="t('form.email')"
+      [error]="isInvalid(emailControl) ? t('form.emailError') : ''"
+    >
       <input
         id="contact-email"
         type="email"
@@ -42,21 +43,22 @@
         [placeholder]="t('form.emailPlaceholder')"
         [attr.aria-invalid]="isInvalid(emailControl) ? true : null"
         [attr.aria-describedby]="
-          isInvalid(emailControl) ? 'contact-email-error' : null
+          isInvalid(emailControl) ? emailField.errorId() : null
         "
       />
-      @if (isInvalid(emailControl)) {
-      <p id="contact-email-error" class="field-error">
-        {{ t('form.emailError') }}
-      </p>
-      }
-    </div>
+    </app-form-field>
   </div>
 
-  <div class="flex flex-col gap-2">
-    <label class="field-label" for="contact-message">
-      {{ t('form.message') }}
-    </label>
+  <app-form-field
+    #messageField
+    controlId="contact-message"
+    [label]="t('form.message')"
+    [error]="
+      isInvalid(messageControl)
+        ? t('form.messageError', { max: maxMessageLength })
+        : ''
+    "
+  >
     <textarea
       id="contact-message"
       class="field min-h-48 resize-y"
@@ -65,22 +67,17 @@
       [placeholder]="t('form.messagePlaceholder')"
       [attr.aria-invalid]="isInvalid(messageControl) ? true : null"
       [attr.aria-describedby]="
-        isInvalid(messageControl) ? 'contact-message-error' : null
+        isInvalid(messageControl) ? messageField.errorId() : null
       "
     ></textarea>
-    <div class="flex items-start justify-between gap-4">
-      <p id="contact-message-error" class="field-error">
-        @if (isInvalid(messageControl)) { {{ t('form.messageError', { max:
-        maxMessageLength }) }} }
-      </p>
-      <p
-        class="meta-label shrink-0"
-        [class.text-error]="message().length > maxMessageLength"
-      >
-        {{ message().length }}/{{ maxMessageLength }}
-      </p>
-    </div>
-  </div>
+    <p
+      appFieldAside
+      class="meta-label ms-auto shrink-0"
+      [class.text-error]="message().length > maxMessageLength"
+    >
+      {{ message().length }}/{{ maxMessageLength }}
+    </p>
+  </app-form-field>
 
   <div
     class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"
@@ -90,51 +87,26 @@
       aria-live="polite"
     >
       @switch (status()) { @case ('sent') {
-      <p class="flex items-start gap-2.5 text-ink">
-        <svg
-          aria-hidden="true"
-          class="mt-0.5 size-5 shrink-0 text-success"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
-        <span>
-          <strong class="font-semibold">{{ t('status.sentTitle') }}.</strong>
-          {{ t('status.sentBody') }}
-        </span>
-      </p>
+      <app-status-message
+        tone="success"
+        [title]="t('status.sentTitle')"
+        [body]="t('status.sentBody')"
+      />
       } @case ('failed') {
-      <p class="flex items-start gap-2.5 text-ink">
-        <svg
-          aria-hidden="true"
-          class="mt-0.5 size-5 shrink-0 text-error"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M12 8v5M12 16.5v.5" />
-          <circle cx="12" cy="12" r="9" />
-        </svg>
-        <span>
-          <strong class="font-semibold">{{ t('status.failedTitle') }}.</strong>
-          {{ t('status.failedBody') }}
-        </span>
-      </p>
+      <app-status-message
+        tone="error"
+        [title]="t('status.failedTitle')"
+        [body]="t('status.failedBody')"
+      />
       } }
     </div>
 
     <button
+      appButton
       type="submit"
-      class="focus-ring inline-flex min-h-13 shrink-0 cursor-pointer items-center justify-center gap-2.5 rounded-[0.875rem] bg-ink px-6 font-semibold text-base-100 hover:opacity-85 disabled:cursor-progress disabled:opacity-60"
+      class="shrink-0"
       [disabled]="isSubmitting()"
+      [attr.aria-busy]="isSubmitting() ? true : null"
     >
       @if (isSubmitting()) {
       <span

@@ -6,31 +6,10 @@
   />
 
   <section class="page-container pb-24 lg:pb-32" [attr.aria-label]="t('title')">
-    <ul>
+    <ul class="rule-list">
       @for (post of posts; track post.id) {
-      <li class="border-t border-base-300 last:border-b">
-        <a
-          class="group focus-ring grid gap-x-8 gap-y-2.5 py-8 transition-[padding] hover:pl-3 motion-reduce:transition-none md:grid-cols-[8.75rem_minmax(0,1fr)_auto] md:items-baseline"
-          [routerLink]="[blogLink, post.slug]"
-        >
-          <time class="meta-label" [attr.datetime]="post.date.toISOString()">
-            {{ post.date | shortDate: language() }}
-          </time>
-
-          <div class="flex flex-col gap-2.5">
-            <h2
-              [style.view-transition-name]="'post-title-' + post.slug"
-              class="post-title-transition w-fit text-[clamp(1.5rem,2.4vw,1.75rem)] leading-[1.2] font-semibold tracking-[-0.025em] text-ink group-hover:text-primary"
-            >
-              {{ post.title }}
-            </h2>
-            <p class="max-w-[60ch]" lang="en">{{ post.summary }}</p>
-          </div>
-
-          <p class="meta-label">
-            {{ t('readTime', { minutes: post.readTime }) }}
-          </p>
-        </a>
+      <li>
+        <app-post-row [post]="post" [headingLevel]="2" showSummary />
       </li>
       }
     </ul>

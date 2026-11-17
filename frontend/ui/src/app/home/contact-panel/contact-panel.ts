@@ -4,10 +4,11 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Route } from '../../config/route';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
+import { Button } from '../../shared/components/button/button';
 
 @Component({
   selector: 'app-contact-panel',
-  imports: [ArrowIcon, RouterLink, TranslocoDirective],
+  imports: [ArrowIcon, Button, RouterLink, TranslocoDirective],
   templateUrl: './contact-panel.html',
 })
 export class ContactPanel {

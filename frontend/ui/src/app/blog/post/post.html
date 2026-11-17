@@ -3,11 +3,7 @@
   <header
     class="page-container flex flex-col items-start gap-6 pt-36 pb-12 lg:pt-36 lg:pb-16"
   >
-    <a
-      class="focus-ring inline-flex min-h-11 items-center gap-2 rounded-lg text-[0.9375rem] font-medium text-ink hover:text-primary"
-      [routerLink]="blogLink"
-    >
-      <app-arrow-icon class="rotate-180" />
+    <a appArrowLink direction="back" [routerLink]="blogLink">
       {{ t('back') }}
     </a>
 
@@ -20,7 +16,7 @@
 
     <h1
       lang="en"
-      [style.view-transition-name]="'post-title-' + post.slug"
+      [style.view-transition-name]="titleTransitionName()"
       class="post-title-transition w-fit max-w-[20ch] text-[clamp(2.125rem,4.6vw,3.5rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance text-ink"
     >
       {{ post.title }}
@@ -46,7 +42,8 @@
         >
           {{ t('contents') }}
           <app-arrow-icon
-            class="rotate-90 transition-transform group-open:-rotate-90 motion-reduce:transition-none"
+            direction="down"
+            class="transition-transform group-open:-rotate-90 motion-reduce:transition-none"
           />
         </summary>
         <div class="px-5 pb-4">
@@ -55,7 +52,7 @@
       </details>
 
       <div class="hidden lg:block">
-        <p class="meta-label mb-3 font-medium">{{ t('contents') }}</p>
+        <p class="section-label mb-3">{{ t('contents') }}</p>
         <ng-container [ngTemplateOutlet]="links" />
       </div>
     </nav>

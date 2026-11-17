@@ -3,13 +3,11 @@
   id="experience"
   class="page-container flex flex-col gap-8 pb-24 lg:pb-32"
 >
-  <h2 class="meta-label font-medium">{{ t('label') }}</h2>
+  <h2 class="section-label">{{ t('label') }}</h2>
 
-  <ol>
+  <ol class="rule-list">
     @for (stepKey of stepKeys; track stepKey) {
-    <li
-      class="flex flex-wrap items-baseline gap-x-8 gap-y-1.5 border-t border-base-300 py-6 last:border-b"
-    >
+    <li class="flex flex-wrap items-baseline gap-x-8 gap-y-1.5 py-6">
       <p class="meta-label basis-35">{{ t(stepKey + '.period') }}</p>
       <h3 class="flex-[1_1_16rem] text-[1.0625rem] font-semibold text-ink">
         {{ t(stepKey + '.title') }}

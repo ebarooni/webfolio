@@ -79,8 +79,7 @@
     },
     "writing": {
       "label": "Writing",
-      "all": "All posts",
-      "readTime": "{{minutes}} min read"
+      "all": "All posts"
     },
     "contactPanel": {
       "cta": "Write to me"

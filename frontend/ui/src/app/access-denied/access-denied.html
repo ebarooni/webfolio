@@ -1,39 +1,29 @@
 <ng-container *transloco="let t; prefix: 'accessDenied'">
   <header class="page-container flex min-h-17 items-center gap-3 py-3">
-    <span
-      aria-hidden="true"
-      class="grid size-8 place-items-center rounded-[9px] bg-ink text-[13px] font-semibold tracking-[0.02em] text-base-100"
-    >
-      EB
-    </span>
+    <app-monogram />
     <span class="font-semibold tracking-tight text-ink">Ehsan Barooni</span>
   </header>
 
   <main class="page-container grid flex-1 place-items-center py-12">
-    <section
-      class="flex w-full max-w-120 flex-col items-start gap-6"
-      aria-labelledby="access-denied-title"
+    <app-page-intro
+      class="w-full max-w-120"
+      size="compact"
+      titleId="access-denied-title"
+      [eyebrow]="t('eyebrow')"
+      [title]="t('title')"
+      [lead]="t('lead')"
     >
-      <p class="meta-label">{{ t('eyebrow') }}</p>
-
-      <h1
-        id="access-denied-title"
-        class="text-[clamp(2.125rem,4.6vw,3rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance text-ink"
-      >
-        {{ t('title') }}
-      </h1>
-
-      <p class="text-lead leading-[1.55]">{{ t('lead') }}</p>
-
       <form
-        class="mt-2 flex w-full flex-wrap items-end gap-3 rounded-3xl bg-base-200 p-6"
+        class="flex w-full flex-wrap items-end gap-3 rounded-3xl bg-base-200 p-6"
         novalidate
+        aria-labelledby="access-denied-title"
         (ngSubmit)="submit()"
       >
-        <div class="flex min-w-0 flex-[1_1_13.75rem] flex-col gap-2">
-          <label class="field-label" for="access-password">
-            {{ t('password') }}
-          </label>
+        <app-form-field
+          class="min-w-0 flex-[1_1_13.75rem]"
+          controlId="access-password"
+          [label]="t('password')"
+        >
           <input
             id="access-password"
             type="password"
@@ -42,16 +32,17 @@
             [value]="password()"
             (input)="updatePassword($event)"
           />
-        </div>
+        </app-form-field>
 
         <button
+          appButton
           type="submit"
-          class="focus-ring inline-flex min-h-13 grow cursor-pointer sm:grow-0 items-center justify-center rounded-[0.875rem] bg-ink px-6 font-semibold text-base-100 hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
+          class="grow sm:grow-0"
           [disabled]="!isPasswordValid()"
         >
           {{ t('submit') }}
         </button>
       </form>
-    </section>
+    </app-page-intro>
   </main>
 </ng-container>

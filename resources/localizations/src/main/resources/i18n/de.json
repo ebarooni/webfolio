@@ -79,8 +79,7 @@
     },
     "writing": {
       "label": "Blog",
-      "all": "Alle Artikel",
-      "readTime": "{{minutes}} Min. Lesezeit"
+      "all": "Alle Artikel"
     },
     "contactPanel": {
       "cta": "Schreib mir"

@@ -18,12 +18,6 @@
 .monogram-face {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
   backface-visibility: hidden;
 }
 

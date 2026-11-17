@@ -1,8 +1,8 @@
-import { Component, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { Component, computed } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { BUILD_INFO } from '../../../environments/build-info';
+import { injectActiveLanguage } from '../../localization/active-language';
 import { ShortDate } from '../../shared/short-date/short-date';
 
 const MS_PER_MINUTE = 60_000;
@@ -42,11 +42,7 @@ export function describeAge(
   templateUrl: './build-facts.html',
 })
 export class BuildFacts {
-  private readonly translocoService = inject(TranslocoService);
-
-  readonly language = toSignal(this.translocoService.langChanges$, {
-    initialValue: this.translocoService.getActiveLang(),
-  });
+  readonly language = injectActiveLanguage();
 
   readonly version = BUILD_INFO.version;
   readonly buildTime = new Date(BUILD_INFO.buildTime);

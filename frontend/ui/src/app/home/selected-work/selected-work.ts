@@ -6,12 +6,12 @@ import { Route } from '../../config/route';
 import { FeaturedProject } from '../../projects/featured-project/featured-project';
 import { findProject } from '../../projects/project-catalog';
 import { ProjectRow } from '../../projects/project-row/project-row';
-import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
+import { ArrowLink } from '../../shared/components/arrow-link/arrow-link';
 
 @Component({
   selector: 'app-selected-work',
   imports: [
-    ArrowIcon,
+    ArrowLink,
     FeaturedProject,
     ProjectRow,
     RouterLink,

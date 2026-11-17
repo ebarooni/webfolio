@@ -9,6 +9,9 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
+import { Button } from '../../shared/components/button/button';
+import { FormField } from '../../shared/components/form-field/form-field';
+import { StatusMessage } from '../../shared/components/status-message/status-message';
 
 export type SubmissionStatus = 'idle' | 'sent' | 'failed';
 
@@ -19,7 +22,14 @@ export interface ContactFormData {
 }
 
 @Component({
-  imports: [ArrowIcon, ReactiveFormsModule, TranslocoDirective],
+  imports: [
+    ArrowIcon,
+    Button,
+    FormField,
+    ReactiveFormsModule,
+    StatusMessage,
+    TranslocoDirective,
+  ],
   selector: 'app-contact-form',
   templateUrl: './contact-form.html',
 })

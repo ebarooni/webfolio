@@ -10,13 +10,16 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
 import { Route } from '../../config/route';
+import { injectActiveLanguage } from '../../localization/active-language';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
+import { ArrowLink } from '../../shared/components/arrow-link/arrow-link';
 import { ShortDate } from '../../shared/short-date/short-date';
 import { findPostBySlug, Posts } from '../post-catalog';
+import { postTitleTransitionName } from '../post-title-transition';
 import { AstroToAngular } from '../posts/astro-to-angular/astro-to-angular';
 import { VpsHosting } from '../posts/vps-hosting/vps-hosting';
 
@@ -33,6 +36,7 @@ function toAnchorId(text: string): string {
   selector: 'app-blog-post',
   imports: [
     ArrowIcon,
+    ArrowLink,
     AstroToAngular,
     NgTemplateOutlet,
     RouterLink,
@@ -43,8 +47,6 @@ function toAnchorId(text: string): string {
   templateUrl: './post.html',
 })
 export class BlogPost {
-  private readonly translocoService = inject(TranslocoService);
-
   private readonly slug = toSignal(
     inject(ActivatedRoute).paramMap.pipe(
       map((parameters) => parameters.get('slug') ?? ''),
@@ -54,14 +56,15 @@ export class BlogPost {
 
   private readonly content = viewChild<ElementRef<HTMLElement>>('content');
 
-  readonly language = toSignal(this.translocoService.langChanges$, {
-    initialValue: this.translocoService.getActiveLang(),
-  });
+  readonly language = injectActiveLanguage();
 
   readonly blogLink = `/${Route.BLOG}`;
   readonly posts = Posts;
   readonly post = computed(() => findPostBySlug(this.slug()));
   readonly headings = signal<readonly Heading[]>([]);
+  readonly titleTransitionName = computed(() =>
+    postTitleTransitionName(this.post()?.slug ?? ''),
+  );
 
   constructor() {
     // The contents list comes from the section titles of the post.

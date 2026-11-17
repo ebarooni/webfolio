@@ -1,0 +1,25 @@
+<p class="flex items-start gap-2.5 text-ink">
+  <svg
+    aria-hidden="true"
+    class="mt-0.5 size-5 shrink-0"
+    [class.text-success]="tone() === 'success'"
+    [class.text-error]="tone() === 'error'"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    @if (tone() === 'success') {
+    <path d="M20 6 9 17l-5-5" />
+    } @else {
+    <path d="M12 8v5M12 16.5v.5" />
+    <circle cx="12" cy="12" r="9" />
+    }
+  </svg>
+  <span>
+    <strong class="font-semibold">{{ title() }}.</strong>
+    {{ body() }}
+  </span>
+</p>

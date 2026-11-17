@@ -2,7 +2,7 @@
   *transloco="let t; prefix: 'buildInfo'"
   class="w-full border-collapse text-[0.9375rem]"
 >
-  <caption class="meta-label pb-4 text-left font-medium">
+  <caption class="section-label pb-4 text-left">
     {{ title() }} · {{ dependencies().length }}
   </caption>
 
@@ -13,9 +13,9 @@
     </tr>
   </thead>
 
-  <tbody>
+  <tbody class="rule-list">
     @for (dependency of dependencies(); track dependency.name) {
-    <tr class="border-t border-base-300 last:border-b">
+    <tr>
       <th
         scope="row"
         class="py-3 pr-4 text-left font-medium wrap-anywhere text-ink"
