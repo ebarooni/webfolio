@@ -15,15 +15,14 @@
     </p>
 
     <h1
-      lang="en"
       [style.view-transition-name]="titleTransitionName()"
       class="post-title-transition w-fit max-w-[20ch] text-[clamp(2.125rem,4.6vw,3.5rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance text-ink"
     >
-      {{ post.title }}
+      {{ t('posts.' + post.slug + '.title') }}
     </h1>
 
-    <p lang="en" class="max-w-[60ch] text-lead leading-[1.55] text-pretty">
-      {{ post.summary }}
+    <p class="max-w-[60ch] text-lead leading-[1.55] text-pretty">
+      {{ t('posts.' + post.slug + '.summary') }}
     </p>
   </header>
 
@@ -58,18 +57,14 @@
     </nav>
     }
 
-    <div #content lang="en" class="post-prose min-w-0">
-      @switch (post.id) { @case (posts.ASTRO_TO_ANGULAR) {
-      <app-astro-to-angular />
-      } @case (posts.VPS_HOSTING) {
-      <app-vps-hosting />
-      } }
+    <div #content class="post-prose min-w-0">
+      <ng-container [ngComponentOutlet]="postContent()" />
     </div>
   </div>
   }
 
   <ng-template #links>
-    <ol class="flex flex-col" lang="en">
+    <ol class="flex flex-col">
       @for (heading of headings(); track heading.id) {
       <li>
         <a

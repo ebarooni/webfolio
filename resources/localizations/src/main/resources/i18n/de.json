@@ -127,10 +127,20 @@
   "blog": {
     "eyebrow": "Blog · {{count}} Artikel",
     "title": "Notizen aus der Web-Entwicklung.",
-    "lead": "Technische Artikel über Web-Entwicklung, Frameworks und meine Werkzeuge. Die Artikel sind auf Englisch.",
+    "lead": "Technische Artikel über Web-Entwicklung, Frameworks und meine Werkzeuge.",
     "readTime": "{{minutes}} Min. Lesezeit",
     "back": "Alle Artikel",
-    "contents": "Auf dieser Seite"
+    "contents": "Auf dieser Seite",
+    "posts": {
+      "from-astro-to-angular": {
+        "title": "Von Astro zu Angular: Warum ich mein Portfolio neu gebaut habe",
+        "summary": "Warum statische Einfachheit für mein Portfolio nicht mehr gereicht hat und wie mir Angular Raum zum Wachsen gegeben hat."
+      },
+      "moving-away-from-firebase-hosting": {
+        "title": "Weg von Firebase Hosting",
+        "summary": "Ich habe meine Portfolio-Website von Firebase Hosting auf einen VPS umgezogen. In diesem Artikel zeige ich die Migration Schritt für Schritt und erkläre, warum ich mich dafür entschieden habe."
+      }
+    }
   },
   "contact": {
     "eyebrow": "Kontakt",
@@ -176,5 +186,14 @@
     "lead": "Wenn du ein Passwort hast, gib es ein, um fortzufahren.",
     "password": "Passwort",
     "submit": "Weiter"
+  },
+  "pageTitles": {
+    "home": "Ehsan Barooni | Full-Stack-Softwareentwickler",
+    "projects": "Projekte | Ehsan Barooni",
+    "blog": "Blog | Ehsan Barooni",
+    "post": "{{title}} | Ehsan Barooni",
+    "contact": "Kontakt | Ehsan Barooni",
+    "buildInfo": "Build-Info | Ehsan Barooni",
+    "accessDenied": "Zugriff verweigert | Ehsan Barooni"
   }
 }

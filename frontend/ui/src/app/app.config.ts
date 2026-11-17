@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import {
   provideRouter,
+  TitleStrategy,
   withInMemoryScrolling,
   withViewTransitions,
 } from '@angular/router';
@@ -16,8 +17,9 @@ import { routes } from './app.routes';
 import { greetCuriousVisitors } from './easter-eggs/console-greeting';
 import { fixedHeaderScrollOffset } from './fixed-header-scroll-offset';
 import { initializeApp } from './initialize-app';
+import { LocalizedTitleStrategy } from './localization/localized-title-strategy';
 import { provideLocalization } from './localization/provide-localization';
-import { skipViewTransitionForReducedMotion } from './reduced-motion-view-transition';
+import { skipUnwantedViewTransition } from './view-transition-filter';
 
 function registerFixedHeaderScrollOffset(): void {
   const documentRef = inject(DOCUMENT);
@@ -34,6 +36,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(),
     provideLocalization(),
+    { provide: TitleStrategy, useClass: LocalizedTitleStrategy },
     provideRouter(
       routes,
       withInMemoryScrolling({
@@ -42,7 +45,7 @@ export const appConfig: ApplicationConfig = {
       }),
       // Browsers without the View Transitions API navigate without animation.
       withViewTransitions({
-        onViewTransitionCreated: skipViewTransitionForReducedMotion,
+        onViewTransitionCreated: skipUnwantedViewTransition,
         skipInitialTransition: true,
       }),
     ),

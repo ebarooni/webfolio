@@ -130,7 +130,17 @@
     "lead": "Technical write-ups on web development, frameworks and the tooling I use.",
     "readTime": "{{minutes}} min read",
     "back": "All posts",
-    "contents": "On this page"
+    "contents": "On this page",
+    "posts": {
+      "from-astro-to-angular": {
+        "title": "From Astro to Angular: Why I Rebuilt My Portfolio",
+        "summary": "Why static simplicity wasn’t enough for my portfolio and how Angular gave me room to grow."
+      },
+      "moving-away-from-firebase-hosting": {
+        "title": "Moving away from Firebase Hosting",
+        "summary": "I decided to deploy my portfolio website on a VPS instead of using Firebase Hosting. In this blog post, I provide a step by step guide on the migration and explain the reason behind this decision."
+      }
+    }
   },
   "contact": {
     "eyebrow": "Contact",
@@ -176,5 +186,14 @@
     "lead": "If you have a password, enter it to continue.",
     "password": "Password",
     "submit": "Continue"
+  },
+  "pageTitles": {
+    "home": "Ehsan Barooni | Full-Stack Software Engineer",
+    "projects": "Projects | Ehsan Barooni",
+    "blog": "Blog | Ehsan Barooni",
+    "post": "{{title}} | Ehsan Barooni",
+    "contact": "Contact | Ehsan Barooni",
+    "buildInfo": "Build info | Ehsan Barooni",
+    "accessDenied": "Access denied | Ehsan Barooni"
   }
 }

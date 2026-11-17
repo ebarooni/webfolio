@@ -4,7 +4,10 @@ import { provideRouter } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { localizationTestingModule } from '../../../testing/localization-testing';
+import {
+  localizationTestingModule,
+  postText,
+} from '../../../testing/localization-testing';
 import { BLOG_POSTS } from '../../blog/post-catalog';
 import { Route } from '../../config/route';
 import { LatestPosts } from './latest-posts';
@@ -34,7 +37,7 @@ describe('LatestPosts', () => {
 
   it('should show the two newest posts', () => {
     expect(rowTexts()).toHaveLength(2);
-    expect(rowTexts()[0]).toContain(BLOG_POSTS[0].title);
+    expect(rowTexts()[0]).toContain(postText(BLOG_POSTS[0].slug).title);
     expect(rowTexts()[0]).toContain('10 min read');
   });
 

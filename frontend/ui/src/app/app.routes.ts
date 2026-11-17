@@ -2,16 +2,12 @@ import {
   accessDeniedGuard,
   geoAccessGuard,
 } from './access-denied/geo-access-guard';
-import { findPostBySlug } from './blog/post-catalog';
 import { postExistsGuard } from './blog/post/post-exists-guard';
 import { Route } from './config/route';
-import { ResolveFn, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-const postTitle: ResolveFn<string> = (route) => {
-  const post = findPostBySlug(route.paramMap.get('slug') ?? '');
-
-  return `${post?.title ?? 'Blog'} | Ehsan Barooni`;
-};
+// Titles that start with "pageTitles." are translation keys.
+// LocalizedTitleStrategy translates them.
 
 export const routes: Routes = [
   {
@@ -19,7 +15,7 @@ export const routes: Routes = [
     canActivate: [accessDeniedGuard],
     loadComponent: () =>
       import('./access-denied/access-denied').then((m) => m.AccessDenied),
-    title: 'Access denied',
+    title: 'pageTitles.accessDenied',
     data: {
       page: Route.ACCESS_DENIED,
     },
@@ -34,7 +30,7 @@ export const routes: Routes = [
       {
         path: Route.HOME,
         loadComponent: () => import('./home/home').then((m) => m.Home),
-        title: 'Ehsan Barooni | Full-Stack Software Engineer',
+        title: 'pageTitles.home',
         data: {
           page: Route.HOME,
         },
@@ -42,7 +38,7 @@ export const routes: Routes = [
       {
         path: Route.BLOG,
         loadComponent: () => import('./blog/blog').then((m) => m.BlogComponent),
-        title: 'Blog | Ehsan Barooni',
+        title: 'pageTitles.blog',
         data: {
           page: Route.BLOG,
         },
@@ -51,7 +47,7 @@ export const routes: Routes = [
         path: `${Route.BLOG}/:slug`,
         canActivate: [postExistsGuard],
         loadComponent: () => import('./blog/post/post').then((m) => m.BlogPost),
-        title: postTitle,
+        title: 'pageTitles.post',
         data: {
           page: Route.BLOG,
         },
@@ -60,7 +56,7 @@ export const routes: Routes = [
         path: Route.PROJECTS,
         loadComponent: () =>
           import('./projects/projects').then((m) => m.Projects),
-        title: 'Projects | Ehsan Barooni',
+        title: 'pageTitles.projects',
         data: {
           page: Route.PROJECTS,
         },
@@ -68,7 +64,7 @@ export const routes: Routes = [
       {
         path: Route.CONTACT,
         loadComponent: () => import('./contact/contact').then((m) => m.Contact),
-        title: 'Contact | Ehsan Barooni',
+        title: 'pageTitles.contact',
         data: {
           page: Route.CONTACT,
         },
@@ -77,7 +73,7 @@ export const routes: Routes = [
         path: Route.BUILD_INFO,
         loadComponent: () =>
           import('./build-info/build-info').then((m) => m.BuildInfo),
-        title: 'Build Info | Ehsan Barooni',
+        title: 'pageTitles.buildInfo',
         data: {
           page: Route.BUILD_INFO,
         },

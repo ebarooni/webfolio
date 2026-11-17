@@ -26,3 +26,15 @@ export function localizationTestingModule(
     ...options,
   });
 }
+
+type PostText = Readonly<{ title: string; summary: string }>;
+
+/** The translated title and summary of a blog post. */
+export function postText(
+  slug: string,
+  translation: typeof english | typeof german = english,
+): PostText {
+  const posts: Readonly<Record<string, PostText>> = translation.blog.posts;
+
+  return posts[slug];
+}

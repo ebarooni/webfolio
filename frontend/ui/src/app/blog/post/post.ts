@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import {
   afterRenderEffect,
   Component,
@@ -18,16 +18,19 @@ import { injectActiveLanguage } from '../../localization/active-language';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
 import { ArrowLink } from '../../shared/components/arrow-link/arrow-link';
 import { ShortDate } from '../../shared/short-date/short-date';
-import { findPostBySlug, Posts } from '../post-catalog';
+import { DEFAULT_LANGUAGE, isLanguage } from '../../config/languages';
+import { findPostBySlug } from '../post-catalog';
 import { postTitleTransitionName } from '../post-title-transition';
-import { AstroToAngular } from '../posts/astro-to-angular/astro-to-angular';
-import { VpsHosting } from '../posts/vps-hosting/vps-hosting';
+import { POST_CONTENT } from '../posts/post-content';
 
 type Heading = Readonly<{ id: string; text: string }>;
 
 function toAnchorId(text: string): string {
   return text
     .toLowerCase()
+    .replace(/ß/g, 'ss')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 }
@@ -37,12 +40,11 @@ function toAnchorId(text: string): string {
   imports: [
     ArrowIcon,
     ArrowLink,
-    AstroToAngular,
+    NgComponentOutlet,
     NgTemplateOutlet,
     RouterLink,
     ShortDate,
     TranslocoDirective,
-    VpsHosting,
   ],
   templateUrl: './post.html',
 })
@@ -54,13 +56,25 @@ export class BlogPost {
     { initialValue: '' },
   );
 
-  private readonly content = viewChild<ElementRef<HTMLElement>>('content');
+  private readonly contentElement =
+    viewChild<ElementRef<HTMLElement>>('content');
 
   readonly language = injectActiveLanguage();
 
   readonly blogLink = `/${Route.BLOG}`;
-  readonly posts = Posts;
   readonly post = computed(() => findPostBySlug(this.slug()));
+  readonly postContent = computed(() => {
+    const post = this.post();
+    const language = this.language();
+
+    if (!post) {
+      return null;
+    }
+
+    return POST_CONTENT[post.id][
+      isLanguage(language) ? language : DEFAULT_LANGUAGE
+    ];
+  });
   readonly headings = signal<readonly Heading[]>([]);
   readonly titleTransitionName = computed(() =>
     postTitleTransitionName(this.post()?.slug ?? ''),
@@ -69,10 +83,10 @@ export class BlogPost {
   constructor() {
     // The contents list comes from the section titles of the post.
     afterRenderEffect(() => {
-      this.post();
+      this.postContent();
 
       const sectionTitles =
-        this.content()?.nativeElement.querySelectorAll('h2') ?? [];
+        this.contentElement()?.nativeElement.querySelectorAll('h2') ?? [];
 
       this.headings.set(
         Array.from(sectionTitles, (sectionTitle) => {

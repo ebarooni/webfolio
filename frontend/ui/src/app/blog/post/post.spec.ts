@@ -8,7 +8,13 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { localizationTestingModule } from '../../../testing/localization-testing';
+import { TranslocoService } from '@jsverse/transloco';
+
+import {
+  germanTranslation,
+  localizationTestingModule,
+  postText,
+} from '../../../testing/localization-testing';
 import { BLOG_POSTS } from '../post-catalog';
 import { BlogPost } from './post';
 
@@ -53,7 +59,7 @@ describe('BlogPost', () => {
   });
 
   it('should show the title, the date and the read time of the post', () => {
-    expect(text('h1')).toBe(vpsPost.title);
+    expect(text('h1')).toBe(postText(vpsPost.slug).title);
     expect(text('header .meta-label')).toBe('Apr 4, 2026 · 10 min read');
   });
 
@@ -91,10 +97,33 @@ describe('BlogPost', () => {
   it('should show the other post after the address changes', async () => {
     await openPost(astroPost.slug);
 
-    expect(text('h1')).toBe(astroPost.title);
+    expect(text('h1')).toBe(postText(astroPost.slug).title);
     expect(
       fixture.debugElement.query(By.css('app-astro-to-angular')),
     ).not.toBeNull();
+  });
+
+  it('should show the post, its summary and its contents in German', async () => {
+    TestBed.inject(TranslocoService).setActiveLang('de');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const germanText = postText(vpsPost.slug, germanTranslation);
+    const firstLink = fixture.debugElement.query(By.css('nav ol a'))
+      .nativeElement as HTMLAnchorElement;
+
+    expect(text('h1')).toBe(germanText.title);
+    expect(text('header p.text-lead')).toBe(germanText.summary);
+    expect(
+      fixture.debugElement.query(By.css('app-vps-hosting-de')),
+    ).not.toBeNull();
+    expect(firstLink.textContent.trim()).toBe(
+      'Warum ich Firebase Hosting verlassen habe',
+    );
+    expect(firstLink.getAttribute('href')).toContain(
+      '#warum-ich-firebase-hosting-verlassen-habe',
+    );
   });
 
   it('should render nothing for an unknown post', async () => {

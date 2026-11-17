@@ -4,7 +4,10 @@ import { provideRouter } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { localizationTestingModule } from '../../testing/localization-testing';
+import {
+  localizationTestingModule,
+  postText,
+} from '../../testing/localization-testing';
 import { BlogComponent } from './blog';
 import { BLOG_POSTS } from './post-catalog';
 
@@ -45,8 +48,8 @@ describe('BlogComponent', () => {
   it('should show the title, the summary and the read time of a post', () => {
     const text = rows()[0].textContent;
 
-    expect(text).toContain(BLOG_POSTS[0].title);
-    expect(text).toContain(BLOG_POSTS[0].summary);
+    expect(text).toContain(postText(BLOG_POSTS[0].slug).title);
+    expect(text).toContain(postText(BLOG_POSTS[0].slug).summary);
     expect(text).toContain('10 min read');
   });
 

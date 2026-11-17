@@ -1,0 +1,298 @@
+<p>
+  Eine Zeit lang war Firebase Hosting meine erste Wahl, um mein Portfolio zu
+  deployen. Es ist schnell eingerichtet, lässt sich gut mit GitHub Actions
+  verbinden, und das kostenlose Kontingent reicht für eine persönliche Website
+  locker aus. Lange schien es die naheliegende Wahl zu sein.
+</p>
+
+<p>
+  Mit der Zeit habe ich aber die Grenzen von Managed Hosting gespürt. Ich wollte
+  mehr Kontrolle über meine Infrastruktur, mehrere Services auf einem einzigen
+  Server betreiben und ein Setup, das ich von Anfang bis Ende wirklich verstehe.
+  Firebase hat hinter den Kulissen zu viel Magie erledigt, und ich wollte diese
+  Ebene selbst in der Hand haben.
+</p>
+
+<p>
+  Also bin ich mit allem auf einen VPS bei Hetzner umgezogen. Dieser Artikel
+  erklärt, warum, und zeigt genau, wie ich alles eingerichtet habe.
+</p>
+
+<h2>Warum ich Firebase Hosting verlassen habe</h2>
+
+<p>
+  Firebase Hosting ist für seinen Zweck wirklich gut. Statische Dateien, ein
+  globales CDN, automatisches SSL: Es funktioniert sofort, und man muss kaum
+  darüber nachdenken. Wenn du nur eine statische Website brauchst, spricht wenig
+  dagegen.
+</p>
+
+<p>
+  Ich bin nicht gegangen, weil Firebase schlecht ist, sondern weil ich für die
+  Zukunft etwas anderes wollte. Ein paar Punkte gaben den Ausschlag:
+</p>
+
+<ul>
+  <li>
+    Ich wollte mehrere Services unter einem Dach betreiben, ohne mit getrennten
+    Firebase-Projekten zu jonglieren
+  </li>
+  <li>
+    Ich wollte volle Kontrolle über die Serverumgebung, das Netzwerk und den
+    Deployment-Prozess
+  </li>
+  <li>
+    Ich wollte lernen, wie diese Ebene der Infrastruktur wirklich funktioniert
+  </li>
+  <li>Ein VPS ist für meinen Anwendungsfall auf lange Sicht günstiger</li>
+</ul>
+
+<p>
+  Keiner dieser Punkte ist für sich allein ein Ausschlusskriterium, aber
+  zusammen sprachen sie für ein selbst gehostetes Setup. Ich habe mich für
+  Hetzner entschieden, weil es günstig ist, einen guten Ruf hat und die
+  Oberfläche angenehm schnörkellos ist.
+</p>
+
+<h2>Schritt 1: Den Server erstellen</h2>
+
+<p>
+  Geh zu Hetzner, öffne ein Projekt und erstelle eine neue Server-Ressource.
+  Wähle einen Standort in der Nähe deiner Besucher, Ubuntu als Betriebssystem
+  und Docker aus den Setup-Optionen. So sparst du dir die manuelle Installation.
+</p>
+
+<p>
+  Wenn du Docker lieber selbst installieren möchtest, erklärt das
+  <a href="https://community.hetzner.com/tutorials/howto-docker-install"
+    >Tutorial der Hetzner Community</a
+  >
+  den Ablauf gut.
+</p>
+
+<h2>Schritt 2: Firewall und SSH</h2>
+
+<p>
+  Sichere zuerst den Zugang ab. Öffne im Hetzner-Dashboard die Firewall-Regeln
+  des Servers und erlaube diese TCP-Ports:
+</p>
+
+<ul>
+  <li><strong>22</strong>: SSH</li>
+  <li><strong>80</strong>: HTTP</li>
+  <li><strong>443</strong>: HTTPS</li>
+</ul>
+
+<h3>Einen Benutzer ohne Root-Rechte anlegen</h3>
+
+<p>
+  Melde dich über das Terminal im Dashboard als root an und lege sofort einen
+  eigenen Benutzer an. Alles als root auszuführen ist ein Risiko, das du nicht
+  eingehen musst.
+</p>
+
+<pre><code>adduser holu
+usermod -aG sudo holu
+usermod -aG docker holu</code></pre>
+
+<p>
+  Wenn der Benutzer kein Passwort hat, erlaube sudo ohne Passwort, indem du
+  <code>/etc/sudoers</code> mit <code>visudo</code> bearbeitest:
+</p>
+
+<pre><code>%sudo   ALL=(ALL:ALL) NOPASSWD: ALL</code></pre>
+
+<p>
+  Wechsle dann mit <code>su - holu</code> zum neuen Benutzer und mach von dort
+  aus weiter.
+</p>
+
+<h3>Anmeldung mit SSH-Schlüssel</h3>
+
+<p>
+  Kopiere deinen öffentlichen Schlüssel in die Datei mit den autorisierten
+  Schlüsseln auf dem Server:
+</p>
+
+<pre><code>mkdir -p ~/.ssh
+nano ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh</code></pre>
+
+<p>
+  Teste von deinem lokalen Rechner aus, ob die Anmeldung mit dem Schlüssel
+  funktioniert, bevor du weitermachst:
+</p>
+
+<pre><code>ssh holu@&lt;SERVER_IP&gt;</code></pre>
+
+<p>
+  Wenn das klappt, deaktiviere die Anmeldung als root und die
+  Passwort-Authentifizierung in <code>/etc/ssh/sshd_config</code>:
+</p>
+
+<pre><code>PermitRootLogin no
+PasswordAuthentication no</code></pre>
+
+<pre><code>sudo systemctl restart ssh</code></pre>
+
+<h3>UFW und Fail2Ban</h3>
+
+<p>Installiere UFW und erlaube nur die Ports, die du wirklich brauchst:</p>
+
+<pre><code>sudo apt update && sudo apt install ufw -y
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable</code></pre>
+
+<p>
+  Installiere dann Fail2Ban, damit wiederholte fehlgeschlagene Anmeldeversuche
+  automatisch blockiert werden:
+</p>
+
+<pre><code>sudo apt install fail2ban -y
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local</code></pre>
+
+<p>
+  Öffne <code>jail.local</code>, suche den Abschnitt <code>[sshd]</code> und
+  stelle sicher, dass er aktiviert ist:
+</p>
+
+<pre><code>[sshd]
+enabled = true
+port    = ssh
+filter  = sshd
+logpath = /var/log/auth.log
+maxretry = 5</code></pre>
+
+<pre><code>sudo systemctl enable fail2ban
+sudo systemctl start fail2ban</code></pre>
+
+<h2>Schritt 3: Domain und DNS</h2>
+
+<p>
+  Dieser Schritt ersetzt, was Firebase Hosting automatisch erledigt hat. Geh zu
+  deinem Domain-Registrar und lege einen A-Record an, der deine Domain auf die
+  IP-Adresse des Servers zeigt. Füge bei Bedarf einen CNAME für
+  <code>www</code> hinzu.
+</p>
+
+<p>Prüfe die Verbreitung mit:</p>
+
+<pre><code>dig +short yourdomain.com</code></pre>
+
+<h2>Schritt 4: Deployment mit Docker und Caddy</h2>
+
+<p>
+  Mein Setup nutzt Docker Compose für jeden Service und Caddy als Reverse Proxy.
+  Alle Deployment-Dateien liegen unter <code>/opt/docker/</code>, und jeder
+  Service bekommt ein eigenes Unterverzeichnis.
+</p>
+
+<pre><code>/opt/docker/
+|–– caddy/
+|   |–– compose.yaml
+|   |–– Caddyfile
+|–– webfolio/
+    |–– compose.yaml
+    |–– .env
+    |–– secrets/
+        |–– application-secrets.properties</code></pre>
+
+<h3>Warum Caddy statt Nginx?</h3>
+
+<p>
+  Caddy kümmert sich automatisch um TLS. Es spricht mit Let's Encrypt, holt
+  Zertifikate und erneuert sie, ganz ohne Cronjobs und ohne manuelle Schritte.
+  Bei Firebase war HTTPS einfach da, und genau diese Einfachheit wollte ich auch
+  beim Selbsthosten behalten. Caddy liefert das.
+</p>
+
+<p>
+  Ein gemeinsames Docker-Netzwerk namens <code>proxy</code> verbindet alle
+  Services mit Caddy. Du legst es einmal an, und jeder neue Service tritt ihm
+  einfach bei.
+</p>
+
+<h3>Einrichten und deployen</h3>
+
+<pre><code>sudo mkdir -p /opt/docker/&#123;caddy,webfolio/secrets&#125;
+sudo chown -R $(whoami):docker /opt/docker
+chmod 750 /opt/docker /opt/docker/caddy /opt/docker/webfolio /opt/docker/webfolio/secrets</code></pre>
+
+<p>
+  Kopiere deine Deployment-Dateien mit <code>scp</code> von deinem lokalen
+  Rechner, verbinde dich per SSH und trage deine Domain, die Umgebungsvariablen
+  und die Secrets ein. Setze dann die richtigen Berechtigungen:
+  <code>640</code> für Konfigurationsdateien und <code>600</code> für alles
+  Vertrauliche.
+</p>
+
+<p>
+  Ein Punkt, auf den du achten solltest: Wenn dein App-Container nicht als root
+  läuft, kann er eine Secrets-Datei nicht lesen, die komplett deinem
+  Host-Benutzer gehört. Prüfe, mit welcher UID der Container läuft:
+</p>
+
+<pre><code>docker inspect your-image:latest | grep -i user</code></pre>
+
+<p>Passe dann den Besitzer an, damit der Container die Datei lesen kann:</p>
+
+<pre><code>sudo chown 185:holu /opt/docker/webfolio/secrets/application-secrets.properties
+sudo chmod 660 /opt/docker/webfolio/secrets/application-secrets.properties</code></pre>
+
+<p>Lege das gemeinsame Netzwerk an, starte zuerst Caddy und dann die App:</p>
+
+<pre><code>docker network create proxy
+cd /opt/docker/caddy && docker compose up -d
+cd /opt/docker/webfolio && docker compose up -d</code></pre>
+
+<p>
+  Caddy erkennt die Domain, holt ein Zertifikat, und die Website ist unter
+  <code>https://yourdomain.com</code> erreichbar. Das erste Deployment ist
+  geschafft.
+</p>
+
+<h2>Services aktualisieren und hinzufügen</h2>
+
+<p>Eine neue Version auszurollen dauert nur ein paar Befehle:</p>
+
+<pre><code>cd /opt/docker/webfolio
+docker compose pull
+docker compose up -d</code></pre>
+
+<p>
+  Compose erkennt, dass sich das Image geändert hat, und erstellt nur diesen
+  Container neu. Alles andere läuft weiter. Alte Images räumst du danach so auf:
+</p>
+
+<pre><code>docker image prune -f</code></pre>
+
+<p>
+  Eine zweite Website auf demselben Server hinzuzufügen ist genauso einfach. Ein
+  neues Verzeichnis, eine neue <code>compose.yaml</code>, die dem Netzwerk
+  <code>proxy</code> beitritt, ein neuer Block in der Caddyfile, und fertig.
+  Nichts, was schon läuft, wird angefasst, und Caddy stellt das Zertifikat für
+  die neue Domain automatisch aus.
+</p>
+
+<h2>Hat es sich gelohnt?</h2>
+
+<p>
+  Für meinen Anwendungsfall auf jeden Fall. Ich habe einen Server, auf dem
+  mehrere Services laufen, sehe genau, wie alles zusammenhängt, und zahle
+  weniger, als ich beim Skalieren auf einer Managed-Plattform zahlen würde.
+</p>
+
+<p>
+  Trotzdem ist Firebase Hosting in vielen Situationen weiterhin die richtige
+  Wahl. Wenn du einfach nur eine statische Website ohne Aufwand online bringen
+  willst, ist es kaum zu schlagen. Die Migration hat sich für mich nur gelohnt,
+  weil meine Anforderungen über das hinausgewachsen waren, wofür es gemacht ist.
+</p>
+
+<p>
+  Wenn du über einen ähnlichen Umzug nachdenkst und Fragen zu einem Teil dieses
+  Setups hast, melde dich gern bei mir.
+</p>

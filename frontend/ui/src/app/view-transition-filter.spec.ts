@@ -1,14 +1,32 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { ViewTransitionInfo } from '@angular/router';
+import { ActivatedRouteSnapshot, ViewTransitionInfo } from '@angular/router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { skipViewTransitionForReducedMotion } from './reduced-motion-view-transition';
+import { skipUnwantedViewTransition } from './view-transition-filter';
 
-describe('skipViewTransitionForReducedMotion', () => {
+type FakeSnapshot = Pick<ActivatedRouteSnapshot, 'url' | 'firstChild'>;
+
+function routeTo(...paths: string[]): ActivatedRouteSnapshot {
+  const leaf = paths.reduceRight<FakeSnapshot | null>(
+    (child, path) => ({
+      url: [{ path }] as ActivatedRouteSnapshot['url'],
+      firstChild: child as ActivatedRouteSnapshot | null,
+    }),
+    null,
+  );
+
+  return { url: [], firstChild: leaf } as unknown as ActivatedRouteSnapshot;
+}
+
+describe('skipUnwantedViewTransition', () => {
   const skipTransition = vi.fn();
 
-  function runWithReducedMotion(prefersReducedMotion: boolean): void {
+  function run(
+    from: ActivatedRouteSnapshot,
+    to: ActivatedRouteSnapshot,
+    prefersReducedMotion = false,
+  ): void {
     const view = TestBed.inject(DOCUMENT).defaultView as Window;
 
     view.matchMedia = vi.fn(
@@ -16,8 +34,10 @@ describe('skipViewTransitionForReducedMotion', () => {
     );
 
     TestBed.runInInjectionContext(() => {
-      skipViewTransitionForReducedMotion({
+      skipUnwantedViewTransition({
         transition: { skipTransition },
+        from,
+        to,
       } as unknown as ViewTransitionInfo);
     });
   }
@@ -26,15 +46,21 @@ describe('skipViewTransitionForReducedMotion', () => {
     vi.clearAllMocks();
   });
 
-  it('skips the transition when the visitor prefers reduced motion', () => {
-    runWithReducedMotion(true);
+  it('keeps the transition for a change to another page', () => {
+    run(routeTo('blog'), routeTo('blog', 'from-astro-to-angular'));
+
+    expect(skipTransition).not.toHaveBeenCalled();
+  });
+
+  it('skips the transition when only the section of the page changes', () => {
+    run(routeTo('blog', 'post'), routeTo('blog', 'post'));
 
     expect(skipTransition).toHaveBeenCalledOnce();
   });
 
-  it('keeps the transition when the visitor has no motion preference', () => {
-    runWithReducedMotion(false);
+  it('skips the transition when the visitor prefers reduced motion', () => {
+    run(routeTo('blog'), routeTo('contact'), true);
 
-    expect(skipTransition).not.toHaveBeenCalled();
+    expect(skipTransition).toHaveBeenCalledOnce();
   });
 });

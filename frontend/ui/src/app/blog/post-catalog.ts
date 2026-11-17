@@ -3,13 +3,13 @@ export enum Posts {
   VPS_HOSTING,
 }
 
+// The title and the summary of each post are in the localization files,
+// under blog.posts.<slug>.
 export type BlogPostPreview = Readonly<{
   date: Date;
   id: Posts;
   readTime: number;
   slug: string;
-  summary: string;
-  title: string;
 }>;
 
 const UNSORTED_POSTS: readonly BlogPostPreview[] = [
@@ -18,18 +18,12 @@ const UNSORTED_POSTS: readonly BlogPostPreview[] = [
     id: Posts.ASTRO_TO_ANGULAR,
     readTime: 3,
     slug: 'from-astro-to-angular',
-    summary:
-      'Why static simplicity wasn’t enough for my portfolio and how Angular gave me room to grow.',
-    title: 'From Astro to Angular: Why I Rebuilt My Portfolio',
   },
   {
     date: new Date('2026-04-04'),
     id: Posts.VPS_HOSTING,
     readTime: 10,
     slug: 'moving-away-from-firebase-hosting',
-    summary:
-      'I decided to deploy my portfolio website on a VPS instead of using Firebase Hosting. In this blog post, I provide a step by step guide on the migration and explain the reason behind this decision.',
-    title: 'Moving away from Firebase Hosting',
   },
 ];
 

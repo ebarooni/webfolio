@@ -2,7 +2,10 @@ import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { localizationTestingModule } from '../../../testing/localization-testing';
+import {
+  localizationTestingModule,
+  postText,
+} from '../../../testing/localization-testing';
 import { BLOG_POSTS } from '../post-catalog';
 import { PostRow } from './post-row';
 
@@ -35,7 +38,9 @@ describe('PostRow', () => {
     expect(root().querySelector('time')?.getAttribute('datetime')).toBe(
       post.date.toISOString(),
     );
-    expect(root().querySelector('h3')?.textContent.trim()).toBe(post.title);
+    expect(root().querySelector('h3')?.textContent.trim()).toBe(
+      postText(post.slug).title,
+    );
     expect(root().textContent).toContain(`${post.readTime} min read`);
   });
 
@@ -46,7 +51,7 @@ describe('PostRow', () => {
   });
 
   it('does not show the summary by default', () => {
-    expect(root().textContent).not.toContain(post.summary);
+    expect(root().textContent).not.toContain(postText(post.slug).summary);
   });
 
   it('shows a level 2 title and the summary on the blog page', () => {
@@ -54,8 +59,10 @@ describe('PostRow', () => {
     fixture.componentRef.setInput('showSummary', true);
     fixture.detectChanges();
 
-    expect(root().querySelector('h2')?.textContent.trim()).toBe(post.title);
+    expect(root().querySelector('h2')?.textContent.trim()).toBe(
+      postText(post.slug).title,
+    );
     expect(root().querySelector('h3')).toBeNull();
-    expect(root().textContent).toContain(post.summary);
+    expect(root().textContent).toContain(postText(post.slug).summary);
   });
 });
