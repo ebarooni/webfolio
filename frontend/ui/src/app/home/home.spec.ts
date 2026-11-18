@@ -1,6 +1,6 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
 import { describe, expect, it } from 'vitest';
 
 import { localizationTestingModule } from '../../testing/localization-testing';
@@ -13,7 +13,7 @@ describe('Home', () => {
       imports: [Home, localizationTestingModule()],
       providers: [
         provideRouter([]),
-        { provide: AppStore, useValue: { selectTheme$: of('light') } },
+        { provide: AppStore, useValue: { theme: signal('light') } },
       ],
     }).compileComponents();
 

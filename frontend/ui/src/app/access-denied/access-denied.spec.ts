@@ -1,13 +1,12 @@
+import { signal, type WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import {
   describe,
   beforeAll,
   beforeEach,
   afterEach,
-  afterAll,
   it,
   expect,
   vi,
@@ -22,10 +21,10 @@ describe('AccessDenied', () => {
   let fixture: ComponentFixture<AccessDenied>;
   let component: AccessDenied;
 
-  let hasGeoAccess$: BehaviorSubject<boolean>;
+  let hasGeoAccess: WritableSignal<boolean>;
 
   let store: {
-    selectHasGeoAccess$: BehaviorSubject<boolean>;
+    hasGeoAccess: WritableSignal<boolean>;
     updateHasGeoAccess: ReturnType<typeof vi.fn>;
   };
 
@@ -34,10 +33,10 @@ describe('AccessDenied', () => {
   };
 
   beforeAll(() => {
-    hasGeoAccess$ = new BehaviorSubject(false);
+    hasGeoAccess = signal(false);
 
     store = {
-      selectHasGeoAccess$: hasGeoAccess$,
+      hasGeoAccess,
       updateHasGeoAccess: vi.fn(),
     };
 
@@ -63,10 +62,6 @@ describe('AccessDenied', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    hasGeoAccess$.complete();
   });
 
   it('should create', () => {
@@ -145,7 +140,7 @@ describe('AccessDenied', () => {
   });
 
   it('navigates to home when geo access becomes true', () => {
-    hasGeoAccess$.next(true);
+    hasGeoAccess.set(true);
 
     fixture.detectChanges();
 

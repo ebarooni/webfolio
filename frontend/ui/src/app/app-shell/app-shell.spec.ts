@@ -1,8 +1,13 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  signal,
+  type WritableSignal,
+} from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router, RouterOutlet } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { localizationTestingModule } from '../../testing/localization-testing';
@@ -46,9 +51,9 @@ describe('AppShell', () => {
   let fixture: ComponentFixture<AppShell>;
   let component: AppShell;
   let router: Router;
-  let themeSubject: BehaviorSubject<Theme>;
-  let languageSubject: BehaviorSubject<Language>;
-  let developerModeSubject: BehaviorSubject<boolean>;
+  let theme: WritableSignal<Theme>;
+  let language: WritableSignal<Language>;
+  let developerMode: WritableSignal<boolean>;
 
   const appStore = {
     enableDeveloperMode: vi.fn(),
@@ -73,9 +78,9 @@ describe('AppShell', () => {
   }
 
   beforeEach(async () => {
-    themeSubject = new BehaviorSubject<Theme>('light');
-    languageSubject = new BehaviorSubject<Language>('en');
-    developerModeSubject = new BehaviorSubject<boolean>(false);
+    theme = signal<Theme>('light');
+    language = signal<Language>('en');
+    developerMode = signal(false);
 
     await TestBed.configureTestingModule({
       imports: [AppShell, localizationTestingModule()],
@@ -93,9 +98,9 @@ describe('AppShell', () => {
           provide: AppStore,
           useValue: {
             ...appStore,
-            selectDeveloperMode$: developerModeSubject.asObservable(),
-            selectLanguage$: languageSubject.asObservable(),
-            selectTheme$: themeSubject.asObservable(),
+            developerMode,
+            language,
+            theme,
           },
         },
       ],
@@ -127,7 +132,7 @@ describe('AppShell', () => {
   it('should set the document theme attribute from the current theme', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
-    themeSubject.next('dark');
+    theme.set('dark');
     fixture.detectChanges();
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
@@ -136,7 +141,7 @@ describe('AppShell', () => {
   it('should set the document language from the current language', () => {
     expect(document.documentElement.getAttribute('lang')).toBe('en');
 
-    languageSubject.next('de');
+    language.set('de');
     fixture.detectChanges();
 
     expect(document.documentElement.getAttribute('lang')).toBe('de');
@@ -156,7 +161,7 @@ describe('AppShell', () => {
   });
 
   it('should pass the version and the developer mode to the footer', async () => {
-    developerModeSubject.next(true);
+    developerMode.set(true);
     await settle();
 
     expect(footer().version()).toBe(component.version);

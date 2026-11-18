@@ -1,6 +1,6 @@
 import { DOCUMENT, NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { filter, fromEvent } from 'rxjs';
@@ -17,9 +17,7 @@ const BOOKMARK_STATUS_ASSETS = 'apps/safari-bookmark-status';
   templateUrl: './featured-project.html',
 })
 export class FeaturedProject {
-  private readonly theme = toSignal(inject(AppStore).selectTheme$, {
-    initialValue: 'light',
-  });
+  private readonly theme = inject(AppStore).theme;
 
   readonly featured = findProject(FEATURED_PROJECT_ID);
   readonly appIconSource = `${BOOKMARK_STATUS_ASSETS}/brand/app-icon-256.webp`;

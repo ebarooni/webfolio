@@ -1,7 +1,7 @@
+import { signal } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { localizationTestingModule } from '../../../testing/localization-testing';
@@ -17,7 +17,7 @@ describe('SelectedWork', () => {
       imports: [SelectedWork, localizationTestingModule()],
       providers: [
         provideRouter([]),
-        { provide: AppStore, useValue: { selectTheme$: of('light') } },
+        { provide: AppStore, useValue: { theme: signal('light') } },
       ],
     }).compileComponents();
 

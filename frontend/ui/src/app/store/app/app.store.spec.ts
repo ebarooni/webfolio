@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { firstValueFrom } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Theme } from '../../config/themes-array';
@@ -74,9 +73,23 @@ describe('AppStore', () => {
     });
   });
 
+  it.each(['{not json', 'null', '[]', '"dark"'])(
+    'should start from the default state when the persisted state is %s',
+    (stored) => {
+      preferLanguages(['de-DE']);
+      localStorage.setItem(persistenceKey, stored);
+
+      const state = store.initialize();
+
+      expect(state).toEqual({ ...defaultState, language: 'de' });
+      expect(persistedState()).toEqual(state);
+    },
+  );
+
   it.each([
     { persisted: { hasGeoAccess: 'yes' }, expected: { hasGeoAccess: false } },
     { persisted: { theme: 42 }, expected: { theme: 'light' } },
+    { persisted: { theme: 'blue' }, expected: { theme: 'light' } },
     { persisted: { language: 'fr' }, expected: { language: 'en' } },
     { persisted: { developerMode: 1 }, expected: { developerMode: false } },
     { persisted: { theme: 'dark' }, expected: { theme: 'dark' } },
@@ -92,30 +105,30 @@ describe('AppStore', () => {
     },
   );
 
-  it('should update and persist the theme', async () => {
+  it('should update and persist the theme', () => {
     store.initialize();
 
     store.updateTheme('dark' satisfies Theme);
 
-    expect(await firstValueFrom(store.selectTheme$)).toBe('dark');
+    expect(store.theme()).toBe('dark');
     expect(persistedState()).toEqual({ ...defaultState, theme: 'dark' });
   });
 
-  it('should update and persist the language', async () => {
+  it('should update and persist the language', () => {
     store.initialize();
 
     store.updateLanguage('de');
 
-    expect(await firstValueFrom(store.selectLanguage$)).toBe('de');
+    expect(store.language()).toBe('de');
     expect(persistedState()).toEqual({ ...defaultState, language: 'de' });
   });
 
-  it('should enable and persist the developer mode', async () => {
+  it('should enable and persist the developer mode', () => {
     store.initialize();
 
     store.enableDeveloperMode();
 
-    expect(await firstValueFrom(store.selectDeveloperMode$)).toBe(true);
+    expect(store.developerMode()).toBe(true);
     expect(persistedState()).toEqual({ ...defaultState, developerMode: true });
   });
 
@@ -125,12 +138,12 @@ describe('AppStore', () => {
     { value: '', expected: false },
   ])(
     'should set the geo access to $expected for "$value"',
-    async ({ value, expected }) => {
+    ({ value, expected }) => {
       store.initialize();
 
       store.updateHasGeoAccess(value);
 
-      expect(await firstValueFrom(store.selectHasGeoAccess$)).toBe(expected);
+      expect(store.hasGeoAccess()).toBe(expected);
       expect(persistedState()).toEqual({
         ...defaultState,
         hasGeoAccess: expected,
