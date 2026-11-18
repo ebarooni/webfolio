@@ -1,33 +1,31 @@
-<article class="card bg-base-100 shadow-lg">
-  <div class="card-body gap-6 sm:gap-7">
-    <header class="text-center">
-      <h3 class="text-2xl font-bold text-primary sm:text-3xl md:text-4xl">
-        {{ title() }}
-      </h3>
-    </header>
+<table
+  *transloco="let t; prefix: 'buildInfo'"
+  class="w-full border-collapse text-[0.9375rem]"
+>
+  <caption class="section-label pb-4 text-left">
+    {{ title() }} · {{ dependencies().length }}
+  </caption>
 
-    <div class="overflow-x-auto">
-      <table class="table table-zebra w-full">
-        <caption class="sr-only">
-          {{ title() }}
-        </caption>
+  <thead class="sr-only">
+    <tr>
+      <th scope="col">{{ t('package') }}</th>
+      <th scope="col">{{ t('packageVersion') }}</th>
+    </tr>
+  </thead>
 
-        <thead>
-          <tr>
-            <th scope="col">Package</th>
-            <th scope="col">Version</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          @for (dep of dependencies(); track dep.name) {
-          <tr>
-            <th scope="row" class="font-medium">{{ dep.name }}</th>
-            <td>{{ dep.version }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </div>
-</article>
+  <tbody class="rule-list">
+    @for (dependency of dependencies(); track dependency.name) {
+    <tr>
+      <th
+        scope="row"
+        class="py-3 pr-4 text-left font-medium wrap-anywhere text-ink"
+      >
+        {{ dependency.name }}
+      </th>
+      <td class="meta-label py-3 text-right whitespace-nowrap">
+        {{ dependency.version }}
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>

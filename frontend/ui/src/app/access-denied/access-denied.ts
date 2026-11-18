@@ -5,13 +5,26 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AppStore } from '../store/app/app.store';
 import { Route } from '../config/route';
 import { FormsModule } from '@angular/forms';
+import { TranslocoDirective } from '@jsverse/transloco';
+
+import { Button } from '../shared/components/button/button';
+import { FormField } from '../shared/components/form-field/form-field';
+import { Monogram } from '../shared/components/monogram/monogram';
+import { PageIntro } from '../shared/components/page-intro/page-intro';
 
 @Component({
   selector: 'app-access-denied',
   templateUrl: './access-denied.html',
-  imports: [FormsModule],
+  imports: [
+    Button,
+    FormField,
+    FormsModule,
+    Monogram,
+    PageIntro,
+    TranslocoDirective,
+  ],
   host: {
-    class: 'min-h-dvh flex',
+    class: 'flex min-h-dvh flex-col bg-base-100',
   },
 })
 export class AccessDenied {

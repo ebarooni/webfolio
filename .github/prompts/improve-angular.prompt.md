@@ -11,7 +11,6 @@ Refactor the provided Angular components and services to improve structure, read
 
 - Angular 22
 - Tailwind CSS 4
-- DaisyUI 5
 - Vitest for unit testing
 - Standalone components by default
 - Each screen is wrapped by the `app-shell` component, which defines the global layout structure
@@ -26,7 +25,7 @@ You must understand how `app-shell` controls layout before modifying any screen-
 
 ## Requirements
 
-- Do not use redundant Tailwind or DaisyUI utility classes.
+- Do not use redundant Tailwind utility classes.
 - Eliminate any unnecessary CSS classes to keep the markup minimal and clean.
 - Prefer semantic HTML elements over div and span unless there is no meaningful semantic alternative.
 - Use Angular signals as the primary reactive state mechanism unless there is a strong reason not to.

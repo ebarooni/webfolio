@@ -1,31 +1,6 @@
-<section
-  #heroSection
-  class="relative flex md:min-h-screen flex-col md:justify-center px-4 pb-12 md:pb-32 pt-24 sm:px-8"
->
-  <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
-    <app-about />
-
-    <section
-      aria-label="Professional highlights"
-      class="grid gap-6 md:grid-cols-3"
-    >
-      @for (highlight of highlights; track highlight.title) {
-      <app-info-card>
-        <span header>{{ highlight.title }}</span>
-        <span description>{{ highlight.description }}</span>
-      </app-info-card>
-      }
-    </section>
-  </div>
-
-  @if (showScrollIndicator()) {
-  <div
-    class="absolute bottom-4 left-1/2 hidden -translate-x-1/2 animate-bounce md:block"
-    aria-hidden="true"
-  >
-    <app-scroll-indicator />
-  </div>
-  }
-</section>
-
-<app-timeline />
+<app-home-hero />
+<app-selected-work />
+<app-focus />
+<app-experience />
+<app-latest-posts />
+<app-contact-panel />

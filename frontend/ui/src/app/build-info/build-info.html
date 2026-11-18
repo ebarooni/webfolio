@@ -1,38 +1,19 @@
-<section class="flex-1 bg-base-200">
-  <app-hero
-    backgroundClass="bg-gradient-to-b from-base-100 to-base-200"
-    subtitleClass="text-neutral-content"
-  >
-    <h1 heroTitle>Build Information</h1>
-    <p heroSubtitle>
-      Explore the current version, deployment details, and technical
-      dependencies powering this website.
-    </p>
-  </app-hero>
+<ng-container *transloco="let t; prefix: 'buildInfo'">
+  <app-page-header
+    [eyebrow]="t('eyebrow')"
+    [title]="t('title')"
+    [lead]="t('lead')"
+  />
 
-  <div class="container mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 lg:px-0">
-    <div class="space-y-8 pb-10 sm:space-y-10 sm:pb-16">
-      <section aria-labelledby="deployment-details-title">
-        <h2 id="deployment-details-title" class="sr-only">
-          Deployment Details
-        </h2>
-        <app-deployment-details />
-      </section>
+  <div class="page-container flex flex-col gap-20 pb-24 lg:pb-32">
+    <app-build-facts />
 
-      <section aria-labelledby="runtime-deps-title">
-        <h2 id="runtime-deps-title" class="sr-only">Runtime Dependencies</h2>
-        <app-dependencies [dependencies]="dependencies()" />
-      </section>
-
-      <section aria-labelledby="buildtime-deps-title">
-        <h2 id="buildtime-deps-title" class="sr-only">
-          Build Time Dependencies
-        </h2>
-        <app-dependencies
-          [title]="'Build Time Dependencies'"
-          [dependencies]="devDependencies()"
-        />
-      </section>
+    <div class="grid items-start gap-x-18 gap-y-16 lg:grid-cols-2">
+      <app-dependencies [title]="t('runtime')" [dependencies]="dependencies" />
+      <app-dependencies
+        [title]="t('buildTime')"
+        [dependencies]="devDependencies"
+      />
     </div>
   </div>
-</section>
+</ng-container>

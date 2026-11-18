@@ -1,20 +1,33 @@
 import { TestBed } from '@angular/core/testing';
-import { vi } from 'vitest';
-import { AppStore } from './app.store';
+import { firstValueFrom } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Theme } from '../../config/themes-array';
+import { AppStore, IState } from './app.store';
 
 describe('AppStore', () => {
   const persistenceKey = 'app:v1';
 
-  let store: AppStore;
-  let originalPersistedState: string | null;
+  const defaultState: IState = {
+    developerMode: false,
+    hasGeoAccess: false,
+    language: 'en',
+    theme: 'light',
+  };
 
-  beforeAll(() => {
-    originalPersistedState = localStorage.getItem(persistenceKey);
-  });
+  let store: AppStore;
+
+  function persistedState(): unknown {
+    return JSON.parse(localStorage.getItem(persistenceKey) ?? 'null');
+  }
+
+  function preferLanguages(languages: readonly string[]): void {
+    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(languages);
+  }
 
   beforeEach(() => {
     localStorage.clear();
+    preferLanguages(['en-US']);
 
     TestBed.configureTestingModule({
       providers: [AppStore],
@@ -25,130 +38,103 @@ describe('AppStore', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    TestBed.resetTestingModule();
     localStorage.clear();
   });
 
-  afterAll(() => {
-    localStorage.clear();
-
-    if (originalPersistedState !== null) {
-      localStorage.setItem(persistenceKey, originalPersistedState);
-    }
-  });
-
-  it('initializes with the default state when no persisted state exists', () => {
+  it('should initialize and persist the default state', () => {
     const state = store.initialize();
 
-    expect(state).toEqual({
-      hasGeoAccess: false,
-      theme: 'light',
-    });
-
-    expect(JSON.parse(localStorage.getItem(persistenceKey) ?? 'null')).toEqual(
-      state,
-    );
+    expect(state).toEqual(defaultState);
+    expect(persistedState()).toEqual(defaultState);
   });
 
-  it('initializes with the sanitized persisted state and ignores unknown properties', () => {
-    const persistedState = {
-      hasGeoAccess: true,
-      theme: 'custom-theme' as Theme,
-      unknown: 'value',
-    };
+  it('should follow the browser language on the first visit', () => {
+    preferLanguages(['fr-FR', 'de-DE', 'en-US']);
 
-    localStorage.setItem(persistenceKey, JSON.stringify(persistedState));
+    expect(store.initialize().language).toBe('de');
+  });
 
-    const state = store.initialize();
-
-    expect(state).toEqual({
-      hasGeoAccess: true,
-      theme: 'custom-theme' as Theme,
-    });
-
-    expect(JSON.parse(localStorage.getItem(persistenceKey) ?? 'null')).toEqual(
-      state,
+  it('should keep known persisted values and drop unknown properties', () => {
+    localStorage.setItem(
+      persistenceKey,
+      JSON.stringify({
+        developerMode: true,
+        hasGeoAccess: true,
+        language: 'de',
+        theme: 'dark',
+        unknown: 'value',
+      }),
     );
+
+    expect(store.initialize()).toEqual({
+      developerMode: true,
+      hasGeoAccess: true,
+      language: 'de',
+      theme: 'dark',
+    });
   });
 
   it.each([
-    [
-      { hasGeoAccess: 'yes', theme: 42 },
-      { hasGeoAccess: false, theme: 'light' },
-    ],
-    [
-      { hasGeoAccess: null, theme: 'persisted-theme' },
-      { hasGeoAccess: false, theme: 'persisted-theme' },
-    ],
-    [{ hasGeoAccess: true }, { hasGeoAccess: true, theme: 'light' }],
+    { persisted: { hasGeoAccess: 'yes' }, expected: { hasGeoAccess: false } },
+    { persisted: { theme: 42 }, expected: { theme: 'light' } },
+    { persisted: { language: 'fr' }, expected: { language: 'en' } },
+    { persisted: { developerMode: 1 }, expected: { developerMode: false } },
+    { persisted: { theme: 'dark' }, expected: { theme: 'dark' } },
   ])(
-    'initializes with merged and type safe persisted state for %j',
-    (
-      persistedState: Partial<Record<'theme' | 'hasGeoAccess', unknown>>,
-      expectedState: { theme: string; hasGeoAccess: boolean },
-    ) => {
-      localStorage.setItem(persistenceKey, JSON.stringify(persistedState));
+    'should repair the persisted state $persisted',
+    ({ persisted, expected }) => {
+      localStorage.setItem(persistenceKey, JSON.stringify(persisted));
 
       const state = store.initialize();
 
-      expect(state).toEqual(expectedState);
-
-      expect(
-        JSON.parse(localStorage.getItem(persistenceKey) ?? 'null'),
-      ).toEqual(expectedState);
+      expect(state).toEqual({ ...defaultState, ...expected });
+      expect(persistedState()).toEqual(state);
     },
   );
 
-  it('updates the theme selector and persists the new theme', () => {
+  it('should update and persist the theme', async () => {
     store.initialize();
 
-    const emittedThemes: Theme[] = [];
-    const subscription = store.selectTheme$.subscribe((theme) => {
-      emittedThemes.push(theme);
-    });
+    store.updateTheme('dark' satisfies Theme);
 
-    const nextTheme = 'dark-theme' as Theme;
+    expect(await firstValueFrom(store.selectTheme$)).toBe('dark');
+    expect(persistedState()).toEqual({ ...defaultState, theme: 'dark' });
+  });
 
-    store.updateTheme(nextTheme);
+  it('should update and persist the language', async () => {
+    store.initialize();
 
-    expect(emittedThemes.at(-1)).toBe(nextTheme);
+    store.updateLanguage('de');
 
-    expect(JSON.parse(localStorage.getItem(persistenceKey) ?? 'null')).toEqual({
-      hasGeoAccess: false,
-      theme: nextTheme,
-    });
+    expect(await firstValueFrom(store.selectLanguage$)).toBe('de');
+    expect(persistedState()).toEqual({ ...defaultState, language: 'de' });
+  });
 
-    subscription.unsubscribe();
+  it('should enable and persist the developer mode', async () => {
+    store.initialize();
+
+    store.enableDeveloperMode();
+
+    expect(await firstValueFrom(store.selectDeveloperMode$)).toBe(true);
+    expect(persistedState()).toEqual({ ...defaultState, developerMode: true });
   });
 
   it.each([
-    ['dogecoin', true],
-    ['bitcoin', false],
-    ['', false],
+    { value: 'dogecoin', expected: true },
+    { value: 'bitcoin', expected: false },
+    { value: '', expected: false },
   ])(
-    'updates geo access to %s when the value is %s',
-    (value: string, expectedHasGeoAccess: boolean) => {
+    'should set the geo access to $expected for "$value"',
+    async ({ value, expected }) => {
       store.initialize();
-
-      const emittedValues: boolean[] = [];
-      const subscription = store.selectHasGeoAccess$.subscribe(
-        (hasGeoAccess) => {
-          emittedValues.push(hasGeoAccess);
-        },
-      );
 
       store.updateHasGeoAccess(value);
 
-      expect(emittedValues.at(-1)).toBe(expectedHasGeoAccess);
-
-      expect(
-        JSON.parse(localStorage.getItem(persistenceKey) ?? 'null'),
-      ).toEqual({
-        hasGeoAccess: expectedHasGeoAccess,
-        theme: 'light',
+      expect(await firstValueFrom(store.selectHasGeoAccess$)).toBe(expected);
+      expect(persistedState()).toEqual({
+        ...defaultState,
+        hasGeoAccess: expected,
       });
-
-      subscription.unsubscribe();
     },
   );
 });

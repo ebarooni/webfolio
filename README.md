@@ -3,7 +3,7 @@
 Webfolio is a Maven based monorepo containing:
 
 - A Quarkus backend
-- An Angular frontend with Tailwind, DaisyUI, and Vitest
+- An Angular frontend with Tailwind and Vitest
 
 The repository is structured to keep backend and frontend concerns separated while still providing one build system and a simple local development flow.
 
@@ -28,7 +28,7 @@ The root project is a Maven parent that:
 #### Frontend
 
 - Angular application
-- Tailwind CSS and DaisyUI
+- Tailwind CSS
 - Vitest for unit testing
 - managed via npm and Maven plugins
 

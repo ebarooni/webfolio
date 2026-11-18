@@ -1,14 +1,29 @@
-<section class="flex-1 bg-gradient-to-b from-base-100 to-base-200 to-75%">
-  <app-hero
-    backgroundClass="bg-gradient-to-br from-base-200 via-primary to-base-300"
-    titleClass="text-neutral"
-    subtitleClass="text-secondary-content"
-  >
-    <h1 heroTitle>Projects</h1>
-    <p heroSubtitle>
-      A selection of projects that reflect my approach to design and code.
-    </p>
-  </app-hero>
+<ng-container *transloco="let t; prefix: 'projects'">
+  <app-page-header
+    [eyebrow]="t('eyebrow', { count: projectCount })"
+    [title]="t('title')"
+    [lead]="t('lead')"
+  />
 
-  <app-showcase />
-</section>
+  <div class="page-container flex flex-col gap-16 pb-24 lg:pb-32">
+    <section class="flex flex-col gap-8" aria-labelledby="featured-label">
+      <h2 id="featured-label" class="section-label">
+        {{ t('featuredLabel') }}
+      </h2>
+
+      <app-featured-project />
+    </section>
+
+    <section class="flex flex-col gap-8" aria-labelledby="more-label">
+      <h2 id="more-label" class="section-label">{{ t('moreLabel') }}</h2>
+
+      <ul class="rule-list">
+        @for (project of otherProjects; track project.id) {
+        <li>
+          <app-project-row [project]="project" />
+        </li>
+        }
+      </ul>
+    </section>
+  </div>
+</ng-container>

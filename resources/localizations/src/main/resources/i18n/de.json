@@ -1,0 +1,199 @@
+{
+  "shell": {
+    "brand": {
+      "homeLabel": "Ehsan Barooni, zur Startseite"
+    },
+    "nav": {
+      "label": "Hauptnavigation",
+      "work": "Projekte",
+      "writing": "Blog",
+      "about": "Über mich",
+      "contact": "Kontakt"
+    },
+    "language": {
+      "switchLabel": "Sprache auf Englisch umstellen"
+    },
+    "theme": {
+      "switchLabel": "Zwischen hellem und dunklem Design wechseln"
+    },
+    "footer": {
+      "copyright": "© 2022 bis {{year}} Ehsan Barooni",
+      "socialLabel": "Soziale Netzwerke",
+      "buildInfo": "Build-Info",
+      "tapsLeft": "Noch {{count}}",
+      "developerMode": "Entwicklermodus aktiviert"
+    }
+  },
+  "home": {
+    "hero": {
+      "portraitAlt": "Porträt von Ehsan Barooni",
+      "eyebrow": "Full-Stack-Softwareentwickler · seit 2021",
+      "titleBefore": "Hi, ich bin Ehsan. Ich entwickle Cross-Platform-Apps, die sich ",
+      "titleAccent": "nativ anfühlen",
+      "titleAfter": ".",
+      "lead": "Seit über {{years}} Jahren entwickle ich Web- und Mobile-Produkte mit Angular, Ionic und Capacitor, von eigenen nativen Plugins bis zu den Cloud-Diensten dahinter.",
+      "ctaWork": "Projekte ansehen",
+      "ctaContact": "Kontakt aufnehmen"
+    },
+    "work": {
+      "label": "Ausgewählte Projekte",
+      "all": "Alle Projekte"
+    },
+    "focus": {
+      "label": "Was ich mache",
+      "frontends": {
+        "title": "Enterprise-Frontends",
+        "body": "Modulare, performante Frontends mit Angular und Ionic, die wartbar bleiben, wenn das Produkt wächst."
+      },
+      "hybrid": {
+        "title": "Hybride Apps und native Plugins",
+        "body": "Cross-Platform-Apps für Mobile und Web mit Capacitor, mit viel Erfahrung in der Entwicklung eigener nativer Plugins."
+      },
+      "fullStack": {
+        "title": "Full-Stack-Umsetzung",
+        "body": "Skalierbare Webanwendungen und Cloud-Architekturen, über Frontend, Backend und DevOps hinweg."
+      }
+    },
+    "experience": {
+      "label": "Werdegang",
+      "engineer": {
+        "period": "2021 bis heute",
+        "title": "Full-Stack-Softwareentwickler",
+        "body": "Frontend, Backend und DevOps in mehreren Webanwendungen."
+      },
+      "graduate": {
+        "period": "2021",
+        "title": "B.Sc. Wirtschaftsingenieurwesen",
+        "body": "Studium mit Schwerpunkt Informationstechnik abgeschlossen."
+      },
+      "intern": {
+        "period": "2020",
+        "title": "Praktikant KI und ML",
+        "body": "Praktikum und Bachelorarbeit im Bereich Künstliche Intelligenz und Machine Learning."
+      },
+      "student": {
+        "period": "2017",
+        "title": "Student",
+        "body": "Beginn des Studiums Wirtschaftsingenieurwesen."
+      }
+    },
+    "writing": {
+      "label": "Blog",
+      "all": "Alle Artikel"
+    },
+    "contactPanel": {
+      "cta": "Schreib mir"
+    }
+  },
+  "projects": {
+    "eyebrow": "Projekte · {{count}} Projekte",
+    "title": "Was ich gebaut und veröffentlicht habe.",
+    "lead": "Eine Mac-App, Open-Source-Plugins und die Werkzeuge drumherum. Jedes Projekt führt zum Code oder zur eigenen Seite.",
+    "featuredLabel": "Im Fokus",
+    "moreLabel": "Open Source und Werkzeuge",
+    "externalHint": "öffnet in einem neuen Tab",
+    "items": {
+      "capacitor-calendar": {
+        "description": "Native Kalendereinträge auf iOS und Android erstellen, ändern, löschen und abfragen."
+      },
+      "capawesome": {
+        "description": "Enterprise-Lösungen und Services für Cross-Platform-Apps mit Capacitor."
+      },
+      "cloudcost-tracker": {
+        "description": "Sammelt die Abrechnungsdaten mehrerer Google-Cloud-Projekte über Pub/Sub an einem Ort."
+      },
+      "repo-sync": {
+        "description": "Ein GitHub-Workflow, der ein Repository bei jedem Push auf ein zweites Remote spiegelt."
+      },
+      "spotify-auth": {
+        "description": "Eine Web-App, die Zugriffstoken für Nutzerdaten aus der Spotify-Web-API erzeugt."
+      },
+      "web-configs": {
+        "description": "Gemeinsame Konfiguration für ESLint, Prettier, Stylelint und SwiftLint."
+      },
+      "webfolio": {
+        "description": "Diese Website, gebaut mit Angular und Tailwind CSS, ausgeliefert von Quarkus."
+      }
+    },
+    "featured": {
+      "description": "Eine Safari-Erweiterung und Mac-App, die zeigt, ob die aktuelle Seite schon als Lesezeichen gespeichert ist, und wo.",
+      "tags": "macOS · Safari · Nur lesend",
+      "link": "Zur App",
+      "iconAlt": "App-Symbol von Bookmark Status",
+      "shotAlt": "Die Seite von Bookmark Status in Safari. Die aktuelle Seite ist im Lesezeichenbaum hervorgehoben.",
+      "bookmarkHint": "Symbolleisten-Schaltfläche von Bookmark Status"
+    }
+  },
+  "blog": {
+    "eyebrow": "Blog · {{count}} Artikel",
+    "title": "Notizen aus der Web-Entwicklung.",
+    "lead": "Technische Artikel über Web-Entwicklung, Frameworks und meine Werkzeuge.",
+    "readTime": "{{minutes}} Min. Lesezeit",
+    "back": "Alle Artikel",
+    "contents": "Auf dieser Seite",
+    "posts": {
+      "from-astro-to-angular": {
+        "title": "Von Astro zu Angular: Warum ich mein Portfolio neu gebaut habe",
+        "summary": "Warum statische Einfachheit für mein Portfolio nicht mehr gereicht hat und wie mir Angular Raum zum Wachsen gegeben hat."
+      },
+      "moving-away-from-firebase-hosting": {
+        "title": "Weg von Firebase Hosting",
+        "summary": "Ich habe meine Portfolio-Website von Firebase Hosting auf einen VPS umgezogen. In diesem Artikel zeige ich die Migration Schritt für Schritt und erkläre, warum ich mich dafür entschieden habe."
+      }
+    }
+  },
+  "contact": {
+    "eyebrow": "Kontakt",
+    "title": "Zusammenarbeiten oder einfach Hallo sagen?",
+    "lead": "Ich helfe Teams und Einzelpersonen, aus Ideen funktionierende Produkte zu machen. Deine Nachricht landet direkt bei mir, ohne Formular-Team und ohne Ticketnummer.",
+    "elsewhere": "Anderswo",
+    "form": {
+      "label": "Kontaktformular",
+      "name": "Name",
+      "namePlaceholder": "Max Mustermann",
+      "nameError": "Gib deinen Namen mit 2 bis 50 Buchstaben ein.",
+      "email": "E-Mail",
+      "emailPlaceholder": "max@mustermann.de",
+      "emailError": "Gib eine gültige E-Mail-Adresse ein.",
+      "message": "Nachricht",
+      "messagePlaceholder": "Beschreib dein Projekt oder sag einfach Hallo.",
+      "messageError": "Schreib eine Nachricht mit 2 bis {{max}} Zeichen.",
+      "send": "Nachricht senden",
+      "sending": "Wird gesendet"
+    },
+    "status": {
+      "sentTitle": "Nachricht gesendet",
+      "sentBody": "Danke für deine Nachricht. Ich melde mich bald bei dir.",
+      "failedTitle": "Die Nachricht wurde nicht gesendet",
+      "failedBody": "Dein Text steht noch im Formular. Versuch es später noch einmal oder schreib mir über eines der Profile auf dieser Seite."
+    }
+  },
+  "buildInfo": {
+    "eyebrow": "Build-Info · Entwicklermodus",
+    "title": "Was diese Website antreibt.",
+    "lead": "Die aktuelle Version, das letzte Deployment und die Pakete hinter diesem Build.",
+    "version": "Version",
+    "lastDeployment": "Letztes Deployment",
+    "builtOn": "Gebaut am",
+    "runtime": "Laufzeit-Abhängigkeiten",
+    "buildTime": "Build-Abhängigkeiten",
+    "package": "Paket",
+    "packageVersion": "Version"
+  },
+  "accessDenied": {
+    "eyebrow": "Zugriff verweigert",
+    "title": "Diese Website ist in deiner Region nicht verfügbar.",
+    "lead": "Wenn du ein Passwort hast, gib es ein, um fortzufahren.",
+    "password": "Passwort",
+    "submit": "Weiter"
+  },
+  "pageTitles": {
+    "home": "Ehsan Barooni | Full-Stack-Softwareentwickler",
+    "projects": "Projekte | Ehsan Barooni",
+    "blog": "Blog | Ehsan Barooni",
+    "post": "{{title}} | Ehsan Barooni",
+    "contact": "Kontakt | Ehsan Barooni",
+    "buildInfo": "Build-Info | Ehsan Barooni",
+    "accessDenied": "Zugriff verweigert | Ehsan Barooni"
+  }
+}

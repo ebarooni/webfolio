@@ -1,128 +1,65 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, input } from '@angular/core';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import {
+  localizationTestingModule,
+  postText,
+} from '../../testing/localization-testing';
 import { BlogComponent } from './blog';
-import { DatePipe } from '@angular/common';
-import { PostModal } from './post-modal/post-modal';
-
-@Component({
-  selector: 'app-hero',
-  template: '<ng-content></ng-content>',
-  standalone: true,
-})
-class MockHero {
-  readonly backgroundClass = input<string>();
-  readonly subtitleClass = input<string>();
-}
-
-@Component({
-  selector: 'app-post-modal',
-  template: '<ng-content></ng-content>',
-  standalone: true,
-})
-class MockPostModal {
-  show(): void {
-    return void 0;
-  }
-}
-
-@Component({
-  selector: 'app-astro-to-angular',
-  template: '',
-  standalone: true,
-})
-class MockAstroToAngular {}
-
-@Component({
-  selector: 'app-vps-hosting',
-  template: '',
-  standalone: true,
-})
-class MockVpsHosting {}
+import { BLOG_POSTS } from './post-catalog';
 
 describe('BlogComponent', () => {
   let fixture: ComponentFixture<BlogComponent>;
-  let component: BlogComponent;
+
+  function rows(): HTMLAnchorElement[] {
+    return fixture.debugElement
+      .queryAll(By.css('li a'))
+      .map((row) => row.nativeElement as HTMLAnchorElement);
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BlogComponent,
-        DatePipe,
-        MockHero,
-        MockPostModal,
-        MockAstroToAngular,
-        MockVpsHosting,
-      ],
-    })
-      .overrideComponent(BlogComponent, {
-        set: {
-          imports: [
-            DatePipe,
-            MockHero,
-            MockPostModal,
-            MockAstroToAngular,
-            MockVpsHosting,
-          ],
-        },
-      })
-      .compileComponents();
+      imports: [BlogComponent, localizationTestingModule()],
+      providers: [provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BlogComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('renders all blog posts', () => {
-    const articles = fixture.debugElement.queryAll(By.css('article'));
-    expect(articles.length).toBe(component.posts.length);
-  });
+  it('should show the number of posts in the header', () => {
+    const eyebrow = fixture.debugElement.query(By.css('app-page-header p'))
+      .nativeElement as HTMLElement;
 
-  it('renders post title and summary', () => {
-    const titleEl = fixture.debugElement.query(By.css('h2'));
-    const summaryEl = fixture.debugElement.query(By.css('article p'));
-
-    const title = titleEl.nativeElement as HTMLHeadingElement;
-    const summary = summaryEl.nativeElement as HTMLParagraphElement;
-
-    expect(title.textContent).toContain(component.posts[0].title);
-    expect(summary.textContent).toContain(component.posts[0].summary);
-  });
-
-  it('renders read time', () => {
-    const spanEl = fixture.debugElement.query(By.css('article span'));
-    const span = spanEl.nativeElement as HTMLSpanElement;
-
-    expect(span.textContent).toContain(
-      `${component.posts[0].readTime} min read`,
+    expect(eyebrow.textContent.trim()).toBe(
+      `Writing · ${BLOG_POSTS.length} posts`,
     );
   });
 
-  it('calls show on modal and updates selectedPostId when clicking read more', () => {
-    const modalDebug = fixture.debugElement.query(By.directive(MockPostModal));
-    const modal = modalDebug.componentInstance as MockPostModal;
-
-    const spy = vi.spyOn(modal, 'show');
-
-    const buttonDebug = fixture.debugElement.query(By.css('button'));
-    const button = buttonDebug.nativeElement as HTMLButtonElement;
-
-    button.click();
-    fixture.detectChanges();
-
-    expect(component.selectedPostId()).toBe(component.posts[0].id);
-    expect(spy).toHaveBeenCalled();
+  it('should link every post to its own page, newest first', () => {
+    expect(rows().map((row) => row.getAttribute('href'))).toEqual(
+      BLOG_POSTS.map((post) => `/blog/${post.slug}`),
+    );
   });
 
-  it('viewPost updates selectedPostId and opens modal', () => {
-    const modalDebug = fixture.debugElement.query(By.directive(MockPostModal));
-    const modal = modalDebug.componentInstance as PostModal;
+  it('should show the title, the summary and the read time of a post', () => {
+    const text = rows()[0].textContent;
 
-    const spy = vi.spyOn(modal, 'show');
+    expect(text).toContain(postText(BLOG_POSTS[0].slug).title);
+    expect(text).toContain(postText(BLOG_POSTS[0].slug).summary);
+    expect(text).toContain('10 min read');
+  });
 
-    component.viewPost(component.posts[0].id, modal);
+  it('should format the dates for the active language', () => {
+    expect(rows()[0].textContent).toContain('Apr 4, 2026');
 
-    expect(component.selectedPostId()).toBe(component.posts[0].id);
-    expect(spy).toHaveBeenCalled();
+    TestBed.inject(TranslocoService).setActiveLang('de');
+    fixture.detectChanges();
+
+    expect(rows()[0].textContent).toContain('4. Apr. 2026');
+    expect(rows()[0].textContent).toContain('10 Min. Lesezeit');
   });
 });

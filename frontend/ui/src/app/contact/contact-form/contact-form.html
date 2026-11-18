@@ -1,104 +1,121 @@
-<section class="card mx-auto max-w-4xl bg-base-100 shadow-lg">
-  <div class="card-body p-6 sm:p-8">
-    <header class="mb-8 flex items-center gap-4 sm:mb-10">
-      <div
-        class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary"
-        aria-hidden="true"
-      >
-        <span class="text-xl">👨‍💻</span>
-      </div>
-
-      <h2 class="text-2xl font-bold text-primary sm:text-3xl">Get in Touch</h2>
-    </header>
-
-    <form
-      class="flex flex-col gap-7 sm:gap-8"
-      [formGroup]="contactForm"
-      (ngSubmit)="submit()"
+<form
+  *transloco="let t; prefix: 'contact'"
+  class="flex flex-col gap-6 rounded-3xl bg-base-200 p-6 md:p-10"
+  novalidate
+  [attr.aria-label]="t('form.label')"
+  [formGroup]="contactForm"
+  (ngSubmit)="submit()"
+>
+  <div class="grid gap-6 sm:grid-cols-2 sm:gap-5">
+    <app-form-field
+      #nameField
+      controlId="contact-name"
+      [label]="t('form.name')"
+      [error]="isInvalid(nameControl) ? t('form.nameError') : ''"
     >
-      <div class="grid gap-6 md:grid-cols-2 md:gap-8">
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend pb-2 text-lg font-medium">Name</legend>
+      <input
+        id="contact-name"
+        type="text"
+        class="field"
+        autocomplete="name"
+        formControlName="name"
+        [placeholder]="t('form.namePlaceholder')"
+        [attr.aria-invalid]="isInvalid(nameControl) ? true : null"
+        [attr.aria-describedby]="
+          isInvalid(nameControl) ? nameField.errorId() : null
+        "
+      />
+    </app-form-field>
 
-          <input
-            type="text"
-            class="input w-full"
-            placeholder="Max Mustermann"
-            autocomplete="name"
-            formControlName="name"
-            [class.input-error]="
-              nameControl.invalid && (nameControl.touched || nameControl.dirty)
-            "
-            [attr.aria-invalid]="
-              nameControl.invalid && (nameControl.touched || nameControl.dirty)
-                ? true
-                : null
-            "
-          />
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend pb-2 text-lg font-medium">
-            Email
-          </legend>
-
-          <input
-            type="email"
-            class="input w-full"
-            placeholder="max@mustermann.de"
-            autocomplete="email"
-            formControlName="email"
-            [class.input-error]="
-              emailControl.invalid &&
-              (emailControl.touched || emailControl.dirty)
-            "
-            [attr.aria-invalid]="
-              emailControl.invalid &&
-              (emailControl.touched || emailControl.dirty)
-                ? true
-                : null
-            "
-          />
-        </fieldset>
-      </div>
-
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend pb-2 text-lg font-medium">
-          Message
-        </legend>
-
-        <textarea
-          class="textarea h-52 w-full"
-          placeholder="Describe your project or say hello!"
-          formControlName="message"
-          [class.textarea-error]="
-            messageControl.invalid &&
-            (messageControl.touched || messageControl.dirty)
-          "
-          [attr.aria-invalid]="
-            messageControl.invalid &&
-            (messageControl.touched || messageControl.dirty)
-              ? true
-              : null
-          "
-        ></textarea>
-
-        <div class="label">{{ message().length }}/{{ maxMessageLength }}</div>
-      </fieldset>
-
-      <div class="flex justify-center">
-        <button
-          type="submit"
-          class="btn btn-primary btn-block sm:w-80"
-          [class.btn-outline]="contactForm.invalid"
-          [disabled]="contactForm.invalid || isSubmitting()"
-        >
-          @if (isSubmitting()) {
-          <span class="loading loading-spinner loading-sm"></span>
-          }
-          <span>{{ isSubmitting() ? "Sending..." : "Send Message" }}</span>
-        </button>
-      </div>
-    </form>
+    <app-form-field
+      #emailField
+      controlId="contact-email"
+      [label]="t('form.email')"
+      [error]="isInvalid(emailControl) ? t('form.emailError') : ''"
+    >
+      <input
+        id="contact-email"
+        type="email"
+        class="field"
+        autocomplete="email"
+        inputmode="email"
+        formControlName="email"
+        [placeholder]="t('form.emailPlaceholder')"
+        [attr.aria-invalid]="isInvalid(emailControl) ? true : null"
+        [attr.aria-describedby]="
+          isInvalid(emailControl) ? emailField.errorId() : null
+        "
+      />
+    </app-form-field>
   </div>
-</section>
+
+  <app-form-field
+    #messageField
+    controlId="contact-message"
+    [label]="t('form.message')"
+    [error]="
+      isInvalid(messageControl)
+        ? t('form.messageError', { max: maxMessageLength })
+        : ''
+    "
+  >
+    <textarea
+      id="contact-message"
+      class="field min-h-48 resize-y"
+      rows="7"
+      formControlName="message"
+      [placeholder]="t('form.messagePlaceholder')"
+      [attr.aria-invalid]="isInvalid(messageControl) ? true : null"
+      [attr.aria-describedby]="
+        isInvalid(messageControl) ? messageField.errorId() : null
+      "
+    ></textarea>
+    <p
+      appFieldAside
+      class="meta-label ms-auto shrink-0"
+      [class.text-error]="message().length > maxMessageLength"
+    >
+      {{ message().length }}/{{ maxMessageLength }}
+    </p>
+  </app-form-field>
+
+  <div
+    class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div
+      class="text-[0.9375rem] empty:hidden sm:min-h-6 sm:empty:block"
+      aria-live="polite"
+    >
+      @switch (status()) { @case ('sent') {
+      <app-status-message
+        tone="success"
+        [title]="t('status.sentTitle')"
+        [body]="t('status.sentBody')"
+      />
+      } @case ('failed') {
+      <app-status-message
+        tone="error"
+        [title]="t('status.failedTitle')"
+        [body]="t('status.failedBody')"
+      />
+      } }
+    </div>
+
+    <button
+      appButton
+      type="submit"
+      class="shrink-0"
+      [disabled]="isSubmitting()"
+      [attr.aria-busy]="isSubmitting() ? true : null"
+    >
+      @if (isSubmitting()) {
+      <span
+        aria-hidden="true"
+        class="size-4 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none"
+      ></span>
+      {{ t('form.sending') }} } @else { {{ t('form.send') }}
+      <app-arrow-icon />
+      }
+    </button>
+  </div>
+</form>

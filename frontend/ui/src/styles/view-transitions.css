@@ -1,0 +1,87 @@
+/*
+ * Page transitions. The router starts one for each navigation in browsers
+ * with the View Transitions API. Other browsers change the page at once.
+ *
+ * The old page goes away before the new page comes in. Two pages of text
+ * are hard to read when they show at the same time.
+ */
+@keyframes page-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes title-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes title-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+::view-transition-old(root) {
+  animation: page-leave 110ms ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: page-enter 260ms cubic-bezier(0.2, 0, 0, 1) 90ms both;
+}
+
+/* The top bar has its own name, thus it stays in position above the page. */
+.site-header-transition {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header) {
+  z-index: 1;
+}
+
+/*
+ * A post title moves from the list to the post page. The name of each
+ * title is set in the templates, because it must be different for each post.
+ */
+.post-title-transition {
+  view-transition-class: post-title;
+}
+
+::view-transition-group(.post-title) {
+  animation-duration: 360ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/*
+ * The two titles have different sizes and line breaks. Each one keeps
+ * its own size during the move, because a stretched title looks broken.
+ */
+::view-transition-old(.post-title),
+::view-transition-new(.post-title) {
+  width: auto;
+  height: auto;
+}
+
+::view-transition-old(.post-title) {
+  animation: title-leave 150ms ease-in both;
+}
+
+::view-transition-new(.post-title) {
+  animation: title-enter 240ms ease-out 120ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

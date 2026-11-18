@@ -25,13 +25,8 @@ describe('VpsHosting', () => {
     expect(component).toBeTruthy();
   });
 
-  it('renders the article title', () => {
-    const headingDebug = fixture.debugElement.query(By.css('h1'));
-    const heading = headingDebug.nativeElement as HTMLHeadingElement;
-
-    expect(heading.textContent?.trim()).toContain(
-      'Moving Away from Firebase Hosting',
-    );
+  it('leaves the article title to the post page', () => {
+    expect(fixture.debugElement.query(By.css('h1'))).toBeNull();
   });
 
   it('renders section headings', () => {

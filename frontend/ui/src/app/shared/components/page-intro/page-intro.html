@@ -1,0 +1,16 @@
+<p class="meta-label">{{ eyebrow() }}</p>
+
+<h1
+  class="max-w-[18ch] leading-[1.04] font-semibold tracking-[-0.035em] text-balance text-ink hyphens-auto"
+  [class.text-page-title]="size() === 'page'"
+  [class.text-compact-title]="size() === 'compact'"
+  [attr.id]="titleId()"
+>
+  {{ title() }}
+</h1>
+
+@if (lead()) {
+<p class="max-w-[56ch] text-lead leading-[1.55] text-pretty">{{ lead() }}</p>
+}
+
+<ng-content />

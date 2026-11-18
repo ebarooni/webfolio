@@ -2,8 +2,12 @@ import {
   accessDeniedGuard,
   geoAccessGuard,
 } from './access-denied/geo-access-guard';
+import { postExistsGuard } from './blog/post/post-exists-guard';
 import { Route } from './config/route';
 import { Routes } from '@angular/router';
+
+// Titles that start with "pageTitles." are translation keys.
+// LocalizedTitleStrategy translates them.
 
 export const routes: Routes = [
   {
@@ -11,7 +15,7 @@ export const routes: Routes = [
     canActivate: [accessDeniedGuard],
     loadComponent: () =>
       import('./access-denied/access-denied').then((m) => m.AccessDenied),
-    title: 'Access denied',
+    title: 'pageTitles.accessDenied',
     data: {
       page: Route.ACCESS_DENIED,
     },
@@ -26,16 +30,24 @@ export const routes: Routes = [
       {
         path: Route.HOME,
         loadComponent: () => import('./home/home').then((m) => m.Home),
-        title: 'Ehsan Barooni | Full-Stack Software Engineer',
+        title: 'pageTitles.home',
         data: {
-          footerBgClass: 'bg-base-200',
           page: Route.HOME,
         },
       },
       {
         path: Route.BLOG,
         loadComponent: () => import('./blog/blog').then((m) => m.BlogComponent),
-        title: 'Blog | Ehsan Barooni',
+        title: 'pageTitles.blog',
+        data: {
+          page: Route.BLOG,
+        },
+      },
+      {
+        path: `${Route.BLOG}/:slug`,
+        canActivate: [postExistsGuard],
+        loadComponent: () => import('./blog/post/post').then((m) => m.BlogPost),
+        title: 'pageTitles.post',
         data: {
           page: Route.BLOG,
         },
@@ -44,7 +56,7 @@ export const routes: Routes = [
         path: Route.PROJECTS,
         loadComponent: () =>
           import('./projects/projects').then((m) => m.Projects),
-        title: 'Projects | Ehsan Barooni',
+        title: 'pageTitles.projects',
         data: {
           page: Route.PROJECTS,
         },
@@ -52,7 +64,7 @@ export const routes: Routes = [
       {
         path: Route.CONTACT,
         loadComponent: () => import('./contact/contact').then((m) => m.Contact),
-        title: 'Contact | Ehsan Barooni',
+        title: 'pageTitles.contact',
         data: {
           page: Route.CONTACT,
         },
@@ -61,7 +73,7 @@ export const routes: Routes = [
         path: Route.BUILD_INFO,
         loadComponent: () =>
           import('./build-info/build-info').then((m) => m.BuildInfo),
-        title: 'Build Info | Ehsan Barooni',
+        title: 'pageTitles.buildInfo',
         data: {
           page: Route.BUILD_INFO,
         },
@@ -75,7 +87,6 @@ export const routes: Routes = [
         title: 'Bookmark Status for Safari on Mac | Ehsan Barooni',
         data: {
           page: Route.APPS_BOOKMARK_STATUS,
-          footerBgClass: 'bg-base-100',
         },
       },
       { path: '**', redirectTo: Route.HOME, pathMatch: 'full' },

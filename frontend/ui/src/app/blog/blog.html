@@ -1,58 +1,17 @@
-<section class="bg-base-200 flex-1">
-  <app-hero
-    backgroundClass="bg-gradient-to-b from-base-100 to-base-200"
-    subtitleClass="text-neutral-content"
-  >
-    <h1 heroTitle>Blog Posts</h1>
-    <p heroSubtitle>
-      Insights and technical write-ups on web development, frameworks and modern
-      tooling.
-    </p>
-  </app-hero>
+<ng-container *transloco="let t; prefix: 'blog'">
+  <app-page-header
+    [eyebrow]="t('eyebrow', { count: posts.length })"
+    [title]="t('title')"
+    [lead]="t('lead')"
+  />
 
-  <div
-    class="container mx-auto max-w-3xl px-4 py-6 pb-10 sm:px-6 sm:pb-16 lg:px-0"
-  >
-    <div class="flex flex-col gap-6 sm:gap-8">
+  <section class="page-container pb-24 lg:pb-32" [attr.aria-label]="t('title')">
+    <ul class="rule-list">
       @for (post of posts; track post.id) {
-      <article
-        class="card bg-base-100 shadow-md transition-shadow hover:shadow-xl"
-      >
-        <div class="card-body gap-4">
-          <div
-            class="text-secondary flex flex-wrap items-center justify-between gap-2 text-sm"
-          >
-            <time [attr.datetime]="post.date.toISOString()">
-              {{ post.date | date: 'mediumDate' }}
-            </time>
-            <span>{{ post.readTime }} min read</span>
-          </div>
-
-          <h2 class="card-title text-xl">{{ post.title }}</h2>
-          <p class="text-base-content">{{ post.summary }}</p>
-
-          <div class="card-actions justify-end">
-            <button
-              type="button"
-              class="btn btn-sm btn-primary"
-              (click)="viewPost(post.id, postModalComponent)"
-            >
-              Read More
-            </button>
-          </div>
-        </div>
-      </article>
+      <li>
+        <app-post-row [post]="post" [headingLevel]="2" showSummary />
+      </li>
       }
-    </div>
-  </div>
-</section>
-
-<app-post-modal #postModalComponent>
-  @switch (selectedPostId()) { @case (Posts.ASTRO_TO_ANGULAR) {
-  <app-astro-to-angular />
-  } @case (Posts.VPS_HOSTING) {
-  <app-vps-hosting />
-  } @default {
-  <app-astro-to-angular />
-  } }
-</app-post-modal>
+    </ul>
+  </section>
+</ng-container>

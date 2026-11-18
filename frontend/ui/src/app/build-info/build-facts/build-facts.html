@@ -1,0 +1,23 @@
+<dl
+  *transloco="let t; prefix: 'buildInfo'"
+  class="grid gap-x-12 gap-y-8 sm:grid-cols-3"
+>
+  <div class="flex flex-col gap-2.5 border-t-2 border-ink pt-5">
+    <dt class="meta-label">{{ t('version') }}</dt>
+    <dd class="fact-value">{{ version }}</dd>
+  </div>
+
+  <div class="flex flex-col gap-2.5 border-t-2 border-ink pt-5">
+    <dt class="meta-label">{{ t('lastDeployment') }}</dt>
+    <dd class="fact-value">{{ sinceLastBuild() }}</dd>
+  </div>
+
+  <div class="flex flex-col gap-2.5 border-t-2 border-ink pt-5">
+    <dt class="meta-label">{{ t('builtOn') }}</dt>
+    <dd class="fact-value">
+      <time [attr.datetime]="buildTime.toISOString()">
+        {{ buildTime | shortDate: language() }}
+      </time>
+    </dd>
+  </div>
+</dl>

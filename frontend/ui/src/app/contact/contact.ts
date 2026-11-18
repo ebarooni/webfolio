@@ -1,54 +1,61 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, finalize, of, tap } from 'rxjs';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { finalize } from 'rxjs';
 
-import { ContactForm, ContactFormData } from './contact-form/contact-form';
-import { Hero } from '../shared/components/hero/hero';
-import { Modal } from './modal/modal';
+import { SOCIAL_LINKS } from '../config/social-links';
+import { ArrowIcon } from '../shared/components/arrow-icon/arrow-icon';
+import { PageIntro } from '../shared/components/page-intro/page-intro';
+import {
+  ContactForm,
+  ContactFormData,
+  SubmissionStatus,
+} from './contact-form/contact-form';
 
 @Component({
   selector: 'app-contact',
+  imports: [
+    ArrowIcon,
+    ContactForm,
+    NgTemplateOutlet,
+    PageIntro,
+    TranslocoDirective,
+  ],
   templateUrl: './contact.html',
-  imports: [Hero, ContactForm, Modal],
-  host: {
-    class: 'flex flex-col flex-1',
-  },
 })
 export class Contact {
   private readonly http = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly links = SOCIAL_LINKS;
   readonly isSubmitting = signal(false);
+  readonly status = signal<SubmissionStatus>('idle');
 
-  submitForm(data: ContactFormData, modal: Modal): void {
+  submitForm(data: ContactFormData): void {
     if (this.isSubmitting()) {
       return;
     }
 
     this.isSubmitting.set(true);
+    this.status.set('idle');
 
     this.http
       .post('/api/v1/contact-form', data)
       .pipe(
-        tap(() => {
-          modal.showModal(
-            'Message sent ✅',
-            'Thanks for reaching out. I will get back to you soon.',
-          );
-        }),
-        catchError(() => {
-          modal.showModal(
-            'Error ⚠️',
-            'Submissions are currently disabled. Please reach out using one of the social links below.',
-          );
-          return of(null);
-        }),
         finalize(() => {
           this.isSubmitting.set(false);
         }),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe();
+      .subscribe({
+        next: () => {
+          this.status.set('sent');
+        },
+        error: () => {
+          this.status.set('failed');
+        },
+      });
   }
 }

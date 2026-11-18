@@ -1,19 +1,17 @@
-import { Component, signal } from '@angular/core';
-import { BUILD_INFO } from '../../environments/build-info';
+import { Component } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 
-import { Hero } from '../shared/components/hero/hero';
+import { BUILD_INFO } from '../../environments/build-info';
+import { PageHeader } from '../shared/components/page-header/page-header';
+import { BuildFacts } from './build-facts/build-facts';
 import { Dependencies } from './dependencies/dependencies';
-import { DeploymentDetails } from './deployment-details/deployment-details';
 
 @Component({
   selector: 'app-build-info',
+  imports: [BuildFacts, Dependencies, PageHeader, TranslocoDirective],
   templateUrl: './build-info.html',
-  imports: [Hero, DeploymentDetails, Dependencies],
-  host: {
-    class: 'flex flex-col flex-1',
-  },
 })
 export class BuildInfo {
-  readonly dependencies = signal(BUILD_INFO.dependencies);
-  readonly devDependencies = signal(BUILD_INFO.devDependencies);
+  readonly dependencies = BUILD_INFO.dependencies;
+  readonly devDependencies = BUILD_INFO.devDependencies;
 }

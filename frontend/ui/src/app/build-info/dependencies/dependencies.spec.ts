@@ -1,121 +1,57 @@
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
+import { localizationTestingModule } from '../../../testing/localization-testing';
 import { Dependencies } from './dependencies';
 
 describe('Dependencies', () => {
   let fixture: ComponentFixture<Dependencies>;
-  let component: Dependencies;
 
-  beforeAll(() => {
-    vi.clearAllMocks();
-  });
+  function rowTexts(): string[] {
+    return fixture.debugElement
+      .queryAll(By.css('tbody tr'))
+      .map((row) =>
+        (row.nativeElement as HTMLElement).textContent
+          .replace(/\s+/g, ' ')
+          .trim(),
+      );
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Dependencies],
+      imports: [Dependencies, localizationTestingModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Dependencies);
-    component = fixture.componentInstance;
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-    TestBed.resetTestingModule();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  it('creates the component', () => {
-    fixture.componentRef.setInput('dependencies', {});
-    fixture.detectChanges();
-
-    expect(component).toBeTruthy();
-  });
-
-  it('renders the default title when no custom title is provided', () => {
+    fixture.componentRef.setInput('title', 'Runtime dependencies');
     fixture.componentRef.setInput('dependencies', {
-      angular: '21.0.0',
+      rxjs: '~7.8.2',
+      '@angular/core': '^22.2.3',
     });
     fixture.detectChanges();
-
-    const headingDebugElement = fixture.debugElement.query(By.css('h3'));
-    const headingElement =
-      headingDebugElement.nativeElement as HTMLHeadingElement;
-
-    expect(headingElement.textContent?.trim()).toBe('Runtime Dependencies');
   });
 
-  it('renders a custom title when one is provided', () => {
-    fixture.componentRef.setInput('title', 'Build Time Dependencies');
-    fixture.componentRef.setInput('dependencies', {
-      vite: '7.0.0',
-    });
-    fixture.detectChanges();
+  it('should show the title with the number of packages', () => {
+    const caption = fixture.debugElement.query(By.css('caption'))
+      .nativeElement as HTMLElement;
 
-    const headingDebugElement = fixture.debugElement.query(By.css('h3'));
-    const headingElement =
-      headingDebugElement.nativeElement as HTMLHeadingElement;
-
-    expect(headingElement.textContent?.trim()).toBe('Build Time Dependencies');
+    expect(caption.textContent.replace(/\s+/g, ' ').trim()).toBe(
+      'Runtime dependencies · 2',
+    );
   });
 
-  it('transforms dependency records into alphabetically sorted table rows', () => {
-    fixture.componentRef.setInput('dependencies', {
-      zod: '4.0.0',
-      angular: '21.0.0',
-      dayjs: '1.11.0',
-    });
-    fixture.detectChanges();
-
-    const rowDebugElements = fixture.debugElement.queryAll(By.css('tbody tr'));
-
-    expect(rowDebugElements).toHaveLength(3);
-
-    const rowValues = rowDebugElements.map((rowDebugElement) => {
-      const cellDebugElements = rowDebugElement.queryAll(By.css('th, td'));
-      const packageCell = cellDebugElements[0]
-        .nativeElement as HTMLTableCellElement;
-      const versionCell = cellDebugElements[1]
-        .nativeElement as HTMLTableCellElement;
-
-      return {
-        name: packageCell.textContent?.trim(),
-        version: versionCell.textContent?.trim(),
-      };
-    });
-
-    expect(rowValues).toEqual([
-      { name: 'angular', version: '21.0.0' },
-      { name: 'dayjs', version: '1.11.0' },
-      { name: 'zod', version: '4.0.0' },
-    ]);
+  it('should list the packages by name with their versions', () => {
+    expect(rowTexts()).toEqual(['@angular/core ^22.2.3', 'rxjs ~7.8.2']);
   });
 
-  it('renders the title in the table caption for accessibility', () => {
-    fixture.componentRef.setInput('title', 'Selected Dependencies');
-    fixture.componentRef.setInput('dependencies', {
-      angular: '21.0.0',
-    });
-    fixture.detectChanges();
+  it('should name the columns for screen readers', () => {
+    const headers = fixture.debugElement
+      .queryAll(By.css('thead th'))
+      .map((header) =>
+        (header.nativeElement as HTMLElement).textContent.trim(),
+      );
 
-    const captionDebugElement = fixture.debugElement.query(By.css('caption'));
-    const captionElement =
-      captionDebugElement.nativeElement as HTMLTableCaptionElement;
-
-    expect(captionElement.textContent?.trim()).toBe('Selected Dependencies');
+    expect(headers).toEqual(['Package', 'Version']);
   });
 });

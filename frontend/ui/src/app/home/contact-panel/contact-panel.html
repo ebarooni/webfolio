@@ -1,0 +1,19 @@
+<div class="page-container">
+  <section
+    *transloco="let t"
+    class="flex flex-col items-start gap-6 rounded-3xl bg-base-200 p-8 md:p-18"
+  >
+    <h2
+      class="max-w-[18ch] text-panel-title leading-[1.05] font-semibold tracking-[-0.035em] text-balance text-ink hyphens-auto"
+    >
+      {{ t('contact.title') }}
+    </h2>
+
+    <p class="max-w-[52ch] text-[1.0625rem]">{{ t('contact.lead') }}</p>
+
+    <a appButton class="mt-2" [routerLink]="contactLink">
+      {{ t('home.contactPanel.cta') }}
+      <app-arrow-icon />
+    </a>
+  </section>
+</div>

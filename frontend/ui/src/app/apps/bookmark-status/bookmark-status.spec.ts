@@ -51,7 +51,6 @@ describe('BookmarkStatusPage', () => {
     expect(page?.title).toBe(PAGE_TITLE);
     expect(page?.data).toEqual({
       page: Route.APPS_BOOKMARK_STATUS,
-      footerBgClass: 'bg-base-100',
     });
     expect(pageIndex).toBeGreaterThan(-1);
     expect(pageIndex).toBeLessThan(wildcardIndex);

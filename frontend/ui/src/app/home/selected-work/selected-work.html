@@ -1,0 +1,20 @@
+<section
+  *transloco="let t; prefix: 'home.work'"
+  class="page-container flex flex-col gap-8 pb-24 lg:pb-32"
+>
+  <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+    <h2 class="section-label">{{ t('label') }}</h2>
+
+    <a appArrowLink [routerLink]="projectsLink">{{ t('all') }}</a>
+  </header>
+
+  <app-featured-project />
+
+  <ul class="rule-list">
+    @for (project of rows; track project.id) {
+    <li>
+      <app-project-row [project]="project" />
+    </li>
+    }
+  </ul>
+</section>

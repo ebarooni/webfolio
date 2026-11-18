@@ -1,0 +1,18 @@
+<section
+  *transloco="let t; prefix: 'home.writing'"
+  class="page-container flex flex-col gap-8 pb-24 lg:pb-32"
+>
+  <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+    <h2 class="section-label">{{ t('label') }}</h2>
+
+    <a appArrowLink [routerLink]="blogLink">{{ t('all') }}</a>
+  </header>
+
+  <ul class="rule-list">
+    @for (post of posts; track post.id) {
+    <li>
+      <app-post-row [post]="post" />
+    </li>
+    }
+  </ul>
+</section>

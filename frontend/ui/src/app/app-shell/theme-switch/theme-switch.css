@@ -1,0 +1,103 @@
+:host {
+  display: block;
+  flex: none;
+}
+
+.theme-switch {
+  display: block;
+  width: 76px;
+  height: 44px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-base-300);
+  border-radius: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+
+svg {
+  display: block;
+  margin: -1px;
+}
+
+svg * {
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.5, 1.5, 0.5, 1);
+}
+
+.night {
+  opacity: 0;
+}
+
+.stars {
+  transform: translateY(5px);
+}
+
+.is-dark .night {
+  opacity: 1;
+}
+
+.is-dark .day {
+  opacity: 0;
+}
+
+.is-dark .stars {
+  transform: translateY(0);
+}
+
+.is-dark .clouds {
+  transform: translateX(-8px);
+}
+
+.is-dark .knob {
+  transform: translateX(32px);
+}
+
+.theme-switch:hover .knob {
+  transform: translateX(3px);
+}
+
+.theme-switch.is-dark:hover .knob {
+  transform: translateX(29px);
+}
+
+/* The sun leaves on the right and comes back from the left. The moon follows. */
+@keyframes theme-switch-chase {
+  0% {
+    transform: translateX(0);
+  }
+
+  45% {
+    transform: translateX(80px);
+  }
+
+  46% {
+    transform: translateX(-90px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.is-chasing .sun,
+.is-chasing .moon {
+  opacity: 1;
+  animation: theme-switch-chase 1.7s ease-in-out;
+}
+
+.is-chasing .moon {
+  animation-delay: 0.22s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  svg * {
+    transition: none;
+  }
+
+  .is-chasing .sun,
+  .is-chasing .moon {
+    animation: none;
+  }
+}

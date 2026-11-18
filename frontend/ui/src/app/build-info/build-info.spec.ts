@@ -1,132 +1,53 @@
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, input } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { BUILD_INFO } from '../../environments/build-info';
+import { localizationTestingModule } from '../../testing/localization-testing';
 import { BuildInfo } from './build-info';
-import { Dependencies } from './dependencies/dependencies';
-import { DeploymentDetails } from './deployment-details/deployment-details';
-import { Hero } from '../shared/components/hero/hero';
-
-@Component({
-  selector: 'app-hero',
-  template: `
-    <section data-testid="hero">
-      <ng-content select="[heroTitle]" />
-      <ng-content select="[heroSubtitle]" />
-    </section>
-  `,
-})
-class MockHero {}
-
-@Component({
-  selector: 'app-dependencies',
-  template: '',
-})
-class MockDependencies {
-  readonly title = input('Runtime Dependencies');
-  readonly dependencies = input.required<Record<string, string>>();
-}
-
-@Component({
-  selector: 'app-deployment-details',
-  template: '',
-})
-class MockDeploymentDetails {}
 
 describe('BuildInfo', () => {
   let fixture: ComponentFixture<BuildInfo>;
-  let component: BuildInfo;
 
-  beforeAll(() => {
-    vi.clearAllMocks();
-  });
+  function captions(): string[] {
+    return fixture.debugElement
+      .queryAll(By.css('caption'))
+      .map((caption) =>
+        (caption.nativeElement as HTMLElement).textContent
+          .replace(/\s+/g, ' ')
+          .trim(),
+      );
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BuildInfo],
-    })
-      .overrideComponent(BuildInfo, {
-        remove: {
-          imports: [Hero, DeploymentDetails, Dependencies],
-        },
-        add: {
-          imports: [MockHero, MockDeploymentDetails, MockDependencies],
-        },
-      })
-      .compileComponents();
+      imports: [BuildInfo, localizationTestingModule()],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BuildInfo);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-    TestBed.resetTestingModule();
+  it('should show the headline of the screen', () => {
+    const headline = fixture.debugElement.query(By.css('h1'))
+      .nativeElement as HTMLElement;
+
+    expect(headline.textContent.trim()).toBe('What runs this website.');
   });
 
-  afterAll(() => {
-    vi.restoreAllMocks();
+  it('should show the facts of the build', () => {
+    expect(
+      fixture.debugElement.query(By.css('app-build-facts dl')),
+    ).not.toBeNull();
   });
 
-  it('creates the component', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should list the runtime and the build time packages', () => {
+    const runtimeCount = Object.keys(BUILD_INFO.dependencies).length;
+    const buildTimeCount = Object.keys(BUILD_INFO.devDependencies).length;
 
-  it('exposes the runtime and build time dependencies as signals', () => {
-    expect(component.dependencies()).toBe(BUILD_INFO.dependencies);
-    expect(component.devDependencies()).toBe(BUILD_INFO.devDependencies);
-  });
-
-  it('renders the page heading and subtitle inside the hero component', () => {
-    const heroDebugElement = fixture.debugElement.query(
-      By.css('[data-testid="hero"]'),
-    );
-    const heroElement = heroDebugElement.nativeElement as HTMLElement;
-    const textContent = heroElement.textContent ?? '';
-
-    expect(textContent).toContain('Build Information');
-    expect(textContent).toContain(
-      'Explore the current version, deployment details, and technical dependencies powering this website.',
-    );
-  });
-
-  it('renders deployment details and both dependency sections with the expected inputs', () => {
-    const deploymentDetailsDebugElement = fixture.debugElement.query(
-      By.directive(MockDeploymentDetails),
-    );
-    const dependenciesDebugElements = fixture.debugElement.queryAll(
-      By.directive(MockDependencies),
-    );
-
-    expect(deploymentDetailsDebugElement).toBeTruthy();
-    expect(dependenciesDebugElements).toHaveLength(2);
-
-    const runtimeDependenciesComponent = dependenciesDebugElements[0]
-      .componentInstance as MockDependencies;
-    const buildTimeDependenciesComponent = dependenciesDebugElements[1]
-      .componentInstance as MockDependencies;
-
-    expect(runtimeDependenciesComponent.title()).toBe('Runtime Dependencies');
-    expect(runtimeDependenciesComponent.dependencies()).toBe(
-      BUILD_INFO.dependencies,
-    );
-    expect(buildTimeDependenciesComponent.title()).toBe(
-      'Build Time Dependencies',
-    );
-    expect(buildTimeDependenciesComponent.dependencies()).toBe(
-      BUILD_INFO.devDependencies,
-    );
+    expect(captions()).toEqual([
+      `Runtime dependencies · ${runtimeCount}`,
+      `Build time dependencies · ${buildTimeCount}`,
+    ]);
   });
 });
