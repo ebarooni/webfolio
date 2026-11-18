@@ -22,7 +22,9 @@
       "socialLabel": "Sociale netwerken",
       "buildInfo": "build-info",
       "tapsLeft": "Nog {{count}}",
-      "developerMode": "Ontwikkelaarsmodus ingeschakeld"
+      "developerMode": "Ontwikkelaarsmodus ingeschakeld",
+      "status": "status",
+      "statusTitle": "Live beschikbaarheid van deze website"
     }
   },
   "home": {

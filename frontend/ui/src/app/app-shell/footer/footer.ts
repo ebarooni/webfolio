@@ -12,6 +12,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Route } from '../../config/route';
 import { SOCIAL_LINKS } from '../../config/social-links';
+import { STATUS_PAGE_URL } from '../../config/status-page';
 import { Github } from './github/github';
 import { Gitlab } from './gitlab/gitlab';
 import { Linkedin } from './linkedin/linkedin';
@@ -55,6 +56,7 @@ export class Footer {
   readonly versionToast = signal<VersionToast | null>(null);
 
   readonly links = SOCIAL_LINKS;
+  readonly statusPageUrl = STATUS_PAGE_URL;
 
   constructor() {
     this.destroyRef.onDestroy(() => {

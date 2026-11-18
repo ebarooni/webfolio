@@ -40,37 +40,49 @@
       </ul>
     </nav>
 
-    @if (version()) {
-      <div class="relative">
-        @if (developerMode()) {
-          <a
-            class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
-            [routerLink]="buildInfoLink"
-          >
-            {{ version() }} · {{ t('buildInfo') }}
-          </a>
-        } @else {
-          <button
-            type="button"
-            class="meta-label focus-ring min-h-11 cursor-pointer rounded-lg hover:text-ink"
-            (click)="tapVersion()"
-          >
-            {{ version() }}
-          </button>
-        }
-        @if (versionToast(); as toast) {
-          <p
-            role="status"
-            class="absolute bottom-full left-0 rounded-lg bg-ink px-3 py-2 text-xs whitespace-nowrap text-base-100 lg:right-0 lg:left-auto"
-          >
-            @if (toast.kind === 'tapsLeft') {
-              {{ t('tapsLeft', { count: toast.count }) }}
-            } @else {
-              {{ t('developerMode') }}
-            }
-          </p>
-        }
-      </div>
-    }
+    <div class="flex items-center gap-4">
+      <a
+        class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
+        [href]="statusPageUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        [attr.title]="t('statusTitle')"
+      >
+        {{ t('status') }} ↗
+      </a>
+
+      @if (version()) {
+        <div class="relative">
+          @if (developerMode()) {
+            <a
+              class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
+              [routerLink]="buildInfoLink"
+            >
+              {{ version() }} · {{ t('buildInfo') }}
+            </a>
+          } @else {
+            <button
+              type="button"
+              class="meta-label focus-ring min-h-11 cursor-pointer rounded-lg hover:text-ink"
+              (click)="tapVersion()"
+            >
+              {{ version() }}
+            </button>
+          }
+          @if (versionToast(); as toast) {
+            <p
+              role="status"
+              class="absolute bottom-full left-0 rounded-lg bg-ink px-3 py-2 text-xs whitespace-nowrap text-base-100 lg:right-0 lg:left-auto"
+            >
+              @if (toast.kind === 'tapsLeft') {
+                {{ t('tapsLeft', { count: toast.count }) }}
+              } @else {
+                {{ t('developerMode') }}
+              }
+            </p>
+          }
+        </div>
+      }
+    </div>
   </div>
 </footer>

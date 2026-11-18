@@ -22,7 +22,9 @@
       "socialLabel": "Soziale Netzwerke",
       "buildInfo": "Build-Info",
       "tapsLeft": "Noch {{count}}",
-      "developerMode": "Entwicklermodus aktiviert"
+      "developerMode": "Entwicklermodus aktiviert",
+      "status": "Status",
+      "statusTitle": "Live-Verfügbarkeit dieser Website"
     }
   },
   "home": {
