@@ -11,6 +11,7 @@ public class OpenApiMcpPrompts {
   /** Generates an onboarding prompt that gives a full overview of the WebFolio API. */
   @Prompt(
       name = "webfolio-api-onboarding",
+      title = "API onboarding",
       description =
           "Get a full overview of the WebFolio API — endpoints, purpose, and how to interact with"
               + " it")
@@ -36,6 +37,7 @@ public class OpenApiMcpPrompts {
    */
   @Prompt(
       name = "webfolio-contact-form-integration",
+      title = "Contact form integration guide",
       description = "Get a detailed integration guide for the WebFolio contact form endpoint")
   public List<PromptMessage> contactFormIntegration() {
     return List.of(
@@ -57,6 +59,7 @@ public class OpenApiMcpPrompts {
   /** Generates a prompt for debugging a failed contact form submission. */
   @Prompt(
       name = "webfolio-debug-contact-form",
+      title = "Debug a contact form submission",
       description = "Debug a failed contact form submission given an HTTP status code")
   public List<PromptMessage> debugContactForm(
       @PromptArg(
@@ -80,6 +83,7 @@ public class OpenApiMcpPrompts {
   /** Generates a prompt for reviewing the overall WebFolio API design and health setup. */
   @Prompt(
       name = "webfolio-api-health-review",
+      title = "API design review",
       description =
           "Review the WebFolio API structure, health indicators, and identify gaps or improvements")
   public List<PromptMessage> apiHealthReview() {

@@ -13,7 +13,8 @@ public class OpenApiMcpResource {
   /** Returns the full OpenAPI specification for WebFolio as JSON. */
   @Resource(
       uri = "webfolio://openapi",
-      name = "OpenAPI Specification",
+      name = "openapi",
+      title = "OpenAPI specification",
       description = "Full OpenAPI specification of WebFolio in JSON format",
       mimeType = "application/json")
   public TextResourceContents getOpenApiSpec() {

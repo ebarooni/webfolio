@@ -42,7 +42,9 @@ The server provides the following capabilities:
 - **Tools** — search endpoints by keyword and retrieve detailed information about a specific path
 - **Prompts** — reusable prompt templates for API onboarding, contact form integration, debugging, and API review
 
-The MCP server is intended for local development and AI tooling only. It is not exposed publicly in the production Docker Compose setup.
+The MCP server is intended for local development and AI tooling only. It runs in dev mode and in tests, but the production build leaves it out (`%prod.quarkus.mcp.server.http.enabled=false` in `application.properties`, a build-time setting), so `/mcp` does not exist on the deployed site.
+
+All tools are read-only and say so in their MCP annotations. Invalid input and a spec that cannot be loaded come back as tool errors (`isError: true`).
 
 ### Connecting locally
 
