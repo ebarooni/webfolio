@@ -11,16 +11,16 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 
 ## Commands
 
-| What                                             | Where         | Command                                                                        |
-| ------------------------------------------------ | ------------- | ------------------------------------------------------------------------------ |
-| Full build (all modules)                         | root          | `mvn clean install -Ddocker.skip=true`                                         |
-| Backend dev (needs `.env`)                       | root          | `./startup.sh`                                                                 |
-| Backend tests                                    | root          | `mvn -pl backend test`                                                         |
-| Frontend dev (proxies `/api` to :8080)           | `frontend/ui` | `npm start`                                                                    |
-| Frontend tests, single run                       | `frontend/ui` | `npm test -- --watch=false`                                                    |
-| Lint and format check, everything (CI runs this) | root          | `npm run lint`                                                                 |
-| Fix formatting and lint, everything              | root          | `npm run fmt`                                                                  |
-| One tool only                                    | root          | `npm run lint:prettier`, `lint:frontend`, `lint:java` (same names with `fmt:`) |
+| What                                   | Where         | Command                                                                        |
+| -------------------------------------- | ------------- | ------------------------------------------------------------------------------ |
+| Full build (all modules)               | root          | `mvn clean install -Ddocker.skip=true`                                         |
+| Backend dev (needs `.env`)             | root          | `./startup.sh`                                                                 |
+| Backend tests                          | root          | `mvn -pl backend test`                                                         |
+| Frontend dev (proxies `/api` to :8080) | `frontend/ui` | `npm start`                                                                    |
+| Frontend tests, single run             | `frontend/ui` | `npm test -- --watch=false`                                                    |
+| Lint and format check, everything      | root          | `npm run lint`                                                                 |
+| Fix formatting and lint, everything    | root          | `npm run fmt`                                                                  |
+| One tool only                          | root          | `npm run lint:prettier`, `lint:frontend`, `lint:java` (same names with `fmt:`) |
 
 ## Gotchas
 
@@ -48,7 +48,7 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 - Every commit message ends with this trailer, after one empty line:
   `Co-authored-by: Ehsan Barooni <66495214+ebarooni@users.noreply.github.com>`
   Do not add any other `Co-authored-by` line. Cursor's commit hook adds the session owner only when no trailer is present, and that adds the wrong email.
-- `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. `.github/workflows/lint.yml` runs `npm run lint` on every pull request. There is no CI build or test, so run those checks locally.
+- `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. There is no CI build, test or lint, so run the checks above locally.
 - Prose and comments: ASD-STE100 Simplified Technical English. Use plain words, short sentences, and one idea per sentence. Comments say why, not what.
 - No cryptic names (`d`, `m`, `bm`). Names state meaning.
 - Size: aim for 250 lines or fewer per hand-written file. Split by responsibility, not by line count: one component has one template and one stylesheet. A file that is one unit may go up to 400 lines. Over 400 lines, the unit is too big: extract a child component, service or module that has its own name and job. Never split one unit into parts that always load together, such as two stylesheets on one component. Split an oversized file when you next touch it; no mass refactors. Generated files are exempt.
