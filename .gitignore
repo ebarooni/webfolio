@@ -32,3 +32,6 @@ buildNumber.properties
 !**/.env.example
 secrets/*
 !secrets/*.example.*
+
+# Root tooling (Prettier, Lefthook)
+/node_modules/

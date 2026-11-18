@@ -1,0 +1,7 @@
+# Prettier also reads the root .gitignore. Nested .gitignore files are not read, so build output is listed here.
+**/package-lock.json
+**/target/
+frontend/ui/dist/
+frontend/ui/.angular/
+frontend/ui/coverage/
+frontend/ui/src/environments/

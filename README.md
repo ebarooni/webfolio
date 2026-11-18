@@ -70,6 +70,7 @@ For VS Code, add the following to `.vscode/mcp.json`:
 - Java 25
 - Maven
 - Node.js LTS via `nvm`
+- `npm install` at the repository root, for the formatter and the pre-commit hook
 
 ## Configuration
 

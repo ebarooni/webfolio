@@ -5,7 +5,8 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 ## Toolchain
 
 - JDK 25. The root `pom.xml` sets `maven.compiler.release=25` and the image uses `ubi9/openjdk-25`.
-- Node comes from `.nvmrc` (`nvm use`), and npm is pinned by `packageManager` in `frontend/ui/package.json`. The Maven build runs `npm` and `node` from your PATH.
+- Node comes from `.nvmrc` (`nvm use`), and npm is pinned by `packageManager` in both `package.json` files. The Maven build runs `npm` and `node` from your PATH.
+- The root `package.json` holds only repository tooling: Prettier and Lefthook. Run `npm install` at the root once. It also installs the pre-commit hook.
 - There is no Maven wrapper. Use `mvn`.
 
 ## Commands
@@ -17,8 +18,9 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 | Backend tests | root | `mvn -pl backend test` |
 | Frontend dev (proxies `/api` to :8080) | `frontend/ui` | `npm start` |
 | Frontend tests, single run | `frontend/ui` | `npm test -- --watch=false` |
-| Lint the way the build does | `frontend/ui` | `npm run lint` |
-| Full lint (prettier, stylelint, eslint) | `frontend/ui` | `npm run lint:all`, fix with `npm run fmt:all` |
+| Lint and format check, everything (CI runs this) | root | `npm run lint` |
+| Fix formatting and lint, everything | root | `npm run fmt` |
+| One tool only | root | `npm run lint:prettier`, `lint:frontend`, `lint:java` (same names with `fmt:`) |
 
 ## Gotchas
 
@@ -27,7 +29,9 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 - The backend serves the SPA. In `process-resources` it copies `frontend/ui/dist/webfolio/browser` into `META-INF/resources`, so `mvn -pl backend ...` ships whatever frontend build already exists, or none at all.
 - `FallbackResource` catches every unmatched `GET` and returns `index.html`. New REST endpoints go under `/api/...`, which is also the only prefix `proxy.conf.json` forwards. `/mcp` and `/q/*` belong to Quarkus.
 - Telegram config is never in `application.properties`. Dev passes it as `-D` flags (`startup.sh`), containers read the secrets file (`QUARKUS_CONFIG_LOCATIONS`), and tests use WireMock (`WireMockTelegram`). Never commit `.env` or `secrets/*.properties`.
-- Checkstyle (`google_checks.xml`, 2-space indent) runs at `validate` in `backend`. `*IT.java` tests are skipped unless you pass `-DskipITs=false` or `-Dnative`.
+- Lint and format are split by tool. Prettier (root `prettier.config.mjs`) formats every file type it knows in the whole repository. ESLint and Stylelint stay in `frontend/ui`, because they need its Angular setup. Java uses Spotless (google-java-format) and Checkstyle (`google_checks.xml`) from Maven. Both run at `validate` in `backend`, and any Checkstyle warning fails the build.
+- The pre-commit hook (`lefthook.yml`) fixes staged files and adds the fixes to the commit. Skip it once with `LEFTHOOK=0 git commit`.
+- `*IT.java` tests are skipped unless you pass `-DskipITs=false` or `-Dnative`.
 
 ## Where things live
 
@@ -44,7 +48,7 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 - Every commit message ends with this trailer, after one empty line:
   `Co-authored-by: Ehsan Barooni <66495214+ebarooni@users.noreply.github.com>`
   Do not add any other `Co-authored-by` line. Cursor's commit hook adds the session owner only when no trailer is present, and that adds the wrong email.
-- `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. There is no CI build or test, so run the checks above locally.
+- `.github/workflows/mirror-to-gitlab.yml` mirrors `main` to GitLab. `.github/workflows/publish-docker-image.yml` publishes the Docker Hub image when dispatched from `main`. `.github/workflows/lint.yml` runs `npm run lint` on every pull request. There is no CI build or test, so run those checks locally.
 - Prose and comments: ASD-STE100 Simplified Technical English. Use plain words, short sentences, and one idea per sentence. Comments say why, not what.
 - No cryptic names (`d`, `m`, `bm`). Names state meaning.
 - Size: aim for 250 lines or fewer per hand-written file. Split by responsibility, not by line count: one component has one template and one stylesheet. A file that is one unit may go up to 400 lines. Over 400 lines, the unit is too big: extract a child component, service or module that has its own name and job. Never split one unit into parts that always load together, such as two stylesheets on one component. Split an oversized file when you next touch it; no mass refactors. Generated files are exempt.

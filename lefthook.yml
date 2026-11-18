@@ -1,0 +1,25 @@
+# Git hooks for the whole repository. `npm install` at the root installs them.
+# Skip once with `LEFTHOOK=0 git commit ...`.
+# The jobs run one after another, because two tools must not write the same file at the same time.
+pre-commit:
+  jobs:
+    - name: prettier
+      run: npx prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+
+    - name: stylelint
+      root: frontend/ui/
+      glob: "*.{css,scss}"
+      run: npx stylelint --fix {staged_files}
+      stage_fixed: true
+
+    - name: eslint
+      root: frontend/ui/
+      glob: "*.{ts,html}"
+      run: npx eslint --fix --no-warn-ignored {staged_files}
+      stage_fixed: true
+
+    - name: java
+      glob: "backend/**/*.java"
+      run: mvn --quiet --projects backend spotless:apply
+      stage_fixed: true

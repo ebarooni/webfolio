@@ -8,12 +8,7 @@
     "build:production": "ng build --configuration production",
     "eslint": "npx eslint",
     "lint": "npm run eslint -- .",
-    "lint:all": "npm run prettier:check && npm run stylelint:lint && npm run lint",
     "fmt": "npm run eslint -- . --fix",
-    "fmt:all": "npm run prettier:fix && npm run stylelint:fix && npm run fmt",
-    "prettier": "npx prettier",
-    "prettier:check": "npm run prettier -- . --check",
-    "prettier:fix": "npm run prettier -- . --write",
     "stylelint": "npx stylelint",
     "stylelint:lint": "npm run stylelint -- \"**/*.(css|scss)\"",
     "stylelint:fix": "npm run stylelint -- \"**/*.(css|scss)\" --fix",
@@ -42,7 +37,6 @@
     "@angular/cli": "^22.2.4",
     "@angular/compiler-cli": "^22.2.3",
     "@ebarooni/angular-eslint-config": "^2.0.0",
-    "@ebarooni/prettier-config": "^1.4.0",
     "@ebarooni/stylelint-config": "^1.4.0",
     "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.2.4",
@@ -51,13 +45,11 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.4.0",
     "postcss": "^8.5.10",
-    "prettier": "^3.8.3",
     "stylelint": "^16.26.1",
     "stylelint-config-standard-scss": "^14.0.0",
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.1",
     "vitest": "^5.0.5"
-  },
-  "prettier": "@ebarooni/prettier-config"
+  }
 }
