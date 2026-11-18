@@ -5,7 +5,7 @@ description: >
   fixing commit or the reason to decline, and resolves it. Use when addressing
   or resolving PR review comments, including bot review threads.
 metadata:
-  version: '1.0'
+  version: "1.0"
 ---
 
 # Resolve Review Threads

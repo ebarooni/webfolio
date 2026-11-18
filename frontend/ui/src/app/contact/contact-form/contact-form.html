@@ -86,19 +86,22 @@
       class="text-[0.9375rem] empty:hidden sm:min-h-6 sm:empty:block"
       aria-live="polite"
     >
-      @switch (status()) { @case ('sent') {
-      <app-status-message
-        tone="success"
-        [title]="t('status.sentTitle')"
-        [body]="t('status.sentBody')"
-      />
-      } @case ('failed') {
-      <app-status-message
-        tone="error"
-        [title]="t('status.failedTitle')"
-        [body]="t('status.failedBody')"
-      />
-      } }
+      @switch (status()) {
+        @case ('sent') {
+          <app-status-message
+            tone="success"
+            [title]="t('status.sentTitle')"
+            [body]="t('status.sentBody')"
+          />
+        }
+        @case ('failed') {
+          <app-status-message
+            tone="error"
+            [title]="t('status.failedTitle')"
+            [body]="t('status.failedBody')"
+          />
+        }
+      }
     </div>
 
     <button
@@ -109,12 +112,14 @@
       [attr.aria-busy]="isSubmitting() ? true : null"
     >
       @if (isSubmitting()) {
-      <span
-        aria-hidden="true"
-        class="size-4 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none"
-      ></span>
-      {{ t('form.sending') }} } @else { {{ t('form.send') }}
-      <app-arrow-icon />
+        <span
+          aria-hidden="true"
+          class="size-4 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none"
+        ></span>
+        {{ t('form.sending') }}
+      } @else {
+        {{ t('form.send') }}
+        <app-arrow-icon />
       }
     </button>
   </div>

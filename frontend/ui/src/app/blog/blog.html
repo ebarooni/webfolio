@@ -8,9 +8,9 @@
   <section class="page-container pb-24 lg:pb-32" [attr.aria-label]="t('title')">
     <ul class="rule-list">
       @for (post of posts; track post.id) {
-      <li>
-        <app-post-row [post]="post" [headingLevel]="2" showSummary />
-      </li>
+        <li>
+          <app-post-row [post]="post" [headingLevel]="2" showSummary />
+        </li>
       }
     </ul>
   </section>

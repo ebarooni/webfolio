@@ -31,19 +31,19 @@ Caddy blocks `/admin` on the public address. You reach the admin panel only thro
 The setup has **two separate DNS parts**. Both are records in the DNS settings of `example.com`:
 
 | Part    | Name                 | Points to          | Purpose                             |
-|---------|----------------------|--------------------|-------------------------------------|
+| ------- | -------------------- | ------------------ | ----------------------------------- |
 | Vault   | `vault.example.com`  | Your server        | Apps and browsers find the vault    |
 | Sending | `notify.example.com` | Your mail provider | Receivers trust mail from the vault |
 
 ### Order of the steps
 
-| Step | Where                       | What                                      |
-|------|-----------------------------|-------------------------------------------|
-| 1    | DNS provider                | Point `vault.example.com` to the server   |
-| 2    | Mail provider, DNS provider | Set up `notify.example.com` and an API key ([setup-mail-sending.md](setup-mail-sending.md)) |
-| 3    | Browser                     | Get the Bitwarden installation ID and key |
-| 4–11 | VPS over SSH, local machine | Install and start Bitwarden               |
-| 12–13| Browser, your devices       | Create the account and connect the apps   |
+| Step  | Where                       | What                                                                                        |
+| ----- | --------------------------- | ------------------------------------------------------------------------------------------- |
+| 1     | DNS provider                | Point `vault.example.com` to the server                                                     |
+| 2     | Mail provider, DNS provider | Set up `notify.example.com` and an API key ([setup-mail-sending.md](setup-mail-sending.md)) |
+| 3     | Browser                     | Get the Bitwarden installation ID and key                                                   |
+| 4–11  | VPS over SSH, local machine | Install and start Bitwarden                                                                 |
+| 12–13 | Browser, your devices       | Create the account and connect the apps                                                     |
 
 ## Before you start
 
@@ -56,16 +56,16 @@ The setup has **two separate DNS parts**. Both are records in the DNS settings o
 
 Write down these values while you work. You need them in step 7. Keep the secret values out of chats, notes apps and the repository.
 
-| Value               | Example                       | Secret | You get it in                      |
-|---------------------|-------------------------------|--------|------------------------------------|
-| Server IP           | `<SERVER_IP>`                 | No     | Your hosting dashboard (step 1)    |
-| Sending subdomain   | `notify.example.com`          | No     | Your choice (step 2)               |
-| Sender address      | `no-reply@notify.example.com` | No     | Your choice (step 2)               |
-| SMTP host and port  | `smtp.resend.com`, `2465`     | No     | Mail provider docs (step 2)        |
-| SMTP user and key   | `resend`, the API key         | Key    | Mail provider (step 2)             |
-| Installation ID/key | `<INSTALLATION_ID>`, `<INSTALLATION_KEY>` | Yes | bitwarden.com/host (step 3) |
-| Bitwarden subnet    | `<BITWARDEN_SUBNET>`          | No     | Server command (step 7)            |
-| Admin address       | Your own email address        | No     | Your choice (step 7)               |
+| Value               | Example                                   | Secret | You get it in                   |
+| ------------------- | ----------------------------------------- | ------ | ------------------------------- |
+| Server IP           | `<SERVER_IP>`                             | No     | Your hosting dashboard (step 1) |
+| Sending subdomain   | `notify.example.com`                      | No     | Your choice (step 2)            |
+| Sender address      | `no-reply@notify.example.com`             | No     | Your choice (step 2)            |
+| SMTP host and port  | `smtp.resend.com`, `2465`                 | No     | Mail provider docs (step 2)     |
+| SMTP user and key   | `resend`, the API key                     | Key    | Mail provider (step 2)          |
+| Installation ID/key | `<INSTALLATION_ID>`, `<INSTALLATION_KEY>` | Yes    | bitwarden.com/host (step 3)     |
+| Bitwarden subnet    | `<BITWARDEN_SUBNET>`                      | No     | Server command (step 7)         |
+| Admin address       | Your own email address                    | No     | Your choice (step 7)            |
 
 New to DNS words such as A, MX, TXT, SPF or TTL? Read [DNS words in plain English](setup-mail-sending.md#dns-words-in-plain-english) first.
 
@@ -78,7 +78,7 @@ New to DNS words such as A, MX, TXT, SPF or TTL? Read [DNS words in plain Englis
 Add one record:
 
 | Type | Host name | Value         | TTL     |
-|------|-----------|---------------|---------|
+| ---- | --------- | ------------- | ------- |
 | A    | `vault`   | `<SERVER_IP>` | Default |
 
 An A record points a name to an IPv4 address. Many panels add `.example.com` for you, so you type only `vault`. Most panels show a preview. It must show `vault.example.com`, not `vault.example.com.example.com`. Add an `AAAA` record with the server's IPv6 address only if IPv6 already works for your other sites.
@@ -148,7 +148,7 @@ sudo chmod 700 bwdata logs backups
 **Why:** the container runs as UID `911`, so it must own the data folders.
 
 | Path       | Mounted at           | Contents                                      |
-|------------|----------------------|-----------------------------------------------|
+| ---------- | -------------------- | --------------------------------------------- |
 | `bwdata/`  | `/etc/bitwarden`     | `vault.db`, data-protection keys, attachments |
 | `logs/`    | `/var/log/bitwarden` | Application and backup logs                   |
 | `backups/` | `/backups`           | Built-in daily backup archives                |
@@ -180,9 +180,9 @@ docker network create bitwarden
 2. Connect Caddy to the network. Check that `/opt/docker/caddy/compose.yaml` lists both networks, as in `deploy/caddy/compose.yaml` in the repository:
 
 ```yaml
-    networks:
-      - proxy
-      - bitwarden
+networks:
+  - proxy
+  - bitwarden
 ```
 
 and at the end of the file:
@@ -224,7 +224,7 @@ nano settings.env
 ```
 
 | Variable                                    | Value                                    |
-|---------------------------------------------|------------------------------------------|
+| ------------------------------------------- | ---------------------------------------- |
 | `BW_DOMAIN`                                 | `vault.example.com`                      |
 | `BW_INSTALLATION_ID`, `BW_INSTALLATION_KEY` | From step 3                              |
 | `BW_REAL_IPS`                               | The Bitwarden subnet                     |
@@ -489,13 +489,13 @@ Inside the container, Bitwarden's web server listens on port `8080` (the default
 1. Check that `compose.yaml` has these lines under the `bitwarden` service. The file in this repository already has them. If your copy on the server is older, add them below `expose`:
 
 ```yaml
-    # Admin panel access over an SSH tunnel only (see "Reach the admin panel
-    # safely" in docs/setup-bitwarden.md). 127.0.0.1 is the loopback address:
-    # only programs on the server itself can connect to it. Never remove
-    # "127.0.0.1:". Without it, Docker publishes port 8081 on every address
-    # of the server, the internet included, and ufw does not stop that.
-    ports:
-      - "127.0.0.1:8081:8080"
+# Admin panel access over an SSH tunnel only (see "Reach the admin panel
+# safely" in docs/setup-bitwarden.md). 127.0.0.1 is the loopback address:
+# only programs on the server itself can connect to it. Never remove
+# "127.0.0.1:". Without it, Docker publishes port 8081 on every address
+# of the server, the internet included, and ufw does not stop that.
+ports:
+  - "127.0.0.1:8081:8080"
 ```
 
 Read `127.0.0.1:8081:8080` from left to right: on the server address `127.0.0.1`, port `8081`, send traffic to port `8080` in the container.

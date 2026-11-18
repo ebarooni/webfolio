@@ -10,21 +10,22 @@
   <div class="flex flex-col gap-2.5">
     <!-- The title box fits the text, thus the title moves without a gap. -->
     @if (headingLevel() === 2) {
-    <h2
-      class="post-title-transition w-fit text-[clamp(1.5rem,2.4vw,1.75rem)] leading-[1.2] font-semibold tracking-[-0.025em] text-ink group-hover:text-primary"
-      [style.view-transition-name]="transitionName()"
-    >
-      {{ t('posts.' + post().slug + '.title') }}
-    </h2>
+      <h2
+        class="post-title-transition w-fit text-[clamp(1.5rem,2.4vw,1.75rem)] leading-[1.2] font-semibold tracking-[-0.025em] text-ink group-hover:text-primary"
+        [style.view-transition-name]="transitionName()"
+      >
+        {{ t('posts.' + post().slug + '.title') }}
+      </h2>
     } @else {
-    <h3
-      class="post-title-transition w-fit text-[1.375rem] leading-[1.25] font-semibold tracking-tight text-ink group-hover:text-primary"
-      [style.view-transition-name]="transitionName()"
-    >
-      {{ t('posts.' + post().slug + '.title') }}
-    </h3>
-    } @if (showSummary()) {
-    <p class="max-w-[60ch]">{{ t('posts.' + post().slug + '.summary') }}</p>
+      <h3
+        class="post-title-transition w-fit text-[1.375rem] leading-[1.25] font-semibold tracking-tight text-ink group-hover:text-primary"
+        [style.view-transition-name]="transitionName()"
+      >
+        {{ t('posts.' + post().slug + '.title') }}
+      </h3>
+    }
+    @if (showSummary()) {
+      <p class="max-w-[60ch]">{{ t('posts.' + post().slug + '.summary') }}</p>
     }
   </div>
 

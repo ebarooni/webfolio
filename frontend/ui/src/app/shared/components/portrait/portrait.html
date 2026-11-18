@@ -1,19 +1,19 @@
 @if (hasFailed()) {
-<span
-  role="img"
-  class="grid size-full place-items-center font-semibold text-muted"
-  [attr.aria-label]="alt()"
->
-  EB
-</span>
+  <span
+    role="img"
+    class="grid size-full place-items-center font-semibold text-muted"
+    [attr.aria-label]="alt()"
+  >
+    EB
+  </span>
 } @else {
-<!-- The photo has headroom above the hair. Anchor it to the top so the round and 4:5 frames keep that space. -->
-<img
-  ngSrc="profile.webp"
-  fill
-  class="object-cover object-top"
-  [alt]="alt()"
-  [priority]="isPriority()"
-  (error)="hasFailed.set(true)"
-/>
+  <!-- The photo has headroom above the hair. Anchor it to the top so the round and 4:5 frames keep that space. -->
+  <img
+    ngSrc="profile.webp"
+    fill
+    class="object-cover object-top"
+    [alt]="alt()"
+    [priority]="isPriority()"
+    (error)="hasFailed.set(true)"
+  />
 }

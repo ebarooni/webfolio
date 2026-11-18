@@ -1,6 +1,6 @@
 ---
-agent: 'agent'
-description: 'Write unit tests for Angular components, services, directives, and pipes with modern best practices while strictly following the given requirements'
+agent: "agent"
+description: "Write unit tests for Angular components, services, directives, and pipes with modern best practices while strictly following the given requirements"
 ---
 
 ## Objective

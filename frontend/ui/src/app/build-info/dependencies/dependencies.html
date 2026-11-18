@@ -3,7 +3,13 @@
   class="w-full border-collapse text-[0.9375rem]"
 >
   <caption class="section-label pb-4 text-left">
-    {{ title() }} · {{ dependencies().length }}
+    {{
+      title()
+    }}
+    ·
+    {{
+      dependencies().length
+    }}
   </caption>
 
   <thead class="sr-only">
@@ -15,17 +21,17 @@
 
   <tbody class="rule-list">
     @for (dependency of dependencies(); track dependency.name) {
-    <tr>
-      <th
-        scope="row"
-        class="py-3 pr-4 text-left font-medium wrap-anywhere text-ink"
-      >
-        {{ dependency.name }}
-      </th>
-      <td class="meta-label py-3 text-right whitespace-nowrap">
-        {{ dependency.version }}
-      </td>
-    </tr>
+      <tr>
+        <th
+          scope="row"
+          class="py-3 pr-4 text-left font-medium wrap-anywhere text-ink"
+        >
+          {{ dependency.name }}
+        </th>
+        <td class="meta-label py-3 text-right whitespace-nowrap">
+          {{ dependency.version }}
+        </td>
+      </tr>
     }
   </tbody>
 </table>

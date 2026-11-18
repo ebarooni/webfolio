@@ -53,7 +53,7 @@ drwxr-xr-x holu docker /opt/docker
 Breaking down the command:
 
 | Part          | Meaning                                                       |
-|---------------|---------------------------------------------------------------|
+| ------------- | ------------------------------------------------------------- |
 | `sudo`        | Run as root – required because the directory is owned by root |
 | `chown`       | Change ownership                                              |
 | `-R`          | Recursive – apply to the directory and everything inside it   |
@@ -68,7 +68,7 @@ After this, `holu` can read, write and manage everything under `/opt/docker/` wi
 Directories use `750` – owner has full access, the `docker` group can read and traverse, all other users are blocked.
 
 | Path                           | Mode  | Owner  | Group    |
-|--------------------------------|-------|--------|----------|
+| ------------------------------ | ----- | ------ | -------- |
 | `/opt/docker/`                 | `750` | `holu` | `docker` |
 | `/opt/docker/caddy`            | `750` | `holu` | `docker` |
 | `/opt/docker/webfolio`         | `750` | `holu` | `docker` |
@@ -82,12 +82,12 @@ Directories use `750` – owner has full access, the `docker` group can read and
 
 Some containers run as a fixed non-root user and write to a bind mount. These directories belong to that user. Only that user has access.
 
-| Path                            | Mode  | Owner | Group | Contents                              |
-|---------------------------------|-------|-------|-------|---------------------------------------|
-| `/opt/docker/bitwarden/bwdata`  | `700` | `911` | `911` | Vault database, data-protection keys  |
-| `/opt/docker/bitwarden/logs`    | `700` | `911` | `911` | Bitwarden logs                        |
-| `/opt/docker/bitwarden/backups` | `700` | `911` | `911` | Built-in daily backup archives        |
-| `/opt/docker/uptime-kuma/data` | `700` | `1000` | `1000` | Uptime Kuma database, notification credentials |
+| Path                            | Mode  | Owner  | Group  | Contents                                       |
+| ------------------------------- | ----- | ------ | ------ | ---------------------------------------------- |
+| `/opt/docker/bitwarden/bwdata`  | `700` | `911`  | `911`  | Vault database, data-protection keys           |
+| `/opt/docker/bitwarden/logs`    | `700` | `911`  | `911`  | Bitwarden logs                                 |
+| `/opt/docker/bitwarden/backups` | `700` | `911`  | `911`  | Built-in daily backup archives                 |
+| `/opt/docker/uptime-kuma/data`  | `700` | `1000` | `1000` | Uptime Kuma database, notification credentials |
 
 To read these directories from the host, use `sudo`.
 
@@ -99,26 +99,26 @@ Files are split into two categories based on sensitivity:
 
 Owner can read and write, the `docker` group can read. These files do not contain credentials.
 
-| File                                 | Mode  | Contents                     |
-|--------------------------------------|-------|------------------------------|
-| `/opt/docker/caddy/compose.yaml`     | `640` | Caddy service definitions    |
-| `/opt/docker/caddy/Caddyfile`        | `640` | Domain routing rules         |
-| `/opt/docker/webfolio/compose.yaml`  | `640` | Webfolio service definition  |
-| `/opt/docker/wg-easy/compose.yaml`   | `640` | wg-easy service definition   |
-| `/opt/docker/bitwarden/compose.yaml` | `640` | Bitwarden service definition |
-| `/opt/docker/passbolt/compose.yaml` | `640` | Passbolt service definitions |
+| File                                   | Mode  | Contents                       |
+| -------------------------------------- | ----- | ------------------------------ |
+| `/opt/docker/caddy/compose.yaml`       | `640` | Caddy service definitions      |
+| `/opt/docker/caddy/Caddyfile`          | `640` | Domain routing rules           |
+| `/opt/docker/webfolio/compose.yaml`    | `640` | Webfolio service definition    |
+| `/opt/docker/wg-easy/compose.yaml`     | `640` | wg-easy service definition     |
+| `/opt/docker/bitwarden/compose.yaml`   | `640` | Bitwarden service definition   |
+| `/opt/docker/passbolt/compose.yaml`    | `640` | Passbolt service definitions   |
 | `/opt/docker/uptime-kuma/compose.yaml` | `640` | Uptime Kuma service definition |
 
 ### Sensitive files – `600`
 
 Owner can read and write. No access for group or others. These files contain secrets or credentials.
 
-| File                                                          | Mode  | Contents                                   |
-|---------------------------------------------------------------|-------|--------------------------------------------|
-| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone                 |
-| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID             |
-| `/opt/docker/bitwarden/settings.env`                          | `600` | Installation ID and key, SMTP credential   |
-| `/opt/docker/passbolt/settings.env`                           | `600` | Database password, SMTP credential         |
+| File                                                          | Mode  | Contents                                 |
+| ------------------------------------------------------------- | ----- | ---------------------------------------- |
+| `/opt/docker/webfolio/.env`                                   | `600` | Docker image tag, timezone               |
+| `/opt/docker/webfolio/secrets/application-secrets.properties` | `600` | Telegram API token and chat ID           |
+| `/opt/docker/bitwarden/settings.env`                          | `600` | Installation ID and key, SMTP credential |
+| `/opt/docker/passbolt/settings.env`                           | `600` | Database password, SMTP credential       |
 
 ## Apply permissions
 

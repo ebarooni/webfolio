@@ -158,13 +158,13 @@ At this point, a new user with sudo privileges is created. SSH key login (no pas
 Point the domain to the server by creating an **A record** in the domain registrar's DNS settings:
 
 | Type | Name | Value         | TTI  |
-|------|------|---------------|------|
+| ---- | ---- | ------------- | ---- |
 | A    | @    | `<SERVER_IP>` | 3600 |
 
 To also handle `www`:
 
 | Type  | Name | Value       | TTI  |
-|-------|------|-------------|------|
+| ----- | ---- | ----------- | ---- |
 | CNAME | www  | barooni.dev | 3600 |
 
 Verify DNS propagation:

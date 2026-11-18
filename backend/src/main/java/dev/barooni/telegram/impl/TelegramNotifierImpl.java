@@ -9,19 +9,15 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-/**
- * Service to send message to telegram bot.
- */
+/** Service to send message to telegram bot. */
 @RequestScoped
 public class TelegramNotifierImpl implements TelegramNotifier {
 
-  @Inject
-  @RestClient 
-  TelegramBotClient client;
+  @Inject @RestClient TelegramBotClient client;
 
   @ConfigProperty(name = "telegram.chat.id")
   String chatId;
-  
+
   @Override
   public TelegramResponse notify(final String message) {
     SendMessageRequest request = new SendMessageRequest(chatId, message);

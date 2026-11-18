@@ -25,19 +25,19 @@ flowchart LR
 
 ## DNS words in plain English
 
-| Word            | Meaning                                                                                       |
-|-----------------|-----------------------------------------------------------------------------------------------|
-| Record          | One line in the DNS settings: a name, a type and a value.                                     |
-| A / AAAA        | Points a name to an IPv4 / IPv6 address. Used for `vault.example.com`.                        |
-| MX              | Tells other mail servers where to deliver mail for a name. Here only for bounces.             |
-| TXT             | Free text. SPF, DKIM and DMARC are TXT records.                                               |
-| SPF             | A list of servers that can send mail for a name. Receivers check it.                          |
-| DKIM            | A public key. The provider signs each mail, and receivers check the signature with this key.  |
-| DMARC           | Tells receivers what to do when SPF and DKIM fail, and where to send reports.                 |
-| Return-path     | The hidden bounce address of a mail. Undeliverable mail goes back to it, not to you.          |
-| TTL             | How long other servers keep a record in their cache. The default (often 1 hour) is correct.   |
-| Subdomain       | A name below your domain, for example `notify.example.com`. It needs no website or mailbox.   |
-| Host name field | Many DNS panels add `.example.com` for you. Then you type only `vault` or `send.notify`.      |
+| Word            | Meaning                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| Record          | One line in the DNS settings: a name, a type and a value.                                    |
+| A / AAAA        | Points a name to an IPv4 / IPv6 address. Used for `vault.example.com`.                       |
+| MX              | Tells other mail servers where to deliver mail for a name. Here only for bounces.            |
+| TXT             | Free text. SPF, DKIM and DMARC are TXT records.                                              |
+| SPF             | A list of servers that can send mail for a name. Receivers check it.                         |
+| DKIM            | A public key. The provider signs each mail, and receivers check the signature with this key. |
+| DMARC           | Tells receivers what to do when SPF and DKIM fail, and where to send reports.                |
+| Return-path     | The hidden bounce address of a mail. Undeliverable mail goes back to it, not to you.         |
+| TTL             | How long other servers keep a record in their cache. The default (often 1 hour) is correct.  |
+| Subdomain       | A name below your domain, for example `notify.example.com`. It needs no website or mailbox.  |
+| Host name field | Many DNS panels add `.example.com` for you. Then you type only `vault` or `send.notify`.     |
 
 ## Setup
 
@@ -58,13 +58,13 @@ Do not use `mail.example.com`. It looks like a webmail address, and you may want
 
 Fill in the form:
 
-| Field              | Value                                                                                    |
-|--------------------|------------------------------------------------------------------------------------------|
-| Name               | `notify.example.com`                                                                     |
-| Region             | The region nearest to the server. Choose an EU region to keep data in the EU.            |
-| Custom Return-Path | Keep the default `send`. This gives `send.notify.example.com` as the bounce address.     |
-| Tracking subdomain | Leave empty.                                                                             |
-| Click/open tracking| Off.                                                                                     |
+| Field               | Value                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| Name                | `notify.example.com`                                                                 |
+| Region              | The region nearest to the server. Choose an EU region to keep data in the EU.        |
+| Custom Return-Path  | Keep the default `send`. This gives `send.notify.example.com` as the bounce address. |
+| Tracking subdomain  | Leave empty.                                                                         |
+| Click/open tracking | Off.                                                                                 |
 
 Tracking rewrites the links in a mail. App mails such as Bitwarden's contain security links, so they must stay unchanged. If the tracking boxes are grey without a tracking subdomain, continue. Make sure that tracking is off in the domain settings after step 4.
 
@@ -78,11 +78,11 @@ The provider shows three records. Values differ per account. Always copy your ow
 
 ![DNS records that the mail provider shows](images/bitwarden/mail-provider-dns-records.png)
 
-| Type | Host name (example)             | Purpose                                         |
-|------|---------------------------------|-------------------------------------------------|
-| TXT  | `resend._domainkey.notify`      | DKIM: the public key for the mail signature     |
-| MX   | `send.notify`, priority `10`    | Return-path: bounces go back to the provider    |
-| TXT  | `send.notify`                   | SPF: allows the provider to send for the return-path |
+| Type | Host name (example)          | Purpose                                              |
+| ---- | ---------------------------- | ---------------------------------------------------- |
+| TXT  | `resend._domainkey.notify`   | DKIM: the public key for the mail signature          |
+| MX   | `send.notify`, priority `10` | Return-path: bounces go back to the provider         |
+| TXT  | `send.notify`                | SPF: allows the provider to send for the return-path |
 
 For each record:
 
@@ -116,7 +116,7 @@ Choose the plain **TXT** type. Do not use a special DMARC wizard. Some wizards c
 ![Record types in a DNS panel: use the plain TXT type](images/bitwarden/dns-record-types.png)
 
 | Type | Host name       | Value               |
-|------|-----------------|---------------------|
+| ---- | --------------- | ------------------- |
 | TXT  | `_dmarc.notify` | `v=DMARC1; p=none;` |
 
 The preview must show `_dmarc.notify.example.com`. If `example.com` already has a `_dmarc` record, do not change it.
@@ -156,21 +156,21 @@ The API key is the SMTP password. Never paste it into a chat, an issue or the re
 
 Worked example for Resend. Other providers use other values. Find them in the SMTP section of their docs.
 
-| Setting  | Resend value      | Note                                                   |
-|----------|-------------------|--------------------------------------------------------|
-| Host     | `smtp.resend.com` |                                                        |
-| Port     | `2465`            | Implicit TLS: TLS starts at once                       |
-| `ssl`    | `true`            | Required for implicit TLS                              |
-| Username | `resend`          | The same for all accounts                              |
-| Password | The API key       | Secret                                                 |
+| Setting  | Resend value      | Note                             |
+| -------- | ----------------- | -------------------------------- |
+| Host     | `smtp.resend.com` |                                  |
+| Port     | `2465`            | Implicit TLS: TLS starts at once |
+| `ssl`    | `true`            | Required for implicit TLS        |
+| Username | `resend`          | The same for all accounts        |
+| Password | The API key       | Secret                           |
 
 Port rules for Bitwarden on a Hetzner server:
 
-| Port              | `ssl`   | Result                                                       |
-|-------------------|---------|--------------------------------------------------------------|
-| Implicit TLS port | `true`  | **Recommended.** For example `2465`.                         |
-| 587               | `false` | Bitwarden uses STARTTLS only when the server offers it.      |
-| 25 or 465         | –       | Hetzner blocks outbound traffic on these ports by default.   |
+| Port              | `ssl`   | Result                                                     |
+| ----------------- | ------- | ---------------------------------------------------------- |
+| Implicit TLS port | `true`  | **Recommended.** For example `2465`.                       |
+| 587               | `false` | Bitwarden uses STARTTLS only when the server offers it.    |
+| 25 or 465         | –       | Hetzner blocks outbound traffic on these ports by default. |
 
 Use these values in the settings of the app, for example in step 7 of [setup-bitwarden.md](setup-bitwarden.md).
 

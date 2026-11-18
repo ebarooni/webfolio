@@ -1,0 +1,25 @@
+{
+  "name": "webfolio-tooling",
+  "private": true,
+  "description": "Lint and format tooling for the whole repository. The app itself is in frontend/ui and backend.",
+  "scripts": {
+    "prepare": "lefthook install",
+    "lint": "npm run lint:prettier && npm run lint:frontend && npm run lint:java",
+    "lint:prettier": "prettier . --check",
+    "lint:frontend": "npm --prefix frontend/ui run stylelint:lint && npm --prefix frontend/ui run lint",
+    "lint:java": "mvn --quiet --projects backend validate",
+    "fmt": "npm run fmt:prettier && npm run fmt:frontend && npm run fmt:java",
+    "fmt:prettier": "prettier . --write",
+    "fmt:frontend": "npm --prefix frontend/ui run stylelint:fix && npm --prefix frontend/ui run fmt",
+    "fmt:java": "mvn --quiet --projects backend spotless:apply"
+  },
+  "packageManager": "npm@11.6.2",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "devDependencies": {
+    "@ebarooni/prettier-config": "^1.4.0",
+    "lefthook": "^2.2.2",
+    "prettier": "^3.8.3"
+  }
+}

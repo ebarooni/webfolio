@@ -7,13 +7,10 @@ import dev.barooni.telegram.dto.TelegramResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
-/**
- * The implementation class of ContactFormResource interface.
- */
+/** The implementation class of ContactFormResource interface. */
 public class ContactFormResourceImpl implements ContactFormResource {
 
-  @Inject
-  TelegramNotifier telegramNotifier;
+  @Inject TelegramNotifier telegramNotifier;
 
   @Override
   public Response submitContactForm(ContactFormRequest request) {
@@ -38,19 +35,20 @@ public class ContactFormResourceImpl implements ContactFormResource {
   }
 
   private String formatTelegramMessage(ContactFormRequest request) {
-    return """
-      <b>📬 New Message</b>
+    String template =
+        """
+        <b>📬 New Message</b>
 
-      <b>Name:</b> %s
-      <b>Email:</b> <a href="mailto:%s">%s</a>
-      <b>Message:</b>
-      %s
-      """.formatted(
+        <b>Name:</b> %s
+        <b>Email:</b> <a href="mailto:%s">%s</a>
+        <b>Message:</b>
+        %s
+        """;
+    return template.formatted(
         escapeHtml(request.name),
         escapeHtml(request.email),
         escapeHtml(request.email),
-        escapeHtml(request.message)
-      );
+        escapeHtml(request.message));
   }
 
   private String escapeHtml(String value) {
@@ -58,9 +56,6 @@ public class ContactFormResourceImpl implements ContactFormResource {
       return "";
     }
 
-    return value
-      .replace("&", "&amp;")
-      .replace("<", "&lt;")
-      .replace(">", "&gt;");
+    return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
   }
 }

@@ -1,10 +1,8 @@
 package dev.barooni;
 
-/**
- * The constants used for testing.
- */
+/** The constants used for testing. */
 public final class Constants {
-  
+
   private Constants() {
     // prevent instantiation
   }

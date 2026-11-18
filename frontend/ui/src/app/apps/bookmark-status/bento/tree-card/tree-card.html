@@ -17,16 +17,16 @@
       <span><i class="live-dot"></i>{{ copy.features.tree.live }}</span>
     </div>
     @for (row of copy.features.tree.rows; track row.name) {
-    <div class="row" [class.current]="row.current">
-      <span class="tile" [class.tile-green]="row.tile === 'green'"
-        >{{ row.letter }}</span
-      >
-      <span class="name">{{ row.name }}</span>
-      <span class="domain">{{ row.domain }}</span>
-      @if (row.current) {
-      <span class="tag">{{ copy.features.tree.currentTag }}</span>
-      }
-    </div>
+      <div class="row" [class.current]="row.current">
+        <span class="tile" [class.tile-green]="row.tile === 'green'">{{
+          row.letter
+        }}</span>
+        <span class="name">{{ row.name }}</span>
+        <span class="domain">{{ row.domain }}</span>
+        @if (row.current) {
+          <span class="tag">{{ copy.features.tree.currentTag }}</span>
+        }
+      </div>
     }
   </div>
 </article>

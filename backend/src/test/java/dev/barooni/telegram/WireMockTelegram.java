@@ -11,9 +11,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import java.util.Map;
 
-/**
- * Server for Telegram endpoints in tests.
- */
+/** Server for Telegram endpoints in tests. */
 public class WireMockTelegram implements QuarkusTestResourceLifecycleManager {
 
   private WireMockServer wireMockServer;
@@ -23,23 +21,27 @@ public class WireMockTelegram implements QuarkusTestResourceLifecycleManager {
     wireMockServer = new WireMockServer();
     wireMockServer.start();
 
-    wireMockServer.stubFor(post(urlEqualTo(SEND_MESSAGE))
-        .willReturn(aResponse()
-            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-            .withBody("""
-                {
-                  "ok": true,
-                  "result": {
-                    "message_id": 123456789,
-                    "text": "Wiremock test text"
-                  }
-                }
-                """)));
+    wireMockServer.stubFor(
+        post(urlEqualTo(SEND_MESSAGE))
+            .willReturn(
+                aResponse()
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                    .withBody(
+                        """
+                        {
+                          "ok": true,
+                          "result": {
+                            "message_id": 123456789,
+                            "text": "Wiremock test text"
+                          }
+                        }
+                        """)));
 
     return Map.of(
-        "quarkus.rest-client.telegram-api.url", wireMockServer.baseUrl(),
-        "telegram.chat.id", "fake-chat-id"
-    );
+        "quarkus.rest-client.telegram-api.url",
+        wireMockServer.baseUrl(),
+        "telegram.chat.id",
+        "fake-chat-id");
   }
 
   @Override

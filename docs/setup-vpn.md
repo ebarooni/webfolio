@@ -72,7 +72,7 @@ Host myserver
 With it, `ssh myserver` does the same as `ssh holu@<SERVER_IP>`. Both commands above open the same tunnel.
 
 | Flag                    | Meaning                                              |
-|-------------------------|------------------------------------------------------|
+| ----------------------- | ---------------------------------------------------- |
 | `51821:127.0.0.1:51821` | Forward local port 51821 to server's 127.0.0.1:51821 |
 | `-N`                    | Don't open a shell, only hold the tunnel open        |
 | `myserver`              | SSH host alias (as defined in `~/.ssh/config`)       |

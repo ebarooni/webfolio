@@ -4,7 +4,7 @@
 
 <div class="flex items-start gap-4 empty:hidden">
   @if (error()) {
-  <p class="field-error" [id]="errorId()">{{ error() }}</p>
+    <p class="field-error" [id]="errorId()">{{ error() }}</p>
   }
   <ng-content select="[appFieldAside]" />
 </div>

@@ -35,20 +35,20 @@
   <ng-template #profileLinks>
     <ul class="rule-list">
       @for (link of links; track link.id) {
-      <li>
-        <a
-          class="group focus-ring flex min-h-13 items-center justify-between gap-4 font-medium text-ink hover:text-primary"
-          [href]="link.href"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ link.label }}
-          <span class="meta-label flex items-center gap-2">
-            {{ link.handle }}
-            <app-arrow-icon direction="external" class="text-[0.875rem]" />
-          </span>
-        </a>
-      </li>
+        <li>
+          <a
+            class="group focus-ring flex min-h-13 items-center justify-between gap-4 font-medium text-ink hover:text-primary"
+            [href]="link.href"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ link.label }}
+            <span class="meta-label flex items-center gap-2">
+              {{ link.handle }}
+              <app-arrow-icon direction="external" class="text-[0.875rem]" />
+            </span>
+          </a>
+        </li>
       }
     </ul>
   </ng-template>

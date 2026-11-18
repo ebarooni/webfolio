@@ -28,6 +28,9 @@
 
         <surefire-plugin.version>3.6.1</surefire-plugin.version>
         <version.checkstyle>3.6.0</version.checkstyle>
+        <version.checkstyle.engine>14.4.0</version.checkstyle.engine>
+        <version.google.java.format>2.0.0</version.google.java.format>
+        <version.spotless>3.11.0</version.spotless>
         <version.exec.maven.plugin>3.6.4</version.exec.maven.plugin>
         <version.maven.resources.plugin>3.5.0</version.maven.resources.plugin>
         <version.wiremock>3.13.2</version.wiremock>
@@ -134,7 +137,34 @@
                         <configLocation>google_checks.xml</configLocation>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>
+                        <!-- google_checks.xml reports every finding as a warning. Without this, the build never fails. -->
+                        <violationSeverity>warning</violationSeverity>
                         <linkXRef>false</linkXRef>
+                    </configuration>
+                    <dependencies>
+                        <!-- The plugin uses Checkstyle 9.3 by default, which is too old for current Java. -->
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${version.checkstyle.engine}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${version.spotless}</version>
+                    <configuration>
+                        <java>
+                            <googleJavaFormat>
+                                <version>${version.google.java.format}</version>
+                                <style>GOOGLE</style>
+                                <!-- Split long strings so that lines stay within the Checkstyle limit. -->
+                                <reflowLongStrings>true</reflowLongStrings>
+                            </googleJavaFormat>
+                            <removeUnusedImports/>
+                        </java>
                     </configuration>
                 </plugin>
 

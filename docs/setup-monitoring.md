@@ -34,13 +34,13 @@ flowchart LR
 
 ### Order of the steps
 
-| Step | Where                   | What                                  |
-|------|-------------------------|---------------------------------------|
-| 1    | VPS over SSH            | Check the image                       |
-| 2–4  | VPS, local Mac terminal | Create the folders and copy the file  |
-| 5    | VPS over SSH            | Start Uptime Kuma                     |
-| 6–7  | Browser via tunnel      | Create the admin user, add monitors   |
-| 8    | Browser via tunnel      | Set up notifications                  |
+| Step | Where                   | What                                 |
+| ---- | ----------------------- | ------------------------------------ |
+| 1    | VPS over SSH            | Check the image                      |
+| 2–4  | VPS, local Mac terminal | Create the folders and copy the file |
+| 5    | VPS over SSH            | Start Uptime Kuma                    |
+| 6–7  | Browser via tunnel      | Create the admin user, add monitors  |
+| 8    | Browser via tunnel      | Set up notifications                 |
 
 ## Before you start
 
@@ -51,13 +51,13 @@ flowchart LR
 
 ## Decisions and why
 
-| Decision | Why |
-|----------|-----|
-| UI on `127.0.0.1:3001` and an SSH tunnel, not behind Caddy | The UI shows your service layout and holds notification credentials. Only someone with SSH access can reach it, even if the app has a login bug. |
-| No IP allowlist in Caddy | With Docker's default network setup, Caddy sees every visitor as the Docker gateway (for example `172.18.0.1`). An IP rule then blocks everyone or nobody. |
-| Rootless image (UID `1000`), `cap_drop: ALL`, `no-new-privileges` | Uptime Kuma does not need root. If it is compromised, the attacker has fewer rights. |
-| On the `proxy` network | It can check containers on `proxy` by name (for example `http://webfolio:8080`) without public ports. Bitwarden is not on `proxy`, so its check uses the public address. |
-| SQLite, not MariaDB | One file, no extra container, simple backups. |
+| Decision                                                          | Why                                                                                                                                                                      |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| UI on `127.0.0.1:3001` and an SSH tunnel, not behind Caddy        | The UI shows your service layout and holds notification credentials. Only someone with SSH access can reach it, even if the app has a login bug.                         |
+| No IP allowlist in Caddy                                          | With Docker's default network setup, Caddy sees every visitor as the Docker gateway (for example `172.18.0.1`). An IP rule then blocks everyone or nobody.               |
+| Rootless image (UID `1000`), `cap_drop: ALL`, `no-new-privileges` | Uptime Kuma does not need root. If it is compromised, the attacker has fewer rights.                                                                                     |
+| On the `proxy` network                                            | It can check containers on `proxy` by name (for example `http://webfolio:8080`) without public ports. Bitwarden is not on `proxy`, so its check uses the public address. |
+| SQLite, not MariaDB                                               | One file, no extra container, simple backups.                                                                                                                            |
 
 ## Setup
 
@@ -155,11 +155,11 @@ Open `http://localhost:3001`. Choose **SQLite** as the database. Create the admi
 
 Click **Add New Monitor** for each line:
 
-| Monitor type | URL or host                         | Why |
-|--------------|-------------------------------------|-----|
-| HTTP(s)      | `https://example.com`               | The public website, through Caddy and TLS, as visitors see it |
-| HTTP(s)      | `https://vault.example.com/alive`   | Bitwarden, through Caddy and TLS. It also catches Caddy and certificate problems. Bitwarden is on its own network with Caddy only, so Uptime Kuma cannot reach it internally, by design |
-| DNS          | `example.com`                       | Your DNS records still resolve |
+| Monitor type | URL or host                       | Why                                                                                                                                                                                     |
+| ------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HTTP(s)      | `https://example.com`             | The public website, through Caddy and TLS, as visitors see it                                                                                                                           |
+| HTTP(s)      | `https://vault.example.com/alive` | Bitwarden, through Caddy and TLS. It also catches Caddy and certificate problems. Bitwarden is on its own network with Caddy only, so Uptime Kuma cannot reach it internally, by design |
+| DNS          | `example.com`                     | Your DNS records still resolve                                                                                                                                                          |
 
 For the HTTPS monitors, turn on **Certificate Expiry Notification**. Caddy renews certificates by itself. This alert tells you when renewal fails. Set **Retries** to `3`, so that a short network problem does not send an alert.
 
@@ -204,9 +204,7 @@ Uptime Kuma can show a read-only status page (for example `status.example.com`).
 
 1. In Uptime Kuma: **Status Pages > New Status Page**. Write `status` in **Slug**. The `/status/` prefix is already there, so the full path becomes `/status/status`. Write a neutral title in **Name**, for example `Service status`. Then add the monitors.
 
-![Add New Status Page form with slug status](images/monitoring/status-page-new.png)
-2. Point `status.example.com` to the server (A record, as in [step 1 of setup-bitwarden.md](setup-bitwarden.md#1-point-vaultexamplecom-to-the-server)).
-3. Add this block to `/opt/docker/caddy/Caddyfile`. It sends only the status page and the files it needs to Uptime Kuma. Everything else, the login and dashboard included, gets `404`:
+![Add New Status Page form with slug status](images/monitoring/status-page-new.png) 2. Point `status.example.com` to the server (A record, as in [step 1 of setup-bitwarden.md](setup-bitwarden.md#1-point-vaultexamplecom-to-the-server)). 3. Add this block to `/opt/docker/caddy/Caddyfile`. It sends only the status page and the files it needs to Uptime Kuma. Everything else, the login and dashboard included, gets `404`:
 
 ```
 status.example.com {
@@ -263,8 +261,8 @@ Do the same in the repository, so that `deploy/uptime-kuma/compose.yaml` matches
 
 If you lose the data, you lose history and settings, not user data. A backup still saves you from setting up monitors and notifications again.
 
-| Path | Contains |
-|------|----------|
+| Path                           | Contains                                                            |
+| ------------------------------ | ------------------------------------------------------------------- |
 | `/opt/docker/uptime-kuma/data` | SQLite database with monitors, history and notification credentials |
 
 Stop the container before you copy the database, so that the copy is consistent:
