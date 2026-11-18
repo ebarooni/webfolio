@@ -5,7 +5,7 @@ description: >
   a split when staged changes are not cohesive. Use before any git commit,
   including commit-and-push and updates to a PR branch.
 metadata:
-  version: '1.2'
+  version: "1.2"
 ---
 
 # Generate Commit Message

@@ -6,44 +6,44 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-/**
-* DTO to send message request.
-*/
+/** DTO to send message request. */
 @Schema(
     name = "SendMessageRequest",
-    description = "DTO that represents the structure of send message request."
-)
+    description = "DTO that represents the structure of send message request.")
 public class SendMessageRequest {
-  
+
   @Schema(
       description = "Unique identifier of the target chat.",
-      examples = { "123456789" },
-      required = true
-  )
+      examples = {"123456789"},
+      required = true)
   @NotBlank
   @JsonProperty("chat_id")
   public String chatId;
 
   @Schema(
       description = "Parsing mode for the message content. Always set to HTML.",
-      examples = { "HTML" },
-      defaultValue = "HTML"
-  )
+      examples = {"HTML"},
+      defaultValue = "HTML")
   @Pattern(regexp = "HTML", message = "parseMode must be HTML")
   @JsonProperty("parse_mode")
   public final String parseMode = "HTML";
-  
+
   @Schema(
       description = "Text content of the message to be sent.",
-      examples = { "Hello from Quarkus 👋" },
+      examples = {"Hello from Quarkus 👋"},
       required = true,
       minLength = 1,
-      maxLength = 2048
-  )
+      maxLength = 2048)
   @NotBlank
   @Size(min = 1, max = 2048)
   public String text;
-  
+
+  /**
+   * Creates a request that sends a message to one chat.
+   *
+   * @param chatId the identifier of the target chat
+   * @param text the message text, in Telegram HTML
+   */
   public SendMessageRequest(String chatId, String text) {
     this.chatId = chatId;
     this.text = text;

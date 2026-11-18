@@ -76,12 +76,12 @@ The new image migrates the database on start. An old image may not work with a m
 
 A Passbolt restore needs four parts. Missing one makes the rest useless:
 
-| Part | Where it is | Why you need it |
-|---|---|---|
-| Database dump | MariaDB in `database_volume` | Users, permissions and the encrypted secrets |
-| Server GPG key | `gpg_volume`, `/etc/passbolt/gpg` | Decrypts what the database holds |
-| JWT keys | `jwt_volume`, `/etc/passbolt/jwt` | Login tokens. Less critical than GPG, still back it up |
-| `settings.env` | `/opt/docker/passbolt/settings.env` | Database password, SMTP key, public URL |
+| Part           | Where it is                         | Why you need it                                        |
+| -------------- | ----------------------------------- | ------------------------------------------------------ |
+| Database dump  | MariaDB in `database_volume`        | Users, permissions and the encrypted secrets           |
+| Server GPG key | `gpg_volume`, `/etc/passbolt/gpg`   | Decrypts what the database holds                       |
+| JWT keys       | `jwt_volume`, `/etc/passbolt/jwt`   | Login tokens. Less critical than GPG, still back it up |
+| `settings.env` | `/opt/docker/passbolt/settings.env` | Database password, SMTP key, public URL                |
 
 Take a manual backup before every change, and store it off the server with the same care as the Bitwarden backups:
 

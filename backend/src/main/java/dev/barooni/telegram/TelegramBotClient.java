@@ -14,26 +14,26 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-/**
-* Endpoints for interacting with the Telegram Bot API.
-*/
+/** Endpoints for interacting with the Telegram Bot API. */
 @Path("/sendMessage")
 @RegisterRestClient(configKey = "telegram-api")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Tag(description = "Endpoints for interacting with the Telegram Bot API.", name = "Telegram")
 public interface TelegramBotClient {
-  
+
+  /**
+   * Sends a message through the Telegram Bot API.
+   *
+   * @param request the target chat and the message text
+   * @return the response of the Telegram Bot API
+   */
   @POST
   TelegramResponse sendMessage(
       @RequestBody(
-          content = @Content(
-              schema = @Schema(implementation = SendMessageRequest.class)
-          ),
-          description = "The chat ID and message.",
-          required = true
-      )
-      @Valid
-      SendMessageRequest request
-  );
+              content = @Content(schema = @Schema(implementation = SendMessageRequest.class)),
+              description = "The chat ID and message.",
+              required = true)
+          @Valid
+          SendMessageRequest request);
 }

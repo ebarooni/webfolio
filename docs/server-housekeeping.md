@@ -115,7 +115,7 @@ sudo ufw status
 ## Routine schedule
 
 | Frequency            | Task                                                               |
-|----------------------|--------------------------------------------------------------------|
+| -------------------- | ------------------------------------------------------------------ |
 | On every deploy      | `docker compose pull && up -d`, then `image prune -f`              |
 | Weekly               | `apt update && upgrade`, review application logs                   |
 | Monthly              | `docker system prune -f`, check disk usage, review Fail2Ban status |

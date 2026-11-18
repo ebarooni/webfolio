@@ -11,16 +11,16 @@ Setup, configuration, and the MCP server are described in [README.md](README.md)
 
 ## Commands
 
-| What | Where | Command |
-| --- | --- | --- |
-| Full build (all modules) | root | `mvn clean install -Ddocker.skip=true` |
-| Backend dev (needs `.env`) | root | `./startup.sh` |
-| Backend tests | root | `mvn -pl backend test` |
-| Frontend dev (proxies `/api` to :8080) | `frontend/ui` | `npm start` |
-| Frontend tests, single run | `frontend/ui` | `npm test -- --watch=false` |
-| Lint and format check, everything (CI runs this) | root | `npm run lint` |
-| Fix formatting and lint, everything | root | `npm run fmt` |
-| One tool only | root | `npm run lint:prettier`, `lint:frontend`, `lint:java` (same names with `fmt:`) |
+| What                                             | Where         | Command                                                                        |
+| ------------------------------------------------ | ------------- | ------------------------------------------------------------------------------ |
+| Full build (all modules)                         | root          | `mvn clean install -Ddocker.skip=true`                                         |
+| Backend dev (needs `.env`)                       | root          | `./startup.sh`                                                                 |
+| Backend tests                                    | root          | `mvn -pl backend test`                                                         |
+| Frontend dev (proxies `/api` to :8080)           | `frontend/ui` | `npm start`                                                                    |
+| Frontend tests, single run                       | `frontend/ui` | `npm test -- --watch=false`                                                    |
+| Lint and format check, everything (CI runs this) | root          | `npm run lint`                                                                 |
+| Fix formatting and lint, everything              | root          | `npm run fmt`                                                                  |
+| One tool only                                    | root          | `npm run lint:prettier`, `lint:frontend`, `lint:java` (same names with `fmt:`) |
 
 ## Gotchas
 

@@ -1,23 +1,26 @@
 <article class="bookmark-status-card bookmark-status-card-toolbar" appReveal>
   <div class="bookmark-status-card-copy">
-    <span class="bookmark-status-kicker"
-      >{{ copy.features.toolbar.kicker }}</span
-    >
+    <span class="bookmark-status-kicker">{{
+      copy.features.toolbar.kicker
+    }}</span>
     <h3>{{ copy.features.toolbar.title }}</h3>
     <p>{{ copy.features.toolbar.body }}</p>
     <div class="legend" [attr.aria-label]="copy.features.toolbar.legendLabel">
-      @for (label of copy.features.toolbar.legend; track label; let index =
-      $index) {
-      <span>
-        <img
-          [ngSrc]="legendIcons[index]"
-          alt=""
-          width="16"
-          height="16"
-          loading="eager"
-        />
-        {{ label }}
-      </span>
+      @for (
+        label of copy.features.toolbar.legend;
+        track label;
+        let index = $index
+      ) {
+        <span>
+          <img
+            [ngSrc]="legendIcons[index]"
+            alt=""
+            width="16"
+            height="16"
+            loading="eager"
+          />
+          {{ label }}
+        </span>
       }
     </div>
   </div>

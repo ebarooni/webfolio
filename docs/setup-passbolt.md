@@ -12,10 +12,10 @@ Troubleshooting, hardening, updates and backups are in [passbolt-maintenance.md]
 
 "TOTP" means two different things. Keep them apart before you switch:
 
-| Meaning | In Bitwarden lite | In Passbolt CE |
-|---|---|---|
-| TOTP as a second factor for your login | Free. This is the authenticator step in [setup-bitwarden.md](setup-bitwarden.md), Hardening | Free. Turn it on in step 13 |
-| TOTP seeds stored inside a vault item, so the app shows the 6-digit code next to the password | Needs a Premium license. See [Premium license](setup-bitwarden.md#premium-license) | Free. A TOTP is a normal item type, no license |
+| Meaning                                                                                       | In Bitwarden lite                                                                           | In Passbolt CE                                 |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| TOTP as a second factor for your login                                                        | Free. This is the authenticator step in [setup-bitwarden.md](setup-bitwarden.md), Hardening | Free. Turn it on in step 13                    |
+| TOTP seeds stored inside a vault item, so the app shows the 6-digit code next to the password | Needs a Premium license. See [Premium license](setup-bitwarden.md#premium-license)          | Free. A TOTP is a normal item type, no license |
 
 So Passbolt CE does give you the second row for free. That is the reason for this trial. The first row was never the problem.
 
@@ -47,14 +47,14 @@ There is no SSH-tunnel admin panel here, unlike Bitwarden. Passbolt has no separ
 
 ### Order of the steps
 
-| Step | Where | What |
-|---|---|---|
-| 1 | DNS provider | Point `passbolt.example.com` to the server |
-| 2 | Mail provider | Create a second API key on the existing `notify.example.com` domain |
-| 3–9 | VPS over SSH, local machine | Create the network, copy files, configure, start |
-| 10 | VPS over SSH, browser | Create the first admin account through the setup link |
-| 11–13 | Browser, your devices | Install the extension, save the recovery kit, turn on MFA, store a TOTP item |
-| 14 | Browser | Optional: import your Bitwarden export for the trial |
+| Step  | Where                       | What                                                                         |
+| ----- | --------------------------- | ---------------------------------------------------------------------------- |
+| 1     | DNS provider                | Point `passbolt.example.com` to the server                                   |
+| 2     | Mail provider               | Create a second API key on the existing `notify.example.com` domain          |
+| 3–9   | VPS over SSH, local machine | Create the network, copy files, configure, start                             |
+| 10    | VPS over SSH, browser       | Create the first admin account through the setup link                        |
+| 11–13 | Browser, your devices       | Install the extension, save the recovery kit, turn on MFA, store a TOTP item |
+| 14    | Browser                     | Optional: import your Bitwarden export for the trial                         |
 
 ## Before you start
 
@@ -67,14 +67,14 @@ There is no SSH-tunnel admin panel here, unlike Bitwarden. Passbolt has no separ
 
 Write down these values while you work. Keep the secret values out of chats, notes apps and the repository.
 
-| Value | Example | Secret | You get it in |
-|---|---|---|---|
-| Server IP | `<SERVER_IP>` | No | Your hosting dashboard (step 1) |
-| Sender address | `no-reply@notify.example.com` | No | Already exists (step 2) |
-| SMTP host and port | `ssl://smtp.resend.com`, `2465` | No | Already known (step 2) |
-| Passbolt SMTP API key | A new key named `passbolt` | Yes | Mail provider (step 2) |
-| Database password | `openssl rand -hex 32` | Yes | You create it (step 6) |
-| Admin email | Your own email address | No | Your choice (step 10) |
+| Value                 | Example                         | Secret | You get it in                   |
+| --------------------- | ------------------------------- | ------ | ------------------------------- |
+| Server IP             | `<SERVER_IP>`                   | No     | Your hosting dashboard (step 1) |
+| Sender address        | `no-reply@notify.example.com`   | No     | Already exists (step 2)         |
+| SMTP host and port    | `ssl://smtp.resend.com`, `2465` | No     | Already known (step 2)          |
+| Passbolt SMTP API key | A new key named `passbolt`      | Yes    | Mail provider (step 2)          |
+| Database password     | `openssl rand -hex 32`          | Yes    | You create it (step 6)          |
+| Admin email           | Your own email address          | No     | Your choice (step 10)           |
 
 ## Reuse your mail setup
 
@@ -82,13 +82,13 @@ Yes. Reuse the whole setup from [setup-mail-sending.md](setup-mail-sending.md): 
 
 Change only one thing: **give Passbolt its own API key.**
 
-| | Bitwarden | Passbolt |
-|---|---|---|
-| Sending domain | `notify.example.com` | Same |
-| Sender address | `no-reply@notify.example.com` | Same |
-| DNS records (SPF, DKIM, DMARC) | Already set | No change |
-| API key (SMTP password) | The key named `bitwarden` | A new key named `passbolt` |
-| SMTP host, port, user | `smtp.resend.com`, `2465`, `resend` | Same values, one difference in step 6 |
+|                                | Bitwarden                           | Passbolt                              |
+| ------------------------------ | ----------------------------------- | ------------------------------------- |
+| Sending domain                 | `notify.example.com`                | Same                                  |
+| Sender address                 | `no-reply@notify.example.com`       | Same                                  |
+| DNS records (SPF, DKIM, DMARC) | Already set                         | No change                             |
+| API key (SMTP password)        | The key named `bitwarden`           | A new key named `passbolt`            |
+| SMTP host, port, user          | `smtp.resend.com`, `2465`, `resend` | Same values, one difference in step 6 |
 
 Why a separate key: a key can be revoked on its own. If the Passbolt key leaks, you delete it and Bitwarden mail keeps working, and the other way round. Both keys get **Sending access** only and are limited to `notify.example.com`, as in step 5 of [setup-mail-sending.md](setup-mail-sending.md).
 
@@ -104,9 +104,9 @@ Mail is not optional for Passbolt. It sends the account setup and recovery mails
 
 Add one record:
 
-| Type | Host name | Value | TTL |
-|---|---|---|---|
-| A | `passbolt` | `<SERVER_IP>` | Default |
+| Type | Host name  | Value         | TTL     |
+| ---- | ---------- | ------------- | ------- |
+| A    | `passbolt` | `<SERVER_IP>` | Default |
 
 Many panels add `.example.com` for you, so you type only `passbolt`. The preview must show `passbolt.example.com`, not `passbolt.example.com.example.com`. Add an `AAAA` record only if IPv6 already works for your other sites.
 
@@ -161,10 +161,10 @@ docker network create passbolt
 2. Connect Caddy. `/opt/docker/caddy/compose.yaml` must list all three networks, as in `deploy/caddy/compose.yaml` in this repository:
 
 ```yaml
-    networks:
-      - proxy
-      - bitwarden
-      - passbolt
+networks:
+  - proxy
+  - bitwarden
+  - passbolt
 ```
 
 The top-level `networks` list at the end of the file must also have `passbolt` with `external: true`.
@@ -219,15 +219,15 @@ nano settings.env
 
 Replace every placeholder in angle brackets:
 
-| Variable | Value |
-|---|---|
-| `APP_FULL_BASE_URL` | `https://passbolt.example.com`. Must match the Caddy block in step 8 exactly |
-| `MYSQL_PASSWORD` and `DATASOURCES_DEFAULT_PASSWORD` | The same generated password, in both lines |
-| `EMAIL_DEFAULT_FROM` | `no-reply@notify.example.com` |
-| `EMAIL_TRANSPORT_DEFAULT_HOST` | `ssl://smtp.resend.com` for implicit TLS on 2465 |
-| `EMAIL_TRANSPORT_DEFAULT_PORT` | `2465` |
-| `EMAIL_TRANSPORT_DEFAULT_USERNAME` | `resend` for Resend, your SMTP user otherwise |
-| `EMAIL_TRANSPORT_DEFAULT_PASSWORD` | The new `passbolt` API key from step 2 |
+| Variable                                            | Value                                                                        |
+| --------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `APP_FULL_BASE_URL`                                 | `https://passbolt.example.com`. Must match the Caddy block in step 8 exactly |
+| `MYSQL_PASSWORD` and `DATASOURCES_DEFAULT_PASSWORD` | The same generated password, in both lines                                   |
+| `EMAIL_DEFAULT_FROM`                                | `no-reply@notify.example.com`                                                |
+| `EMAIL_TRANSPORT_DEFAULT_HOST`                      | `ssl://smtp.resend.com` for implicit TLS on 2465                             |
+| `EMAIL_TRANSPORT_DEFAULT_PORT`                      | `2465`                                                                       |
+| `EMAIL_TRANSPORT_DEFAULT_USERNAME`                  | `resend` for Resend, your SMTP user otherwise                                |
+| `EMAIL_TRANSPORT_DEFAULT_PASSWORD`                  | The new `passbolt` API key from step 2                                       |
 
 Paste secrets only into `settings.env` on the server. Never write them into a file in the repository.
 

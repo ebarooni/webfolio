@@ -17,10 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @QuarkusTest
-@QuarkusTestResource(
-    value = WireMockTelegram.class,
-    restrictToAnnotatedClass = true
-)
+@QuarkusTestResource(value = WireMockTelegram.class, restrictToAnnotatedClass = true)
 @TestMethodOrder(MethodName.class)
 class ContactFormResourceTest {
   private static final String endpointContactForm = API + V1 + CONTACT_FORM;
@@ -44,103 +41,109 @@ class ContactFormResourceTest {
 
   @Test
   void test01_submitContactFormWithValidData() {
-    JsonObject body = Json.createObjectBuilder()
-        .add(keyEmail, validEmail01)
-        .add(keyName, validName01)
-        .add(keyMessage, validMessage01)
-        .build();
+    JsonObject body =
+        Json.createObjectBuilder()
+            .add(keyEmail, validEmail01)
+            .add(keyName, validName01)
+            .add(keyMessage, validMessage01)
+            .build();
 
     given()
-    .contentType(MediaType.APPLICATION_JSON)
-    .body(body.toString())
-    .when()
-    .post(endpointContactForm)
-    .then()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(body.toString())
+        .when()
+        .post(endpointContactForm)
+        .then()
         .statusCode(Response.Status.ACCEPTED.getStatusCode());
   }
 
   @Test
   void test02_submitContactFormWithValidData() {
-    JsonObject body = Json.createObjectBuilder()
-        .add(keyEmail, validEmail02)
-        .add(keyName, validName01)
-        .add(keyMessage, validMessage01)
-        .build();
+    JsonObject body =
+        Json.createObjectBuilder()
+            .add(keyEmail, validEmail02)
+            .add(keyName, validName01)
+            .add(keyMessage, validMessage01)
+            .build();
 
     given()
-    .contentType(MediaType.APPLICATION_JSON)
-    .body(body.toString())
-    .when()
-    .post(endpointContactForm)
-    .then()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(body.toString())
+        .when()
+        .post(endpointContactForm)
+        .then()
         .statusCode(Response.Status.ACCEPTED.getStatusCode());
   }
 
   @Test
   void test03_submitContactFormWithInvalidEmail() {
-    JsonObject body = Json.createObjectBuilder()
-        .add(keyEmail, invalidEmail01)
-        .add(keyName, validName01)
-        .add(keyMessage, validMessage01)
-        .build();
+    JsonObject body =
+        Json.createObjectBuilder()
+            .add(keyEmail, invalidEmail01)
+            .add(keyName, validName01)
+            .add(keyMessage, validMessage01)
+            .build();
 
     given()
-    .contentType(MediaType.APPLICATION_JSON)
-    .body(body.toString())
-    .when()
-    .post(endpointContactForm)
-    .then()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(body.toString())
+        .when()
+        .post(endpointContactForm)
+        .then()
         .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
   }
 
   @Test
   void test04_submitContactFormWithEmptyName() {
-    JsonObject body = Json.createObjectBuilder()
-        .add(keyEmail, validEmail02)
-        .add(keyName, invalidName01)
-        .add(keyMessage, validMessage01)
-        .build();
+    JsonObject body =
+        Json.createObjectBuilder()
+            .add(keyEmail, validEmail02)
+            .add(keyName, invalidName01)
+            .add(keyMessage, validMessage01)
+            .build();
 
     given()
-    .contentType(MediaType.APPLICATION_JSON)
-    .body(body.toString())
-    .when()
-    .post(endpointContactForm)
-    .then()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(body.toString())
+        .when()
+        .post(endpointContactForm)
+        .then()
         .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
   }
 
   @Test
   void test05_submitContactFormWithEmptyMessage() {
-    JsonObject body = Json.createObjectBuilder()
-        .add(keyEmail, validEmail02)
-        .add(keyName, validName01)
-        .add(keyMessage, invalidMessage01)
-        .build();
+    JsonObject body =
+        Json.createObjectBuilder()
+            .add(keyEmail, validEmail02)
+            .add(keyName, validName01)
+            .add(keyMessage, invalidMessage01)
+            .build();
 
     given()
-    .contentType(MediaType.APPLICATION_JSON)
-    .body(body.toString())
-    .when()
-    .post(endpointContactForm)
-    .then()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(body.toString())
+        .when()
+        .post(endpointContactForm)
+        .then()
         .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
   }
 
   @Test
   void test06_submitContactFormWithInvalidData() {
-    JsonObject body = Json.createObjectBuilder()
-        .add(keyEmail, invalidEmail01)
-        .add(keyName, invalidName01)
-        .add(keyMessage, invalidMessage01)
-        .build();
+    JsonObject body =
+        Json.createObjectBuilder()
+            .add(keyEmail, invalidEmail01)
+            .add(keyName, invalidName01)
+            .add(keyMessage, invalidMessage01)
+            .build();
 
     given()
-    .contentType(MediaType.APPLICATION_JSON)
-    .body(body.toString())
-    .when()
-    .post(endpointContactForm)
-    .then()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(body.toString())
+        .when()
+        .post(endpointContactForm)
+        .then()
         .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
   }
 }

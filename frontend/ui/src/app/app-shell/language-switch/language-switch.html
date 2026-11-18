@@ -12,10 +12,10 @@
   <span class="flag" aria-hidden="true">
     <svg class="european-stars" width="34" height="34" viewBox="-17 -17 34 34">
       @for (star of europeanStars; track star.transform) {
-      <path
-        [attr.transform]="star.transform"
-        d="M0-1.7.4-.55 1.617-.525.647.21.999 1.375 0 .68-.999 1.375-.647.21-1.617-.525-.4-.55Z"
-      />
+        <path
+          [attr.transform]="star.transform"
+          d="M0-1.7.4-.55 1.617-.525.647.21.999 1.375 0 .68-.999 1.375-.647.21-1.617-.525-.4-.55Z"
+        />
       }
     </svg>
 
@@ -38,17 +38,17 @@
   </span>
 
   @if (extraGreeting(); as greeting) {
-  <span class="greeting" aria-hidden="true">{{ greeting }}</span>
+    <span class="greeting" aria-hidden="true">{{ greeting }}</span>
   } @else {
-  <span class="word" aria-hidden="true">
-    <span>H</span>
-    <span class="letter-window">
-      <span class="roll">
-        <span>e</span>
-        <span>a</span>
+    <span class="word" aria-hidden="true">
+      <span>H</span>
+      <span class="letter-window">
+        <span class="roll">
+          <span>e</span>
+          <span>a</span>
+        </span>
       </span>
+      <span>llo</span>
     </span>
-    <span>llo</span>
-  </span>
   }
 </button>
