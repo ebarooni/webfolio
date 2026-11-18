@@ -11,6 +11,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { TranslocoService } from '@jsverse/transloco';
 
 import {
+  dutchTranslation,
   germanTranslation,
   localizationTestingModule,
   postText,
@@ -123,6 +124,26 @@ describe('BlogPost', () => {
     );
     expect(firstLink.getAttribute('href')).toContain(
       '#warum-ich-firebase-hosting-verlassen-habe',
+    );
+  });
+
+  it('should show the post and its contents in Dutch', async () => {
+    TestBed.inject(TranslocoService).setActiveLang('nl');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const dutchText = postText(vpsPost.slug, dutchTranslation);
+    const firstLink = fixture.debugElement.query(By.css('nav ol a'))
+      .nativeElement as HTMLAnchorElement;
+
+    expect(text('h1')).toBe(dutchText.title);
+    expect(text('header p.text-lead')).toBe(dutchText.summary);
+    expect(
+      fixture.debugElement.query(By.css('app-vps-hosting-nl')),
+    ).not.toBeNull();
+    expect(firstLink.textContent.trim()).toBe(
+      'Waarom ik Firebase Hosting heb verlaten',
     );
   });
 

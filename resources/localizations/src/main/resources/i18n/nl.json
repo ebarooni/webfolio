@@ -1,0 +1,200 @@
+{
+  "shell": {
+    "brand": {
+      "homeLabel": "Ehsan Barooni, naar de startpagina"
+    },
+    "nav": {
+      "label": "Hoofdnavigatie",
+      "work": "Projecten",
+      "writing": "Blog",
+      "about": "Over mij",
+      "contact": "Contact"
+    },
+    "language": {
+      "switchLabel": "Taal wijzigen, huidige taal: {{language}}",
+      "menuLabel": "Taal"
+    },
+    "theme": {
+      "switchLabel": "Wisselen tussen licht en donker thema"
+    },
+    "footer": {
+      "copyright": "© 2022 tot {{year}} Ehsan Barooni",
+      "socialLabel": "Sociale netwerken",
+      "buildInfo": "build-info",
+      "tapsLeft": "Nog {{count}}",
+      "developerMode": "Ontwikkelaarsmodus ingeschakeld"
+    }
+  },
+  "home": {
+    "hero": {
+      "portraitAlt": "Portret van Ehsan Barooni",
+      "eyebrow": "Full-stack software engineer · sinds 2021",
+      "titleBefore": "Hoi, ik ben Ehsan. Ik bouw cross-platform apps die ",
+      "titleAccent": "native aanvoelen",
+      "titleAfter": ".",
+      "lead": "Al meer dan {{years}} jaar bouw ik web- en mobiele producten met Angular, Ionic en Capacitor, van eigen native plug-ins tot de clouddiensten erachter.",
+      "ctaWork": "Bekijk mijn werk",
+      "ctaContact": "Neem contact op"
+    },
+    "work": {
+      "label": "Geselecteerde projecten",
+      "all": "Alle projecten"
+    },
+    "focus": {
+      "label": "Wat ik doe",
+      "frontends": {
+        "title": "Enterprise-frontends",
+        "body": "Modulaire, snelle frontends met Angular en Ionic, die onderhoudbaar blijven terwijl het product groeit."
+      },
+      "hybrid": {
+        "title": "Hybride apps en native plug-ins",
+        "body": "Cross-platform apps voor mobiel en web met Capacitor, met ruime ervaring in het ontwikkelen van eigen native plug-ins."
+      },
+      "fullStack": {
+        "title": "Full-stack realisatie",
+        "body": "Schaalbare webapplicaties en cloudarchitecturen, over frontend, backend en DevOps heen."
+      }
+    },
+    "experience": {
+      "label": "Ervaring",
+      "engineer": {
+        "period": "2021 tot heden",
+        "title": "Full-stack software engineer",
+        "body": "Frontend, backend en DevOps in meerdere webapplicaties."
+      },
+      "graduate": {
+        "period": "2021",
+        "title": "B.Sc. Industrial Engineering",
+        "body": "Studie afgerond met een focus op informatietechniek."
+      },
+      "intern": {
+        "period": "2020",
+        "title": "Stagiair AI en ML",
+        "body": "Stage en bachelorscriptie op het gebied van kunstmatige intelligentie en machine learning."
+      },
+      "student": {
+        "period": "2017",
+        "title": "Student",
+        "body": "Begonnen met de studie Industrial Engineering."
+      }
+    },
+    "writing": {
+      "label": "Blog",
+      "all": "Alle artikelen"
+    },
+    "contactPanel": {
+      "cta": "Stuur me een bericht"
+    }
+  },
+  "projects": {
+    "eyebrow": "Projecten · {{count}} projecten",
+    "title": "Wat ik heb gebouwd en uitgebracht.",
+    "lead": "Een Mac-app, opensource-plug-ins en de tools eromheen. Elk project linkt naar de code of naar een eigen pagina.",
+    "featuredLabel": "Uitgelicht",
+    "moreLabel": "Open source en tools",
+    "externalHint": "opent in een nieuw tabblad",
+    "items": {
+      "capacitor-calendar": {
+        "description": "Native agenda-items op iOS en Android aanmaken, wijzigen, verwijderen en opvragen."
+      },
+      "capawesome": {
+        "description": "Enterprise-oplossingen en diensten voor cross-platform apps die met Capacitor zijn gebouwd."
+      },
+      "cloudcost-tracker": {
+        "description": "Verzamelt de factuurgegevens van meerdere Google Cloud-projecten op één plek via Pub/Sub-topics."
+      },
+      "repo-sync": {
+        "description": "Een GitHub-workflow die een repository bij elke push spiegelt naar een tweede remote."
+      },
+      "spotify-auth": {
+        "description": "Een webapp die toegangstokens aanmaakt om gebruikersgegevens uit de Spotify Web API te lezen."
+      },
+      "web-configs": {
+        "description": "Gedeelde configuratie voor ESLint, Prettier, Stylelint en SwiftLint."
+      },
+      "webfolio": {
+        "description": "Deze website, gebouwd met Angular en Tailwind CSS en geserveerd door Quarkus."
+      }
+    },
+    "featured": {
+      "description": "Een Safari-extensie en Mac-app die laat zien of de pagina waarop je bent al een bladwijzer heeft, en waar.",
+      "tags": "macOS · Safari · Alleen-lezen",
+      "link": "Bekijk de app",
+      "iconAlt": "App-icoon van Bookmark Status",
+      "shotAlt": "De pagina van Bookmark Status in Safari, met de huidige pagina gemarkeerd in de bladwijzerboom.",
+      "bookmarkHint": "Knop van Bookmark Status in de knoppenbalk"
+    }
+  },
+  "blog": {
+    "eyebrow": "Blog · {{count}} artikelen",
+    "title": "Notities uit de webontwikkeling.",
+    "lead": "Technische artikelen over webontwikkeling, frameworks en de tools die ik gebruik.",
+    "readTime": "{{minutes}} min. leestijd",
+    "back": "Alle artikelen",
+    "contents": "Op deze pagina",
+    "posts": {
+      "from-astro-to-angular": {
+        "title": "Van Astro naar Angular: waarom ik mijn portfolio opnieuw heb gebouwd",
+        "summary": "Waarom statische eenvoud niet meer genoeg was voor mijn portfolio en hoe Angular me ruimte gaf om te groeien."
+      },
+      "moving-away-from-firebase-hosting": {
+        "title": "Weg van Firebase Hosting",
+        "summary": "Ik heb mijn portfoliowebsite van Firebase Hosting naar een VPS verhuisd. In dit artikel laat ik de migratie stap voor stap zien en leg ik uit waarom ik die keuze heb gemaakt."
+      }
+    }
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Samenwerken, of gewoon even hallo zeggen?",
+    "lead": "Ik help teams en individuen om ideeën om te zetten in werkende producten. Je bericht komt rechtstreeks bij mij terecht, zonder formulierenteam en zonder ticketnummer.",
+    "elsewhere": "Elders",
+    "form": {
+      "label": "Contactformulier",
+      "name": "Naam",
+      "namePlaceholder": "Jan Jansen",
+      "nameError": "Vul je naam in met 2 tot 50 letters.",
+      "email": "E-mail",
+      "emailPlaceholder": "jan@jansen.nl",
+      "emailError": "Vul een geldig e-mailadres in.",
+      "message": "Bericht",
+      "messagePlaceholder": "Beschrijf je project of zeg gewoon hallo.",
+      "messageError": "Schrijf een bericht van 2 tot {{max}} tekens.",
+      "send": "Bericht versturen",
+      "sending": "Bezig met versturen"
+    },
+    "status": {
+      "sentTitle": "Bericht verstuurd",
+      "sentBody": "Bedankt voor je bericht. Ik neem snel contact met je op.",
+      "failedTitle": "Het bericht is niet verstuurd",
+      "failedBody": "Je tekst staat nog in het formulier. Probeer het later opnieuw, of bereik me via een van de profielen op deze pagina."
+    }
+  },
+  "buildInfo": {
+    "eyebrow": "Build-info · ontwikkelaarsmodus",
+    "title": "Wat deze website aandrijft.",
+    "lead": "De huidige versie, de laatste deployment en de pakketten achter deze build.",
+    "version": "Versie",
+    "lastDeployment": "Laatste deployment",
+    "builtOn": "Gebouwd op",
+    "runtime": "Runtime-afhankelijkheden",
+    "buildTime": "Build-afhankelijkheden",
+    "package": "Pakket",
+    "packageVersion": "Versie"
+  },
+  "accessDenied": {
+    "eyebrow": "Toegang geweigerd",
+    "title": "Deze website is niet beschikbaar in jouw regio.",
+    "lead": "Als je een wachtwoord hebt, vul het dan in om verder te gaan.",
+    "password": "Wachtwoord",
+    "submit": "Doorgaan"
+  },
+  "pageTitles": {
+    "home": "Ehsan Barooni | Full-stack software engineer",
+    "projects": "Projecten | Ehsan Barooni",
+    "blog": "Blog | Ehsan Barooni",
+    "post": "{{title}} | Ehsan Barooni",
+    "contact": "Contact | Ehsan Barooni",
+    "buildInfo": "Build-info | Ehsan Barooni",
+    "accessDenied": "Toegang geweigerd | Ehsan Barooni"
+  }
+}

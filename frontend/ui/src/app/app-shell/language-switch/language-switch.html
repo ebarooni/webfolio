@@ -1,54 +1,154 @@
-<button
-  *transloco="let t; prefix: 'shell.language'"
-  type="button"
-  class="language-switch focus-ring"
-  [class.is-german]="isGerman()"
-  [attr.aria-label]="t('switchLabel')"
-  (click)="toggle()"
-  (pointerdown)="startHold()"
-  (pointerup)="cancelHold()"
-  (pointerleave)="cancelHold()"
->
-  <span class="flag" aria-hidden="true">
-    <svg class="european-stars" width="34" height="34" viewBox="-17 -17 34 34">
-      @for (star of europeanStars; track star.transform) {
-        <path
-          [attr.transform]="star.transform"
-          d="M0-1.7.4-.55 1.617-.525.647.21.999 1.375 0 .68-.999 1.375-.647.21-1.617-.525-.4-.55Z"
-        />
-      }
-    </svg>
+<ng-container *transloco="let t; prefix: 'shell.language'">
+  <button
+    #trigger
+    type="button"
+    class="language-switch focus-ring"
+    aria-haspopup="menu"
+    [class.is-european]="isEuropean()"
+    [class.is-open]="isOpen()"
+    [style.--flag-row]="flagRow()"
+    [style.--greeting-row]="greetingRow()"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-controls]="isOpen() ? menuId : null"
+    [attr.aria-label]="t('switchLabel', { language: languageName() })"
+    (click)="toggleMenu()"
+    (keydown)="onTriggerKeydown($event)"
+    (pointerdown)="startHold()"
+    (pointerup)="cancelHold()"
+    (pointerleave)="cancelHold()"
+  >
+    <span class="flag" aria-hidden="true">
+      <svg
+        class="european-stars"
+        width="34"
+        height="34"
+        viewBox="-17 -17 34 34"
+      >
+        @for (star of europeanStars; track star.transform) {
+          <path
+            [attr.transform]="star.transform"
+            d="M0-1.7.4-.55 1.617-.525.647.21.999 1.375 0 .68-.999 1.375-.647.21-1.617-.525-.4-.55Z"
+          />
+        }
+      </svg>
 
-    <span class="flag-window">
-      <span class="roll">
-        <svg width="20" height="20" viewBox="0 0 20 20">
-          <rect width="20" height="20" fill="#012169" />
-          <path d="M0 0 20 20M20 0 0 20" stroke="#fff" stroke-width="4" />
-          <path d="M0 0 20 20M20 0 0 20" stroke="#c8102e" stroke-width="1.4" />
-          <path d="M10 0V20M0 10H20" stroke="#fff" stroke-width="6.4" />
-          <path d="M10 0V20M0 10H20" stroke="#c8102e" stroke-width="3.6" />
-        </svg>
-        <svg width="20" height="20" viewBox="0 0 20 20">
-          <rect width="20" height="7" fill="#000" />
-          <rect y="6.67" width="20" height="7" fill="#d00" />
-          <rect y="13.33" width="20" height="6.67" fill="#ffce00" />
-        </svg>
-      </span>
-    </span>
-  </span>
-
-  @if (extraGreeting(); as greeting) {
-    <span class="greeting" aria-hidden="true">{{ greeting }}</span>
-  } @else {
-    <span class="word" aria-hidden="true">
-      <span>H</span>
-      <span class="letter-window">
-        <span class="roll">
-          <span>e</span>
-          <span>a</span>
+      <span class="flag-window">
+        <span class="roll flag-roll">
+          @for (option of options; track option.code) {
+            <ng-container
+              [ngTemplateOutlet]="flag"
+              [ngTemplateOutletContext]="{ $implicit: option.code }"
+            />
+          }
         </span>
       </span>
-      <span>llo</span>
     </span>
+
+    @if (extraGreeting(); as greeting) {
+      <span class="greeting" aria-hidden="true">{{ greeting }}</span>
+    } @else {
+      <span class="word" aria-hidden="true">
+        <span>H</span>
+        <span class="letter-window">
+          <span class="roll greeting-roll">
+            <span>e</span>
+            <span>a</span>
+          </span>
+        </span>
+        <span>llo</span>
+      </span>
+    }
+
+    <svg
+      class="chevron"
+      aria-hidden="true"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+    >
+      <path
+        d="M3 4.5 6 7.5 9 4.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="language-menu"
+      role="menu"
+      [id]="menuId"
+      [attr.aria-label]="t('menuLabel')"
+    >
+      @for (option of options; track option.code) {
+        <button
+          #item
+          type="button"
+          class="language-option"
+          role="menuitemradio"
+          tabindex="-1"
+          [attr.lang]="option.code"
+          [attr.aria-checked]="option.code === language()"
+          (click)="select(option.code)"
+          (keydown)="onMenuKeydown($event)"
+        >
+          <span class="option-flag" aria-hidden="true">
+            <ng-container
+              [ngTemplateOutlet]="flag"
+              [ngTemplateOutletContext]="{ $implicit: option.code }"
+            />
+          </span>
+          <span class="option-name">{{ option.name }}</span>
+          <svg
+            class="check"
+            aria-hidden="true"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M3.5 8.5 6.5 11.5 12.5 4.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      }
+    </div>
   }
-</button>
+</ng-container>
+
+<ng-template #flag let-code>
+  @switch (code) {
+    @case ('en') {
+      <svg class="flag-svg" width="20" height="20" viewBox="0 0 20 20">
+        <rect width="20" height="20" fill="#012169" />
+        <path d="M0 0 20 20M20 0 0 20" stroke="#fff" stroke-width="4" />
+        <path d="M0 0 20 20M20 0 0 20" stroke="#c8102e" stroke-width="1.4" />
+        <path d="M10 0V20M0 10H20" stroke="#fff" stroke-width="6.4" />
+        <path d="M10 0V20M0 10H20" stroke="#c8102e" stroke-width="3.6" />
+      </svg>
+    }
+    @case ('de') {
+      <svg class="flag-svg" width="20" height="20" viewBox="0 0 20 20">
+        <rect width="20" height="7" fill="#000" />
+        <rect y="6.67" width="20" height="7" fill="#d00" />
+        <rect y="13.33" width="20" height="6.67" fill="#ffce00" />
+      </svg>
+    }
+    @case ('nl') {
+      <svg class="flag-svg" width="20" height="20" viewBox="0 0 20 20">
+        <rect width="20" height="7" fill="#ae1c28" />
+        <rect y="6.67" width="20" height="7" fill="#fff" />
+        <rect y="13.33" width="20" height="6.67" fill="#21468b" />
+      </svg>
+    }
+  }
+</ng-template>

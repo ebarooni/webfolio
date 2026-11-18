@@ -1,8 +1,15 @@
-export type Language = 'en' | 'de';
+export type Language = 'en' | 'de' | 'nl';
 
 export const DEFAULT_LANGUAGE: Language = 'en';
 
-export const languages: readonly Language[] = ['en', 'de'];
+export const languages: readonly Language[] = ['en', 'de', 'nl'];
+
+/** The name of each language in that language, for the language menu. */
+export const LANGUAGE_NAMES: Readonly<Record<Language, string>> = {
+  de: 'Deutsch',
+  en: 'English',
+  nl: 'Nederlands',
+};
 
 export function isLanguage(value: unknown): value is Language {
   return languages.includes(value as Language);
