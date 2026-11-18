@@ -6,17 +6,19 @@ import {
 
 import german from '@localizations/de.json';
 import english from '@localizations/en.json';
+import dutch from '@localizations/nl.json';
 
 import { DEFAULT_LANGUAGE, languages } from '../app/config/languages';
 
 export const englishTranslation = english;
 export const germanTranslation = german;
+export const dutchTranslation = dutch;
 
 export function localizationTestingModule(
   options: TranslocoTestingOptions = {},
 ): ModuleWithProviders<TranslocoTestingModule> {
   return TranslocoTestingModule.forRoot({
-    langs: { de: german, en: english },
+    langs: { de: german, en: english, nl: dutch },
     preloadLangs: true,
     translocoConfig: {
       availableLangs: [...languages],
@@ -32,7 +34,7 @@ type PostText = Readonly<{ title: string; summary: string }>;
 /** The translated title and summary of a blog post. */
 export function postText(
   slug: string,
-  translation: typeof english | typeof german = english,
+  translation: typeof english | typeof german | typeof dutch = english,
 ): PostText {
   const posts: Readonly<Record<string, PostText>> = translation.blog.posts;
 

@@ -6,6 +6,7 @@ describe('languages', () => {
   it.each([
     { value: 'en', expected: true },
     { value: 'de', expected: true },
+    { value: 'nl', expected: true },
     { value: 'fr', expected: false },
     { value: 42, expected: false },
     { value: undefined, expected: false },
@@ -20,6 +21,7 @@ describe('languages', () => {
     { locales: ['de-AT', 'en-US'], expected: 'de' },
     { locales: ['fr-FR', 'en-GB'], expected: 'en' },
     { locales: ['DE'], expected: 'de' },
+    { locales: ['nl-BE', 'de-DE'], expected: 'nl' },
     { locales: ['fr-FR'], expected: 'en' },
     { locales: [], expected: 'en' },
   ])('should detect $expected from $locales', ({ locales, expected }) => {

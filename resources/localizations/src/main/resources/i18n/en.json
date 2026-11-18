@@ -11,7 +11,8 @@
       "contact": "Contact"
     },
     "language": {
-      "switchLabel": "Switch language to German"
+      "switchLabel": "Change language, current language: {{language}}",
+      "menuLabel": "Language"
     },
     "theme": {
       "switchLabel": "Switch between light and dark theme"

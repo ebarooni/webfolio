@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import {
+  dutchTranslation,
   englishTranslation,
   germanTranslation,
 } from '../../testing/localization-testing';
@@ -18,6 +19,7 @@ describe('TranslationLoader', () => {
   it.each([
     { language: 'en', expected: englishTranslation },
     { language: 'de', expected: germanTranslation },
+    { language: 'nl', expected: dutchTranslation },
     { language: 'fr', expected: englishTranslation },
   ])(
     'should load the $language translation or fall back to English',

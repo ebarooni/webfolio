@@ -12,6 +12,7 @@ const TRANSLATION_IMPORTS: Readonly<
 > = {
   de: () => import('@localizations/de.json'),
   en: () => import('@localizations/en.json'),
+  nl: () => import('@localizations/nl.json'),
 };
 
 @Injectable({ providedIn: 'root' })

@@ -76,8 +76,12 @@ describe('Navbar', () => {
     fixture.debugElement
       .query(By.css('app-language-switch button'))
       .triggerEventHandler('click');
+    fixture.detectChanges();
+    fixture.debugElement
+      .query(By.css('app-language-switch [lang="nl"]'))
+      .triggerEventHandler('click');
 
     expect(themeChanged).toHaveBeenCalledExactlyOnceWith('dark');
-    expect(languageChanged).toHaveBeenCalledExactlyOnceWith('de');
+    expect(languageChanged).toHaveBeenCalledExactlyOnceWith('nl');
   });
 });

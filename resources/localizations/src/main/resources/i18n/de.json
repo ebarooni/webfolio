@@ -11,7 +11,8 @@
       "contact": "Kontakt"
     },
     "language": {
-      "switchLabel": "Sprache auf Englisch umstellen"
+      "switchLabel": "Sprache ändern, aktuelle Sprache: {{language}}",
+      "menuLabel": "Sprache"
     },
     "theme": {
       "switchLabel": "Zwischen hellem und dunklem Design wechseln"

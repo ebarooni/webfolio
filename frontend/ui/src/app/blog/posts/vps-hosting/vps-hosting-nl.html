@@ -1,0 +1,293 @@
+<p>
+  Een tijdlang was Firebase Hosting mijn vaste keuze om mijn portfolio te
+  deployen. Het is snel opgezet, werkt mooi samen met GitHub Actions en de
+  gratis laag is ruim genoeg voor een persoonlijke site. Lange tijd voelde het
+  als de vanzelfsprekende keuze.
+</p>
+
+<p>
+  Maar na verloop van tijd begon ik de grenzen van managed hosting te voelen. Ik
+  wilde meer controle over mijn infrastructuur, meerdere services op één server
+  kunnen draaien en een opzet die ik echt van begin tot eind begreep. Firebase
+  deed te veel magie achter de schermen, en ik merkte dat ik die laag zelf in
+  handen wilde hebben.
+</p>
+
+<p>
+  Daarom heb ik alles verhuisd naar een VPS bij Hetzner. In dit artikel leg ik
+  uit waarom, en laat ik precies zien hoe ik het heb opgezet.
+</p>
+
+<h2>Waarom ik Firebase Hosting heb verlaten</h2>
+
+<p>
+  Firebase Hosting is echt goed in waar het voor bedoeld is. Statische
+  bestanden, een wereldwijd CDN, automatische SSL: het werkt direct en je hoeft
+  er nauwelijks over na te denken. Als je alleen een statische site nodig hebt,
+  is er weinig tegenin te brengen.
+</p>
+
+<p>
+  Ik ben niet vertrokken omdat Firebase slecht is, maar vooral omdat ik andere
+  plannen had voor de toekomst. Een paar dingen gaven de doorslag:
+</p>
+
+<ul>
+  <li>
+    Ik wilde meerdere services onder één dak hosten, zonder te jongleren met
+    losse Firebase-projecten
+  </li>
+  <li>
+    Ik wilde volledige controle over de serveromgeving, het netwerk en het
+    deploymentproces
+  </li>
+  <li>Ik wilde leren hoe deze laag van de infrastructuur echt werkt</li>
+  <li>Op de lange termijn is een VPS voor mijn situatie goedkoper</li>
+</ul>
+
+<p>
+  Geen van deze punten is op zichzelf doorslaggevend, maar samen maakten ze
+  duidelijk dat een eigen opzet de juiste stap was. Ik koos Hetzner omdat het
+  betaalbaar is, een goede reputatie heeft en de interface verfrissend nuchter
+  is.
+</p>
+
+<h2>Stap 1: de server aanmaken</h2>
+
+<p>
+  Ga naar Hetzner, open een project en maak een nieuwe server aan. Kies een
+  locatie dicht bij je publiek, kies Ubuntu als besturingssysteem en selecteer
+  Docker bij de installatieopties. Dat bespaart je de handmatige installatie.
+</p>
+
+<p>
+  Wil je Docker liever zelf installeren, dan legt de
+  <a href="https://community.hetzner.com/tutorials/howto-docker-install"
+    >tutorial van de Hetzner-community</a
+  >
+  het goed uit.
+</p>
+
+<h2>Stap 2: firewall en SSH</h2>
+
+<p>
+  Scherm eerst de toegang af. Open in het Hetzner-dashboard de firewallregels
+  van de server en sta deze TCP-poorten toe:
+</p>
+
+<ul>
+  <li><strong>22</strong>: SSH</li>
+  <li><strong>80</strong>: HTTP</li>
+  <li><strong>443</strong>: HTTPS</li>
+</ul>
+
+<h3>Een gebruiker zonder rootrechten aanmaken</h3>
+
+<p>
+  Log via de terminal in het dashboard in als root en maak meteen een eigen
+  gebruiker aan. Alles als root draaien is een risico dat je niet hoeft te
+  nemen.
+</p>
+
+<pre><code>adduser holu
+usermod -aG sudo holu
+usermod -aG docker holu</code></pre>
+
+<p>
+  Heeft de gebruiker geen wachtwoord, sta dan sudo zonder wachtwoord toe door
+  <code>/etc/sudoers</code> te bewerken met <code>visudo</code>:
+</p>
+
+<pre><code>%sudo   ALL=(ALL:ALL) NOPASSWD: ALL</code></pre>
+
+<p>
+  Wissel daarna naar de nieuwe gebruiker met <code>su - holu</code> en ga daar
+  verder.
+</p>
+
+<h3>Inloggen met een SSH-sleutel</h3>
+
+<p>
+  Kopieer je publieke sleutel naar het bestand met geautoriseerde sleutels op de
+  server:
+</p>
+
+<pre><code>mkdir -p ~/.ssh
+nano ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh</code></pre>
+
+<p>
+  Test vanaf je eigen computer of inloggen met de sleutel werkt, voordat je
+  verdergaat:
+</p>
+
+<pre><code>ssh holu@&lt;SERVER_IP&gt;</code></pre>
+
+<p>
+  Werkt het, schakel dan het inloggen als root en de wachtwoordauthenticatie uit
+  in <code>/etc/ssh/sshd_config</code>:
+</p>
+
+<pre><code>PermitRootLogin no
+PasswordAuthentication no</code></pre>
+
+<pre><code>sudo systemctl restart ssh</code></pre>
+
+<h3>UFW en Fail2Ban</h3>
+
+<p>Installeer UFW en sta alleen de poorten toe die je echt nodig hebt:</p>
+
+<pre><code>sudo apt update && sudo apt install ufw -y
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable</code></pre>
+
+<p>
+  Installeer daarna Fail2Ban, dat herhaalde mislukte inlogpogingen automatisch
+  blokkeert:
+</p>
+
+<pre><code>sudo apt install fail2ban -y
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local</code></pre>
+
+<p>
+  Open <code>jail.local</code>, zoek de sectie <code>[sshd]</code> en zorg dat
+  die is ingeschakeld:
+</p>
+
+<pre><code>[sshd]
+enabled = true
+port    = ssh
+filter  = sshd
+logpath = /var/log/auth.log
+maxretry = 5</code></pre>
+
+<pre><code>sudo systemctl enable fail2ban
+sudo systemctl start fail2ban</code></pre>
+
+<h2>Stap 3: domein en DNS</h2>
+
+<p>
+  Dit is de stap die vervangt wat Firebase Hosting automatisch regelde. Ga naar
+  je domeinregistrar en maak een A-record aan dat je domein naar het IP-adres
+  van de server laat wijzen. Voeg zo nodig een CNAME voor <code>www</code> toe.
+</p>
+
+<p>Controleer of de wijziging is doorgevoerd met:</p>
+
+<pre><code>dig +short yourdomain.com</code></pre>
+
+<h2>Stap 4: deployment met Docker en Caddy</h2>
+
+<p>
+  Mijn opzet gebruikt Docker Compose voor elke service, met Caddy als reverse
+  proxy. Alle deploymentbestanden staan onder <code>/opt/docker/</code>, en elke
+  service krijgt een eigen submap.
+</p>
+
+<pre><code>/opt/docker/
+|–– caddy/
+|   |–– compose.yaml
+|   |–– Caddyfile
+|–– webfolio/
+    |–– compose.yaml
+    |–– .env
+    |–– secrets/
+        |–– application-secrets.properties</code></pre>
+
+<h3>Waarom Caddy en niet Nginx?</h3>
+
+<p>
+  Caddy regelt TLS automatisch. Het praat met Let's Encrypt, haalt certificaten
+  op en vernieuwt ze, zonder cronjobs en zonder handmatige stappen. Bij Firebase
+  was HTTPS er gewoon, en ik wilde iets dat die eenvoud ook bij self-hosting
+  behield. Caddy doet precies dat.
+</p>
+
+<p>
+  Een gedeeld Docker-netwerk met de naam <code>proxy</code> verbindt alle
+  services met Caddy. Je maakt het één keer aan, en elke nieuwe service sluit
+  zich er gewoon bij aan.
+</p>
+
+<h3>Opzetten en deployen</h3>
+
+<pre><code>sudo mkdir -p /opt/docker/&#123;caddy,webfolio/secrets&#125;
+sudo chown -R $(whoami):docker /opt/docker
+chmod 750 /opt/docker /opt/docker/caddy /opt/docker/webfolio /opt/docker/webfolio/secrets</code></pre>
+
+<p>
+  Kopieer je deploymentbestanden vanaf je eigen computer met
+  <code>scp</code>, log in via SSH en vul je domein, omgevingsvariabelen en
+  secrets in. Zet daarna de juiste rechten: <code>640</code> voor
+  configuratiebestanden en <code>600</code> voor alles wat gevoelig is.
+</p>
+
+<p>
+  Let op één ding: als je app-container als gebruiker zonder rootrechten draait,
+  kan hij een secrets-bestand dat volledig van je hostgebruiker is niet lezen.
+  Controleer met welke UID de container draait:
+</p>
+
+<pre><code>docker inspect your-image:latest | grep -i user</code></pre>
+
+<p>Pas daarna de eigenaar aan, zodat de container het bestand kan lezen:</p>
+
+<pre><code>sudo chown 185:holu /opt/docker/webfolio/secrets/application-secrets.properties
+sudo chmod 660 /opt/docker/webfolio/secrets/application-secrets.properties</code></pre>
+
+<p>Maak het gedeelde netwerk aan, start eerst Caddy en daarna de app:</p>
+
+<pre><code>docker network create proxy
+cd /opt/docker/caddy && docker compose up -d
+cd /opt/docker/webfolio && docker compose up -d</code></pre>
+
+<p>
+  Caddy herkent het domein, haalt een certificaat op en de site staat live op
+  <code>https://yourdomain.com</code>. De eerste deployment is klaar.
+</p>
+
+<h2>Services bijwerken en toevoegen</h2>
+
+<p>Een nieuwe versie deployen kost twee commando’s:</p>
+
+<pre><code>cd /opt/docker/webfolio
+docker compose pull
+docker compose up -d</code></pre>
+
+<p>
+  Compose ziet dat de image is veranderd en maakt alleen die container opnieuw
+  aan. Al het andere blijft gewoon draaien. Ruim oude images daarna op met:
+</p>
+
+<pre><code>docker image prune -f</code></pre>
+
+<p>
+  Een tweede site aan dezelfde server toevoegen is net zo overzichtelijk. Een
+  nieuwe map, een nieuwe <code>compose.yaml</code> die zich aansluit bij het
+  <code>proxy</code>-netwerk, een nieuw blok in de Caddyfile, en klaar. Je hoeft
+  niets aan te raken wat al draait, en Caddy regelt het certificaat voor het
+  nieuwe domein automatisch.
+</p>
+
+<h2>Was het de moeite waard?</h2>
+
+<p>
+  Voor mijn situatie absoluut. Ik heb één server met meerdere services, volledig
+  zicht op hoe alles met elkaar verbonden is, en ik betaal minder dan ik kwijt
+  zou zijn als ik op een managed platform zou opschalen.
+</p>
+
+<p>
+  Toch blijft Firebase Hosting in veel situaties de juiste keuze. Wil je gewoon
+  zonder gedoe een statische site online hebben, dan is het moeilijk te
+  verslaan. De migratie was voor mij alleen zinvol omdat mijn wensen verder
+  waren gegroeid dan waarvoor het bedoeld is.
+</p>
+
+<p>
+  Denk je aan een vergelijkbare stap en heb je vragen over een deel van deze
+  opzet? Neem gerust contact met me op.
+</p>

@@ -1,4 +1,5 @@
 :host {
+  position: relative;
   display: block;
   flex: none;
 }
@@ -8,7 +9,7 @@
   align-items: center;
   gap: 8px;
   height: 44px;
-  padding: 0 14px 0 12px;
+  padding: 0 12px;
   border: 1px solid var(--color-base-300);
   border-radius: 22px;
   background: transparent;
@@ -21,8 +22,20 @@
   touch-action: manipulation;
 }
 
-.language-switch:hover {
+.language-switch:hover,
+.language-switch.is-open {
   background: var(--color-base-200);
+}
+
+.chevron {
+  flex: none;
+  margin-left: -2px;
+  color: var(--color-muted);
+  transition: transform 0.2s ease;
+}
+
+.is-open .chevron {
+  transform: rotate(180deg);
 }
 
 .flag {
@@ -70,11 +83,15 @@
   height: 20px;
 }
 
-.is-german .roll {
-  transform: translateY(-20px);
+.flag-roll {
+  transform: translateY(calc(var(--flag-row, 0) * -20px));
 }
 
-/* The European stars show only with the German flag. */
+.greeting-roll {
+  transform: translateY(calc(var(--greeting-row, 0) * -20px));
+}
+
+/* The European stars show only with the flags of EU member languages. */
 .european-stars {
   position: absolute;
   top: -7px;
@@ -113,24 +130,113 @@
   }
 }
 
-.is-german .european-stars {
+.is-european .european-stars {
   animation: language-switch-stars-once 2.6s ease both;
 }
 
-.is-german:hover .european-stars,
-.is-german:focus-visible .european-stars {
+.is-european:hover .european-stars,
+.is-european:focus-visible .european-stars {
   opacity: 1;
   animation: language-switch-stars-orbit 16s linear infinite;
 }
 
+.language-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 184px;
+  padding: 4px;
+  border: 1px solid var(--color-base-300);
+  border-radius: 14px;
+  background: var(--color-base-100);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 6%),
+    0 12px 32px -8px rgb(0 0 0 / 18%);
+  transform-origin: top right;
+  animation: language-menu-in 0.16s ease-out both;
+}
+
+@keyframes language-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-base-content);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.language-option:hover,
+.language-option:focus-visible {
+  background: var(--color-base-200);
+  color: var(--color-ink);
+  outline: none;
+}
+
+.language-option[aria-checked="true"] {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.option-flag {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  border-radius: 50%;
+  outline: 1px solid var(--color-base-300);
+}
+
+.flag-svg {
+  display: block;
+}
+
+.option-name {
+  flex: 1;
+}
+
+.check {
+  flex: none;
+  color: var(--color-primary);
+  visibility: hidden;
+}
+
+[aria-checked="true"] > .check {
+  visibility: visible;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .roll {
+  .roll,
+  .chevron {
     transition: none;
   }
 
-  .is-german .european-stars,
-  .is-german:hover .european-stars,
-  .is-german:focus-visible .european-stars {
+  .language-menu {
+    animation: none;
+  }
+
+  .is-european .european-stars,
+  .is-european:hover .european-stars,
+  .is-european:focus-visible .european-stars {
     animation: none;
   }
 }
