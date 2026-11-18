@@ -11,7 +11,7 @@ import {
   isLanguage,
   Language,
 } from '../../config/languages';
-import { Theme } from '../../config/themes-array';
+import { Theme, themesArray } from '../../config/themes-array';
 
 export interface IState {
   theme: Theme;
@@ -84,7 +84,11 @@ function lookupPersistedState(): IState | null {
     return null;
   }
 
-  const parsedState = JSON.parse(stateString) as IState;
+  const parsedState = parsePersistedState(stateString);
+  if (!parsedState) {
+    return null;
+  }
+
   const sanitizedState = Object.keys(parsedState).reduce((prev, curr) => {
     if (curr in INITIAL_STATE) {
       prev = {
@@ -112,9 +116,25 @@ function lookupPersistedState(): IState | null {
     mergedState.hasGeoAccess = INITIAL_STATE.hasGeoAccess;
   }
 
-  if (typeof mergedState.theme !== 'string') {
+  if (!themesArray.includes(mergedState.theme)) {
     mergedState.theme = INITIAL_STATE.theme;
   }
 
   return mergedState;
+}
+
+// Unreadable JSON or a value that is not an object counts as no saved state,
+// so the visit starts from the default state and the browser language.
+function parsePersistedState(stateString: string): IState | null {
+  try {
+    const parsed: unknown = JSON.parse(stateString);
+
+    return parsed !== null &&
+      typeof parsed === 'object' &&
+      !Array.isArray(parsed)
+      ? (parsed as IState)
+      : null;
+  } catch {
+    return null;
+  }
 }

@@ -73,9 +73,23 @@ describe('AppStore', () => {
     });
   });
 
+  it.each(['{not json', 'null', '[]', '"dark"'])(
+    'should start from the default state when the persisted state is %s',
+    (stored) => {
+      preferLanguages(['de-DE']);
+      localStorage.setItem(persistenceKey, stored);
+
+      const state = store.initialize();
+
+      expect(state).toEqual({ ...defaultState, language: 'de' });
+      expect(persistedState()).toEqual(state);
+    },
+  );
+
   it.each([
     { persisted: { hasGeoAccess: 'yes' }, expected: { hasGeoAccess: false } },
     { persisted: { theme: 42 }, expected: { theme: 'light' } },
+    { persisted: { theme: 'blue' }, expected: { theme: 'light' } },
     { persisted: { language: 'fr' }, expected: { language: 'en' } },
     { persisted: { developerMode: 1 }, expected: { developerMode: false } },
     { persisted: { theme: 'dark' }, expected: { theme: 'dark' } },
