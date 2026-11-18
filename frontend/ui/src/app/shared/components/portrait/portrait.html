@@ -7,10 +7,11 @@
   EB
 </span>
 } @else {
+<!-- The photo has headroom above the hair. Anchor it to the top so the round and 4:5 frames keep that space. -->
 <img
   ngSrc="profile.webp"
   fill
-  class="object-cover"
+  class="object-cover object-top"
   [alt]="alt()"
   [priority]="isPriority()"
   (error)="hasFailed.set(true)"
