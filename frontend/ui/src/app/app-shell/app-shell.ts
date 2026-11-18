@@ -11,7 +11,7 @@ import { distinctUntilChanged, filter, map, merge, of } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 
 import { BUILD_INFO } from '../../environments/build-info';
-import { DEFAULT_LANGUAGE, Language } from '../config/languages';
+import { Language } from '../config/languages';
 import { Route } from '../config/route';
 import { Theme } from '../config/themes-array';
 import { AppStore } from '../store/app/app.store';
@@ -44,17 +44,9 @@ export class AppShell {
 
   readonly version = `v${BUILD_INFO.version}`;
 
-  readonly theme = toSignal(this.appStore.selectTheme$, {
-    initialValue: 'light',
-  });
-
-  readonly language = toSignal(this.appStore.selectLanguage$, {
-    initialValue: DEFAULT_LANGUAGE,
-  });
-
-  readonly developerMode = toSignal(this.appStore.selectDeveloperMode$, {
-    initialValue: false,
-  });
+  readonly theme = this.appStore.theme;
+  readonly language = this.appStore.language;
+  readonly developerMode = this.appStore.developerMode;
 
   readonly uiConfig = toSignal(
     merge(

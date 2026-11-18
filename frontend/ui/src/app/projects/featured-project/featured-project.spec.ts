@@ -1,7 +1,7 @@
+import { signal, type WritableSignal } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { localizationTestingModule } from '../../../testing/localization-testing';
@@ -12,7 +12,7 @@ import { FeaturedProject } from './featured-project';
 
 describe('FeaturedProject', () => {
   let fixture: ComponentFixture<FeaturedProject>;
-  let themeSubject: BehaviorSubject<Theme>;
+  let currentTheme: WritableSignal<Theme>;
 
   function image(selector: string): HTMLImageElement {
     return fixture.debugElement.query(By.css(selector))
@@ -25,7 +25,7 @@ describe('FeaturedProject', () => {
   }
 
   beforeEach(async () => {
-    themeSubject = new BehaviorSubject<Theme>('light');
+    currentTheme = signal<Theme>('light');
 
     await TestBed.configureTestingModule({
       imports: [FeaturedProject, localizationTestingModule()],
@@ -33,7 +33,7 @@ describe('FeaturedProject', () => {
         provideRouter([]),
         {
           provide: AppStore,
-          useValue: { selectTheme$: themeSubject.asObservable() },
+          useValue: { theme: currentTheme },
         },
       ],
     }).compileComponents();
@@ -55,7 +55,7 @@ describe('FeaturedProject', () => {
   it.each(['light', 'dark'] as const)(
     'should show the %s screenshot for the %s theme',
     (theme) => {
-      themeSubject.next(theme);
+      currentTheme.set(theme);
       fixture.detectChanges();
 
       expect(image('a > img').getAttribute('src')).toBe(

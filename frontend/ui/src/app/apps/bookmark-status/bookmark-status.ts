@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AppStore } from '../../store/app/app.store';
 import { BookmarkStatusBento } from './bento/bento';
@@ -54,9 +53,7 @@ export class BookmarkStatusPage implements OnInit, OnDestroy {
   private jsonLdScript: HTMLScriptElement | null = null;
 
   readonly copy = pageCopy;
-  readonly theme = toSignal(this.appStore.selectTheme$, {
-    initialValue: 'light',
-  });
+  readonly theme = this.appStore.theme;
 
   ngOnInit(): void {
     this.previousTitle = this.title.getTitle();

@@ -1,6 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AppStore } from '../store/app/app.store';
 import { Route } from '../config/route';
@@ -34,9 +33,7 @@ export class AccessDenied {
   readonly password = signal('');
   readonly isPasswordValid = computed(() => this.password().trim().length >= 6);
 
-  readonly hasGeoAccess = toSignal(this.store.selectHasGeoAccess$, {
-    initialValue: false,
-  });
+  readonly hasGeoAccess = this.store.hasGeoAccess;
 
   constructor() {
     effect(() => {
