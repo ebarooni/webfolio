@@ -7,6 +7,8 @@ Webfolio is a Maven based monorepo containing:
 
 The repository is structured to keep backend and frontend concerns separated while still providing one build system and a simple local development flow.
 
+The uptime of the deployed site is tracked on the [status page](https://status.barooni.dev/status/status). The site footer links to it as well.
+
 ## Architecture Overview
 
 ### Monorepo

@@ -22,7 +22,9 @@
       "socialLabel": "Social links",
       "buildInfo": "build info",
       "tapsLeft": "{{count}} more to go",
-      "developerMode": "Developer mode enabled"
+      "developerMode": "Developer mode enabled",
+      "status": "status",
+      "statusTitle": "Live uptime of this site"
     }
   },
   "home": {

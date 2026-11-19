@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { localizationTestingModule } from '../../../testing/localization-testing';
 import { Route } from '../../config/route';
+import { STATUS_PAGE_URL } from '../../config/status-page';
 import { Footer } from './footer';
 
 describe('Footer', () => {
@@ -81,6 +82,26 @@ describe('Footer', () => {
     }
   });
 
+  it('should link to the uptime status page in a new tab', () => {
+    const statusLink = fixture.debugElement.query(
+      By.css(`a[href="${STATUS_PAGE_URL}"]`),
+    ).nativeElement as HTMLAnchorElement;
+
+    expect(statusLink.getAttribute('href')).toBe(STATUS_PAGE_URL);
+    expect(statusLink.target).toBe('_blank');
+    expect(statusLink.rel).toContain('noopener');
+    expect(statusLink.textContent).toContain('status');
+  });
+
+  it('should keep the status link when the version is empty', () => {
+    fixture.componentRef.setInput('version', '');
+    fixture.detectChanges();
+
+    expect(
+      fixture.debugElement.query(By.css(`a[href="${STATUS_PAGE_URL}"]`)),
+    ).not.toBeNull();
+  });
+
   it('should stay silent for the first version taps', () => {
     tapVersion(3);
 
@@ -115,8 +136,9 @@ describe('Footer', () => {
     fixture.componentRef.setInput('developerMode', true);
     fixture.detectChanges();
 
-    const versionLink = fixture.debugElement.query(By.css('div > a'))
-      .nativeElement as HTMLAnchorElement;
+    const versionLink = fixture.debugElement.query(
+      By.css(`a[href="/${Route.BUILD_INFO}"]`),
+    ).nativeElement as HTMLAnchorElement;
 
     expect(versionLink.getAttribute('href')).toBe(`/${Route.BUILD_INFO}`);
     expect(versionLink.textContent).toContain('v1.2.3');
