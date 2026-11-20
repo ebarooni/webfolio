@@ -1,6 +1,7 @@
 package dev.barooni.fallback;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 
 import dev.barooni.telegram.WireMockTelegram;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -31,14 +32,30 @@ class FallbackResourceTest {
   @Test
   void appRouteGetsTheApp() {
     // The backend build copies the frontend build. Without it there is no page to return.
-    Assumptions.assumeTrue(
-        Thread.currentThread().getContextClassLoader().getResource("META-INF/resources/index.html")
-            != null);
+    Assumptions.assumeTrue(hasResource("index.csr.html") || hasResource("index.html"));
 
     given()
         .when()
         .get("/blog/moving-away-from-firebase-hosting")
         .then()
         .statusCode(Response.Status.OK.getStatusCode());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"/plugins/capacitor-calendar", "/plugins/capacitor-calendar/"})
+  void prerenderedRouteGetsItsOwnPage(String path) {
+    Assumptions.assumeTrue(hasResource("plugins/capacitor-calendar/index.html"));
+
+    given()
+        .when()
+        .get(path)
+        .then()
+        .statusCode(Response.Status.OK.getStatusCode())
+        .body(containsString("<h1"));
+  }
+
+  private static boolean hasResource(String name) {
+    return Thread.currentThread().getContextClassLoader().getResource("META-INF/resources/" + name)
+        != null;
   }
 }
