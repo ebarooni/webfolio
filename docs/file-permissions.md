@@ -71,7 +71,6 @@ Directories use `750` – owner has full access, the `docker` group can read and
 | ------------------------------ | ----- | ------ | -------- |
 | `/opt/docker/`                 | `750` | `holu` | `docker` |
 | `/opt/docker/caddy`            | `750` | `holu` | `docker` |
-| `/opt/docker/caddy/webfolio`   | `750` | `holu` | `docker` |
 | `/opt/docker/webfolio`         | `750` | `holu` | `docker` |
 | `/opt/docker/webfolio/secrets` | `750` | `holu` | `docker` |
 | `/opt/docker/wg-easy`          | `750` | `holu` | `docker` |
@@ -100,16 +99,15 @@ Files are split into two categories based on sensitivity:
 
 Owner can read and write, the `docker` group can read. These files do not contain credentials.
 
-| File                                      | Mode  | Contents                       |
-| ----------------------------------------- | ----- | ------------------------------ |
-| `/opt/docker/caddy/compose.yaml`          | `640` | Caddy service definitions      |
-| `/opt/docker/caddy/Caddyfile`             | `640` | Domain routing rules           |
-| `/opt/docker/caddy/webfolio/profile.webp` | `640` | Profile photo served by Caddy  |
-| `/opt/docker/webfolio/compose.yaml`       | `640` | Webfolio service definition    |
-| `/opt/docker/wg-easy/compose.yaml`        | `640` | wg-easy service definition     |
-| `/opt/docker/bitwarden/compose.yaml`      | `640` | Bitwarden service definition   |
-| `/opt/docker/passbolt/compose.yaml`       | `640` | Passbolt service definitions   |
-| `/opt/docker/uptime-kuma/compose.yaml`    | `640` | Uptime Kuma service definition |
+| File                                   | Mode  | Contents                       |
+| -------------------------------------- | ----- | ------------------------------ |
+| `/opt/docker/caddy/compose.yaml`       | `640` | Caddy service definitions      |
+| `/opt/docker/caddy/Caddyfile`          | `640` | Domain routing rules           |
+| `/opt/docker/webfolio/compose.yaml`    | `640` | Webfolio service definition    |
+| `/opt/docker/wg-easy/compose.yaml`     | `640` | wg-easy service definition     |
+| `/opt/docker/bitwarden/compose.yaml`   | `640` | Bitwarden service definition   |
+| `/opt/docker/passbolt/compose.yaml`    | `640` | Passbolt service definitions   |
+| `/opt/docker/uptime-kuma/compose.yaml` | `640` | Uptime Kuma service definition |
 
 ### Sensitive files – `600`
 

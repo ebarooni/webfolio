@@ -11,8 +11,6 @@ services:
 
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      # Files of barooni.dev that are not in the image, such as the profile photo.
-      - ./webfolio:/srv/webfolio:ro
       - caddy_data:/data
       - caddy_config:/config
 
