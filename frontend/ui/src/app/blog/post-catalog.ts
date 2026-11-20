@@ -1,3 +1,5 @@
+import { Language } from '../config/languages';
+
 export enum Posts {
   ASTRO_TO_ANGULAR,
   VPS_HOSTING,
@@ -8,6 +10,12 @@ export enum Posts {
 export type BlogPostPreview = Readonly<{
   date: Date;
   id: Posts;
+  /**
+   * The languages that have a translation of the text. English is always
+   * one. Other languages show the English text with a notice, and search
+   * engines get the English page as the canonical one.
+   */
+  languages: readonly Language[];
   readTime: number;
   slug: string;
 }>;
@@ -16,12 +24,14 @@ const UNSORTED_POSTS: readonly BlogPostPreview[] = [
   {
     date: new Date('2024-12-01'),
     id: Posts.ASTRO_TO_ANGULAR,
+    languages: ['en', 'de', 'nl'],
     readTime: 3,
     slug: 'from-astro-to-angular',
   },
   {
     date: new Date('2026-04-04'),
     id: Posts.VPS_HOSTING,
+    languages: ['en', 'de', 'nl'],
     readTime: 10,
     slug: 'moving-away-from-firebase-hosting',
   },

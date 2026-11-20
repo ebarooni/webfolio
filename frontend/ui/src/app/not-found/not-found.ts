@@ -8,6 +8,7 @@ import { ArrowIcon } from '../shared/components/arrow-icon/arrow-icon';
 import { ArrowLink } from '../shared/components/arrow-link/arrow-link';
 import { Button } from '../shared/components/button/button';
 import { PageIntro } from '../shared/components/page-intro/page-intro';
+import { LocalizePathPipe } from '../localization/localize-path.pipe';
 
 const ROBOTS_SELECTOR = 'name="robots"';
 
@@ -19,6 +20,7 @@ const ROBOTS_SELECTOR = 'name="robots"';
 @Component({
   selector: 'app-not-found',
   imports: [
+    LocalizePathPipe,
     ArrowIcon,
     ArrowLink,
     Button,

@@ -12,10 +12,12 @@ import {
 } from '../capacitor-calendar.content';
 import { HeroVisual } from '../hero-visual/hero-visual';
 import { InstallCommand } from '../install-command/install-command';
+import { LocalizePathPipe } from '../../../localization/localize-path.pipe';
 
 @Component({
   selector: 'app-capacitor-calendar-hero',
   imports: [
+    LocalizePathPipe,
     ArrowIcon,
     BrandIcon,
     Button,

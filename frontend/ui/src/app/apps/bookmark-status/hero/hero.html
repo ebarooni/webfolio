@@ -49,7 +49,7 @@
         } @else {
           <a
             class="ghost-button"
-            [routerLink]="pageLink"
+            [routerLink]="pageLink | localizePath"
             [fragment]="copy.howFragment"
           >
             <ng-container [ngTemplateOutlet]="howItWorksLabel" />

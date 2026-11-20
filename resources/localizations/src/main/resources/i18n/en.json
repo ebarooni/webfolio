@@ -25,6 +25,12 @@
       "developerMode": "Developer mode enabled",
       "status": "status",
       "statusTitle": "Live uptime of this site"
+    },
+    "languageSuggestion": {
+      "label": "Language suggestion",
+      "text": "This page is also available in English.",
+      "action": "View in English",
+      "dismiss": "Close the language suggestion"
     }
   },
   "home": {
@@ -162,7 +168,8 @@
         "title": "Moving away from Firebase Hosting",
         "summary": "I decided to deploy my portfolio website on a VPS instead of using Firebase Hosting. In this blog post, I provide a step by step guide on the migration and explain the reason behind this decision."
       }
-    }
+    },
+    "translationMissing": "This post is not translated yet. You are reading the English original."
   },
   "contact": {
     "eyebrow": "Contact",
@@ -226,5 +233,16 @@
     "buildInfo": "Build info | Ehsan Barooni",
     "accessDenied": "Access denied | Ehsan Barooni",
     "notFound": "Page not found | Ehsan Barooni"
+  },
+  "seo": {
+    "description": {
+      "home": "Portfolio of Ehsan Barooni, full-stack software engineer. I build cross-platform web and mobile apps with Angular, Ionic and Capacitor, plus the cloud services behind them.",
+      "projects": "Selected projects by Ehsan Barooni: open source Capacitor plugins, a Safari extension for macOS, and the tools and services behind them.",
+      "blog": "Technical write-ups by Ehsan Barooni on web development, Angular, Capacitor, self-hosting and the tooling he uses.",
+      "contact": "Contact Ehsan Barooni, full-stack software engineer, about a project, a job or a question. Your message goes straight to him.",
+      "buildInfo": "Build details of barooni.dev: version, build date and the libraries the site uses."
+    },
+    "imageAlt": "Ehsan Barooni, full-stack software engineer, barooni.dev",
+    "jobTitle": "Full-stack software engineer"
   }
 }

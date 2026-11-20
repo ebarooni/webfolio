@@ -15,6 +15,7 @@ import { map } from 'rxjs';
 
 import { Route } from '../../config/route';
 import { injectActiveLanguage } from '../../localization/active-language';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
 import { ArrowLink } from '../../shared/components/arrow-link/arrow-link';
 import { ShortDate } from '../../shared/short-date/short-date';
@@ -40,6 +41,7 @@ function toAnchorId(text: string): string {
   imports: [
     ArrowIcon,
     ArrowLink,
+    LocalizePathPipe,
     NgComponentOutlet,
     NgTemplateOutlet,
     RouterLink,
@@ -71,9 +73,23 @@ export class BlogPost {
       return null;
     }
 
-    return POST_CONTENT[post.id][
-      isLanguage(language) ? language : DEFAULT_LANGUAGE
-    ];
+    const translations = POST_CONTENT[post.id];
+
+    return (
+      (isLanguage(language) ? translations[language] : undefined) ??
+      translations.en
+    );
+  });
+  // A post without a translation shows the English text and says so.
+  readonly isTranslationMissing = computed(() => {
+    const post = this.post();
+    const language = this.language();
+
+    return (
+      !!post &&
+      language !== DEFAULT_LANGUAGE &&
+      !(isLanguage(language) && post.languages.includes(language))
+    );
   });
   readonly headings = signal<readonly Heading[]>([]);
   readonly titleTransitionName = computed(() =>

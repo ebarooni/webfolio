@@ -25,6 +25,12 @@
       "developerMode": "Entwicklermodus aktiviert",
       "status": "Status",
       "statusTitle": "Live-Verfügbarkeit dieser Website"
+    },
+    "languageSuggestion": {
+      "label": "Sprachvorschlag",
+      "text": "Diese Seite gibt es auch auf Deutsch.",
+      "action": "Auf Deutsch ansehen",
+      "dismiss": "Sprachvorschlag schließen"
     }
   },
   "home": {
@@ -162,7 +168,8 @@
         "title": "Weg von Firebase Hosting",
         "summary": "Ich habe meine Portfolio-Website von Firebase Hosting auf einen VPS umgezogen. In diesem Artikel zeige ich die Migration Schritt für Schritt und erkläre, warum ich mich dafür entschieden habe."
       }
-    }
+    },
+    "translationMissing": "Dieser Artikel ist noch nicht übersetzt. Du liest das englische Original."
   },
   "contact": {
     "eyebrow": "Kontakt",
@@ -226,5 +233,16 @@
     "buildInfo": "Build-Info | Ehsan Barooni",
     "accessDenied": "Zugriff verweigert | Ehsan Barooni",
     "notFound": "Seite nicht gefunden | Ehsan Barooni"
+  },
+  "seo": {
+    "description": {
+      "home": "Portfolio von Ehsan Barooni, Full-Stack-Softwareentwickler. Ich entwickle Cross-Platform-Apps für Web und Mobile mit Angular, Ionic und Capacitor, dazu die Cloud-Dienste dahinter.",
+      "projects": "Ausgewählte Projekte von Ehsan Barooni: Open-Source-Plugins für Capacitor, eine Safari-Erweiterung für macOS und die Werkzeuge und Dienste dahinter.",
+      "blog": "Technische Artikel von Ehsan Barooni über Web-Entwicklung, Angular, Capacitor, Self-Hosting und seine Werkzeuge.",
+      "contact": "Kontakt zu Ehsan Barooni, Full-Stack-Softwareentwickler, für ein Projekt, eine Stelle oder eine Frage. Deine Nachricht geht direkt an ihn.",
+      "buildInfo": "Build-Details von barooni.dev: Version, Build-Datum und die Bibliotheken der Website."
+    },
+    "imageAlt": "Ehsan Barooni, Full-Stack-Softwareentwickler, barooni.dev",
+    "jobTitle": "Full-Stack-Softwareentwickler"
   }
 }

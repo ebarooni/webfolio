@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By, Title } from '@angular/platform-browser';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { RenderMode } from '@angular/ssr';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { routes } from '../../app.routes';
+import { pageRoutesOf } from '../../../testing/page-routes';
 import { serverRoutes } from '../../app.routes.server';
 import { Route } from '../../config/route';
 import { CapacitorCalendarPage } from './capacitor-calendar';
@@ -26,14 +26,7 @@ describe('CapacitorCalendarPage', () => {
   }
 
   function jsonLdGraph(): JsonLdNode[] {
-    const script = document.head.querySelector(
-      'script[type="application/ld+json"][data-page-seo]',
-    );
-    const data = JSON.parse(script?.textContent ?? '{}') as {
-      '@graph'?: JsonLdNode[];
-    };
-
-    return data['@graph'] ?? [];
+    return (PAGE_SEO.jsonLd as { '@graph'?: JsonLdNode[] })['@graph'] ?? [];
   }
 
   beforeEach(async () => {
@@ -51,7 +44,7 @@ describe('CapacitorCalendarPage', () => {
   });
 
   it('registers the lazy route before the wildcard', () => {
-    const children = routes.find((route) => route.path === '')?.children ?? [];
+    const children = pageRoutesOf('en');
     const pageIndex = children.findIndex(
       (route) => route.path === Route.PLUGINS_CAPACITOR_CALENDAR,
     );
@@ -62,14 +55,18 @@ describe('CapacitorCalendarPage', () => {
     expect(children[pageIndex].title).toBe(PAGE_TITLE);
   });
 
-  it('is the only prerendered route', () => {
-    const prerendered = serverRoutes.filter(
-      (route) => route.renderMode === RenderMode.Prerender,
-    );
+  it('is prerendered in every site language', () => {
+    const prerendered = serverRoutes
+      .filter((route) => route.renderMode === RenderMode.Prerender)
+      .map((route) => route.path);
 
-    expect(prerendered.map((route) => route.path)).toEqual([
-      Route.PLUGINS_CAPACITOR_CALENDAR,
-    ]);
+    expect(prerendered).toEqual(
+      expect.arrayContaining([
+        Route.PLUGINS_CAPACITOR_CALENDAR,
+        `de/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
+        `nl/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
+      ]),
+    );
   });
 
   it('has one h1 with the value proposition', () => {
@@ -99,13 +96,13 @@ describe('CapacitorCalendarPage', () => {
     expect(seoText).not.toMatch(/\d+k\+|\b\d+\.\d+\.\d+\b/);
   });
 
-  it('publishes the title, canonical link and structured data', () => {
-    const canonical = document.head.querySelector('link[rel="canonical"]');
+  it('gives the title, the English canonical link and structured data', () => {
     const types = jsonLdGraph().map((node) => node['@type']);
     const faqPage = jsonLdGraph().find((node) => node['@type'] === 'FAQPage');
 
-    expect(TestBed.inject(Title).getTitle()).toBe(PAGE_TITLE);
-    expect(canonical?.getAttribute('href')).toBe(PAGE_URL);
+    expect(PAGE_SEO.title).toBe(PAGE_TITLE);
+    expect(PAGE_SEO.canonicalUrl).toBe(PAGE_URL);
+    expect(PAGE_SEO.alternates).toBeUndefined();
     expect(types).toEqual([
       'WebPage',
       'SoftwareSourceCode',
@@ -113,11 +110,5 @@ describe('CapacitorCalendarPage', () => {
       'FAQPage',
     ]);
     expect(faqPage?.mainEntity?.length).toBe(FAQ.length);
-  });
-
-  it('removes its canonical link and structured data when it closes', () => {
-    fixture.destroy();
-
-    expect(document.head.querySelector('[data-page-seo]')).toBeNull();
   });
 });

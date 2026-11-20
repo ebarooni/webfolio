@@ -9,10 +9,16 @@ import { VpsHosting } from './vps-hosting/vps-hosting';
 import { VpsHostingDe } from './vps-hosting/vps-hosting-de';
 import { VpsHostingNl } from './vps-hosting/vps-hosting-nl';
 
-/** The component with the text of each post, in each language. */
-export const POST_CONTENT: Readonly<
-  Record<Posts, Readonly<Record<Language, Type<unknown>>>>
-> = {
+type PostTranslations = Readonly<
+  { en: Type<unknown> } & Partial<Record<Language, Type<unknown>>>
+>;
+
+/**
+ * The component with the text of each post, in each language that has a
+ * translation. English is required. List the same languages under
+ * "languages" in post-catalog.ts.
+ */
+export const POST_CONTENT: Readonly<Record<Posts, PostTranslations>> = {
   [Posts.ASTRO_TO_ANGULAR]: {
     de: AstroToAngularDe,
     en: AstroToAngular,

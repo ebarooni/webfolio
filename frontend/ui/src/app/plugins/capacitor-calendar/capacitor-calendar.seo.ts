@@ -1,8 +1,7 @@
+import { SITE_URL } from '../../config/site';
 import { type PageSeoConfig } from '../../shared/seo/page-seo';
 import { PACKAGE_NAME, PLUGIN_LINKS } from './capacitor-calendar.content';
 import { FAQ, plainAnswer } from './faq/faq.content';
-
-const SITE_URL = 'https://barooni.dev';
 
 export const PAGE_URL = `${SITE_URL}/plugins/capacitor-calendar`;
 

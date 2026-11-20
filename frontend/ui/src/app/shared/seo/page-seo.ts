@@ -1,130 +1,139 @@
-import { DestroyRef, DOCUMENT, inject, Injectable } from '@angular/core';
-import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+
+export type PageSeoImage = Readonly<{
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+}>;
+
+/** One language version of a page, for the hreflang links. */
+export type PageAlternate = Readonly<{ hreflang: string; href: string }>;
 
 export type PageSeoConfig = Readonly<{
   title: string;
   description: string;
   canonicalUrl: string;
-  image: Readonly<{
-    url: string;
-    alt: string;
-    width: number;
-    height: number;
-  }>;
+  image: PageSeoImage;
   jsonLd: object;
+  /** The Open Graph locale, for example "de_DE". */
+  locale?: string;
+  /** The Open Graph locales of the other language versions. */
+  alternateLocales?: readonly string[];
+  /** Every language version of the page, also this one, and x-default. */
+  alternates?: readonly PageAlternate[];
+  /** Shorter texts for link previews. The page title and description are the default. */
+  social?: Readonly<{ title: string; description: string }>;
+  /** The Open Graph type. "website" is the default. */
+  type?: 'website' | 'article';
+  /** True for pages that search engines must not list, such as "not found". */
+  noIndex?: boolean;
 }>;
 
 const OWNER_ATTRIBUTE = 'data-page-seo';
-const SITE_CONTENT_ATTRIBUTE = 'data-site-content';
 
-type MetaKey = Readonly<{ attribute: 'name' | 'property'; key: string }>;
-
-type PreviousMeta = MetaKey & Readonly<{ content: string | null }>;
+type MetaTag = Readonly<{
+  attribute: 'name' | 'property';
+  key: string;
+  content: string;
+}>;
 
 /**
- * Gives one page its own title, description, canonical link, Open Graph
- * and Twitter tags, and JSON-LD. During prerendering the tags go into the
- * static HTML. When the page closes, the tags of the site come back.
+ * Writes the title, description, canonical and hreflang links, Open Graph
+ * and Twitter tags, and JSON-LD of the page on the screen. Each call
+ * replaces all tags of the call before, so a page never has two of them.
+ * During prerendering the tags go into the static HTML.
  */
 @Injectable({ providedIn: 'root' })
 export class PageSeo {
   private readonly title = inject(Title);
-  private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
 
-  apply(config: PageSeoConfig, destroyRef: DestroyRef): void {
-    const previousTitle = this.title.getTitle();
-    const previousMeta = metaTags(config).map((tag) => this.setMeta(tag));
+  apply(config: PageSeoConfig): void {
     const head = this.document.head;
+    const tags = metaTags(config);
 
-    // The prerendered HTML already has the elements. The browser replaces
-    // them, so that the page never has two of them.
-    for (const stale of head.querySelectorAll(
-      `link[${OWNER_ATTRIBUTE}], script[${OWNER_ATTRIBUTE}]`,
-    )) {
+    // The site tags in index.html and the tags of the last page go first.
+    for (const stale of head.querySelectorAll(`[${OWNER_ATTRIBUTE}]`)) {
       stale.remove();
     }
 
-    const canonical = this.document.createElement('link');
-    canonical.setAttribute(OWNER_ATTRIBUTE, '');
-    canonical.setAttribute('rel', 'canonical');
-    canonical.setAttribute('href', config.canonicalUrl);
-    head.appendChild(canonical);
-
-    const jsonLd = this.document.createElement('script');
-    jsonLd.setAttribute(OWNER_ATTRIBUTE, '');
-    jsonLd.setAttribute('type', 'application/ld+json');
-    jsonLd.textContent = serializeJsonLd(config.jsonLd);
-    head.appendChild(jsonLd);
+    for (const tag of tags) {
+      for (const existing of head.querySelectorAll(
+        `meta[${tag.attribute}="${tag.key}"]`,
+      )) {
+        existing.remove();
+      }
+    }
 
     this.title.setTitle(config.title);
 
-    destroyRef.onDestroy(() => {
-      canonical.remove();
-      jsonLd.remove();
-      this.title.setTitle(previousTitle);
-
-      for (const tag of previousMeta) {
-        this.restoreMeta(tag);
-      }
-    });
-  }
-
-  private setMeta(tag: MetaKey & { content: string }): PreviousMeta {
-    const selector = `${tag.attribute}="${tag.key}"`;
-    const existing = this.meta.getTag(selector);
-
-    // A prerendered page already has its own tag. That tag keeps the
-    // value of the site, so the browser can restore it later.
-    const siteContent = existing?.hasAttribute(OWNER_ATTRIBUTE)
-      ? existing.getAttribute(SITE_CONTENT_ATTRIBUTE)
-      : (existing?.content ?? null);
-
-    this.meta.removeTag(selector);
-    this.meta.addTag({
-      ...definition(tag.attribute, tag.key, tag.content),
-      [OWNER_ATTRIBUTE]: '',
-      ...(siteContent === null
-        ? {}
-        : { [SITE_CONTENT_ATTRIBUTE]: siteContent }),
-    });
-
-    return { attribute: tag.attribute, key: tag.key, content: siteContent };
-  }
-
-  private restoreMeta(tag: PreviousMeta): void {
-    this.meta.removeTag(`${tag.attribute}="${tag.key}"`);
-
-    if (tag.content !== null) {
-      this.meta.addTag(definition(tag.attribute, tag.key, tag.content));
+    for (const tag of tags) {
+      this.append('meta', {
+        [tag.attribute]: tag.key,
+        content: tag.content,
+      });
     }
+
+    this.append('link', { rel: 'canonical', href: config.canonicalUrl });
+
+    for (const alternate of config.alternates ?? []) {
+      this.append('link', {
+        rel: 'alternate',
+        hreflang: alternate.hreflang,
+        href: alternate.href,
+      });
+    }
+
+    const jsonLd = this.append('script', { type: 'application/ld+json' });
+    jsonLd.textContent = serializeJsonLd(config.jsonLd);
+  }
+
+  private append(
+    tagName: 'meta' | 'link' | 'script',
+    attributes: Readonly<Record<string, string>>,
+  ): HTMLElement {
+    const element = this.document.createElement(tagName);
+
+    for (const [name, value] of Object.entries(attributes)) {
+      element.setAttribute(name, value);
+    }
+
+    element.setAttribute(OWNER_ATTRIBUTE, '');
+    this.document.head.appendChild(element);
+
+    return element;
   }
 }
 
-function definition(
-  attribute: MetaKey['attribute'],
-  key: string,
-  content: string,
-): MetaDefinition {
-  return attribute === 'name'
-    ? { name: key, content }
-    : { property: key, content };
-}
+function metaTags(config: PageSeoConfig): MetaTag[] {
+  const socialTitle = config.social?.title ?? config.title;
+  const socialDescription = config.social?.description ?? config.description;
 
-function metaTags(config: PageSeoConfig): (MetaKey & { content: string })[] {
-  const tags: [MetaKey['attribute'], string, string][] = [
+  const tags: [MetaTag['attribute'], string, string][] = [
     ['name', 'description', config.description],
-    ['property', 'og:type', 'website'],
-    ['property', 'og:title', config.title],
-    ['property', 'og:description', config.description],
+    ['name', 'robots', config.noIndex ? 'noindex' : 'index, follow'],
+    ['property', 'og:type', config.type ?? 'website'],
+    ['property', 'og:site_name', 'Ehsan Barooni'],
+    ['property', 'og:title', socialTitle],
+    ['property', 'og:description', socialDescription],
     ['property', 'og:url', config.canonicalUrl],
+    ['property', 'og:locale', config.locale ?? 'en_US'],
+    ...(config.alternateLocales ?? []).map(
+      (locale): [MetaTag['attribute'], string, string] => [
+        'property',
+        'og:locale:alternate',
+        locale,
+      ],
+    ),
     ['property', 'og:image', config.image.url],
     ['property', 'og:image:width', String(config.image.width)],
     ['property', 'og:image:height', String(config.image.height)],
     ['property', 'og:image:alt', config.image.alt],
     ['name', 'twitter:card', 'summary_large_image'],
-    ['name', 'twitter:title', config.title],
-    ['name', 'twitter:description', config.description],
+    ['name', 'twitter:title', socialTitle],
+    ['name', 'twitter:description', socialDescription],
     ['name', 'twitter:image', config.image.url],
     ['name', 'twitter:image:alt', config.image.alt],
   ];

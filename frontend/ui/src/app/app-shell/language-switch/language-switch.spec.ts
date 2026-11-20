@@ -1,10 +1,15 @@
+import { Component } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter, Router } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { localizationTestingModule } from '../../../testing/localization-testing';
 import type { Language } from '../../config/languages';
 import { LanguageSwitch } from './language-switch';
+
+@Component({ template: '' })
+class EmptyPage {}
 
 describe('LanguageSwitch', () => {
   let fixture: ComponentFixture<LanguageSwitch>;
@@ -28,10 +33,10 @@ describe('LanguageSwitch', () => {
       ?.nativeElement as HTMLElement | undefined;
   }
 
-  function options(): HTMLButtonElement[] {
+  function options(): HTMLAnchorElement[] {
     return fixture.debugElement
       .queryAll(By.css('[role="menuitemradio"]'))
-      .map((option) => option.nativeElement as HTMLButtonElement);
+      .map((option) => option.nativeElement as HTMLAnchorElement);
   }
 
   function pressInMenu(key: string): void {
@@ -52,7 +57,12 @@ describe('LanguageSwitch', () => {
 
     await TestBed.configureTestingModule({
       imports: [LanguageSwitch, localizationTestingModule()],
+      providers: [provideRouter([{ path: '**', component: EmptyPage }])],
     }).compileComponents();
+
+    await TestBed.inject(Router).navigateByUrl(
+      '/de/blog/from-astro-to-angular',
+    );
 
     fixture = TestBed.createComponent(LanguageSwitch);
     component = fixture.componentInstance;
@@ -100,6 +110,21 @@ describe('LanguageSwitch', () => {
     expect(triggerButton().getAttribute('aria-expanded')).toBe('true');
   });
 
+  it('should link each option to the same page in its language', () => {
+    trigger('click');
+
+    expect(
+      options().map((option) => [
+        option.getAttribute('hreflang'),
+        option.getAttribute('href'),
+      ]),
+    ).toEqual([
+      ['en', '/blog/from-astro-to-angular'],
+      ['de', '/de/blog/from-astro-to-angular'],
+      ['nl', '/nl/blog/from-astro-to-angular'],
+    ]);
+  });
+
   it.each([
     { language: 'en', checked: 'en', row: '0' },
     { language: 'de', checked: 'de', row: '1' },
@@ -129,7 +154,7 @@ describe('LanguageSwitch', () => {
       trigger('click');
       fixture.debugElement
         .query(By.css(`[role="menuitemradio"][lang="${language}"]`))
-        .triggerEventHandler('click');
+        .triggerEventHandler('click', new MouseEvent('click'));
       fixture.detectChanges();
 
       expect(languageChanged).toHaveBeenCalledExactlyOnceWith(language);
@@ -137,12 +162,13 @@ describe('LanguageSwitch', () => {
     },
   );
 
-  it('should not emit when the current language is chosen again', () => {
+  // Choosing the language of the page also stores it as the visitor's choice.
+  it('should emit the current language when it is chosen again', () => {
     trigger('click');
     options()[0].click();
     fixture.detectChanges();
 
-    expect(languageChanged).not.toHaveBeenCalled();
+    expect(languageChanged).toHaveBeenCalledExactlyOnceWith('en');
     expect(menu()).toBeUndefined();
   });
 

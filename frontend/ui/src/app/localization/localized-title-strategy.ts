@@ -9,6 +9,8 @@ import {
 import { TranslocoService } from '@jsverse/transloco';
 import { switchMap } from 'rxjs';
 
+import { RouteSeoWriter } from '../shared/seo/route-seo';
+
 const TITLE_KEY_PREFIX = 'pageTitles.';
 
 function deepestChild(root: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
@@ -24,12 +26,13 @@ function deepestChild(root: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
 /**
  * Sets the browser tab title in the active language. A route title that
  * starts with "pageTitles." is a translation key. Other route titles stay
- * as they are. The title changes again when the language changes.
+ * as they are. Then it writes the other head tags of the page.
  */
 @Injectable({ providedIn: 'root' })
 export class LocalizedTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
   private readonly translocoService = inject(TranslocoService);
+  private readonly routeSeoWriter = inject(RouteSeoWriter);
 
   private lastSnapshot: RouterStateSnapshot | null = null;
 
@@ -59,24 +62,29 @@ export class LocalizedTitleStrategy extends TitleStrategy {
       return;
     }
 
-    const routeTitle = this.buildTitle(this.lastSnapshot);
+    const title = this.translatedTitle(this.lastSnapshot);
 
-    if (!routeTitle) {
+    if (!title) {
       return;
     }
 
-    if (!routeTitle.startsWith(TITLE_KEY_PREFIX)) {
-      this.title.setTitle(routeTitle);
-      return;
+    this.title.setTitle(title);
+    // The head tags for search engines change with each page.
+    this.routeSeoWriter.write(this.lastSnapshot, title);
+  }
+
+  private translatedTitle(snapshot: RouterStateSnapshot): string | undefined {
+    const routeTitle = this.buildTitle(snapshot);
+
+    if (!routeTitle?.startsWith(TITLE_KEY_PREFIX)) {
+      return routeTitle;
     }
 
-    const slug = deepestChild(this.lastSnapshot.root).paramMap.get('slug');
+    const slug = deepestChild(snapshot.root).paramMap.get('slug');
     const postTitle = slug
       ? this.translocoService.translate(`blog.posts.${slug}.title`)
       : '';
 
-    this.title.setTitle(
-      this.translocoService.translate(routeTitle, { title: postTitle }),
-    );
+    return this.translocoService.translate(routeTitle, { title: postTitle });
   }
 }

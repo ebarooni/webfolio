@@ -13,10 +13,12 @@ import {
 } from '../bookmark-status.copy';
 import { heroCopy } from './hero.copy';
 import { BookmarkStatusHeroVisual } from './hero-visual/hero-visual';
+import { LocalizePathPipe } from '../../../localization/localize-path.pipe';
 
 @Component({
   selector: 'app-bookmark-status-hero',
   imports: [
+    LocalizePathPipe,
     NgOptimizedImage,
     NgTemplateOutlet,
     Reveal,

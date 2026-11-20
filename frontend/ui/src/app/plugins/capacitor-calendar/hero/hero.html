@@ -6,7 +6,7 @@
           <li>
             <a
               class="focus-ring rounded hover:text-ink"
-              [routerLink]="projectsLink"
+              [routerLink]="projectsLink | localizePath"
               >Work</a
             >
           </li>
@@ -37,7 +37,11 @@
       />
 
       <div class="flex flex-wrap items-center gap-3">
-        <a appButton [routerLink]="pageLink" fragment="quick-start">
+        <a
+          appButton
+          [routerLink]="pageLink | localizePath"
+          fragment="quick-start"
+        >
           Get started
           <app-arrow-icon direction="down" />
         </a>

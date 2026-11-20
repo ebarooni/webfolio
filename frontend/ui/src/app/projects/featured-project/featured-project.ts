@@ -8,12 +8,19 @@ import { filter, fromEvent } from 'rxjs';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
 import { AppStore } from '../../store/app/app.store';
 import { FEATURED_PROJECT_ID, findProject } from '../project-catalog';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 const BOOKMARK_STATUS_ASSETS = 'apps/safari-bookmark-status';
 
 @Component({
   selector: 'app-featured-project',
-  imports: [ArrowIcon, NgOptimizedImage, RouterLink, TranslocoDirective],
+  imports: [
+    LocalizePathPipe,
+    ArrowIcon,
+    NgOptimizedImage,
+    RouterLink,
+    TranslocoDirective,
+  ],
   templateUrl: './featured-project.html',
 })
 export class FeaturedProject {

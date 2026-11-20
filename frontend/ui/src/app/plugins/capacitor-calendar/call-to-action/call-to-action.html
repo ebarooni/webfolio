@@ -44,7 +44,9 @@
     <p class="author">
       Built and maintained by Ehsan Barooni. Need a custom Capacitor plugin or
       help with a hybrid app?
-      <a class="author-link focus-ring" [routerLink]="contactLink"
+      <a
+        class="author-link focus-ring"
+        [routerLink]="contactLink | localizePath"
         >Get in touch</a
       >.
     </p>
