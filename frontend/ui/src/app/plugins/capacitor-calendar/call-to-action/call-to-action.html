@@ -1,0 +1,52 @@
+<section class="page-container pb-24 lg:pb-32" aria-labelledby="cta-title">
+  <div class="panel">
+    <h2 id="cta-title" class="title">
+      Add the native calendar to your app
+      <span class="gradient-text">today.</span>
+    </h2>
+    <p class="lead">
+      Free and open source. Install it, sync the native projects, and follow the
+      documentation to your first event.
+    </p>
+
+    <app-install-command
+      class="w-full max-w-[30rem]"
+      [command]="installCommand"
+    />
+
+    <ul class="links">
+      <li>
+        <a class="link-card focus-ring" [href]="links.docs" rel="noopener">
+          <span class="link-title"
+            >Documentation <app-arrow-icon direction="external"
+          /></span>
+          <span class="link-text">Guides, examples and the full API</span>
+        </a>
+      </li>
+      <li>
+        <a class="link-card focus-ring" [href]="links.github" rel="noopener">
+          <span class="link-title"
+            ><app-brand-icon brand="github" /> GitHub</span
+          >
+          <span class="link-text"
+            >Source, issues and a star if it helps you</span
+          >
+        </a>
+      </li>
+      <li>
+        <a class="link-card focus-ring" [href]="links.npm" rel="noopener">
+          <span class="link-title"><app-brand-icon brand="npm" /> npm</span>
+          <span class="link-text">Versions, tags and download numbers</span>
+        </a>
+      </li>
+    </ul>
+
+    <p class="author">
+      Built and maintained by Ehsan Barooni. Need a custom Capacitor plugin or
+      help with a hybrid app?
+      <a class="author-link focus-ring" [routerLink]="contactLink"
+        >Get in touch</a
+      >.
+    </p>
+  </div>
+</section>

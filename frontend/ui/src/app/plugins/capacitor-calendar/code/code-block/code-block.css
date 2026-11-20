@@ -1,0 +1,147 @@
+:host {
+  --code-surface: #0d0f14;
+  --code-header: #151821;
+  --code-line: rgb(255 255 255 / 8%);
+  --code-text: #e6e8ee;
+  --code-muted: #8b93a3;
+  --code-keyword: #c792ea;
+  --code-string: #a5e3a0;
+  --code-comment: #7d8597;
+  --code-number: #f7b267;
+  --code-function: #82aaff;
+  --code-type: #ffcb6b;
+  --code-tag: #7fdbca;
+
+  display: block;
+  min-width: 0;
+}
+
+.code-block {
+  overflow: hidden;
+  border: 1px solid var(--code-line);
+  border-radius: 1rem;
+  background: var(--code-surface);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 6%) inset,
+    0 24px 48px -28px rgb(11 13 18 / 55%);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.375rem 0.5rem 0.375rem 1rem;
+  border-bottom: 1px solid var(--code-line);
+  background: var(--code-header);
+}
+
+.code-label {
+  overflow: hidden;
+  color: var(--code-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  border-radius: 0.625rem;
+  color: var(--code-text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 150ms;
+
+  &:hover {
+    background: rgb(255 255 255 / 8%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #9db4ff;
+    outline-offset: 1px;
+  }
+
+  &.copied {
+    color: var(--code-string);
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+  }
+}
+
+pre {
+  overflow-x: auto;
+  margin: 0;
+  padding: 1.125rem 1.25rem 1.25rem;
+  color: var(--code-text);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  tab-size: 2;
+  scrollbar-color: rgb(255 255 255 / 18%) transparent;
+  scrollbar-width: thin;
+
+  &:focus-visible {
+    outline: 2px solid #9db4ff;
+    outline-offset: -2px;
+  }
+}
+
+:host(.compact) pre {
+  font-size: 0.75rem;
+}
+
+.token-keyword {
+  color: var(--code-keyword);
+}
+
+.token-string {
+  color: var(--code-string);
+}
+
+.token-comment {
+  color: var(--code-comment);
+  font-style: italic;
+}
+
+.token-number {
+  color: var(--code-number);
+}
+
+.token-function {
+  color: var(--code-function);
+}
+
+.token-type {
+  color: var(--code-type);
+}
+
+.token-tag,
+.token-command {
+  color: var(--code-tag);
+}
+
+.token-attribute {
+  color: var(--code-function);
+}
+
+/* Copy needs JavaScript. Without it, people select the code by hand. */
+@media (scripting: none) {
+  .copy-button {
+    display: none;
+  }
+}

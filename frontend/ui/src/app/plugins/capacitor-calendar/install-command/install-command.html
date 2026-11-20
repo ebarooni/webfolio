@@ -1,0 +1,27 @@
+<code class="command"
+  ><span class="prompt" aria-hidden="true">$</span>{{ command() }}</code
+>
+<button
+  type="button"
+  class="copy"
+  [attr.aria-label]="
+    copied() ? 'Copied install command' : 'Copy install command'
+  "
+  (click)="copy()"
+>
+  @if (copied()) {
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M4.5 10.5l3.5 3.5 7.5-8" />
+    </svg>
+  } @else {
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="7" y="7" width="9.5" height="9.5" rx="2" />
+      <path
+        d="M13 7V5a1.5 1.5 0 0 0-1.5-1.5h-6A1.5 1.5 0 0 0 4 5v6.5A1.5 1.5 0 0 0 5.5 13H7"
+      />
+    </svg>
+  }
+</button>
+<span class="sr-only" aria-live="polite">{{
+  copied() ? 'Copied to the clipboard.' : ''
+}}</span>

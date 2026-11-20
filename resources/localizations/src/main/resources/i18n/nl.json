@@ -40,7 +40,26 @@
     },
     "work": {
       "label": "Geselecteerde projecten",
-      "all": "Alle projecten"
+      "all": "Alle projecten",
+      "products": {
+        "label": "Plug-in en app",
+        "calendar": {
+          "kicker": "Open source Capacitor-plug-in",
+          "pitch": "Verbindt je Capacitor-app met de native agenda op iOS en Android.",
+          "link": "Bekijk de plug-in",
+          "iconAlt": "Icoon van Capacitor Calendar",
+          "badgesLabel": "Actuele cijfers van npm en GitHub",
+          "downloadsBadge": "npm-downloads per maand",
+          "starsBadge": "GitHub-sterren"
+        },
+        "bookmark": {
+          "kicker": "Safari-extensie voor macOS",
+          "pitch": "Laat zien of de pagina waarop je bent al een bladwijzer heeft, en waar.",
+          "link": "Bekijk de app",
+          "iconAlt": "App-icoon van Bookmark Status",
+          "tags": "macOS · Safari · Alleen-lezen"
+        }
+      }
     },
     "focus": {
       "label": "Wat ik doe",

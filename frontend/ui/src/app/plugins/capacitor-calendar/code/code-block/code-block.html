@@ -1,0 +1,41 @@
+<figure class="code-block">
+  <figcaption class="code-header">
+    <span class="code-label">{{ label() }}</span>
+    <button
+      type="button"
+      class="copy-button"
+      [class.copied]="copyState() === 'copied'"
+      aria-label="Copy code"
+      (click)="copy()"
+    >
+      @if (copyState() === 'copied') {
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M4.5 10.5l3.5 3.5 7.5-8" />
+        </svg>
+        Copied
+      } @else {
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <rect x="7" y="7" width="9.5" height="9.5" rx="2" />
+          <path
+            d="M13 7V5a1.5 1.5 0 0 0-1.5-1.5h-6A1.5 1.5 0 0 0 4 5v6.5A1.5 1.5 0 0 0 5.5 13H7"
+          />
+        </svg>
+        Copy
+      }
+    </button>
+  </figcaption>
+  <pre
+    tabindex="0"
+    [attr.aria-label]="label() || null"
+  ><code>@for (token of tokens(); track $index) {<span [class]="'token-' + token.kind">{{ token.text }}</span>}</code></pre>
+  <p class="sr-only" aria-live="polite">
+    @switch (copyState()) {
+      @case ('copied') {
+        Copied to the clipboard.
+      }
+      @case ('failed') {
+        Copy failed. Select the code and copy it by hand.
+      }
+    }
+  </p>
+</figure>

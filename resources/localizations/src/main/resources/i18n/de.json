@@ -40,7 +40,26 @@
     },
     "work": {
       "label": "Ausgewählte Projekte",
-      "all": "Alle Projekte"
+      "all": "Alle Projekte",
+      "products": {
+        "label": "Plugin und App",
+        "calendar": {
+          "kicker": "Open-Source-Plugin für Capacitor",
+          "pitch": "Verbindet deine Capacitor-App mit dem nativen Kalender auf iOS und Android.",
+          "link": "Zum Plugin",
+          "iconAlt": "Symbol von Capacitor Calendar",
+          "badgesLabel": "Aktuelle Zahlen von npm und GitHub",
+          "downloadsBadge": "npm-Downloads pro Monat",
+          "starsBadge": "GitHub-Sterne"
+        },
+        "bookmark": {
+          "kicker": "Safari-Erweiterung für macOS",
+          "pitch": "Zeigt, ob die aktuelle Seite schon als Lesezeichen gespeichert ist, und wo.",
+          "link": "Zur App",
+          "iconAlt": "App-Symbol von Bookmark Status",
+          "tags": "macOS · Safari · Nur lesend"
+        }
+      }
     },
     "focus": {
       "label": "Was ich mache",

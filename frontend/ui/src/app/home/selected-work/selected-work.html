@@ -8,7 +8,7 @@
     <a appArrowLink [routerLink]="projectsLink">{{ t('all') }}</a>
   </header>
 
-  <app-featured-project />
+  <app-product-cards />
 
   <ul class="rule-list">
     @for (project of rows; track project.id) {

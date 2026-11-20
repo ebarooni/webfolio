@@ -90,6 +90,17 @@ export const routes: Routes = [
         },
       },
       {
+        path: Route.PLUGINS_CAPACITOR_CALENDAR,
+        loadComponent: () =>
+          import('./plugins/capacitor-calendar/capacitor-calendar').then(
+            (m) => m.CapacitorCalendarPage,
+          ),
+        title: 'Capacitor Calendar Plugin for iOS and Android | Ehsan Barooni',
+        data: {
+          page: Route.PLUGINS_CAPACITOR_CALENDAR,
+        },
+      },
+      {
         path: Route.NOT_FOUND,
         loadComponent: () =>
           import('./not-found/not-found').then((m) => m.NotFound),

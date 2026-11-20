@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   computed,
@@ -5,6 +6,7 @@ import {
   inject,
   input,
   output,
+  PLATFORM_ID,
   signal,
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -63,13 +65,18 @@ export class ThemeSwitch {
   );
 
   constructor() {
-    const refreshIntervalId = window.setInterval(() => {
+    // A prerendered page must not wait for a timer that never ends.
+    if (!isPlatformBrowser(inject(PLATFORM_ID))) {
+      return;
+    }
+
+    const refreshIntervalId = setInterval(() => {
       this.now.set(new Date());
     }, SKY_REFRESH_MS);
 
     this.destroyRef.onDestroy(() => {
-      window.clearInterval(refreshIntervalId);
-      window.clearTimeout(this.chaseTimeoutId);
+      clearInterval(refreshIntervalId);
+      clearTimeout(this.chaseTimeoutId);
     });
   }
 
@@ -93,8 +100,8 @@ export class ThemeSwitch {
 
     this.recentToggleTimes = [];
     this.isChasing.set(true);
-    window.clearTimeout(this.chaseTimeoutId);
-    this.chaseTimeoutId = window.setTimeout(() => {
+    clearTimeout(this.chaseTimeoutId);
+    this.chaseTimeoutId = setTimeout(() => {
       this.isChasing.set(false);
     }, CHASE_DURATION_MS);
   }

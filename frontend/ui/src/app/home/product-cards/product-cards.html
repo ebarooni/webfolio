@@ -1,0 +1,85 @@
+<ul
+  *transloco="let t; prefix: 'home.work.products'"
+  class="grid gap-4 md:grid-cols-2 lg:gap-6"
+  [attr.aria-label]="t('label')"
+>
+  <li class="flex">
+    <a class="card group focus-ring" [routerLink]="calendarLink">
+      <span
+        class="card-icon calendar-icon"
+        role="img"
+        [attr.aria-label]="t('calendar.iconAlt')"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.5" y="5" width="17" height="15.5" rx="3" />
+          <path d="M3.5 10h17M8 3v4M16 3v4" />
+          <circle class="dot" cx="15.5" cy="15" r="1.6" />
+        </svg>
+      </span>
+
+      <p class="meta-label">{{ t('calendar.kicker') }}</p>
+      <h3 class="card-title">Capacitor Calendar</h3>
+      <p class="max-w-[42ch]">{{ t('calendar.pitch') }}</p>
+
+      <p
+        class="mt-auto flex flex-wrap gap-2 pt-2"
+        [attr.aria-label]="t('calendar.badgesLabel')"
+      >
+        <!-- NgOptimizedImage needs a width. A live badge has no fixed width. -->
+        <!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
+        <img
+          [src]="downloadsBadge"
+          [alt]="t('calendar.downloadsBadge')"
+          height="20"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          [src]="starsBadge"
+          [alt]="t('calendar.starsBadge')"
+          height="20"
+          loading="lazy"
+          decoding="async"
+        />
+        <!-- eslint-enable @angular-eslint/template/prefer-ngsrc -->
+      </p>
+
+      <span class="card-link">
+        {{ t('calendar.link') }}
+        <app-arrow-icon class="card-arrow" />
+      </span>
+    </a>
+  </li>
+
+  <li class="flex">
+    <a class="card group focus-ring" [routerLink]="bookmarkLink">
+      <img
+        class="card-icon"
+        width="56"
+        height="56"
+        [ngSrc]="bookmarkIconSource"
+        [alt]="t('bookmark.iconAlt')"
+      />
+
+      <p class="meta-label">{{ t('bookmark.kicker') }}</p>
+      <h3 class="card-title">{{ bookmarkTitle }}</h3>
+      <p class="max-w-[42ch]">{{ t('bookmark.pitch') }}</p>
+
+      <p class="meta-label mt-auto flex items-center gap-2 pt-2">
+        <img
+          class="size-4"
+          width="16"
+          height="16"
+          [ngSrc]="toolbarIconSource()"
+          alt=""
+        />
+        {{ t('bookmark.tags') }}
+      </p>
+
+      <span class="card-link">
+        {{ t('bookmark.link') }}
+        <app-arrow-icon class="card-arrow" />
+      </span>
+    </a>
+  </li>
+</ul>

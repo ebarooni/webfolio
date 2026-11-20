@@ -1,0 +1,41 @@
+<div class="month">
+  <div class="month-header">
+    <span class="month-title">Calendar</span>
+    <span class="month-dots"><i></i><i></i><i></i></span>
+  </div>
+  <div class="month-grid">
+    @for (weekday of weekdays; track $index) {
+      <span class="weekday">{{ weekday }}</span>
+    }
+    @for (cell of days; track cell.day) {
+      <span class="day" [class.selected]="cell.selected">
+        {{ cell.day }}
+        @if (cell.hasEvent) {
+          <i class="event-dot"></i>
+        }
+      </span>
+    }
+  </div>
+</div>
+
+<div class="event">
+  <div class="event-app">
+    <span class="app-icon">
+      <span class="app-icon-day">Mon</span>
+      <span class="app-icon-date">17</span>
+    </span>
+    Calendar
+    <span class="saved">
+      <svg viewBox="0 0 20 20"><path d="M4.5 10.5l3.5 3.5 7.5-8" /></svg>
+      Saved
+    </span>
+  </div>
+  <div class="event-body">
+    <span class="event-bar"></span>
+    <div>
+      <p class="event-title">Product review</p>
+      <p class="event-meta">Office</p>
+      <p class="event-meta">15:00 to 16:00</p>
+    </div>
+  </div>
+</div>
