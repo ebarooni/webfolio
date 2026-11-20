@@ -9,10 +9,11 @@
 
 <main class="flex flex-1 flex-col">
   <router-outlet />
-  <app-footer
-    [bgClass]="uiConfig().footerBgClass"
-    [version]="version"
-    [developerMode]="developerMode()"
-    (developerModeEnabled)="developerModeEnabled()"
-  />
 </main>
+
+<app-footer
+  [bgClass]="uiConfig().footerBgClass"
+  [version]="version"
+  [developerMode]="developerMode()"
+  (developerModeEnabled)="developerModeEnabled()"
+/>

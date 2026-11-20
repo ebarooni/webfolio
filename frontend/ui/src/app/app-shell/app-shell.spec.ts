@@ -200,4 +200,21 @@ describe('AppShell', () => {
 
     expect(outlet).toBeTruthy();
   });
+
+  it('should render the footer after the main element, not inside it', () => {
+    const footer = fixture.debugElement.query(By.css('app-footer'))
+      .nativeElement as HTMLElement;
+
+    expect(fixture.debugElement.query(By.css('main app-footer'))).toBeNull();
+    expect(footer.previousElementSibling?.tagName).toBe('MAIN');
+  });
+
+  it('should let the main element grow so the footer stays at the bottom', () => {
+    const main = fixture.debugElement.query(By.css('main'))
+      .nativeElement as HTMLElement;
+    const host = fixture.nativeElement as HTMLElement;
+
+    expect(main.classList).toContain('flex-1');
+    expect(host.classList).toContain('min-h-dvh');
+  });
 });
