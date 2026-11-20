@@ -89,7 +89,15 @@ export const routes: Routes = [
           page: Route.APPS_BOOKMARK_STATUS,
         },
       },
-      { path: '**', redirectTo: Route.HOME, pathMatch: 'full' },
+      {
+        path: Route.NOT_FOUND,
+        loadComponent: () =>
+          import('./not-found/not-found').then((m) => m.NotFound),
+        title: 'pageTitles.notFound',
+        data: {
+          page: Route.NOT_FOUND,
+        },
+      },
     ],
   },
 ];

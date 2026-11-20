@@ -190,6 +190,13 @@
     "password": "Passwort",
     "submit": "Weiter"
   },
+  "notFound": {
+    "eyebrow": "Fehler 404",
+    "title": "Diese Seite gibt es nicht.",
+    "lead": "Vielleicht ist der Link alt, oder die Adresse hat einen Tippfehler. Hier geht es weiter.",
+    "navLabel": "Seiten zum Weiterlesen",
+    "home": "Zur Startseite"
+  },
   "pageTitles": {
     "home": "Ehsan Barooni | Full-Stack-Softwareentwickler",
     "projects": "Projekte | Ehsan Barooni",
@@ -197,6 +204,7 @@
     "post": "{{title}} | Ehsan Barooni",
     "contact": "Kontakt | Ehsan Barooni",
     "buildInfo": "Build-Info | Ehsan Barooni",
-    "accessDenied": "Zugriff verweigert | Ehsan Barooni"
+    "accessDenied": "Zugriff verweigert | Ehsan Barooni",
+    "notFound": "Seite nicht gefunden | Ehsan Barooni"
   }
 }

@@ -1,0 +1,31 @@
+<div
+  *transloco="let t"
+  class="page-container flex flex-1 flex-col pt-40 pb-24 lg:pt-44 lg:pb-32"
+>
+  <app-page-intro
+    [eyebrow]="t('notFound.eyebrow')"
+    [title]="t('notFound.title')"
+    [lead]="t('notFound.lead')"
+  >
+    <nav
+      class="mt-2 flex flex-wrap items-center gap-x-7 gap-y-3"
+      [attr.aria-label]="t('notFound.navLabel')"
+    >
+      <a appButton [routerLink]="homeLink">
+        {{ t('notFound.home') }}
+        <app-arrow-icon />
+      </a>
+      <div class="flex flex-wrap items-center gap-x-7 gap-y-3">
+        <a appArrowLink [routerLink]="projectsLink">
+          {{ t('shell.nav.work') }}
+        </a>
+        <a appArrowLink [routerLink]="blogLink">
+          {{ t('shell.nav.writing') }}
+        </a>
+        <a appArrowLink [routerLink]="contactLink">
+          {{ t('shell.nav.contact') }}
+        </a>
+      </div>
+    </nav>
+  </app-page-intro>
+</div>

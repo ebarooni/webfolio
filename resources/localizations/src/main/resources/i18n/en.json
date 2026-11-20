@@ -190,6 +190,13 @@
     "password": "Password",
     "submit": "Continue"
   },
+  "notFound": {
+    "eyebrow": "Error 404",
+    "title": "This page does not exist.",
+    "lead": "The link may be old, or the address may have a typo. These pages can help you continue.",
+    "navLabel": "Pages to continue",
+    "home": "Go to the home page"
+  },
   "pageTitles": {
     "home": "Ehsan Barooni | Full-Stack Software Engineer",
     "projects": "Projects | Ehsan Barooni",
@@ -197,6 +204,7 @@
     "post": "{{title}} | Ehsan Barooni",
     "contact": "Contact | Ehsan Barooni",
     "buildInfo": "Build info | Ehsan Barooni",
-    "accessDenied": "Access denied | Ehsan Barooni"
+    "accessDenied": "Access denied | Ehsan Barooni",
+    "notFound": "Page not found | Ehsan Barooni"
   }
 }
