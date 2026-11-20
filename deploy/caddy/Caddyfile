@@ -1,5 +1,17 @@
 barooni.dev {
-    reverse_proxy webfolio:8080
+    # The profile photo is not in git, so the image built on GitHub does not
+    # have it. Caddy serves it from the server instead (see
+    # docs/setup-server.md, "Add the profile photo"). Without the file the
+    # site shows the initials.
+    handle /profile.webp {
+        root * /srv/webfolio
+        header Cache-Control "public, max-age=86400"
+        file_server
+    }
+
+    handle {
+        reverse_proxy webfolio:8080
+    }
 }
 
 www.barooni.dev, barooni.de, www.barooni.de {

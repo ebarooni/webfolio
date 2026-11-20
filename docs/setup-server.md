@@ -184,6 +184,8 @@ The deployment files live under `/opt/docker/`. Each service gets its own direct
 |–– caddy/
 |   |–– compose.yaml
 |   |–– Caddyfile
+|   |–– webfolio/
+|       |–– profile.webp
 |–– webfolio/
 |   |–– compose.yaml
 |   |–– .env
@@ -198,9 +200,9 @@ The source files are in the repository under `deploy/`. They mirror this layout.
 ### Create the directory structure
 
 ```bash
-sudo mkdir -p /opt/docker/{caddy,webfolio/secrets}
+sudo mkdir -p /opt/docker/{caddy/webfolio,webfolio/secrets}
 sudo chown -R $(whoami):docker /opt/docker
-chmod 750 /opt/docker /opt/docker/caddy /opt/docker/webfolio /opt/docker/webfolio/secrets
+chmod 750 /opt/docker /opt/docker/caddy /opt/docker/caddy/webfolio /opt/docker/webfolio /opt/docker/webfolio/secrets
 ```
 
 ### Copy the deployment files
@@ -212,6 +214,17 @@ scp deploy/caddy/compose.yaml deploy/caddy/Caddyfile holu@<SERVER_IP>:/opt/docke
 scp deploy/webfolio/compose.yaml deploy/webfolio/.env.example holu@<SERVER_IP>:/opt/docker/webfolio/
 scp secrets/application-secrets.example.properties holu@<SERVER_IP>:/opt/docker/webfolio/secrets/application-secrets.properties
 ```
+
+### Add the profile photo
+
+The profile photo `frontend/ui/public/profile.webp` is not in git, so the image that GitHub builds does not have it. Caddy serves it from `/opt/docker/caddy/webfolio/` instead. Copy it from your local machine:
+
+```bash
+scp frontend/ui/public/profile.webp holu@<SERVER_IP>:/opt/docker/caddy/webfolio/profile.webp
+ssh holu@<SERVER_IP> chmod 640 /opt/docker/caddy/webfolio/profile.webp
+```
+
+**Expected result:** after Caddy starts, `curl -I https://example.com/profile.webp` answers `200` with `content-type: image/webp`. Without the file it answers `404` and the site shows the initials "EB" instead of the photo. To change the photo later, copy the new file over the old one. Caddy picks it up without a restart. Browsers may keep the old photo for up to a day.
 
 ### Configure
 
