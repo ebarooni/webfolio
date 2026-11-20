@@ -1,11 +1,16 @@
-import { DOCUMENT, ViewportScroller } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
+  PLATFORM_ID,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
+import {
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
 import {
   provideRouter,
   TitleStrategy,
@@ -28,12 +33,22 @@ function registerFixedHeaderScrollOffset(): void {
   scroller.setOffset(() => fixedHeaderScrollOffset(documentRef));
 }
 
+// The prerender step runs in Node. Only a real visitor gets the greeting.
+function greetInBrowser(): void {
+  if (isPlatformBrowser(inject(PLATFORM_ID))) {
+    greetCuriousVisitors();
+  }
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(initializeApp),
     provideAppInitializer(registerFixedHeaderScrollOffset),
-    provideAppInitializer(greetCuriousVisitors),
+    provideAppInitializer(greetInBrowser),
     provideBrowserGlobalErrorListeners(),
+    // A prerendered page keeps its HTML when the app starts. Client-rendered
+    // pages have no server markup, so hydration does nothing for them.
+    provideClientHydration(withEventReplay()),
     provideHttpClient(),
     provideLocalization(),
     { provide: TitleStrategy, useClass: LocalizedTitleStrategy },

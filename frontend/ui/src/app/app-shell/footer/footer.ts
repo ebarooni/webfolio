@@ -60,7 +60,7 @@ export class Footer {
 
   constructor() {
     this.destroyRef.onDestroy(() => {
-      window.clearTimeout(this.toastTimeoutId);
+      clearTimeout(this.toastTimeoutId);
     });
   }
 
@@ -83,8 +83,8 @@ export class Footer {
 
   private showToast(toast: VersionToast, durationMs: number): void {
     this.versionToast.set(toast);
-    window.clearTimeout(this.toastTimeoutId);
-    this.toastTimeoutId = window.setTimeout(() => {
+    clearTimeout(this.toastTimeoutId);
+    this.toastTimeoutId = setTimeout(() => {
       this.versionToast.set(null);
     }, durationMs);
   }

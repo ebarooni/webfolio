@@ -91,8 +91,8 @@ export class LanguageSwitch {
 
   constructor() {
     this.destroyRef.onDestroy(() => {
-      window.clearTimeout(this.holdTimeoutId);
-      window.clearInterval(this.greetingIntervalId);
+      clearTimeout(this.holdTimeoutId);
+      clearInterval(this.greetingIntervalId);
     });
   }
 
@@ -169,15 +169,15 @@ export class LanguageSwitch {
 
   startHold(): void {
     this.wasHeld = false;
-    window.clearTimeout(this.holdTimeoutId);
-    this.holdTimeoutId = window.setTimeout(() => {
+    clearTimeout(this.holdTimeoutId);
+    this.holdTimeoutId = setTimeout(() => {
       this.wasHeld = true;
       this.showExtraGreetings();
     }, HOLD_DURATION_MS);
   }
 
   cancelHold(): void {
-    window.clearTimeout(this.holdTimeoutId);
+    clearTimeout(this.holdTimeoutId);
   }
 
   private open(focus: 'active' | 'last' = 'active'): void {
@@ -202,14 +202,14 @@ export class LanguageSwitch {
   private showExtraGreetings(): void {
     let greetingIndex = 0;
 
-    window.clearInterval(this.greetingIntervalId);
+    clearInterval(this.greetingIntervalId);
     this.extraGreeting.set(EXTRA_GREETINGS[greetingIndex]);
 
-    this.greetingIntervalId = window.setInterval(() => {
+    this.greetingIntervalId = setInterval(() => {
       greetingIndex += 1;
 
       if (greetingIndex >= EXTRA_GREETINGS.length) {
-        window.clearInterval(this.greetingIntervalId);
+        clearInterval(this.greetingIntervalId);
         this.extraGreeting.set(null);
         return;
       }

@@ -42,6 +42,18 @@
       content="Ehsan Barooni, full-stack software engineer, barooni.dev"
     />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <!--
+      A prerendered page paints before the app starts. This applies the
+      stored theme first, so a dark theme does not flash light.
+    -->
+    <script>
+      try {
+        var stored = JSON.parse(localStorage.getItem("app:v1") || "null");
+        if (stored && stored.theme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      } catch (error) {}
+    </script>
   </head>
   <body>
     <app-root></app-root>
