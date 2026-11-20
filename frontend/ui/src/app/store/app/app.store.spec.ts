@@ -150,4 +150,23 @@ describe('AppStore', () => {
       });
     },
   );
+
+  it.each(['dogecoin', ' dogecoin ', 'Dogecoin', 'DOGECOIN\n'])(
+    'should grant geo access and persist it for the password %j',
+    (password) => {
+      store.updateHasGeoAccess(password);
+
+      expect(store.hasGeoAccess()).toBe(true);
+      expect(persistedState()).toMatchObject({ hasGeoAccess: true });
+    },
+  );
+
+  it.each(['', 'dogecoin1', 'doge coin'])(
+    'should not grant geo access for the password %j',
+    (password) => {
+      store.updateHasGeoAccess(password);
+
+      expect(store.hasGeoAccess()).toBe(false);
+    },
+  );
 });

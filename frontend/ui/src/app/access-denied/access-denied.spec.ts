@@ -62,7 +62,33 @@ describe('AccessDenied', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    hasGeoAccess.set(false);
   });
+
+  function submitPassword(password: string): void {
+    const inputElement = fixture.debugElement.query(By.css('input'))
+      .nativeElement as HTMLInputElement;
+    inputElement.value = password;
+    inputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const formElement = fixture.debugElement.query(By.css('form'))
+      .nativeElement as HTMLFormElement;
+    formElement.dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+  }
+
+  function host(): HTMLElement {
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  function passwordInput(): HTMLInputElement {
+    return host().querySelector('input')!;
+  }
+
+  function errorElement(): HTMLElement | null {
+    return host().querySelector('#access-password-error');
+  }
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -145,5 +171,37 @@ describe('AccessDenied', () => {
     fixture.detectChanges();
 
     expect(router.navigateByUrl).toHaveBeenCalledWith(Route.HOME);
+  });
+
+  it('shows an error when the password does not unlock the site', () => {
+    submitPassword('wrong-password');
+
+    expect(errorElement()?.textContent).toContain(
+      'That password is not correct.',
+    );
+    const inputElement = passwordInput();
+    expect(inputElement.getAttribute('aria-invalid')).toBe('true');
+    expect(inputElement.getAttribute('aria-describedby')).toBe(
+      'access-password-error',
+    );
+  });
+
+  it('hides the error again when the password changes', () => {
+    submitPassword('wrong-password');
+
+    const inputElement = passwordInput();
+    inputElement.value = 'another';
+    inputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(errorElement()).toBeNull();
+  });
+
+  it('shows no error when the password unlocks the site', () => {
+    store.updateHasGeoAccess.mockImplementation(() => hasGeoAccess.set(true));
+
+    submitPassword('dogecoin');
+
+    expect(errorElement()).toBeNull();
   });
 });

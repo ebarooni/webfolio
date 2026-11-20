@@ -188,7 +188,8 @@
     "title": "Deze website is niet beschikbaar in jouw regio.",
     "lead": "Als je een wachtwoord hebt, vul het dan in om verder te gaan.",
     "password": "Wachtwoord",
-    "submit": "Doorgaan"
+    "submit": "Doorgaan",
+    "wrongPassword": "Dat wachtwoord klopt niet."
   },
   "pageTitles": {
     "home": "Ehsan Barooni | Full-stack software engineer",

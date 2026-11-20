@@ -1,6 +1,8 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { AppStore } from '../store/app/app.store';
 import { geoAccessGuard, accessDeniedGuard } from './geo-access-guard';
 
 const EX_TZ = 'Asia/Tehran';
@@ -18,9 +20,15 @@ function mockTimezone(timezone: string): void {
 }
 
 describe('geo-access guards', () => {
+  const hasGeoAccess = signal(false);
+
   beforeEach(() => {
+    hasGeoAccess.set(false);
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: AppStore, useValue: { hasGeoAccess } },
+      ],
     });
   });
 
@@ -38,6 +46,12 @@ describe('geo-access guards', () => {
       mockTimezone(TZ);
       expect(runGuard(geoAccessGuard)).toBe(true);
     });
+
+    it('grants access in a suspended timezone after the password', () => {
+      mockTimezone(EX_TZ);
+      hasGeoAccess.set(true);
+      expect(runGuard(geoAccessGuard)).toBe(true);
+    });
   });
 
   describe('accessDeniedGuard', () => {
@@ -48,6 +62,12 @@ describe('geo-access guards', () => {
 
     it('blocks access when timezone is not suspended', () => {
       mockTimezone(TZ);
+      expect(runGuard(accessDeniedGuard)).not.toBe(true);
+    });
+
+    it('blocks access in a suspended timezone after the password', () => {
+      mockTimezone(EX_TZ);
+      hasGeoAccess.set(true);
       expect(runGuard(accessDeniedGuard)).not.toBe(true);
     });
   });

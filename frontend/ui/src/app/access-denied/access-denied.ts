@@ -35,6 +35,9 @@ export class AccessDenied {
 
   readonly hasGeoAccess = this.store.hasGeoAccess;
 
+  /** True after a submit with a password that did not unlock the site. */
+  readonly isPasswordWrong = signal(false);
+
   constructor() {
     effect(() => {
       if (this.hasGeoAccess()) {
@@ -45,6 +48,7 @@ export class AccessDenied {
 
   updatePassword(event: Event): void {
     this.password.set((event.target as HTMLInputElement).value);
+    this.isPasswordWrong.set(false);
   }
 
   submit(): void {
@@ -53,5 +57,6 @@ export class AccessDenied {
     }
 
     this.store.updateHasGeoAccess(this.password());
+    this.isPasswordWrong.set(!this.hasGeoAccess());
   }
 }

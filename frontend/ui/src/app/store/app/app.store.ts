@@ -52,7 +52,10 @@ export const AppStore = signalStore(
       },
 
       updateHasGeoAccess(password: string): void {
-        update({ hasGeoAccess: password === 'dogecoin' });
+        // Autofill and phone keyboards can add spaces or a capital letter.
+        update({
+          hasGeoAccess: password.trim().toLowerCase() === 'dogecoin',
+        });
       },
 
       initialize(): IState {
