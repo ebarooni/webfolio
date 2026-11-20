@@ -7,9 +7,9 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { routes } from '../../app.routes';
 import { serverRoutes } from '../../app.routes.server';
 import { Route } from '../../config/route';
-import { API_GROUPS, API_METHOD_COUNT } from './api-methods';
 import { CapacitorCalendarPage } from './capacitor-calendar';
-import { PAGE_TITLE, PAGE_URL } from './capacitor-calendar.seo';
+import { RESOURCES } from './capacitor-calendar.content';
+import { PAGE_SEO, PAGE_TITLE, PAGE_URL } from './capacitor-calendar.seo';
 import { FAQ } from './faq/faq.content';
 
 type JsonLdNode = Readonly<{
@@ -81,34 +81,22 @@ describe('CapacitorCalendarPage', () => {
     ).toContain('Native calendar events for');
   });
 
-  it('shows the install command, every API method and every FAQ entry', () => {
-    const methods = fixture.debugElement.queryAll(By.css('.method-name'));
+  it('shows the install command, the documentation links and the FAQ', () => {
+    const resourceLinks = fixture.debugElement
+      .queryAll(By.css('app-capacitor-calendar-resources a'))
+      .map((link) => (link.nativeElement as HTMLAnchorElement).href);
     const questions = fixture.debugElement.queryAll(By.css('details'));
 
     expect(text()).toContain('npm i @ebarooni/capacitor-calendar');
-    expect(API_METHOD_COUNT).toBe(40);
-    expect(methods.length).toBe(API_METHOD_COUNT);
+    expect(resourceLinks).toEqual(RESOURCES.map((resource) => resource.href));
     expect(questions.length).toBe(FAQ.length);
   });
 
-  it('dims the methods that a platform does not support', () => {
-    const webOption = fixture.debugElement
-      .queryAll(By.css('.filter input'))
-      .map((input) => input.nativeElement as HTMLInputElement)
-      .find((input) => input.value === 'Web');
-    const webMethodCount = API_GROUPS.flatMap((group) => group.methods).filter(
-      (method) => method.platforms.includes('Web'),
-    ).length;
+  it('states no versions or numbers that change with a plugin release', () => {
+    const seoText = JSON.stringify(PAGE_SEO);
 
-    webOption?.click();
-    fixture.detectChanges();
-
-    const available = fixture.debugElement.queryAll(
-      By.css('.method:not(.unavailable)'),
-    );
-
-    expect(webMethodCount).toBe(2);
-    expect(available.length).toBe(webMethodCount);
+    expect(text()).not.toMatch(/\d+k\+|\bv?\d+\.\d+\.\d+\b/);
+    expect(seoText).not.toMatch(/\d+k\+|\b\d+\.\d+\.\d+\b/);
   });
 
   it('publishes the title, canonical link and structured data', () => {

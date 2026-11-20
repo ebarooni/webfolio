@@ -1,32 +1,20 @@
 /*
- * Facts about the plugin. They come from the README, package.json and the
- * native build files of @ebarooni/capacitor-calendar 8.11.0. Check them
- * against the plugin repository when you change this page.
+ * This page holds no plugin facts that change with a release: no versions,
+ * no method lists, no platform tables and no download numbers. It only has
+ * the package name, the install command and links. The plugin repository,
+ * the docs and npm stay the single source of truth.
  */
 
 export const PACKAGE_NAME = '@ebarooni/capacitor-calendar';
 
+const GITHUB = 'https://github.com/ebarooni/capacitor-calendar';
+
 export const PLUGIN_LINKS = {
   docs: 'https://ebarooni.github.io/capacitor-calendar/',
-  github: 'https://github.com/ebarooni/capacitor-calendar',
+  github: GITHUB,
   npm: 'https://www.npmjs.com/package/@ebarooni/capacitor-calendar',
-  issues: 'https://github.com/ebarooni/capacitor-calendar/issues',
-  changelog:
-    'https://github.com/ebarooni/capacitor-calendar/blob/HEAD/CHANGELOG.md',
-  mcp: 'https://github.com/ebarooni/capacitor-calendar/blob/HEAD/mcp/README.md',
-  apiReference: 'https://github.com/ebarooni/capacitor-calendar#api',
+  issues: `${GITHUB}/issues`,
 } as const;
-
-/** The anchor of one method in the README API reference on GitHub. */
-export function methodReferenceUrl(method: string): string {
-  return `${PLUGIN_LINKS.github}#${method.toLowerCase()}`;
-}
-
-/**
- * Ehsan's figure from November 2026. The live badges below the hero show
- * the current numbers. Raise this only from the npm statistics.
- */
-export const MONTHLY_DOWNLOADS_LABEL = '288k+';
 
 export type LiveBadge = Readonly<{
   label: string;
@@ -36,6 +24,7 @@ export type LiveBadge = Readonly<{
 
 const SHIELDS = 'https://img.shields.io';
 
+/** Live numbers, loaded from npm and GitHub on each visit. */
 export const LIVE_BADGES: readonly LiveBadge[] = [
   {
     label: 'Latest npm version',
@@ -83,99 +72,82 @@ export const PACKAGE_MANAGERS: readonly PackageManager[] = [
   },
 ];
 
-/** Shown in the hero. The first line of the npm command only. */
 export const HERO_INSTALL_COMMAND = `npm i ${PACKAGE_NAME}`;
 
-export type Support = 'yes' | 'no' | 'partial';
-
-export type CapabilityRow = Readonly<{
-  capability: string;
-  ios: Support;
-  android: Support;
-  web: Support;
+export type Resource = Readonly<{
+  id: string;
+  title: string;
+  body: string;
+  href: string;
+  source: string;
 }>;
 
-/** The "Features and Platforms" table of the README. */
-export const CAPABILITIES: readonly CapabilityRow[] = [
+/*
+ * Where each topic lives. The README anchors are its section headings.
+ * If a heading changes in the README, change its anchor here.
+ */
+export const RESOURCES: readonly Resource[] = [
   {
-    capability: 'Create, update and delete events',
-    ios: 'yes',
-    android: 'yes',
-    web: 'partial',
+    id: 'docs',
+    title: 'Documentation',
+    body: 'Guides, examples and the full API reference.',
+    href: PLUGIN_LINKS.docs,
+    source: 'Docs site',
   },
   {
-    capability: 'Native prompts to create, edit and delete events',
-    ios: 'yes',
-    android: 'yes',
-    web: 'partial',
+    id: 'platforms',
+    title: 'Features and platforms',
+    body: 'What the plugin does on iOS, Android and the web.',
+    href: `${GITHUB}#features-and-platforms`,
+    source: 'README',
   },
   {
-    capability: 'List events in a date range',
-    ios: 'yes',
-    android: 'yes',
-    web: 'no',
+    id: 'compatibility',
+    title: 'Capacitor compatibility',
+    body: 'Which npm tag to install for your Capacitor version.',
+    href: `${GITHUB}#capacitor-compatibility`,
+    source: 'README',
   },
   {
-    capability: 'Request calendar permissions',
-    ios: 'yes',
-    android: 'yes',
-    web: 'no',
+    id: 'setup',
+    title: 'Setup and permissions',
+    body: 'The Info.plist keys and Android permissions to add.',
+    href: `${GITHUB}#setup`,
+    source: 'README',
   },
   {
-    capability: 'List, create, modify and delete calendars',
-    ios: 'yes',
-    android: 'yes',
-    web: 'no',
+    id: 'examples',
+    title: 'Usage examples',
+    body: 'Copy-ready code for the common calendar tasks.',
+    href: `${GITHUB}#usage-examples`,
+    source: 'README',
   },
   {
-    capability: 'Open the native Calendar app',
-    ios: 'yes',
-    android: 'yes',
-    web: 'no',
+    id: 'api',
+    title: 'API reference',
+    body: 'Every method with its options, results and platforms.',
+    href: `${GITHUB}#api`,
+    source: 'README',
   },
   {
-    capability: 'Calendar sources and a calendar picker prompt',
-    ios: 'yes',
-    android: 'no',
-    web: 'no',
+    id: 'changelog',
+    title: 'Changelog',
+    body: 'What changed in each release.',
+    href: `${GITHUB}/blob/HEAD/CHANGELOG.md`,
+    source: 'GitHub',
   },
   {
-    capability: 'Reminders and reminder lists',
-    ios: 'yes',
-    android: 'no',
-    web: 'no',
-  },
-];
-
-export type CompatibilityRow = Readonly<{
-  capacitor: string;
-  tag: string;
-  install: string;
-}>;
-
-/** "Match the npm tag to your Capacitor major." (README) */
-export const COMPATIBILITY: readonly CompatibilityRow[] = [
-  {
-    capacitor: 'Capacitor 8',
-    tag: 'latest',
-    install: `npm install ${PACKAGE_NAME}`,
+    id: 'breaking',
+    title: 'Breaking changes',
+    body: 'Migration steps between major versions.',
+    href: `${GITHUB}/blob/HEAD/BREAKING.md`,
+    source: 'GitHub',
   },
   {
-    capacitor: 'Capacitor 7',
-    tag: 'latest-7',
-    install: `npm install ${PACKAGE_NAME}@latest-7`,
+    id: 'issues',
+    title: 'Questions and bugs',
+    body: 'Open an issue or read the existing answers.',
+    href: PLUGIN_LINKS.issues,
+    source: 'GitHub',
   },
-];
-
-export type Requirement = Readonly<{
-  label: string;
-  value: string;
-}>;
-
-/** From EbarooniCapacitorCalendar.podspec, Package.swift and android/build.gradle. */
-export const REQUIREMENTS: readonly Requirement[] = [
-  { label: 'iOS', value: '15.0 or later' },
-  { label: 'Android', value: 'API level 24 (Android 7.0) or later' },
-  { label: 'iOS packaging', value: 'Swift Package Manager or CocoaPods' },
-  { label: 'License', value: 'MIT' },
 ];

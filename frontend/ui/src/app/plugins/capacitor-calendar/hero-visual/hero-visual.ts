@@ -1,18 +1,36 @@
 import { Component } from '@angular/core';
 
-import { CodeBlock } from '../code/code-block/code-block';
-import { HERO_SNIPPET } from '../code/snippets';
+const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
+const DAYS_IN_MONTH = 30;
+const DAYS_WITH_EVENTS: ReadonlySet<number> = new Set([3, 9, 12, 17, 18, 24]);
+const SELECTED_DAY = 17;
+
+type DayCell = Readonly<{
+  day: number;
+  hasEvent: boolean;
+  selected: boolean;
+}>;
 
 /**
- * The code of the quick start next to the event that it creates. The event
- * card is a drawing in HTML, not a screenshot of a device.
+ * A drawing of a month view with one new event. It is decoration, so it
+ * shows no real date and no plugin API.
  */
 @Component({
   selector: 'app-hero-visual',
-  imports: [CodeBlock],
   templateUrl: './hero-visual.html',
   styleUrl: './hero-visual.css',
+  host: {
+    'aria-hidden': 'true',
+  },
 })
 export class HeroVisual {
-  readonly snippet = HERO_SNIPPET;
+  readonly weekdays = WEEKDAYS;
+  readonly days: readonly DayCell[] = Array.from(
+    { length: DAYS_IN_MONTH },
+    (_, index) => ({
+      day: index + 1,
+      hasEvent: DAYS_WITH_EVENTS.has(index + 1),
+      selected: index + 1 === SELECTED_DAY,
+    }),
+  );
 }

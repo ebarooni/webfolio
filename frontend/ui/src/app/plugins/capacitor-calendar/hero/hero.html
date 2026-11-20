@@ -26,10 +26,9 @@
       </h1>
 
       <p class="max-w-[54ch] text-lead leading-[1.55] text-pretty">
-        Create, edit, list and delete events on iOS and Android. Manage
-        calendars and permissions, use Apple Reminders on iOS, and export
-        <code class="inline-code">.ics</code> files on the web. One typed API
-        for every platform.
+        Capacitor Calendar connects your app to the native calendar of the
+        device. One open source plugin, one import, and the calendar the user
+        already knows.
       </p>
 
       <app-install-command
@@ -69,15 +68,6 @@
   </div>
 
   <div class="page-container">
-    <dl class="stats">
-      @for (stat of stats; track stat.label) {
-        <div class="stat">
-          <dt class="order-2 text-[0.9375rem] text-muted">{{ stat.label }}</dt>
-          <dd class="stat-value">{{ stat.value }}</dd>
-        </div>
-      }
-    </dl>
-
     <ul class="badges" aria-label="Live package statistics">
       @for (badge of badges; track badge.label) {
         <li>

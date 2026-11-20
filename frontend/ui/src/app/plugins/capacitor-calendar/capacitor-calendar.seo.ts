@@ -10,7 +10,7 @@ export const PAGE_TITLE =
   'Capacitor Calendar Plugin for iOS and Android | Ehsan Barooni';
 
 export const PAGE_DESCRIPTION =
-  'Native calendar events for Capacitor apps. Create, edit, list and delete events and calendars on iOS and Android, reminders on iOS, and .ics files on the web. MIT licensed.';
+  'Capacitor Calendar is an open source Capacitor plugin that connects your app to the native calendar. Install it from npm and find the docs, the API reference and the source code.';
 
 const IMAGE_URL = `${SITE_URL}/plugins/capacitor-calendar/og-image.png`;
 
@@ -27,7 +27,7 @@ export const PAGE_SEO: PageSeoConfig = {
   canonicalUrl: PAGE_URL,
   image: {
     url: IMAGE_URL,
-    alt: 'Capacitor Calendar: native calendar events for Capacitor apps on iOS, Android and the web',
+    alt: 'Capacitor Calendar: native calendar events for Capacitor apps',
     width: 1200,
     height: 630,
   },
@@ -52,14 +52,12 @@ export const PAGE_SEO: PageSeoConfig = {
         name: PACKAGE_NAME,
         alternateName: 'Capacitor Calendar',
         description:
-          'A Capacitor plugin for native calendar events on iOS and Android, with reminders on iOS and .ics event creation on the web.',
+          'An open source Capacitor plugin that connects your app to the native calendar of the device.',
         url: PAGE_URL,
         codeRepository: PLUGIN_LINKS.github,
-        programmingLanguage: ['TypeScript', 'Swift', 'Kotlin'],
-        runtimePlatform: ['Capacitor', 'iOS', 'Android', 'Web'],
-        license: 'https://opensource.org/licenses/MIT',
+        runtimePlatform: 'Capacitor',
         keywords:
-          'capacitor, capacitor plugin, calendar, reminders, eventkit, ionic, ios, android',
+          'capacitor, capacitor plugin, capacitor calendar, calendar, ionic',
         sameAs: [PLUGIN_LINKS.npm, PLUGIN_LINKS.docs],
         author: AUTHOR,
         maintainer: AUTHOR,

@@ -1,15 +1,12 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 
 import { PageSeo } from '../../shared/seo/page-seo';
-import { CapacitorCalendarApiOverview } from './api-overview/api-overview';
 import { CapacitorCalendarCallToAction } from './call-to-action/call-to-action';
 import { PAGE_SEO } from './capacitor-calendar.seo';
 import { CapacitorCalendarFaq } from './faq/faq';
-import { CapacitorCalendarFeatures } from './features/features';
 import { CapacitorCalendarHero } from './hero/hero';
-import { CapacitorCalendarPlatforms } from './platforms/platforms';
 import { CapacitorCalendarQuickStart } from './quick-start/quick-start';
-import { CapacitorCalendarWhy } from './why/why';
+import { CapacitorCalendarResources } from './resources/resources';
 
 /**
  * The landing page of the Capacitor Calendar plugin. The build prerenders
@@ -19,14 +16,11 @@ import { CapacitorCalendarWhy } from './why/why';
 @Component({
   selector: 'app-capacitor-calendar',
   imports: [
-    CapacitorCalendarApiOverview,
     CapacitorCalendarCallToAction,
     CapacitorCalendarFaq,
-    CapacitorCalendarFeatures,
     CapacitorCalendarHero,
-    CapacitorCalendarPlatforms,
     CapacitorCalendarQuickStart,
-    CapacitorCalendarWhy,
+    CapacitorCalendarResources,
   ],
   templateUrl: './capacitor-calendar.html',
   styleUrl: './capacitor-calendar.css',

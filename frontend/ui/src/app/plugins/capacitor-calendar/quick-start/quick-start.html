@@ -5,8 +5,8 @@
 >
   <app-section-heading
     label="Quick start"
-    title="From install to the first event in three steps."
-    lead="Install the package, declare the permissions, then call the API. Every sample here comes from the plugin README, so you can copy it as it is."
+    title="Three steps to your first event."
+    lead="Install the package here. The permissions and the code live in the plugin documentation, so they always match the current release."
     headingId="quick-start-title"
   />
 
@@ -16,9 +16,11 @@
         <span class="step-number" aria-hidden="true">1</span>
         <h3 class="step-title">Install the plugin</h3>
         <p>
-          Add the package and sync the native projects. On
-          {{ olderCapacitor.capacitor }}, install the
-          <code>{{ olderCapacitor.tag }}</code> tag instead.
+          Add the package and sync the native projects. On an older Capacitor
+          version, install the matching npm tag from the
+          <a class="text-link" [href]="compatibilityLink" rel="noopener"
+            >compatibility table</a
+          >.
         </p>
       </div>
       <app-code-tabs name="install" [tabs]="installTabs" />
@@ -29,12 +31,17 @@
         <span class="step-number" aria-hidden="true">2</span>
         <h3 class="step-title">Declare the permissions</h3>
         <p>
-          The plugin uses the native calendar APIs. Add the usage descriptions
-          on iOS and the calendar permissions on Android. If you only create
-          events on iOS, the write-only key is enough.
+          The plugin uses the native calendar of the device. Add the usage
+          descriptions on iOS and the calendar permissions on Android.
         </p>
       </div>
-      <app-code-tabs name="permissions" [tabs]="permissionTabs" />
+      <a class="next-card" [href]="setupLink" rel="noopener">
+        <span class="next-source">README · Setup</span>
+        <span class="next-title">
+          Info.plist keys and Android permissions
+          <app-arrow-icon direction="external" />
+        </span>
+      </a>
     </li>
 
     <li class="step">
@@ -42,11 +49,26 @@
         <span class="step-number" aria-hidden="true">3</span>
         <h3 class="step-title">Call the API</h3>
         <p>
-          Request access, then create, list or edit events. Dates are Unix
-          timestamps in milliseconds.
+          Import <code>CapacitorCalendar</code>, request access and create your
+          first event.
         </p>
       </div>
-      <app-code-tabs name="usage" [tabs]="quickStartTabs" />
+      <div class="flex flex-col gap-3">
+        <a class="next-card" [href]="examplesLink" rel="noopener">
+          <span class="next-source">README · Usage examples</span>
+          <span class="next-title">
+            Copy-ready code for events, calendars and more
+            <app-arrow-icon direction="external" />
+          </span>
+        </a>
+        <a class="next-card" [href]="docsLink" rel="noopener">
+          <span class="next-source">Documentation</span>
+          <span class="next-title">
+            Guides and the full API reference
+            <app-arrow-icon direction="external" />
+          </span>
+        </a>
+      </div>
     </li>
   </ol>
 </section>

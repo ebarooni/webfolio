@@ -1,0 +1,27 @@
+<section
+  id="resources"
+  class="page-container py-20 lg:py-28"
+  aria-labelledby="resources-title"
+>
+  <app-section-heading
+    label="Documentation"
+    title="Everything you need, at the source."
+    lead="Features, platform support, versions and the API change with the plugin. They live in one place, next to the code, and are always up to date there."
+    headingId="resources-title"
+  />
+
+  <ul class="grid">
+    @for (resource of resources; track resource.id) {
+      <li class="scroll-reveal">
+        <a class="card" [href]="resource.href" rel="noopener">
+          <span class="source">{{ resource.source }}</span>
+          <span class="title">
+            {{ resource.title }}
+            <app-arrow-icon direction="external" class="arrow" />
+          </span>
+          <span class="body">{{ resource.body }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</section>

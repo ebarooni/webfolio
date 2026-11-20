@@ -2,24 +2,99 @@
   position: relative;
   display: block;
   min-width: 0;
-  padding: 1.5rem 0 4.5rem;
+  width: 100%;
+  max-width: 30rem;
+  padding: 0 0 4.5rem;
 
   @media (width >= 64rem) {
-    padding: 2rem 0 5rem 1rem;
+    margin-left: auto;
+    padding: 1rem 0 5rem 2rem;
   }
 }
 
-.code {
-  transform: perspective(1600px) rotateY(-6deg) rotateX(3deg);
-  transform-origin: left center;
+.month {
+  padding: 1.5rem;
+  border: 1px solid var(--color-base-300);
+  border-radius: 1.75rem;
+  background: var(--color-base-100);
+  box-shadow:
+    0 40px 80px -40px var(--cc-glow),
+    0 1px 0 var(--color-base-300);
+  transform: perspective(1600px) rotateY(-8deg) rotateX(4deg);
 
   @media (width < 64rem) {
     transform: none;
   }
+}
 
-  /* Wide screens have room beside the page column for the long lines. */
-  @media (width >= 80rem) {
-    margin-right: -4.5rem;
+.month-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.month-title {
+  color: var(--color-ink);
+  font-size: 1.125rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.month-dots {
+  display: flex;
+  gap: 0.375rem;
+
+  i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-base-300);
+  }
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.weekday {
+  padding-bottom: 0.375rem;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.selected {
+  background: var(--cc-gradient);
+  color: var(--cc-on-gradient);
+  font-weight: 650;
+  box-shadow: 0 10px 24px -10px var(--cc-blue);
+}
+
+.event-dot {
+  position: absolute;
+  bottom: 18%;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 50%;
+  background: var(--cc-blue);
+
+  .selected & {
+    background: var(--cc-on-gradient);
   }
 }
 
@@ -36,7 +111,7 @@
   backdrop-filter: blur(18px) saturate(1.6);
 
   @media (width >= 64rem) {
-    left: -2.5rem;
+    left: -1rem;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -121,54 +196,6 @@
 .event-meta {
   color: var(--color-muted);
   font-size: 0.875rem;
-}
-
-.platforms {
-  position: absolute;
-  top: 0;
-  right: 0.5rem;
-  display: flex;
-  gap: 0.375rem;
-
-  li {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.3125rem 0.625rem;
-    border: 1px solid var(--cc-glass-border);
-    border-radius: 999px;
-    background: var(--cc-glass);
-    color: var(--color-ink);
-    font-size: 0.75rem;
-    font-weight: 600;
-    backdrop-filter: blur(12px);
-  }
-
-  @media (width >= 80rem) {
-    right: -4rem;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    animation: float-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 450ms both;
-  }
-}
-
-.dot {
-  width: 0.4375rem;
-  height: 0.4375rem;
-  border-radius: 50%;
-}
-
-.ios {
-  background: var(--cc-blue);
-}
-
-.android {
-  background: #3ddc84;
-}
-
-.web {
-  background: var(--cc-violet);
 }
 
 @keyframes float-in {
