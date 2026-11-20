@@ -168,9 +168,9 @@
         "title": "Moving away from Firebase Hosting",
         "summary": "I decided to deploy my portfolio website on a VPS instead of using Firebase Hosting. In this blog post, I provide a step by step guide on the migration and explain the reason behind this decision."
       },
-      "getting-started-with-capacitor-calendar": {
-        "title": "Getting Started with Capacitor Calendar",
-        "summary": "An introduction to my Capacitor Calendar plugin and a quick start: install it, declare the permissions and create your first calendar event."
+      "add-events-to-native-calendar-capacitor": {
+        "title": "How to Add Events to the Native Calendar in Capacitor",
+        "summary": "Step by step: install the Capacitor Calendar plugin, set up the iOS and Android permissions, and add events to the device calendar from your app."
       }
     },
     "translationMissing": "This post is not translated yet. You are reading the English original."

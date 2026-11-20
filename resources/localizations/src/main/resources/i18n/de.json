@@ -168,9 +168,9 @@
         "title": "Weg von Firebase Hosting",
         "summary": "Ich habe meine Portfolio-Website von Firebase Hosting auf einen VPS umgezogen. In diesem Artikel zeige ich die Migration Schritt für Schritt und erkläre, warum ich mich dafür entschieden habe."
       },
-      "getting-started-with-capacitor-calendar": {
-        "title": "Erste Schritte mit Capacitor Calendar",
-        "summary": "Eine Einführung in mein Plugin Capacitor Calendar mit Schnellstart: installieren, Berechtigungen deklarieren und den ersten Kalendertermin anlegen."
+      "add-events-to-native-calendar-capacitor": {
+        "title": "Termine im nativen Kalender anlegen mit Capacitor",
+        "summary": "Schritt für Schritt: das Plugin Capacitor Calendar installieren, die Berechtigungen für iOS und Android einrichten und Termine im Gerätekalender anlegen."
       }
     },
     "translationMissing": "Dieser Artikel ist noch nicht übersetzt. Du liest das englische Original."

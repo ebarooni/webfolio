@@ -41,7 +41,7 @@ const UNSORTED_POSTS: readonly BlogPostPreview[] = [
     id: Posts.CAPACITOR_CALENDAR,
     languages: ['en', 'de', 'nl'],
     readTime: 5,
-    slug: 'getting-started-with-capacitor-calendar',
+    slug: 'add-events-to-native-calendar-capacitor',
   },
 ];
 
