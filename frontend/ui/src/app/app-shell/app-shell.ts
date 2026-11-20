@@ -32,8 +32,13 @@ const DEFAULT_UI_CONFIG: UiConfig = {
   selector: 'app-shell',
   imports: [Navbar, Footer, RouterOutlet],
   templateUrl: './app-shell.html',
+  /*
+   * The main element grows to fill the screen, so the footer is never
+   * above the bottom edge on short pages. The footer is outside main
+   * because only then is it the page's contentinfo landmark.
+   */
   host: {
-    class: 'flex min-h-screen w-full flex-col bg-base-100',
+    class: 'flex min-h-dvh w-full flex-col bg-base-100',
   },
 })
 export class AppShell {
