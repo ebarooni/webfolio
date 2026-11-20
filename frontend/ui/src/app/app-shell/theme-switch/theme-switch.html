@@ -71,22 +71,24 @@
             [attr.opacity]="moon().glowOpacity"
           />
           <g [attr.transform]="moonTransform()">
-            <circle cx="22" cy="20" r="11" fill="#3b4475" />
+            @if (moon().hasShadow) {
+              <circle cx="22" cy="20" r="11" fill="#3b4475" />
+              <circle
+                cx="22"
+                cy="20"
+                r="10.7"
+                fill="none"
+                stroke="#aeb7dd"
+                stroke-opacity="0.45"
+                stroke-width="0.6"
+              />
+            }
             <g clip-path="url(#theme-switch-moon-lit)">
               <circle cx="22" cy="20" r="11" fill="#eef1fa" />
               <circle cx="18" cy="16.5" r="2.4" fill="#cbd2e6" />
               <circle cx="26" cy="21" r="1.6" fill="#cbd2e6" />
               <circle cx="20.5" cy="25" r="1.2" fill="#cbd2e6" />
             </g>
-            <circle
-              cx="22"
-              cy="20"
-              r="10.7"
-              fill="none"
-              stroke="#aeb7dd"
-              stroke-opacity="0.45"
-              stroke-width="0.6"
-            />
           </g>
         </g>
       </g>

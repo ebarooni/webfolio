@@ -32,6 +32,15 @@ const J2000_MS = Date.UTC(2000, 0, 1, 12);
 const EARTH_OBLIQUITY = 23.4397 * RADIANS_PER_DEGREE;
 const SUN_DISTANCE_KM = 149_598_000;
 
+// Rounding can push a sine or cosine a little past 1, which gives NaN.
+function safeAsin(value: number): number {
+  return Math.asin(Math.min(1, Math.max(-1, value)));
+}
+
+function safeAcos(value: number): number {
+  return Math.acos(Math.min(1, Math.max(-1, value)));
+}
+
 function daysSinceJ2000(date: Date): number {
   return (date.getTime() - J2000_MS) / MS_PER_DAY;
 }
@@ -46,7 +55,7 @@ function toEquatorial(
       Math.tan(eclipticLatitude) * Math.sin(EARTH_OBLIQUITY),
     Math.cos(eclipticLongitude),
   );
-  const declination = Math.asin(
+  const declination = safeAsin(
     Math.sin(eclipticLatitude) * Math.cos(EARTH_OBLIQUITY) +
       Math.cos(eclipticLatitude) *
         Math.sin(EARTH_OBLIQUITY) *
@@ -93,7 +102,7 @@ function skyPosition(
   const siderealTime =
     (280.16 + 360.9856235 * days + location.longitude) * RADIANS_PER_DEGREE;
   const hourAngle = siderealTime - body.rightAscension;
-  const altitude = Math.asin(
+  const altitude = safeAsin(
     Math.sin(latitude) * Math.sin(body.declination) +
       Math.cos(latitude) * Math.cos(body.declination) * Math.cos(hourAngle),
   );
@@ -126,7 +135,7 @@ export function moonIllumination(
   const sun = sunEquatorial(days);
   const moon = moonEquatorial(days);
   const rightAscensionGap = sun.rightAscension - moon.rightAscension;
-  const elongation = Math.acos(
+  const elongation = safeAcos(
     Math.sin(sun.declination) * Math.sin(moon.declination) +
       Math.cos(sun.declination) *
         Math.cos(moon.declination) *

@@ -10,7 +10,6 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Theme } from '../../config/themes-array';
-import type { GeoLocation } from './astronomy';
 import {
   HILL_COLORS,
   KNOB_CENTER_X,
@@ -19,11 +18,7 @@ import {
   seasonOf,
   sunLook,
 } from './sky';
-import {
-  approximateLocation,
-  browserTimeZone,
-  locateTimeZone,
-} from './time-zone-location';
+import { locateVisitor } from './time-zone-location';
 
 const CHASE_TOGGLE_COUNT = 5;
 const CHASE_WINDOW_MS = 2000;
@@ -39,9 +34,7 @@ const SKY_REFRESH_MS = 60_000;
 export class ThemeSwitch {
   private readonly destroyRef = inject(DestroyRef);
   private readonly now = signal(new Date());
-  private readonly location = signal<GeoLocation>(
-    approximateLocation(this.now()),
-  );
+  private readonly location = locateVisitor();
 
   private recentToggleTimes: number[] = [];
   private chaseTimeoutId = 0;
@@ -53,11 +46,11 @@ export class ThemeSwitch {
 
   readonly isDark = computed(() => this.theme() === 'dark');
   readonly season = computed(() =>
-    seasonOf(this.now(), this.location().latitude),
+    seasonOf(this.now(), this.location?.latitude),
   );
   readonly hillColors = computed(() => HILL_COLORS[this.season()]);
-  readonly sun = computed(() => sunLook(this.now(), this.location()));
-  readonly moon = computed(() => moonLook(this.now(), this.location()));
+  readonly sun = computed(() => sunLook(this.now(), this.location));
+  readonly moon = computed(() => moonLook(this.now(), this.location));
 
   readonly celestialTransform = computed(() => {
     const offset = this.isDark() ? this.moon().offset : this.sun().offset;
@@ -78,21 +71,11 @@ export class ThemeSwitch {
       window.clearInterval(refreshIntervalId);
       window.clearTimeout(this.chaseTimeoutId);
     });
-    void this.locateVisitor();
   }
 
   toggle(): void {
     this.themeChanged.emit(this.isDark() ? 'light' : 'dark');
     this.startChaseAfterRapidToggles();
-  }
-
-  private async locateVisitor(): Promise<void> {
-    const timeZone = browserTimeZone();
-    const location = timeZone ? await locateTimeZone(timeZone) : undefined;
-
-    if (location) {
-      this.location.set(location);
-    }
   }
 
   // Five quick toggles make the sun and the moon chase each other once.

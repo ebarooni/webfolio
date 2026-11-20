@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
-  approximateLocation,
   browserTimeZone,
   locateTimeZone,
+  locateVisitor,
   parseTimeZoneCoordinates,
 } from './time-zone-location';
 
@@ -23,17 +23,17 @@ describe('time zone location', () => {
     },
     { timeZone: 'Asia/Calcutta', latitude: 23, longitude: 88 },
     { timeZone: 'Europe/Kiev', latitude: 50, longitude: 31 },
-  ])('should locate $timeZone', async ({ timeZone, latitude, longitude }) => {
-    await expect(locateTimeZone(timeZone)).resolves.toEqual({
+  ])('should locate $timeZone', ({ timeZone, latitude, longitude }) => {
+    expect(locateTimeZone(timeZone)).toEqual({
       latitude,
       longitude,
     });
   });
 
-  it.each(['UTC', 'Etc/GMT+3', 'Mars/Olympus_Mons'])(
-    'should not locate %s',
-    async (timeZone) => {
-      await expect(locateTimeZone(timeZone)).resolves.toBeUndefined();
+  it.each(['UTC', 'Etc/GMT+3', 'Mars/Olympus_Mons', ''])(
+    'should not locate "%s"',
+    (timeZone) => {
+      expect(locateTimeZone(timeZone)).toBeUndefined();
     },
   );
 
@@ -54,17 +54,13 @@ Tokyo 36 140
     ]);
   });
 
-  it('should guess the longitude from the standard time offset', () => {
-    vi.spyOn(Date.prototype, 'getTimezoneOffset').mockImplementation(function (
-      this: Date,
-    ) {
-      return this.getMonth() === 0 ? -60 : -120;
+  it('should not locate the visitor when Intl fails', () => {
+    vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => {
+      throw new RangeError('No time zone data');
     });
 
-    expect(approximateLocation(new Date(2026, 5, 1))).toEqual({
-      latitude: 40,
-      longitude: 15,
-    });
+    expect(browserTimeZone()).toBeUndefined();
+    expect(locateVisitor()).toBeUndefined();
   });
 
   it('should read the time zone of the browser', () => {

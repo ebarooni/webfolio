@@ -21,6 +21,8 @@ export type MoonLook = Readonly<{
   litPath: string;
   rotation: number;
   glowOpacity: number;
+  // A full moon draws no shadow, so no dark edge shows around it.
+  hasShadow: boolean;
 }>;
 
 export const HILL_COLORS: Readonly<Record<Season, HillColors>> = {
@@ -42,6 +44,9 @@ const DEEPEST_DIP = 3;
 const TWILIGHT_DEGREES = 12;
 const GOLDEN_HOUR_DEGREES = 20;
 const TROPIC_LATITUDE = 23.44;
+const NEUTRAL_RISE_HOUR = { sun: 6, moon: 18 };
+const NEUTRAL_HOURS_ABOVE_HORIZON = 12;
+const HOURS_PER_DAY = 24;
 const MONTHS_PER_HALF_YEAR = 6;
 const MONTHS_PER_YEAR = 12;
 const RADIANS_PER_DEGREE = Math.PI / 180;
@@ -49,6 +54,7 @@ const RADIANS_PER_DEGREE = Math.PI / 180;
 const SUN_CORE = { high: '#ffc533', low: '#ff8a3d' };
 const SUN_GLOW = { high: '#ffd86b', low: '#ffa65c' };
 const SUN_GLOW_OPACITY = { high: 0.35, low: 0.55 };
+const FULL_MOON_FRACTION = 0.99;
 const MOON_GLOW_OPACITY = { new: 0.05, full: 0.2 };
 
 function roundToTenth(value: number): number {
@@ -79,16 +85,24 @@ function mixHexColors(from: string, to: string, amount: number): string {
 
 // Near the tropics the year has no real winter, so the hills stay green.
 // South of the equator the seasons are half a year apart from the north.
-export function seasonOf(date: Date, latitude: number): Season {
+// Without a latitude, the seasons follow the north, as most visitors live there.
+export function seasonOf(date: Date, latitude?: number): Season {
+  if (latitude === undefined || !Number.isFinite(latitude)) {
+    return northernSeasonOf(date.getMonth());
+  }
+
   if (Math.abs(latitude) < TROPIC_LATITUDE) {
     return 'summer';
   }
 
-  const month =
+  return northernSeasonOf(
     latitude < 0
       ? (date.getMonth() + MONTHS_PER_HALF_YEAR) % MONTHS_PER_YEAR
-      : date.getMonth();
+      : date.getMonth(),
+  );
+}
 
+function northernSeasonOf(month: number): Season {
   if (month <= 1 || month === 11) {
     return 'winter';
   }
@@ -144,9 +158,60 @@ export function moonRotation(brightLimbAngle: number): number {
   return roundToTenth(Math.atan2(downward, rightward) / RADIANS_PER_DEGREE);
 }
 
+// The look from before the real sky: the sun rises at 6 o'clock and the
+// moon at 18 o'clock, and both are highest after six hours.
+export function neutralOffset(body: 'sun' | 'moon', date: Date): number {
+  const hour = date.getHours() + date.getMinutes() / 60;
+
+  if (!Number.isFinite(hour)) {
+    return HORIZON_OFFSET;
+  }
+
+  const hoursSinceRise =
+    (hour - NEUTRAL_RISE_HOUR[body] + HOURS_PER_DAY) % HOURS_PER_DAY;
+  const progress = hoursSinceRise / NEUTRAL_HOURS_ABOVE_HORIZON;
+
+  if (progress > 1) {
+    return HORIZON_OFFSET;
+  }
+
+  return roundToTenth(
+    HORIZON_OFFSET - ARC_HEIGHT * Math.sin(Math.PI * progress),
+  );
+}
+
+export function neutralSunLook(date: Date): SunLook {
+  return {
+    offset: neutralOffset('sun', date),
+    core: SUN_CORE.high,
+    glow: SUN_GLOW.high,
+    glowOpacity: SUN_GLOW_OPACITY.high,
+  };
+}
+
+export function neutralMoonLook(date: Date): MoonLook {
+  return {
+    offset: neutralOffset('moon', date),
+    litPath: moonLitPath(1),
+    rotation: 0,
+    glowOpacity: 0,
+    hasShadow: false,
+  };
+}
+
 // A low sun is more orange, as at sunrise and sunset.
-export function sunLook(date: Date, location: GeoLocation): SunLook {
+// Without a location or a valid result, the sun keeps its neutral look.
+export function sunLook(date: Date, location?: GeoLocation): SunLook {
+  if (!location) {
+    return neutralSunLook(date);
+  }
+
   const { altitude } = sunPosition(date, location);
+
+  if (!Number.isFinite(altitude)) {
+    return neutralSunLook(date);
+  }
+
   const height = clamp(altitude / GOLDEN_HOUR_DEGREES, 0, 1);
 
   return {
@@ -160,17 +225,31 @@ export function sunLook(date: Date, location: GeoLocation): SunLook {
   };
 }
 
-export function moonLook(date: Date, location: GeoLocation): MoonLook {
+// The moon falls back on its own. A valid sun does not depend on it.
+export function moonLook(date: Date, location?: GeoLocation): MoonLook {
+  if (!location) {
+    return neutralMoonLook(date);
+  }
+
   const { altitude } = moonPosition(date, location);
   const { fraction, brightLimbAngle } = moonIllumination(date, location);
 
+  if (
+    ![altitude, fraction, brightLimbAngle].every((value) =>
+      Number.isFinite(value),
+    )
+  ) {
+    return neutralMoonLook(date);
+  }
+
   return {
     offset: celestialOffset(altitude),
-    litPath: moonLitPath(fraction),
+    litPath: moonLitPath(fraction < FULL_MOON_FRACTION ? fraction : 1),
     rotation: moonRotation(brightLimbAngle),
     glowOpacity: roundToHundredth(
       MOON_GLOW_OPACITY.new +
         (MOON_GLOW_OPACITY.full - MOON_GLOW_OPACITY.new) * fraction,
     ),
+    hasShadow: fraction < FULL_MOON_FRACTION,
   };
 }

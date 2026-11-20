@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { localizationTestingModule } from '../../../testing/localization-testing';
 import type { Theme } from '../../config/themes-array';
+import { neutralOffset } from './sky';
 import { ThemeSwitch } from './theme-switch';
 
 describe('ThemeSwitch', () => {
@@ -24,6 +25,19 @@ describe('ThemeSwitch', () => {
     fixture.detectChanges();
   }
 
+  function createSwitch(timeZone: string, theme: Theme): void {
+    vi.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
+      ...new Intl.DateTimeFormat().resolvedOptions(),
+      timeZone,
+    });
+    fixture = TestBed.createComponent(ThemeSwitch);
+    component = fixture.componentInstance;
+    themeChanged = vi.fn();
+    component.themeChanged.subscribe(themeChanged);
+    fixture.componentRef.setInput('theme', theme);
+    fixture.detectChanges();
+  }
+
   beforeEach(async () => {
     // Intl stays real, so the spy below can set the time zone.
     vi.useFakeTimers({
@@ -36,21 +50,12 @@ describe('ThemeSwitch', () => {
       ],
     });
     vi.setSystemTime(new Date('2026-04-15T10:00:00Z'));
-    vi.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
-      ...new Intl.DateTimeFormat().resolvedOptions(),
-      timeZone: 'Europe/Berlin',
-    });
 
     await TestBed.configureTestingModule({
       imports: [ThemeSwitch, localizationTestingModule()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ThemeSwitch);
-    component = fixture.componentInstance;
-    themeChanged = vi.fn();
-    component.themeChanged.subscribe(themeChanged);
-    fixture.componentRef.setInput('theme', 'light');
-    fixture.detectChanges();
+    createSwitch('Europe/Berlin', 'light');
   });
 
   afterEach(() => {
@@ -86,12 +91,8 @@ describe('ThemeSwitch', () => {
     );
   });
 
-  it('should show the season and the sun of the time zone', async () => {
-    await vi.waitFor(() => {
-      expect(component.celestialTransform()).toBe('translate(0 -0.7)');
-    });
-    fixture.detectChanges();
-
+  it('should show the season and the sun of the time zone', () => {
+    expect(component.celestialTransform()).toBe('translate(0 -0.7)');
     expect(component.season()).toBe('spring');
     expect(fixture.debugElement.query(By.css('.blossoms'))).toBeTruthy();
   });
@@ -109,6 +110,24 @@ describe('ThemeSwitch', () => {
       `translate(0 ${component.moon().offset})`,
     );
   });
+
+  it.each([
+    { theme: 'light', body: 'sun' },
+    { theme: 'dark', body: 'moon' },
+  ] as const)(
+    'should show the neutral $body for a time zone without a city',
+    ({ theme, body }) => {
+      const offset = neutralOffset(body, new Date());
+
+      fixture.destroy();
+      createSwitch('UTC', theme);
+
+      expect(component.sun().core).toBe('#ffc533');
+      expect(component.moon().rotation).toBe(0);
+      expect(component.moon().hasShadow).toBe(false);
+      expect(component.celestialTransform()).toBe(`translate(0 ${offset})`);
+    },
+  );
 
   it('should move the sun as time goes by', () => {
     const noonTransform = component.celestialTransform();
