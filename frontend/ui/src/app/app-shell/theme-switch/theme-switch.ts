@@ -10,11 +10,25 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Theme } from '../../config/themes-array';
-import { celestialOffset, HILL_COLORS, seasonOf } from './sky';
+import type { GeoLocation } from './astronomy';
+import {
+  HILL_COLORS,
+  KNOB_CENTER_X,
+  KNOB_CENTER_Y,
+  moonLook,
+  seasonOf,
+  sunLook,
+} from './sky';
+import {
+  approximateLocation,
+  browserTimeZone,
+  locateTimeZone,
+} from './time-zone-location';
 
 const CHASE_TOGGLE_COUNT = 5;
 const CHASE_WINDOW_MS = 2000;
 const CHASE_DURATION_MS = 1900;
+const SKY_REFRESH_MS = 60_000;
 
 @Component({
   selector: 'app-theme-switch',
@@ -24,7 +38,10 @@ const CHASE_DURATION_MS = 1900;
 })
 export class ThemeSwitch {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly createdAt = new Date();
+  private readonly now = signal(new Date());
+  private readonly location = signal<GeoLocation>(
+    approximateLocation(this.now()),
+  );
 
   private recentToggleTimes: number[] = [];
   private chaseTimeoutId = 0;
@@ -32,25 +49,50 @@ export class ThemeSwitch {
   readonly theme = input.required<Theme>();
   readonly themeChanged = output<Theme>();
 
-  readonly season = seasonOf(this.createdAt);
-  readonly hillColors = HILL_COLORS[this.season];
   readonly isChasing = signal(false);
 
   readonly isDark = computed(() => this.theme() === 'dark');
+  readonly season = computed(() =>
+    seasonOf(this.now(), this.location().latitude),
+  );
+  readonly hillColors = computed(() => HILL_COLORS[this.season()]);
+  readonly sun = computed(() => sunLook(this.now(), this.location()));
+  readonly moon = computed(() => moonLook(this.now(), this.location()));
 
-  readonly celestialTransform = computed(
-    () => `translate(0 ${celestialOffset(this.theme(), this.createdAt)})`,
+  readonly celestialTransform = computed(() => {
+    const offset = this.isDark() ? this.moon().offset : this.sun().offset;
+
+    return `translate(0 ${offset})`;
+  });
+
+  readonly moonTransform = computed(
+    () => `rotate(${this.moon().rotation} ${KNOB_CENTER_X} ${KNOB_CENTER_Y})`,
   );
 
   constructor() {
+    const refreshIntervalId = window.setInterval(() => {
+      this.now.set(new Date());
+    }, SKY_REFRESH_MS);
+
     this.destroyRef.onDestroy(() => {
+      window.clearInterval(refreshIntervalId);
       window.clearTimeout(this.chaseTimeoutId);
     });
+    void this.locateVisitor();
   }
 
   toggle(): void {
     this.themeChanged.emit(this.isDark() ? 'light' : 'dark');
     this.startChaseAfterRapidToggles();
+  }
+
+  private async locateVisitor(): Promise<void> {
+    const timeZone = browserTimeZone();
+    const location = timeZone ? await locateTimeZone(timeZone) : undefined;
+
+    if (location) {
+      this.location.set(location);
+    }
   }
 
   // Five quick toggles make the sun and the moon chase each other once.

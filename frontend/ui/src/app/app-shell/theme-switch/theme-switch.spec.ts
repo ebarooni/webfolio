@@ -25,8 +25,21 @@ describe('ThemeSwitch', () => {
   }
 
   beforeEach(async () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date(2026, 3, 15, 12));
+    // Intl stays real, so the spy below can set the time zone.
+    vi.useFakeTimers({
+      toFake: [
+        'Date',
+        'setTimeout',
+        'clearTimeout',
+        'setInterval',
+        'clearInterval',
+      ],
+    });
+    vi.setSystemTime(new Date('2026-04-15T10:00:00Z'));
+    vi.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
+      ...new Intl.DateTimeFormat().resolvedOptions(),
+      timeZone: 'Europe/Berlin',
+    });
 
     await TestBed.configureTestingModule({
       imports: [ThemeSwitch, localizationTestingModule()],
@@ -42,6 +55,7 @@ describe('ThemeSwitch', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should create', () => {
@@ -72,10 +86,37 @@ describe('ThemeSwitch', () => {
     );
   });
 
-  it('should show the season and the time of day', () => {
-    expect(component.season).toBe('spring');
+  it('should show the season and the sun of the time zone', async () => {
+    await vi.waitFor(() => {
+      expect(component.celestialTransform()).toBe('translate(0 -0.7)');
+    });
+    fixture.detectChanges();
+
+    expect(component.season()).toBe('spring');
     expect(fixture.debugElement.query(By.css('.blossoms'))).toBeTruthy();
-    expect(component.celestialTransform()).toBe('translate(0 -3)');
+  });
+
+  it('should show the moon phase in the dark theme', () => {
+    fixture.componentRef.setInput('theme', 'dark');
+    fixture.detectChanges();
+
+    const litPart = fixture.debugElement.query(
+      By.css('#theme-switch-moon-lit path'),
+    ).nativeElement as SVGPathElement;
+
+    expect(litPart.getAttribute('d')).toBe(component.moon().litPath);
+    expect(component.celestialTransform()).toBe(
+      `translate(0 ${component.moon().offset})`,
+    );
+  });
+
+  it('should move the sun as time goes by', () => {
+    const noonTransform = component.celestialTransform();
+
+    vi.advanceTimersByTime(6 * 60 * 60 * 1000);
+    fixture.detectChanges();
+
+    expect(component.celestialTransform()).not.toBe(noonTransform);
   });
 
   it('should not start the chase after four quick toggles', () => {
