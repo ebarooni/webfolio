@@ -41,7 +41,7 @@ describe('ContactForm', () => {
     const emitSpy = vi.spyOn(component.formSubmitted, 'emit');
     const expectedPayload: ContactFormData = {
       email: 'max@example.com',
-      message: 'Hi there\nnext line',
+      message: 'Hi <b>there</b> 😀\nnext line',
       name: 'Max Mustermann',
     };
 
@@ -51,6 +51,29 @@ describe('ContactForm', () => {
     expect(emitSpy).toHaveBeenCalledWith(expectedPayload);
     expect(component.contactForm.getRawValue()).toEqual(validValue);
   });
+
+  it.each([
+    'Zoë Daniël',
+    'François Müller',
+    'Łukasz Nowak',
+    'Søren Kierkegaard',
+    'D’Angelo',
+    "Dr. Jane van 't Hof",
+    '李小龙',
+  ])('should accept the name %s', (name) => {
+    component.nameControl.setValue(name);
+
+    expect(component.nameControl.valid).toBe(true);
+  });
+
+  it.each(['A', 'R2-D2', '-Max', 'Max <b>', 'x'.repeat(101)])(
+    'should reject the name %s',
+    (name) => {
+      component.nameControl.setValue(name);
+
+      expect(component.nameControl.valid).toBe(false);
+    },
+  );
 
   it('should clear the form after the message was sent', () => {
     component.contactForm.setValue(validValue);
@@ -84,7 +107,7 @@ describe('ContactForm', () => {
 
     expect(emitSpy).not.toHaveBeenCalled();
     expect(errorTexts()).toEqual([
-      'Enter your name with 2 to 50 letters.',
+      'Enter your name with 2 to 100 letters.',
       'Enter a valid email address.',
       'Write a message with 2 to 1000 characters.',
     ]);

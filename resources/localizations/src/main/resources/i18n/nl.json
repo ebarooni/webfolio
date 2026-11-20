@@ -154,7 +154,7 @@
       "label": "Contactformulier",
       "name": "Naam",
       "namePlaceholder": "Jan Jansen",
-      "nameError": "Vul je naam in met 2 tot 50 letters.",
+      "nameError": "Vul je naam in met 2 tot 100 letters.",
       "email": "E-mail",
       "emailPlaceholder": "jan@jansen.nl",
       "emailError": "Vul een geldig e-mailadres in.",

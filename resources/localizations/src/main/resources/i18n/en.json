@@ -154,7 +154,7 @@
       "label": "Contact form",
       "name": "Name",
       "namePlaceholder": "Max Mustermann",
-      "nameError": "Enter your name with 2 to 50 letters.",
+      "nameError": "Enter your name with 2 to 100 letters.",
       "email": "Email",
       "emailPlaceholder": "max@mustermann.de",
       "emailError": "Enter a valid email address.",
