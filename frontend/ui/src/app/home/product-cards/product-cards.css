@@ -1,0 +1,88 @@
+.card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background: var(--color-base-200);
+  transition: background-color 200ms ease;
+
+  @media (width >= 48rem) {
+    padding: 2.5rem;
+  }
+
+  &:hover {
+    background: color-mix(
+      in srgb,
+      var(--color-base-300) 55%,
+      var(--color-base-200)
+    );
+  }
+}
+
+.card-title {
+  margin-top: -0.25rem;
+  color: var(--color-ink);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.card-arrow {
+  transition: transform 200ms ease;
+
+  .card:hover & {
+    transform: translateX(0.25rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.card-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/*
+ * The same blue to violet as the plugin page, so the two belong together.
+ * The inset matches the transparent margin around a macOS app icon.
+ */
+.calendar-icon {
+  display: grid;
+  padding: 0.3125rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #0a84ff 0%, #3d50f2 55%, #7c4dff 100%)
+    content-box;
+  filter: drop-shadow(0 8px 12px rgb(61 80 242 / 28%));
+  place-items: center;
+
+  svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-width: 1.75;
+  }
+
+  .dot {
+    fill: #fff;
+    stroke: none;
+  }
+}

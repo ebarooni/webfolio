@@ -25,14 +25,15 @@ describe('SelectedWork', () => {
     fixture.detectChanges();
   });
 
-  it('should show the featured project', () => {
-    const featured = fixture.debugElement.query(
-      By.css('app-featured-project a'),
-    ).nativeElement as HTMLAnchorElement;
+  it('should show the plugin and the app before the other projects', () => {
+    const cards = fixture.debugElement
+      .queryAll(By.css('app-product-cards a'))
+      .map((card) => card.nativeElement as HTMLAnchorElement);
 
-    expect(featured.getAttribute('href')).toBe(
+    expect(cards.map((card) => card.getAttribute('href'))).toEqual([
+      `/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
       `/${Route.APPS_BOOKMARK_STATUS}`,
-    );
+    ]);
   });
 
   it('should link to all projects', () => {
@@ -44,14 +45,14 @@ describe('SelectedWork', () => {
 
   it('should show two other projects with their short tag lists', () => {
     const rows = fixture.debugElement
-      .queryAll(By.css('li a'))
+      .queryAll(By.css('app-project-row a'))
       .map((row) => row.nativeElement as HTMLAnchorElement);
 
     expect(rows.map((row) => row.getAttribute('href'))).toEqual([
-      `/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
       'https://github.com/capawesome-team',
+      'https://github.com/ebarooni/webfolio',
     ]);
-    expect(rows[0].textContent).toContain('Capacitor · iOS · Android');
-    expect(rows[1].textContent).toContain('Capacitor · Enterprise');
+    expect(rows[0].textContent).toContain('Capacitor · Enterprise');
+    expect(rows[1].textContent).toContain('Angular · Tailwind CSS · Quarkus');
   });
 });

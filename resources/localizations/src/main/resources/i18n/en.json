@@ -20,6 +20,7 @@
     "footer": {
       "copyright": "© 2022 to {{year}} Ehsan Barooni",
       "socialLabel": "Social links",
+      "productsLabel": "Products",
       "buildInfo": "build info",
       "tapsLeft": "{{count}} more to go",
       "developerMode": "Developer mode enabled",
@@ -40,7 +41,26 @@
     },
     "work": {
       "label": "Selected work",
-      "all": "All projects"
+      "all": "All projects",
+      "products": {
+        "label": "Plugin and app",
+        "calendar": {
+          "kicker": "Open source Capacitor plugin",
+          "pitch": "Connects your Capacitor app to the native calendar on iOS and Android.",
+          "link": "View the plugin",
+          "iconAlt": "Capacitor Calendar icon",
+          "badgesLabel": "Live numbers from npm and GitHub",
+          "downloadsBadge": "npm downloads per month",
+          "starsBadge": "GitHub stars"
+        },
+        "bookmark": {
+          "kicker": "Safari extension for macOS",
+          "pitch": "Shows whether the page you are on is already bookmarked, and where.",
+          "link": "View the app",
+          "iconAlt": "Bookmark Status app icon",
+          "tags": "macOS · Safari · Read-only"
+        }
+      }
     },
     "focus": {
       "label": "What I do",

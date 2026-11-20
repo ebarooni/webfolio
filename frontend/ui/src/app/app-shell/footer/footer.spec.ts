@@ -69,7 +69,7 @@ describe('Footer', () => {
 
   it('should render every social link as a safe external link', () => {
     const anchors = fixture.debugElement
-      .queryAll(By.css('nav a'))
+      .queryAll(By.css('nav a[target="_blank"]'))
       .map((anchor) => anchor.nativeElement as HTMLAnchorElement);
 
     expect(anchors.map((anchor) => anchor.getAttribute('href'))).toEqual(
@@ -80,6 +80,24 @@ describe('Footer', () => {
       expect(anchor.target).toBe('_blank');
       expect(anchor.rel).toContain('noopener');
     }
+  });
+
+  it('should link to the plugin and the app pages', () => {
+    const productNav = fixture.debugElement.query(
+      By.css('nav[aria-label="Products"]'),
+    );
+    const anchors = productNav
+      .queryAll(By.css('a'))
+      .map((anchor) => anchor.nativeElement as HTMLAnchorElement);
+
+    expect(anchors.map((anchor) => anchor.getAttribute('href'))).toEqual([
+      `/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
+      `/${Route.APPS_BOOKMARK_STATUS}`,
+    ]);
+    expect(anchors.map((anchor) => anchor.textContent.trim())).toEqual([
+      'Capacitor Calendar',
+      'Bookmark Status',
+    ]);
   });
 
   it('should link to the uptime status page in a new tab', () => {

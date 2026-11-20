@@ -56,6 +56,13 @@ export class Footer {
   readonly versionToast = signal<VersionToast | null>(null);
 
   readonly links = SOCIAL_LINKS;
+  readonly products = [
+    {
+      title: 'Capacitor Calendar',
+      path: `/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
+    },
+    { title: 'Bookmark Status', path: `/${Route.APPS_BOOKMARK_STATUS}` },
+  ];
   readonly statusPageUrl = STATUS_PAGE_URL;
 
   constructor() {
