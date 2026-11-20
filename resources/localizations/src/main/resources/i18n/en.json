@@ -154,7 +154,7 @@
       "label": "Contact form",
       "name": "Name",
       "namePlaceholder": "Max Mustermann",
-      "nameError": "Enter your name with 2 to 50 letters.",
+      "nameError": "Enter your name with 2 to 100 letters.",
       "email": "Email",
       "emailPlaceholder": "max@mustermann.de",
       "emailError": "Enter a valid email address.",
@@ -191,6 +191,13 @@
     "submit": "Continue",
     "wrongPassword": "That password is not correct."
   },
+  "notFound": {
+    "eyebrow": "Error 404",
+    "title": "This page does not exist.",
+    "lead": "The link may be old, or the address may have a typo. These pages can help you continue.",
+    "navLabel": "Pages to continue",
+    "home": "Go to the home page"
+  },
   "pageTitles": {
     "home": "Ehsan Barooni | Full-Stack Software Engineer",
     "projects": "Projects | Ehsan Barooni",
@@ -198,6 +205,7 @@
     "post": "{{title}} | Ehsan Barooni",
     "contact": "Contact | Ehsan Barooni",
     "buildInfo": "Build info | Ehsan Barooni",
-    "accessDenied": "Access denied | Ehsan Barooni"
+    "accessDenied": "Access denied | Ehsan Barooni",
+    "notFound": "Page not found | Ehsan Barooni"
   }
 }

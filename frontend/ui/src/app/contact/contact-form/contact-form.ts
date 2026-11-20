@@ -13,6 +13,12 @@ import { Button } from '../../shared/components/button/button';
 import { FormField } from '../../shared/components/form-field/form-field';
 import { StatusMessage } from '../../shared/components/status-message/status-message';
 
+// A name starts with a letter of any script. Letters, marks, spaces,
+// apostrophes, hyphens and periods can follow, as in "Daniël", "Łukasz",
+// "D’Angelo" or "Dr. Jane van 't Hof". The backend also allows 100 characters.
+const NAME_PATTERN = /^\p{L}[\p{L}\p{M}'’. -]*$/u;
+const MAX_NAME_LENGTH = 100;
+
 export type SubmissionStatus = 'idle' | 'sent' | 'failed';
 
 export interface ContactFormData {
@@ -46,9 +52,9 @@ export class ContactForm {
     name: this.fb.control('', {
       validators: [
         (control) => Validators.required(control),
-        Validators.pattern(/^[a-zA-ZäöüÄÖÜß' -]{2,50}$/),
+        Validators.pattern(NAME_PATTERN),
         Validators.minLength(2),
-        Validators.maxLength(50),
+        Validators.maxLength(MAX_NAME_LENGTH),
       ],
       updateOn: 'blur',
     }),
@@ -105,8 +111,6 @@ export class ContactForm {
       .trim()
       // eslint-disable-next-line no-control-regex
       .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
-      .replace(/<[^>]*>/g, '')
-      .replace(/[\u{1F600}-\u{1F6FF}]/gu, '')
       .replace(/[^\S\r\n]+/g, ' ')
       .replace(/^[ \t]+|[ \t]+$/gm, '');
 
