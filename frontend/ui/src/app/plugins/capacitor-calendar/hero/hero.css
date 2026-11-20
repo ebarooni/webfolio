@@ -73,7 +73,7 @@
   box-shadow: 0 0 0 0 var(--cc-blue);
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: pulse 2.4s ease-out infinite;
+    animation: pulse 2.4s ease-out 4;
   }
 }
 

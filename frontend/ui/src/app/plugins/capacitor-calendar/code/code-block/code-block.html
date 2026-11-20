@@ -5,7 +5,7 @@
       type="button"
       class="copy-button"
       [class.copied]="copyState() === 'copied'"
-      [attr.aria-label]="'Copy ' + (label() || 'code')"
+      aria-label="Copy code"
       (click)="copy()"
     >
       @if (copyState() === 'copied') {

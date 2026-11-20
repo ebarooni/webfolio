@@ -38,7 +38,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   :host {
-    animation: install-spin 6s linear infinite;
+    animation: install-spin 6s linear 2;
   }
 }
 
@@ -89,5 +89,12 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.6;
+  }
+}
+
+/* Copy needs JavaScript. Without it, people select the command by hand. */
+@media (scripting: none) {
+  .copy {
+    display: none;
   }
 }

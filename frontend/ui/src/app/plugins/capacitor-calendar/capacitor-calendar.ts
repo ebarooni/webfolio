@@ -26,6 +26,8 @@ import { CapacitorCalendarResources } from './resources/resources';
   styleUrl: './capacitor-calendar.css',
   host: {
     class: 'flex flex-1 flex-col',
+    // The page text is English in every site language.
+    lang: 'en',
   },
 })
 export class CapacitorCalendarPage {

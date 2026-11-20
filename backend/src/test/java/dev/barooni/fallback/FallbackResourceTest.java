@@ -41,6 +41,19 @@ class FallbackResourceTest {
         .statusCode(Response.Status.OK.getStatusCode());
   }
 
+  @Test
+  void homeGetsTheApp() {
+    // With prerendered pages, the build has no root "index.html". The fallback returns the shell.
+    Assumptions.assumeTrue(hasResource("index.csr.html") || hasResource("index.html"));
+
+    given()
+        .when()
+        .get("/")
+        .then()
+        .statusCode(Response.Status.OK.getStatusCode())
+        .body(containsString("<app-root"));
+  }
+
   @ParameterizedTest
   @ValueSource(strings = {"/plugins/capacitor-calendar", "/plugins/capacitor-calendar/"})
   void prerenderedRouteGetsItsOwnPage(String path) {

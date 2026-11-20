@@ -47,3 +47,10 @@
     outline-offset: 2px;
   }
 }
+
+/* The tabs need JavaScript. Without it, only the first panel shows. */
+@media (scripting: none) {
+  .tab-list {
+    display: none;
+  }
+}

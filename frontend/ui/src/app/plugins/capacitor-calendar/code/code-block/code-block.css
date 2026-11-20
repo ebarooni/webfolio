@@ -138,3 +138,10 @@ pre {
 .token-attribute {
   color: var(--code-function);
 }
+
+/* Copy needs JavaScript. Without it, people select the code by hand. */
+@media (scripting: none) {
+  .copy-button {
+    display: none;
+  }
+}
