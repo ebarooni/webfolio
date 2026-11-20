@@ -188,7 +188,8 @@
     "title": "Diese Website ist in deiner Region nicht verfügbar.",
     "lead": "Wenn du ein Passwort hast, gib es ein, um fortzufahren.",
     "password": "Passwort",
-    "submit": "Weiter"
+    "submit": "Weiter",
+    "wrongPassword": "Das Passwort ist nicht korrekt."
   },
   "pageTitles": {
     "home": "Ehsan Barooni | Full-Stack-Softwareentwickler",

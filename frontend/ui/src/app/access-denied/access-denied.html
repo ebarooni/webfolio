@@ -23,12 +23,17 @@
           class="min-w-0 flex-[1_1_13.75rem]"
           controlId="access-password"
           [label]="t('password')"
+          [error]="isPasswordWrong() ? t('wrongPassword') : ''"
         >
           <input
             id="access-password"
             type="password"
             class="field"
             autocomplete="current-password"
+            [attr.aria-invalid]="isPasswordWrong()"
+            [attr.aria-describedby]="
+              isPasswordWrong() ? 'access-password-error' : null
+            "
             [value]="password()"
             (input)="updatePassword($event)"
           />
