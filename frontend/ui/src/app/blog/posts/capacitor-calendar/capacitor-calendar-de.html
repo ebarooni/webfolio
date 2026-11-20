@@ -1,0 +1,178 @@
+<p>
+  Viele Apps arbeiten mit Terminen: Buchungen, Verabredungen, Events, Fristen.
+  Früher oder später wünschen sich die Nutzer einen Button, der den Termin in
+  ihren eigenen Kalender einträgt. In einer Capacitor-App kommt die Web-Schicht
+  allein nicht an den Kalender des Geräts heran. Dafür brauchst du ein natives
+  Plugin.
+</p>
+
+<p>
+  Genau dafür habe ich
+  <a href="/plugins/capacitor-calendar">Capacitor Calendar</a> geschrieben, und
+  ich pflege es bis heute. Dieser Artikel stellt das Plugin vor und bringt dich
+  in wenigen Minuten von der Installation zu deinem ersten Kalendereintrag.
+</p>
+
+<h2>Was das Plugin kann</h2>
+
+<p>
+  <code>&#64;ebarooni/capacitor-calendar</code> verbindet deine Capacitor-App
+  mit dem nativen Kalender. Auf iOS und Android kannst du Termine anlegen,
+  bearbeiten und auflisten, Kalender verwalten und nach Kalenderberechtigungen
+  fragen. Auf iOS unterstützt es auch Erinnerungen. Im Web erstellt es
+  stattdessen eine <code>.ics</code>-Datei zum Herunterladen, weil ein Browser
+  nicht in einen Gerätekalender schreiben kann.
+</p>
+
+<p>
+  Es ist ein normales Capacitor-Plugin. Es funktioniert also mit Ionic, Angular,
+  React, Vue oder jedem anderen Framework, das deine Oberfläche rendert. Die
+  aktuelle Tabelle der Funktionen pro Plattform steht in der README.
+</p>
+
+<h2>Plugin installieren</h2>
+
+<p>Füge das Paket hinzu und synchronisiere die nativen Projekte:</p>
+
+<pre><code>npm install &#64;ebarooni/capacitor-calendar
+npx cap sync</code></pre>
+
+<p>
+  So installierst du die Version für die aktuelle Capacitor-Version. Nutzt deine
+  App eine ältere Capacitor-Hauptversion, zeigt dir die
+  <a
+    href="https://github.com/ebarooni/capacitor-calendar#capacitor-compatibility"
+    >Kompatibilitätstabelle</a
+  >, welches npm-Tag du installieren musst.
+</p>
+
+<h2>Berechtigungen deklarieren</h2>
+
+<p>
+  Der Kalender enthält persönliche Daten. Deshalb fragen beide Plattformen den
+  Nutzer, bevor eine App ihn verwenden darf. Deklariere zuerst, was deine App
+  braucht. Trage nur die Einträge ein, die deine App wirklich nutzt.
+</p>
+
+<h3>Android</h3>
+
+<p>
+  Füge die Kalenderberechtigungen in
+  <code>android/app/src/main/AndroidManifest.xml</code> ein:
+</p>
+
+<pre><code>&lt;uses-permission android:name="android.permission.READ_CALENDAR" /&gt;
+&lt;uses-permission android:name="android.permission.WRITE_CALENDAR" /&gt;</code></pre>
+
+<h3>iOS</h3>
+
+<p>
+  Füge Nutzungsbeschreibungen in <code>ios/App/App/Info.plist</code> ein. iOS
+  zeigt diesen Text im Berechtigungsdialog. Erkläre also, warum deine App den
+  Zugriff braucht:
+</p>
+
+<pre><code>&lt;key&gt;NSCalendarsFullAccessUsageDescription&lt;/key&gt;
+&lt;string&gt;Diese App braucht Zugriff, um deine Termine zu lesen und zu verwalten.&lt;/string&gt;</code></pre>
+
+<p>
+  iOS hat eigene Schlüssel für reinen Schreibzugriff und für Erinnerungen. Der
+  <a href="https://github.com/ebarooni/capacitor-calendar#setup"
+    >Setup-Abschnitt der README</a
+  >
+  listet sie alle auf.
+</p>
+
+<h2>Zugriff anfragen und Termin anlegen</h2>
+
+<p>
+  Jetzt der Code. Frage zuerst nach dem Zugriff und lege dann den Termin an.
+  Zeitangaben sind Unix-Zeitstempel in Millisekunden.
+</p>
+
+<pre><code>import &#123; CapacitorCalendar &#125; from '&#64;ebarooni/capacitor-calendar';
+
+const &#123; result &#125; = await CapacitorCalendar.requestFullCalendarAccess();
+
+if (result !== 'granted') &#123;
+  throw new Error('Calendar permission denied');
+&#125;
+
+// Ein Termin, der in einer Stunde beginnt und eine Stunde dauert
+const startDate = Date.now() + 60 * 60 * 1000;
+const endDate = startDate + 60 * 60 * 1000;
+
+const &#123; id &#125; = await CapacitorCalendar.createEvent(&#123;
+  title: 'Produkt-Review',
+  location: 'Büro',
+  startDate,
+  endDate,
+&#125;);</code></pre>
+
+<p>
+  Speichere die zurückgegebene <code>id</code>, wenn du den Termin später ändern
+  oder löschen willst.
+</p>
+
+<h2>Im nativen Editor bestätigen lassen</h2>
+
+<p>
+  Manchmal willst du nicht direkt in den Kalender schreiben. Vielleicht möchte
+  der Nutzer erst einen Kalender wählen, eine Erinnerung hinzufügen oder die
+  Uhrzeit ändern. Öffne dafür den nativen Termin-Editor mit bereits ausgefüllten
+  Feldern:
+</p>
+
+<pre><code>await CapacitorCalendar.createEventWithPrompt(&#123;
+  title: 'Planungsrunde',
+  location: 'Büro',
+  startDate: Date.now() + 24 * 60 * 60 * 1000,
+  endDate: Date.now() + 25 * 60 * 60 * 1000,
+&#125;);</code></pre>
+
+<p>
+  Der Nutzer sieht den vertrauten Systemdialog und speichert den Termin mit
+  einem Tipp. Im Web fragt derselbe Aufruf nach einer Bestätigung und bietet
+  eine <code>.ics</code>-Datei zum Herunterladen an.
+</p>
+
+<h2>Wie es weitergeht</h2>
+
+<p>
+  Du hast jetzt eine funktionierende Kalenderanbindung. Das Plugin kann noch
+  viel mehr, zum Beispiel Termine in einem Zeitraum auflisten, Kalender
+  verwalten oder die Kalender-App öffnen. Diese Seiten passen immer zur
+  aktuellen Version:
+</p>
+
+<ul>
+  <li>
+    <a href="https://ebarooni.github.io/capacitor-calendar/">Dokumentation</a>
+    mit Anleitungen und der vollständigen API-Referenz
+  </li>
+  <li>
+    <a href="https://github.com/ebarooni/capacitor-calendar#usage-examples"
+      >Anwendungsbeispiele</a
+    >
+    in der README
+  </li>
+  <li>
+    <a href="https://www.npmjs.com/package/@ebarooni/capacitor-calendar"
+      >Das Paket auf npm</a
+    >
+  </li>
+  <li>
+    <a href="https://github.com/ebarooni/capacitor-calendar"
+      >Der Quellcode auf GitHub</a
+    >, wo du auch Fragen stellen und Fehler melden kannst
+  </li>
+  <li>
+    <a href="/plugins/capacitor-calendar">Die Capacitor-Calendar-Seite</a> auf
+    dieser Website (auf Englisch)
+  </li>
+</ul>
+
+<p>
+  Wenn du etwas mit dem Plugin baust oder etwas nicht wie erwartet funktioniert,
+  eröffne ein Issue auf GitHub.
+</p>

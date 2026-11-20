@@ -167,6 +167,10 @@
       "moving-away-from-firebase-hosting": {
         "title": "Weg van Firebase Hosting",
         "summary": "Ik heb mijn portfoliowebsite van Firebase Hosting naar een VPS verhuisd. In dit artikel laat ik de migratie stap voor stap zien en leg ik uit waarom ik die keuze heb gemaakt."
+      },
+      "getting-started-with-capacitor-calendar": {
+        "title": "Aan de slag met Capacitor Calendar",
+        "summary": "Een introductie tot mijn plug-in Capacitor Calendar met een snelle start: installeren, toestemmingen declareren en je eerste agenda-afspraak maken."
       }
     },
     "translationMissing": "Dit artikel is nog niet vertaald. Je leest het Engelse origineel."

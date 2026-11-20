@@ -1,0 +1,174 @@
+<p>
+  Many apps deal with dates: bookings, appointments, events, deadlines. Sooner
+  or later, users ask for a button that puts that date into their own calendar.
+  In a Capacitor app, the web layer cannot reach the calendar of the device on
+  its own. You need a native plugin for that.
+</p>
+
+<p>
+  I wrote
+  <a href="/plugins/capacitor-calendar">Capacitor Calendar</a> for exactly this
+  job, and I still maintain it. This post introduces the plugin and takes you
+  from installation to your first calendar event in a few minutes.
+</p>
+
+<h2>What the Plugin Does</h2>
+
+<p>
+  <code>&#64;ebarooni/capacitor-calendar</code> connects your Capacitor app to
+  the native calendar. On iOS and Android, you can create, edit and list events,
+  manage calendars and ask for calendar permissions. On iOS, it also handles
+  reminders. On the web, it builds a downloadable <code>.ics</code> file
+  instead, because a browser cannot write to a device calendar.
+</p>
+
+<p>
+  It is a regular Capacitor plugin, so it works with Ionic, Angular, React, Vue
+  or any other framework that renders your UI. The README has the current table
+  of features per platform.
+</p>
+
+<h2>Install the Plugin</h2>
+
+<p>Add the package and sync the native projects:</p>
+
+<pre><code>npm install &#64;ebarooni/capacitor-calendar
+npx cap sync</code></pre>
+
+<p>
+  This installs the release for the current Capacitor version. If your app is on
+  an older Capacitor major, the
+  <a
+    href="https://github.com/ebarooni/capacitor-calendar#capacitor-compatibility"
+    >compatibility table</a
+  >
+  tells you which npm tag to install.
+</p>
+
+<h2>Declare the Permissions</h2>
+
+<p>
+  The calendar holds personal data, so both platforms ask the user before an app
+  can use it. First, declare what your app needs. Only add the entries that your
+  app really uses.
+</p>
+
+<h3>Android</h3>
+
+<p>
+  Add the calendar permissions to
+  <code>android/app/src/main/AndroidManifest.xml</code>:
+</p>
+
+<pre><code>&lt;uses-permission android:name="android.permission.READ_CALENDAR" /&gt;
+&lt;uses-permission android:name="android.permission.WRITE_CALENDAR" /&gt;</code></pre>
+
+<h3>iOS</h3>
+
+<p>
+  Add usage descriptions to <code>ios/App/App/Info.plist</code>. iOS shows this
+  text in the permission dialog, so explain why your app needs access:
+</p>
+
+<pre><code>&lt;key&gt;NSCalendarsFullAccessUsageDescription&lt;/key&gt;
+&lt;string&gt;This app needs permission to read and manage your calendar events.&lt;/string&gt;</code></pre>
+
+<p>
+  iOS has separate keys for write-only access and for reminders. The
+  <a href="https://github.com/ebarooni/capacitor-calendar#setup"
+    >setup section of the README</a
+  >
+  lists all of them.
+</p>
+
+<h2>Request Access and Create an Event</h2>
+
+<p>
+  Now the code. Ask for access first, then create the event. Dates are Unix
+  timestamps in milliseconds.
+</p>
+
+<pre><code>import &#123; CapacitorCalendar &#125; from '&#64;ebarooni/capacitor-calendar';
+
+const &#123; result &#125; = await CapacitorCalendar.requestFullCalendarAccess();
+
+if (result !== 'granted') &#123;
+  throw new Error('Calendar permission denied');
+&#125;
+
+// An event that starts in one hour and lasts one hour
+const startDate = Date.now() + 60 * 60 * 1000;
+const endDate = startDate + 60 * 60 * 1000;
+
+const &#123; id &#125; = await CapacitorCalendar.createEvent(&#123;
+  title: 'Product review',
+  location: 'Office',
+  startDate,
+  endDate,
+&#125;);</code></pre>
+
+<p>
+  Keep the returned <code>id</code> if you want to change or delete the event
+  later.
+</p>
+
+<h2>Let the User Confirm in the Native Editor</h2>
+
+<p>
+  Sometimes you do not want to write to the calendar directly. The user may want
+  to pick a calendar, add an alert or change the time first. For that, open the
+  native event editor with the event already filled in:
+</p>
+
+<pre><code>await CapacitorCalendar.createEventWithPrompt(&#123;
+  title: 'Planning session',
+  location: 'Office',
+  startDate: Date.now() + 24 * 60 * 60 * 1000,
+  endDate: Date.now() + 25 * 60 * 60 * 1000,
+&#125;);</code></pre>
+
+<p>
+  The user sees the familiar system screen and saves the event with one tap. On
+  the web, the same call asks for confirmation and gives an
+  <code>.ics</code> file to download.
+</p>
+
+<h2>Where to Go Next</h2>
+
+<p>
+  You now have a working calendar integration. The plugin can do much more, for
+  example list the events in a date range, manage calendars or open the calendar
+  app. These pages always match the current release:
+</p>
+
+<ul>
+  <li>
+    <a href="https://ebarooni.github.io/capacitor-calendar/">Documentation</a>
+    with guides and the full API reference
+  </li>
+  <li>
+    <a href="https://github.com/ebarooni/capacitor-calendar#usage-examples"
+      >Usage examples</a
+    >
+    in the README
+  </li>
+  <li>
+    <a href="https://www.npmjs.com/package/@ebarooni/capacitor-calendar"
+      >The package on npm</a
+    >
+  </li>
+  <li>
+    <a href="https://github.com/ebarooni/capacitor-calendar"
+      >The source code on GitHub</a
+    >, where you can also ask questions and report bugs
+  </li>
+  <li>
+    <a href="/plugins/capacitor-calendar">The Capacitor Calendar page</a> on
+    this site
+  </li>
+</ul>
+
+<p>
+  If you build something with the plugin, or if something does not work as you
+  expect, open an issue on GitHub.
+</p>

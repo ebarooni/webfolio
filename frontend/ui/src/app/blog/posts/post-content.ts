@@ -5,6 +5,9 @@ import { Posts } from '../post-catalog';
 import { AstroToAngular } from './astro-to-angular/astro-to-angular';
 import { AstroToAngularDe } from './astro-to-angular/astro-to-angular-de';
 import { AstroToAngularNl } from './astro-to-angular/astro-to-angular-nl';
+import { CapacitorCalendarPost } from './capacitor-calendar/capacitor-calendar';
+import { CapacitorCalendarPostDe } from './capacitor-calendar/capacitor-calendar-de';
+import { CapacitorCalendarPostNl } from './capacitor-calendar/capacitor-calendar-nl';
 import { VpsHosting } from './vps-hosting/vps-hosting';
 import { VpsHostingDe } from './vps-hosting/vps-hosting-de';
 import { VpsHostingNl } from './vps-hosting/vps-hosting-nl';
@@ -23,6 +26,11 @@ export const POST_CONTENT: Readonly<Record<Posts, PostTranslations>> = {
     de: AstroToAngularDe,
     en: AstroToAngular,
     nl: AstroToAngularNl,
+  },
+  [Posts.CAPACITOR_CALENDAR]: {
+    de: CapacitorCalendarPostDe,
+    en: CapacitorCalendarPost,
+    nl: CapacitorCalendarPostNl,
   },
   [Posts.VPS_HOSTING]: {
     de: VpsHostingDe,

@@ -3,6 +3,7 @@ import { Language } from '../config/languages';
 export enum Posts {
   ASTRO_TO_ANGULAR,
   VPS_HOSTING,
+  CAPACITOR_CALENDAR,
 }
 
 // The title and the summary of each post are in the localization files,
@@ -34,6 +35,13 @@ const UNSORTED_POSTS: readonly BlogPostPreview[] = [
     languages: ['en', 'de', 'nl'],
     readTime: 10,
     slug: 'moving-away-from-firebase-hosting',
+  },
+  {
+    date: new Date('2026-11-20'),
+    id: Posts.CAPACITOR_CALENDAR,
+    languages: ['en', 'de', 'nl'],
+    readTime: 5,
+    slug: 'getting-started-with-capacitor-calendar',
   },
 ];
 
