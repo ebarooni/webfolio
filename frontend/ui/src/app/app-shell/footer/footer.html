@@ -40,22 +40,7 @@
       </ul>
     </nav>
 
-    <div class="flex flex-wrap items-center gap-x-4">
-      <nav [attr.aria-label]="t('productsLabel')">
-        <ul class="flex flex-wrap gap-x-4">
-          @for (product of products; track product.path) {
-            <li>
-              <a
-                class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
-                [routerLink]="product.path"
-              >
-                {{ product.title }}
-              </a>
-            </li>
-          }
-        </ul>
-      </nav>
-
+    <div class="flex items-center gap-4">
       <a
         class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
         [href]="statusPageUrl"

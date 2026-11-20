@@ -20,7 +20,6 @@
     "footer": {
       "copyright": "© 2022 tot {{year}} Ehsan Barooni",
       "socialLabel": "Sociale netwerken",
-      "productsLabel": "Producten",
       "buildInfo": "build-info",
       "tapsLeft": "Nog {{count}}",
       "developerMode": "Ontwikkelaarsmodus ingeschakeld",

@@ -20,7 +20,6 @@
     "footer": {
       "copyright": "© 2022 to {{year}} Ehsan Barooni",
       "socialLabel": "Social links",
-      "productsLabel": "Products",
       "buildInfo": "build info",
       "tapsLeft": "{{count}} more to go",
       "developerMode": "Developer mode enabled",
