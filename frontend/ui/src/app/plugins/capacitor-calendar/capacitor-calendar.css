@@ -1,0 +1,38 @@
+/* The colors of this page. The child components read them. */
+:host {
+  --cc-blue: #0a84ff;
+  --cc-indigo: #3d50f2;
+  --cc-violet: #7c4dff;
+  --cc-gradient: linear-gradient(105deg, #0a84ff 0%, #3d50f2 50%, #7c4dff 100%);
+  --cc-on-gradient: #fff;
+  --cc-blue-text: #0063cc;
+  --cc-violet-text: #5b2fd6;
+  --cc-success: #1f7a37;
+  --cc-glow: rgb(10 132 255 / 22%);
+  --cc-glow-2: rgb(124 77 255 / 16%);
+  --cc-grid: rgb(15 23 42 / 6%);
+  --cc-chip: rgb(10 132 255 / 8%);
+  --cc-chip-border: rgb(10 132 255 / 22%);
+  --cc-chip-text: #0063cc;
+  --cc-glass: rgb(255 255 255 / 78%);
+  --cc-glass-border: rgb(15 23 42 / 10%);
+}
+
+:host-context([data-theme="dark"]) {
+  --cc-blue: #4fb3ff;
+  --cc-indigo: #9db4ff;
+  --cc-violet: #b69cff;
+  --cc-gradient: linear-gradient(105deg, #4fb3ff 0%, #9db4ff 50%, #c7a8ff 100%);
+  --cc-on-gradient: #0b0c0f;
+  --cc-blue-text: #7cc6ff;
+  --cc-violet-text: #c7b3ff;
+  --cc-success: #6fd08c;
+  --cc-glow: rgb(79 179 255 / 22%);
+  --cc-glow-2: rgb(182 156 255 / 16%);
+  --cc-grid: rgb(255 255 255 / 5%);
+  --cc-chip: rgb(79 179 255 / 10%);
+  --cc-chip-border: rgb(79 179 255 / 26%);
+  --cc-chip-text: #8fd0ff;
+  --cc-glass: rgb(26 28 36 / 78%);
+  --cc-glass-border: rgb(255 255 255 / 10%);
+}

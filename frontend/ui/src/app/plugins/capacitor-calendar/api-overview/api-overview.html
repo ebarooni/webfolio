@@ -1,0 +1,72 @@
+<section
+  id="api"
+  class="page-container py-20 lg:py-28"
+  aria-labelledby="api-title"
+>
+  <app-section-heading
+    label="API overview"
+    title="One import. Every calendar call."
+    [lead]="lead"
+    headingId="api-title"
+  />
+
+  <div class="toolbar">
+    <fieldset class="filter">
+      <legend class="sr-only">Show the methods of a platform</legend>
+      @for (option of filters; track option) {
+        <label class="filter-option">
+          <input
+            type="radio"
+            name="api-platform"
+            [value]="option"
+            [checked]="filter() === option"
+            (change)="filter.set(option)"
+          />
+          {{ option }}
+        </label>
+      }
+    </fieldset>
+    <p class="meta-label" aria-live="polite">
+      {{ matchCount() }} methods
+      {{ filter() === 'All' ? 'in total' : 'on ' + filter() }}
+    </p>
+  </div>
+
+  <div class="groups">
+    @for (group of groups; track group.id) {
+      <section
+        class="group scroll-reveal"
+        [attr.aria-labelledby]="'api-' + group.id"
+      >
+        <header class="group-header">
+          <h3 class="group-title" [id]="'api-' + group.id">
+            {{ group.title }}
+          </h3>
+          <p class="group-description">{{ group.description }}</p>
+        </header>
+        <ul class="methods">
+          @for (method of group.methods; track method.name) {
+            <li class="method" [class.unavailable]="!isAvailable(method)">
+              <a class="method-link" [href]="methodUrl(method)" rel="noopener">
+                <code class="method-name">{{ method.name }}</code>
+                <span class="method-summary">{{ method.summary }}</span>
+              </a>
+              <span class="platforms">
+                @for (platform of method.platforms; track platform) {
+                  <span class="platform">{{ platform }}</span>
+                }
+              </span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+
+  <p class="mt-8">
+    <a class="reference-link focus-ring" [href]="referenceUrl" rel="noopener">
+      Full API reference with every option and type
+      <span aria-hidden="true">↗</span>
+    </a>
+  </p>
+</section>

@@ -159,6 +159,27 @@
   color: var(--color-error);
 }
 
+/*
+ * Fades a block in while it scrolls into view. Only browsers with
+ * scroll-driven animations run it, and never with reduced motion.
+ */
+@keyframes scroll-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@utility scroll-reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation: scroll-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
 @utility fact-value {
   font-size: 1.75rem;
   line-height: 1.15;

@@ -1,0 +1,52 @@
+<section
+  id="quick-start"
+  class="page-container py-20 lg:py-28"
+  aria-labelledby="quick-start-title"
+>
+  <app-section-heading
+    label="Quick start"
+    title="From install to the first event in three steps."
+    lead="Install the package, declare the permissions, then call the API. Every sample here comes from the plugin README, so you can copy it as it is."
+    headingId="quick-start-title"
+  />
+
+  <ol class="steps">
+    <li class="step">
+      <div class="step-text">
+        <span class="step-number" aria-hidden="true">1</span>
+        <h3 class="step-title">Install the plugin</h3>
+        <p>
+          Add the package and sync the native projects. On
+          {{ olderCapacitor.capacitor }}, install the
+          <code>{{ olderCapacitor.tag }}</code> tag instead.
+        </p>
+      </div>
+      <app-code-tabs name="install" [tabs]="installTabs" />
+    </li>
+
+    <li class="step">
+      <div class="step-text">
+        <span class="step-number" aria-hidden="true">2</span>
+        <h3 class="step-title">Declare the permissions</h3>
+        <p>
+          The plugin uses the native calendar APIs. Add the usage descriptions
+          on iOS and the calendar permissions on Android. If you only create
+          events on iOS, the write-only key is enough.
+        </p>
+      </div>
+      <app-code-tabs name="permissions" [tabs]="permissionTabs" />
+    </li>
+
+    <li class="step">
+      <div class="step-text">
+        <span class="step-number" aria-hidden="true">3</span>
+        <h3 class="step-title">Call the API</h3>
+        <p>
+          Request access, then create, list or edit events. Dates are Unix
+          timestamps in milliseconds.
+        </p>
+      </div>
+      <app-code-tabs name="usage" [tabs]="quickStartTabs" />
+    </li>
+  </ol>
+</section>

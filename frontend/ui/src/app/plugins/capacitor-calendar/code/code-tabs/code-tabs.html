@@ -1,0 +1,28 @@
+<div #tabList class="tab-list" role="tablist" [attr.aria-label]="name()">
+  @for (tab of tabs(); track tab.id; let index = $index) {
+    <button
+      type="button"
+      role="tab"
+      class="tab"
+      [id]="name() + '-tab-' + tab.id"
+      [attr.aria-selected]="index === selectedIndex()"
+      [attr.aria-controls]="name() + '-panel'"
+      [attr.tabindex]="index === selectedIndex() ? 0 : -1"
+      (click)="select(index)"
+      (keydown)="moveFocus($event, tabList)"
+    >
+      {{ tab.title }}
+    </button>
+  }
+</div>
+<div
+  role="tabpanel"
+  [id]="name() + '-panel'"
+  [attr.aria-labelledby]="name() + '-tab-' + selected().id"
+>
+  <app-code-block
+    [code]="selected().code"
+    [language]="selected().language"
+    [label]="selected().label"
+  />
+</div>

@@ -1,0 +1,104 @@
+<section class="hero" aria-labelledby="hero-title">
+  <div class="page-container hero-grid">
+    <div class="flex min-w-0 flex-col items-start gap-7">
+      <nav aria-label="Breadcrumb">
+        <ol class="meta-label flex flex-wrap items-center gap-2">
+          <li>
+            <a
+              class="focus-ring rounded hover:text-ink"
+              [routerLink]="projectsLink"
+              >Work</a
+            >
+          </li>
+          <li aria-hidden="true">/</li>
+          <li><span aria-current="page">Capacitor Calendar</span></li>
+        </ol>
+      </nav>
+
+      <p class="eyebrow">
+        <span class="pulse" aria-hidden="true"></span>
+        Open source Capacitor plugin
+      </p>
+
+      <h1 id="hero-title" class="title">
+        Native calendar events for
+        <span class="gradient-text">Capacitor apps.</span>
+      </h1>
+
+      <p class="max-w-[54ch] text-lead leading-[1.55] text-pretty">
+        Create, edit, list and delete events on iOS and Android. Manage
+        calendars and permissions, use Apple Reminders on iOS, and export
+        <code class="inline-code">.ics</code> files on the web. One typed API
+        for every platform.
+      </p>
+
+      <app-install-command
+        class="w-full max-w-[30rem]"
+        [command]="installCommand"
+      />
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a appButton [routerLink]="pageLink" fragment="quick-start">
+          Get started
+          <app-arrow-icon direction="down" />
+        </a>
+        <a class="ghost-button focus-ring" [href]="links.docs" rel="noopener">
+          Documentation
+          <app-arrow-icon direction="external" />
+        </a>
+        <a
+          class="icon-button focus-ring"
+          [href]="links.github"
+          rel="noopener"
+          aria-label="Capacitor Calendar on GitHub"
+        >
+          <app-brand-icon brand="github" />
+        </a>
+        <a
+          class="icon-button focus-ring"
+          [href]="links.npm"
+          rel="noopener"
+          aria-label="Capacitor Calendar on npm"
+        >
+          <app-brand-icon brand="npm" />
+        </a>
+      </div>
+    </div>
+
+    <app-hero-visual />
+  </div>
+
+  <div class="page-container">
+    <dl class="stats">
+      @for (stat of stats; track stat.label) {
+        <div class="stat">
+          <dt class="order-2 text-[0.9375rem] text-muted">{{ stat.label }}</dt>
+          <dd class="stat-value">{{ stat.value }}</dd>
+        </div>
+      }
+    </dl>
+
+    <ul class="badges" aria-label="Live package statistics">
+      @for (badge of badges; track badge.label) {
+        <li>
+          <a
+            class="focus-ring block rounded"
+            [href]="badge.href"
+            rel="noopener"
+          >
+            <!-- NgOptimizedImage needs a width. A live badge has no fixed width. -->
+            <!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
+            <img
+              [src]="badge.image"
+              [alt]="badge.label"
+              height="20"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- eslint-enable @angular-eslint/template/prefer-ngsrc -->
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,89 @@
+<section
+  id="platforms"
+  class="page-container py-20 lg:py-28"
+  aria-labelledby="platforms-title"
+>
+  <app-section-heading
+    label="Platforms"
+    title="Built for iOS and Android. Useful on the web."
+    lead="The native platforms get the full calendar. The browser gets an .ics file that every calendar app can import."
+    headingId="platforms-title"
+  />
+
+  <div class="layout">
+    <div
+      class="table-wrap scroll-reveal"
+      tabindex="0"
+      role="region"
+      aria-labelledby="matrix-caption"
+    >
+      <table>
+        <caption id="matrix-caption" class="sr-only">
+          Capabilities of the plugin on each platform
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Capability</th>
+            <th scope="col">iOS</th>
+            <th scope="col">Android</th>
+            <th scope="col">Web</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of capabilities; track row.capability) {
+            <tr>
+              <th scope="row">{{ row.capability }}</th>
+              @for (support of [row.ios, row.android, row.web]; track $index) {
+                <td>
+                  <span [class]="'support support-' + support">
+                    @switch (support) {
+                      @case ('yes') {
+                        <svg viewBox="0 0 20 20" aria-hidden="true">
+                          <path d="M4.5 10.5l3.5 3.5 7.5-8" />
+                        </svg>
+                      }
+                      @case ('partial') {
+                        <span aria-hidden="true">.ics</span>
+                      }
+                      @default {
+                        <span aria-hidden="true">–</span>
+                      }
+                    }
+                    <span class="sr-only">{{ supportLabel(support) }}</span>
+                  </span>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="side">
+      <section class="panel scroll-reveal" aria-labelledby="versions-title">
+        <h3 id="versions-title" class="panel-title">Capacitor versions</h3>
+        <p class="panel-lead">Match the npm tag to your Capacitor major.</p>
+        <ul class="versions">
+          @for (version of compatibility; track version.tag) {
+            <li>
+              <span class="version-name">{{ version.capacitor }}</span>
+              <code class="tag">{{ version.tag }}</code>
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="panel scroll-reveal" aria-labelledby="requirements-title">
+        <h3 id="requirements-title" class="panel-title">Requirements</h3>
+        <dl class="requirements">
+          @for (requirement of requirements; track requirement.label) {
+            <div>
+              <dt>{{ requirement.label }}</dt>
+              <dd>{{ requirement.value }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+    </div>
+  </div>
+</section>

@@ -19,7 +19,7 @@ const UNSORTED_PROJECTS: readonly CatalogProject[] = [
   {
     id: 'capacitor-calendar',
     title: 'Capacitor Calendar Plugin',
-    href: 'https://github.com/ebarooni/capacitor-calendar',
+    internalPath: `/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
     tags: ['Capacitor', 'iOS', 'Android'],
   },
   {

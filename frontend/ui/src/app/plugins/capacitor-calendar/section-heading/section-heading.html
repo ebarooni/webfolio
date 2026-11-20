@@ -1,0 +1,10 @@
+<p class="section-label">{{ label() }}</p>
+<h2
+  class="text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance text-ink"
+  [id]="headingId()"
+>
+  {{ title() }}
+</h2>
+@if (lead()) {
+  <p class="max-w-[58ch] text-lead leading-[1.55] text-pretty">{{ lead() }}</p>
+}

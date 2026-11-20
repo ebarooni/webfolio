@@ -1,0 +1,121 @@
+/* A dark band in both themes, to break the rhythm of the page. */
+:host {
+  display: block;
+  padding: 0 clamp(0.5rem, 2vw, 1.25rem);
+}
+
+.band {
+  position: relative;
+  padding: clamp(4rem, 9vw, 7rem) 0;
+  overflow: clip;
+  border-radius: 2rem;
+  background: #0b0d12;
+  color: #b8bfcc;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -30% -10% auto 40%;
+    height: 40rem;
+    background:
+      radial-gradient(
+        closest-side at 60% 40%,
+        rgb(17 158 255 / 30%),
+        transparent
+      ),
+      radial-gradient(
+        closest-side at 30% 60%,
+        rgb(124 77 255 / 24%),
+        transparent
+      );
+  }
+}
+
+.band-grid {
+  display: grid;
+  gap: 3rem;
+
+  @media (width >= 64rem) {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 4rem;
+  }
+}
+
+.label {
+  color: #8b93a3;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+}
+
+.title {
+  color: #f3f4f6;
+  font-size: clamp(2rem, 4.4vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.lead {
+  max-width: 46ch;
+  font-size: var(--text-lead);
+  line-height: 1.55;
+}
+
+.link {
+  color: #f3f4f6;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 25%);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+
+  &:hover {
+    color: #9db4ff;
+  }
+
+  &:focus-visible {
+    border-radius: 0.25rem;
+    outline: 2px solid #9db4ff;
+    outline-offset: 3px;
+  }
+}
+
+.reasons {
+  display: grid;
+  gap: 1rem;
+
+  @media (width >= 40rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.reason {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 1.25rem;
+  background: rgb(255 255 255 / 4%);
+  backdrop-filter: blur(8px);
+}
+
+.reason-index {
+  color: #4fb3ff;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.reason-title {
+  color: #f3f4f6;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.reason-body {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}

@@ -48,7 +48,7 @@ describe('SelectedWork', () => {
       .map((row) => row.nativeElement as HTMLAnchorElement);
 
     expect(rows.map((row) => row.getAttribute('href'))).toEqual([
-      'https://github.com/ebarooni/capacitor-calendar',
+      `/${Route.PLUGINS_CAPACITOR_CALENDAR}`,
       'https://github.com/capawesome-team',
     ]);
     expect(rows[0].textContent).toContain('Capacitor · iOS · Android');
