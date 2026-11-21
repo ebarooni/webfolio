@@ -1,7 +1,4 @@
-import {
-  accessDeniedGuard,
-  geoAccessGuard,
-} from './access-denied/geo-access-guard';
+import { accessDeniedGuard, accessGuard } from './access-denied/access-guard';
 import { postExistsGuard } from './blog/post/post-exists-guard';
 import { Route } from './config/route';
 import { Routes } from '@angular/router';
@@ -22,8 +19,8 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [geoAccessGuard],
-    canActivateChild: [geoAccessGuard],
+    canActivate: [accessGuard],
+    canActivateChild: [accessGuard],
     loadComponent: () =>
       import('./app-shell/app-shell').then((m) => m.AppShell),
     children: [
