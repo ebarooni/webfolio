@@ -1,9 +1,6 @@
 import { Routes } from '@angular/router';
 
-import {
-  accessDeniedGuard,
-  geoAccessGuard,
-} from './access-denied/geo-access-guard';
+import { accessDeniedGuard, accessGuard } from './access-denied/access-guard';
 import { bookmarkStatusSeo } from './apps/bookmark-status/bookmark-status.seo';
 import { postExistsGuard } from './blog/post/post-exists-guard';
 import { DEFAULT_LANGUAGE, Language, languages } from './config/languages';
@@ -161,8 +158,8 @@ export const routes: Routes = [
     // One shell for all languages, so the navbar stays on the screen when
     // the language changes.
     path: '',
-    canActivate: [geoAccessGuard],
-    canActivateChild: [geoAccessGuard],
+    canActivate: [accessGuard],
+    canActivateChild: [accessGuard],
     loadComponent: () =>
       import('./app-shell/app-shell').then((m) => m.AppShell),
     children: languageRoutes(),
