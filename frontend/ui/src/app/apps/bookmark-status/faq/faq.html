@@ -5,11 +5,11 @@
 >
   <div class="bookmark-status-wrap">
     <div class="bookmark-status-section-head" appReveal>
-      <span class="bookmark-status-eyebrow">{{ copy.faq.eyebrow }}</span>
-      <h2 id="faq-title">{{ copy.faq.title }}</h2>
+      <span class="bookmark-status-eyebrow">{{ copy().faq.eyebrow }}</span>
+      <h2 id="faq-title">{{ copy().faq.title }}</h2>
     </div>
     <div class="questions">
-      @for (item of copy.faq.items; track item.question) {
+      @for (item of copy().faq.items; track item.question) {
         <details [open]="item.open" appReveal>
           <summary>
             {{ item.question }}
@@ -33,23 +33,23 @@
             }
             @if (item.kind === 'add') {
               <p>
-                {{ copy.faq.addBefore }}
+                {{ copy().faq.addBefore }}
                 <app-bookmark-status-keys
-                  [label]="copy.faq.addKeysLabel"
-                  [keys]="copy.faq.addKeys"
+                  [label]="copy().faq.addKeysLabel"
+                  [keys]="copy().faq.addKeys"
                 />
-                {{ copy.faq.addBetween }}
+                {{ copy().faq.addBetween }}
                 <app-bookmark-status-keys
-                  [label]="copy.faq.editorKeysLabel"
-                  [keys]="copy.faq.editorKeys"
+                  [label]="copy().faq.editorKeysLabel"
+                  [keys]="copy().faq.editorKeys"
                 />
-                {{ copy.faq.addAfter }}
+                {{ copy().faq.addAfter }}
               </p>
             }
             @if (item.kind === 'match') {
               <p>
-                {{ copy.faq.matchBefore }}<code>#</code
-                >{{ copy.faq.matchAfter }}
+                {{ copy().faq.matchBefore }}<code>#</code
+                >{{ copy().faq.matchAfter }}
               </p>
             }
           </div>

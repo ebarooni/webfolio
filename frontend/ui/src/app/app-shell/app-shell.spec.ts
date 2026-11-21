@@ -14,9 +14,11 @@ import { localizationTestingModule } from '../../testing/localization-testing';
 import type { Language } from '../config/languages';
 import { Route } from '../config/route';
 import type { Theme } from '../config/themes-array';
+import { SiteLanguage } from '../localization/site-language';
 import { AppStore } from '../store/app/app.store';
 import { AppShell } from './app-shell';
 import { Footer } from './footer/footer';
+import { LanguageSuggestion } from './language-suggestion/language-suggestion';
 import { Navbar } from './navbar/navbar';
 
 @Component({
@@ -39,6 +41,14 @@ class MockFooter {
   readonly version = input.required<string>();
   readonly developerMode = input.required<boolean>();
   readonly developerModeEnabled = output();
+}
+
+@Component({
+  selector: 'app-language-suggestion',
+  template: '',
+})
+class MockLanguageSuggestion {
+  readonly pageExists = input(true);
 }
 
 @Component({
@@ -106,8 +116,15 @@ describe('AppShell', () => {
       ],
     })
       .overrideComponent(AppShell, {
-        remove: { imports: [Navbar, Footer, RouterOutlet] },
-        add: { imports: [MockNavbar, MockFooter, RouterOutlet] },
+        remove: { imports: [Navbar, Footer, LanguageSuggestion, RouterOutlet] },
+        add: {
+          imports: [
+            MockNavbar,
+            MockFooter,
+            MockLanguageSuggestion,
+            RouterOutlet,
+          ],
+        },
       })
       .compileComponents();
 
@@ -138,16 +155,16 @@ describe('AppShell', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
-  it('should set the document language from the current language', () => {
-    expect(document.documentElement.getAttribute('lang')).toBe('en');
-
-    language.set('de');
+  it('should give the navbar the language of the page, not the stored one', async () => {
+    language.set('nl');
+    await TestBed.inject(SiteLanguage).activate('de');
     fixture.detectChanges();
 
+    expect(navbar().selectedLanguage()).toBe('de');
     expect(document.documentElement.getAttribute('lang')).toBe('de');
   });
 
-  it('should forward theme and language changes to the app store', () => {
+  it('should store the theme and the language that the visitor chose', () => {
     navbar().themeChanged.emit('dark');
     navbar().languageChanged.emit('de');
 

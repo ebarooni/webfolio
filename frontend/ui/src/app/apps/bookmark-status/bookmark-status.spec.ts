@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Meta, Title } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Route } from '../../config/route';
+import { SiteLanguage } from '../../localization/site-language';
 import { AppStore } from '../../store/app/app.store';
-import { routes } from '../../app.routes';
+import { localizationTestingModule } from '../../../testing/localization-testing';
+import { pageRoutesOf } from '../../../testing/page-routes';
 import { BookmarkStatusPage } from './bookmark-status';
-import { APP_STORE_URL, PAGE_TITLE } from './bookmark-status.copy';
+import { APP_STORE_URL } from './bookmark-status.copy';
+import { bookmarkStatusSeo } from './bookmark-status.seo';
 
 describe('BookmarkStatusPage', () => {
   let fixture: ComponentFixture<BookmarkStatusPage>;
@@ -18,7 +20,7 @@ describe('BookmarkStatusPage', () => {
     localStorage.clear();
 
     await TestBed.configureTestingModule({
-      imports: [BookmarkStatusPage],
+      imports: [BookmarkStatusPage, localizationTestingModule()],
       providers: [provideRouter([])],
     }).compileComponents();
 
@@ -38,8 +40,7 @@ describe('BookmarkStatusPage', () => {
   });
 
   it('registers the lazy route before the wildcard', () => {
-    const shell = routes.find((route) => route.path === '');
-    const children = shell?.children ?? [];
+    const children = pageRoutesOf('en');
     const page = children.find((route) => {
       return route.path === Route.APPS_BOOKMARK_STATUS;
     });
@@ -48,9 +49,10 @@ describe('BookmarkStatusPage', () => {
       return route.path === Route.APPS_BOOKMARK_STATUS;
     });
 
-    expect(page?.title).toBe(PAGE_TITLE);
+    expect(page?.title).toBe('pageTitles.bookmarkStatus');
     expect(page?.data).toEqual({
       page: Route.APPS_BOOKMARK_STATUS,
+      seo: { kind: 'landing', seo: bookmarkStatusSeo },
     });
     expect(pageIndex).toBeGreaterThan(-1);
     expect(pageIndex).toBeLessThan(wildcardIndex);
@@ -100,23 +102,37 @@ describe('BookmarkStatusPage', () => {
     expect(text).not.toContain('Stop saving the same page twice');
   });
 
-  it('publishes title, description, canonical, and JSON-LD without offers', () => {
-    const title = TestBed.inject(Title);
-    const meta = TestBed.inject(Meta);
-    const description = meta.getTag('name="description"');
-    const canonical = document.querySelector('link[rel="canonical"]');
-    const script = document.querySelector('script[type="application/ld+json"]');
-    const jsonLd = JSON.parse(script?.textContent ?? '{}') as {
+  it('shows the page in the language of the address', async () => {
+    await TestBed.inject(SiteLanguage).activate('nl');
+    fixture.detectChanges();
+
+    const title = fixture.debugElement.query(By.css('h1'))
+      .nativeElement as HTMLHeadingElement;
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+
+    expect(title.textContent).toContain('Al een bladwijzer?');
+    expect(text).toContain('macOS Ventura 13 of nieuwer');
+    expect(text).toContain('Je bladwijzers verlaten nooit je Mac.');
+  });
+
+  it('gives a description and JSON-LD in each language, without offers', () => {
+    const url = 'https://barooni.dev/de/apps/safari-bookmark-status';
+    const seo = bookmarkStatusSeo('de', url);
+    const jsonLd = seo.jsonLd as {
+      url?: string;
+      inLanguage?: string;
       downloadUrl?: string;
       offers?: unknown;
       aggregateRating?: unknown;
     };
 
-    expect(title.getTitle()).toBe(PAGE_TITLE);
-    expect(description?.content).toContain('already in your Safari bookmarks');
-    expect(canonical?.getAttribute('href')).toBe(
-      'https://barooni.dev/apps/safari-bookmark-status',
-    );
+    expect(
+      bookmarkStatusSeo('en', 'https://barooni.dev/apps/safari-bookmark-status')
+        .description,
+    ).toContain('already in your Safari bookmarks');
+    expect(seo.description).toContain('Safari-Lesezeichen');
+    expect(jsonLd.url).toBe(url);
+    expect(jsonLd.inLanguage).toBe('de');
     expect(jsonLd.downloadUrl).toBe(APP_STORE_URL);
     expect(jsonLd.offers).toBeUndefined();
     expect(jsonLd.aggregateRating).toBeUndefined();

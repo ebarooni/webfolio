@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+
+import { injectCopy } from '../../../localization/localized-copy';
 
 import { SectionHeading } from '../section-heading/section-heading';
-import { answerParts, FAQ } from './faq.content';
+import { answerParts, FAQ_COPY } from './faq.content';
 
 @Component({
   selector: 'app-capacitor-calendar-faq',
@@ -10,8 +12,11 @@ import { answerParts, FAQ } from './faq.content';
   styleUrl: './faq.css',
 })
 export class CapacitorCalendarFaq {
-  readonly entries = FAQ.map((entry) => ({
-    ...entry,
-    parts: answerParts(entry.answer),
-  }));
+  readonly copy = injectCopy(FAQ_COPY);
+  readonly entries = computed(() =>
+    this.copy().entries.map((entry) => ({
+      ...entry,
+      parts: answerParts(entry.answer),
+    })),
+  );
 }

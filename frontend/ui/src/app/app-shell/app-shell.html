@@ -1,7 +1,7 @@
 <!--
-  The navbar and the footer show the stored language, theme and developer
-  mode. A prerendered page has only the defaults, so the browser renders
-  these two again instead of reusing the server markup.
+  The navbar and the footer show the stored theme and developer mode. A
+  prerendered page has only the defaults, so the browser renders these two
+  again instead of reusing the server markup.
 -->
 <header class="site-header-transition fixed top-0 z-10 w-full">
   <app-navbar
@@ -24,3 +24,6 @@
   [developerMode]="developerMode()"
   (developerModeEnabled)="developerModeEnabled()"
 />
+
+<!-- A fixed card at the bottom of the screen, see LanguageSuggestion. -->
+<app-language-suggestion [pageExists]="uiConfig().page !== notFoundPage" />

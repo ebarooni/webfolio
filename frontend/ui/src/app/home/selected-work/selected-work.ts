@@ -7,10 +7,12 @@ import { findProject } from '../../projects/project-catalog';
 import { ProjectRow } from '../../projects/project-row/project-row';
 import { ArrowLink } from '../../shared/components/arrow-link/arrow-link';
 import { ProductCards } from '../product-cards/product-cards';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 @Component({
   selector: 'app-selected-work',
   imports: [
+    LocalizePathPipe,
     ArrowLink,
     ProductCards,
     ProjectRow,

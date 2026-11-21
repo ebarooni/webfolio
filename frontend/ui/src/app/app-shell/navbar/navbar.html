@@ -15,7 +15,7 @@
       @for (item of navItems; track item.labelKey) {
         <a
           class="focus-ring flex min-h-10 flex-1 items-center justify-center rounded-[0.625rem] px-1 text-sm font-medium whitespace-nowrap hover:bg-base-300 hover:text-ink lg:min-h-9 lg:flex-none lg:px-4"
-          [routerLink]="item.link"
+          [routerLink]="item.link | localizePath"
           [fragment]="item.fragment"
           [routerLinkActive]="item.fragment ? '' : ['bg-base-200', 'text-ink']"
         >

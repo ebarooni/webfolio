@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 
+import { SiteLanguage } from '../../../../localization/site-language';
 import type { Theme } from '../../../../config/themes-array';
 import { Reveal } from '../../../../shared/reveal/reveal';
 import { searchCardCopy } from './search-card.copy';
@@ -13,9 +14,14 @@ import { BookmarkStatusShot } from '../../shot/shot';
 })
 export class BookmarkStatusSearchCard {
   readonly theme = input.required<Theme>();
-  readonly copy = {
-    features: {
-      search: searchCardCopy,
-    },
-  };
+  private readonly language = inject(SiteLanguage).current;
+  readonly copy = computed(() => {
+    const language = this.language();
+
+    return {
+      features: {
+        search: searchCardCopy[language],
+      },
+    };
+  });
 }

@@ -17,6 +17,7 @@ import { Github } from './github/github';
 import { Gitlab } from './gitlab/gitlab';
 import { Linkedin } from './linkedin/linkedin';
 import { Stackoverflow } from './stackoverflow/stackoverflow';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 type VersionToast = Readonly<
   { kind: 'tapsLeft'; count: number } | { kind: 'developerMode' }
@@ -30,6 +31,7 @@ const DEVELOPER_MODE_TOAST_MS = 3000;
 @Component({
   selector: 'app-footer',
   imports: [
+    LocalizePathPipe,
     Github,
     Gitlab,
     Linkedin,

@@ -20,8 +20,12 @@ import { BLOG_POSTS } from '../post-catalog';
 import { BlogPost } from './post';
 
 describe('BlogPost', () => {
-  const vpsPost = BLOG_POSTS[0];
-  const astroPost = BLOG_POSTS[1];
+  const vpsPost = BLOG_POSTS.find(
+    (post) => post.slug === 'moving-away-from-firebase-hosting',
+  )!;
+  const astroPost = BLOG_POSTS.find(
+    (post) => post.slug === 'from-astro-to-angular',
+  )!;
 
   let fixture: ComponentFixture<BlogPost>;
   let parameters: BehaviorSubject<ReturnType<typeof convertToParamMap>>;

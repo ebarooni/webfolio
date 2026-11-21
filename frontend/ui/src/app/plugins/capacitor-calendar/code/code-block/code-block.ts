@@ -10,6 +10,8 @@ import {
   signal,
 } from '@angular/core';
 
+import { injectCopy } from '../../../../localization/localized-copy';
+import { CODE_COPY } from '../code.copy';
 import { type CodeLanguage, highlight } from '../highlight';
 
 type CopyState = 'idle' | 'copied' | 'failed';
@@ -29,6 +31,7 @@ export class CodeBlock {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private feedbackTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
+  readonly text = injectCopy(CODE_COPY);
   readonly code = input.required<string>();
   readonly language = input.required<CodeLanguage>();
   readonly label = input('');

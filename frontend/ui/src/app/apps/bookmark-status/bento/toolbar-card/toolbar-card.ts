@@ -1,6 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 
+import { SiteLanguage } from '../../../../localization/site-language';
 import type { Theme } from '../../../../config/themes-array';
 import { Reveal } from '../../../../shared/reveal/reveal';
 import { BOOKMARK_STATUS_ASSETS } from '../../bookmark-status.copy';
@@ -15,11 +16,16 @@ import { BookmarkStatusShot } from '../../shot/shot';
 })
 export class BookmarkStatusToolbarCard {
   readonly theme = input.required<Theme>();
-  readonly copy = {
-    features: {
-      toolbar: toolbarCardCopy,
-    },
-  };
+  private readonly language = inject(SiteLanguage).current;
+  readonly copy = computed(() => {
+    const language = this.language();
+
+    return {
+      features: {
+        toolbar: toolbarCardCopy[language],
+      },
+    };
+  });
   readonly legendIcons = [
     BOOKMARK_STATUS_ASSETS.toolbarGrey,
     BOOKMARK_STATUS_ASSETS.toolbarBlue,

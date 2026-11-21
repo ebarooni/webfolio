@@ -4,7 +4,9 @@ import { ArrowIcon } from '../../../shared/components/arrow-icon/arrow-icon';
 import { PLUGIN_LINKS, RESOURCES } from '../capacitor-calendar.content';
 import { CodeTabs } from '../code/code-tabs/code-tabs';
 import { INSTALL_TABS } from '../code/snippets';
+import { injectCopy } from '../../../localization/localized-copy';
 import { SectionHeading } from '../section-heading/section-heading';
+import { QUICK_START_COPY } from './quick-start.copy';
 
 function resourceLink(id: string): string {
   return (
@@ -19,6 +21,7 @@ function resourceLink(id: string): string {
   styleUrl: './quick-start.css',
 })
 export class CapacitorCalendarQuickStart {
+  readonly copy = injectCopy(QUICK_START_COPY);
   readonly installTabs = INSTALL_TABS;
   readonly compatibilityLink = resourceLink('compatibility');
   readonly setupLink = resourceLink('setup');

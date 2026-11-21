@@ -1,12 +1,11 @@
 <section class="page-container pb-24 lg:pb-32" aria-labelledby="cta-title">
   <div class="panel">
     <h2 id="cta-title" class="title">
-      Add the native calendar to your app
-      <span class="gradient-text">today.</span>
+      {{ copy().titleLead }}
+      <span class="gradient-text">{{ copy().titleAccent }}</span>
     </h2>
     <p class="lead">
-      Free and open source. Install it, sync the native projects, and follow the
-      documentation to your first event.
+      {{ copy().lead }}
     </p>
 
     <app-install-command
@@ -18,9 +17,9 @@
       <li>
         <a class="link-card focus-ring" [href]="links.docs" rel="noopener">
           <span class="link-title"
-            >Documentation <app-arrow-icon direction="external"
+            >{{ copy().docsTitle }} <app-arrow-icon direction="external"
           /></span>
-          <span class="link-text">Guides, examples and the full API</span>
+          <span class="link-text">{{ copy().docsText }}</span>
         </a>
       </li>
       <li>
@@ -28,25 +27,23 @@
           <span class="link-title"
             ><app-brand-icon brand="github" /> GitHub</span
           >
-          <span class="link-text"
-            >Source, issues and a star if it helps you</span
-          >
+          <span class="link-text">{{ copy().githubText }}</span>
         </a>
       </li>
       <li>
         <a class="link-card focus-ring" [href]="links.npm" rel="noopener">
           <span class="link-title"><app-brand-icon brand="npm" /> npm</span>
-          <span class="link-text">Versions, tags and download numbers</span>
+          <span class="link-text">{{ copy().npmText }}</span>
         </a>
       </li>
     </ul>
 
     <p class="author">
-      Built and maintained by Ehsan Barooni. Need a custom Capacitor plugin or
-      help with a hybrid app?
-      <a class="author-link focus-ring" [routerLink]="contactLink"
-        >Get in touch</a
-      >.
+      {{ copy().author }}
+      <a
+        class="author-link focus-ring"
+        [routerLink]="contactLink | localizePath"
+        >{{ copy().contact }}</a>.
     </p>
   </div>
 </section>

@@ -8,27 +8,27 @@
         [attr.srcset]="assets.appIcon + ' 2x'"
         width="104"
         height="104"
-        alt="{{ copy.hero.iconAlt }}"
+        alt="{{ copy().hero.iconAlt }}"
         loading="eager"
       />
       <span class="bookmark-status-eyebrow" appReveal revealDelay="60ms">
         <span class="bookmark-status-dot" aria-hidden="true"></span>
-        {{ copy.hero.eyebrow }}
+        {{ copy().hero.eyebrow }}
       </span>
       <h1 id="hero-title" appReveal revealDelay="120ms">
-        {{ copy.hero.titleLine1 }}<br />
-        <span class="gradient">{{ copy.hero.titleLine2 }}</span>
+        {{ copy().hero.titleLine1 }}<br />
+        <span class="gradient">{{ copy().hero.titleLine2 }}</span>
       </h1>
       <p class="bookmark-status-lead" appReveal revealDelay="180ms">
-        {{ copy.hero.tagline }}
+        {{ copy().hero.tagline }}
       </p>
       <div class="bookmark-status-action-row" appReveal revealDelay="240ms">
         <a
           class="store-badge"
-          [attr.href]="copy.storeHref"
-          [attr.role]="copy.storeHref === null ? 'button' : null"
-          [attr.tabindex]="copy.storeHref === null ? 0 : null"
-          [attr.aria-label]="copy.hero.badgeLabel"
+          [attr.href]="copy().storeHref"
+          [attr.role]="copy().storeHref === null ? 'button' : null"
+          [attr.tabindex]="copy().storeHref === null ? 0 : null"
+          [attr.aria-label]="copy().hero.badgeLabel"
           (click)="blockStore($event)"
           (auxclick)="blockStore($event)"
           (keydown)="blockStoreKey($event)"
@@ -42,21 +42,21 @@
             loading="eager"
           />
         </a>
-        @if (copy.secondaryHref; as externalHref) {
+        @if (copy().secondaryHref; as externalHref) {
           <a class="ghost-button" [href]="externalHref">
             <ng-container [ngTemplateOutlet]="howItWorksLabel" />
           </a>
         } @else {
           <a
             class="ghost-button"
-            [routerLink]="pageLink"
-            [fragment]="copy.howFragment"
+            [routerLink]="pageLink | localizePath"
+            [fragment]="copy().howFragment"
           >
             <ng-container [ngTemplateOutlet]="howItWorksLabel" />
           </a>
         }
         <ng-template #howItWorksLabel>
-          {{ copy.hero.secondaryLabel }}
+          {{ copy().hero.secondaryLabel }}
           <svg
             class="ghost-arrow"
             width="16"
@@ -73,11 +73,11 @@
         </ng-template>
       </div>
       <p class="bookmark-status-requirements" appReveal revealDelay="300ms">
-        @for (item of copy.requirements; track item) {
+        @for (item of copy().requirements; track item) {
           <span>{{ item }}</span>
         }
-        @if (copy.price) {
-          <span>Price: {{ copy.price }}</span>
+        @if (copy().price) {
+          <span>Price: {{ copy().price }}</span>
         }
       </p>
     </div>
@@ -88,8 +88,8 @@
       [theme]="theme()"
     />
 
-    <ul class="trust" [attr.aria-label]="copy.hero.trustLabel">
-      @for (item of copy.hero.trust; track item.title; let index = $index) {
+    <ul class="trust" [attr.aria-label]="copy().hero.trustLabel">
+      @for (item of copy().hero.trust; track item.title; let index = $index) {
         <li appReveal [revealDelay]="trustDelay(index)">
           <span class="trust-icon" aria-hidden="true">
             @switch (index) {

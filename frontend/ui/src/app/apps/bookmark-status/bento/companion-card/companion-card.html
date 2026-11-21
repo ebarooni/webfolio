@@ -1,10 +1,10 @@
 <article class="bookmark-status-card bookmark-status-card-companion" appReveal>
   <div class="bookmark-status-card-copy">
-    <span class="bookmark-status-kicker">{{ copy.features.app.kicker }}</span>
-    <h3>{{ copy.features.app.title }}</h3>
-    <p>{{ copy.features.app.body }}</p>
+    <span class="bookmark-status-kicker">{{ copy().features.app.kicker }}</span>
+    <h3>{{ copy().features.app.title }}</h3>
+    <p>{{ copy().features.app.body }}</p>
     <ul class="checks">
-      @for (check of copy.features.app.checks; track $index) {
+      @for (check of copy().features.app.checks; track $index) {
         <li>
           <svg
             width="16"
@@ -37,7 +37,7 @@
       <app-bookmark-status-shot
         name="sidebar-open-tabs"
         [theme]="theme()"
-        [alt]="copy.features.app.alt"
+        [alt]="copy().features.app.alt"
         [width]="620"
         [height]="400"
         frameClass="sidebar"
@@ -45,10 +45,10 @@
       <div
         class="menubar"
         role="img"
-        [attr.aria-label]="copy.features.app.menuLabel"
+        [attr.aria-label]="copy().features.app.menuLabel"
       >
         <div class="strip">
-          <span>{{ copy.features.app.clock }}</span>
+          <span>{{ copy().features.app.clock }}</span>
           <span class="active">
             <svg
               width="13"
@@ -65,14 +65,14 @@
           </span>
         </div>
         <div class="menu-panel">
-          <div class="disabled">{{ copy.features.app.status }}</div>
+          <div class="disabled">{{ copy().features.app.status }}</div>
           <hr />
-          <div>{{ copy.features.app.openApp }}</div>
-          <div class="highlight">{{ copy.features.app.openTree }}</div>
+          <div>{{ copy().features.app.openApp }}</div>
+          <div class="highlight">{{ copy().features.app.openTree }}</div>
           <hr />
           <div>
-            {{ copy.features.app.quit }}
-            <span class="shortcut">{{ copy.features.app.quitShortcut }}</span>
+            {{ copy().features.app.quit }}
+            <span class="shortcut">{{ copy().features.app.quitShortcut }}</span>
           </div>
         </div>
       </div>

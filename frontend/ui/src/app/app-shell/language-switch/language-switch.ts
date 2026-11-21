@@ -13,13 +13,16 @@ import {
   viewChildren,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Language, LANGUAGE_NAMES, languages } from '../../config/languages';
+import { localizePath } from '../../localization/localized-path';
+import { injectPagePath } from '../../localization/page-path';
 
 type StarPosition = Readonly<{ transform: string }>;
 
-type LanguageOption = Readonly<{ code: Language; name: string }>;
+type LanguageOption = Readonly<{ code: Language; name: string; link: string }>;
 
 const EXTRA_GREETINGS: readonly string[] = ['Hola', 'Salut', 'Ciao', 'Hej'];
 const HOLD_DURATION_MS = 2000;
@@ -52,7 +55,7 @@ function createEuropeanStars(): readonly StarPosition[] {
 
 @Component({
   selector: 'app-language-switch',
-  imports: [NgTemplateOutlet, TranslocoDirective],
+  imports: [NgTemplateOutlet, RouterLink, TranslocoDirective],
   templateUrl: './language-switch.html',
   styleUrl: './language-switch.css',
   host: {
@@ -66,7 +69,7 @@ export class LanguageSwitch {
 
   private readonly trigger =
     viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
-  private readonly items = viewChildren<ElementRef<HTMLButtonElement>>('item');
+  private readonly items = viewChildren<ElementRef<HTMLAnchorElement>>('item');
 
   private holdTimeoutId = 0;
   private greetingIntervalId = 0;
@@ -76,10 +79,17 @@ export class LanguageSwitch {
   readonly languageChanged = output<Language>();
 
   readonly menuId = `language-menu-${nextMenuId++}`;
-  readonly options: readonly LanguageOption[] = languages.map((code) => ({
-    code,
-    name: LANGUAGE_NAMES[code],
-  }));
+  // The same page without its language prefix, for example "/projects".
+  private readonly pagePath = injectPagePath();
+
+  // Each option is a real link to the same page in its language.
+  readonly options = computed<readonly LanguageOption[]>(() =>
+    languages.map((code) => ({
+      code,
+      name: LANGUAGE_NAMES[code],
+      link: localizePath(this.pagePath(), code),
+    })),
+  );
   readonly europeanStars = createEuropeanStars();
   readonly extraGreeting = signal<string | null>(null);
   readonly isOpen = signal(false);
@@ -119,7 +129,7 @@ export class LanguageSwitch {
 
   onMenuKeydown(event: KeyboardEvent): void {
     const items = this.items().map((item) => item.nativeElement);
-    const current = items.indexOf(document.activeElement as HTMLButtonElement);
+    const current = items.indexOf(document.activeElement as HTMLAnchorElement);
 
     switch (event.key) {
       case 'ArrowDown':
@@ -138,6 +148,11 @@ export class LanguageSwitch {
         event.preventDefault();
         items[items.length - 1]?.focus();
         break;
+      case ' ':
+        // A menu item opens with Space too, a plain link only with Enter.
+        event.preventDefault();
+        (event.target as HTMLElement).click();
+        break;
       case 'Escape':
         event.preventDefault();
         this.close();
@@ -149,13 +164,11 @@ export class LanguageSwitch {
     }
   }
 
+  // The link opens the page. This only closes the menu and reports the choice.
   select(language: Language): void {
     this.close();
     this.trigger().nativeElement.focus();
-
-    if (language !== this.language()) {
-      this.languageChanged.emit(language);
-    }
+    this.languageChanged.emit(language);
   }
 
   closeOnOutsidePointer(event: PointerEvent): void {

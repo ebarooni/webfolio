@@ -16,14 +16,21 @@ import { Theme, themesArray } from '../../config/themes-array';
 export interface IState {
   theme: Theme;
   hasGeoAccess: boolean;
+  /**
+   * The language that the visitor chose last, or the browser language on
+   * the first visit. The address sets the language of the page. This one
+   * only feeds the suggestion to open the page in another language.
+   */
   language: Language;
   developerMode: boolean;
+  languageSuggestionDismissed: boolean;
 }
 
 const INITIAL_STATE: IState = {
   developerMode: false,
   hasGeoAccess: false,
   language: DEFAULT_LANGUAGE,
+  languageSuggestionDismissed: false,
   theme: 'light',
 };
 
@@ -41,6 +48,10 @@ export const AppStore = signalStore(
     return {
       updateLanguage(language: Language): void {
         update({ language });
+      },
+
+      dismissLanguageSuggestion(): void {
+        update({ languageSuggestionDismissed: true });
       },
 
       enableDeveloperMode(): void {
@@ -113,6 +124,11 @@ function lookupPersistedState(): IState | null {
 
   if (!isLanguage(mergedState.language)) {
     mergedState.language = defaultState().language;
+  }
+
+  if (typeof mergedState.languageSuggestionDismissed !== 'boolean') {
+    mergedState.languageSuggestionDismissed =
+      INITIAL_STATE.languageSuggestionDismissed;
   }
 
   if (typeof mergedState.hasGeoAccess !== 'boolean') {

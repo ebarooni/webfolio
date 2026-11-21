@@ -1,0 +1,177 @@
+<p>
+  Veel apps werken met datums: boekingen, afspraken, evenementen, deadlines.
+  Vroeg of laat vragen gebruikers om een knop die die datum in hun eigen agenda
+  zet. In een Capacitor-app kan de weblaag niet zelf bij de agenda van het
+  apparaat. Daarvoor heb je een native plug-in nodig.
+</p>
+
+<p>
+  Precies daarvoor heb ik
+  <a href="/plugins/capacitor-calendar">Capacitor Calendar</a> geschreven, en ik
+  onderhoud het nog steeds. Dit artikel stelt de plug-in voor en brengt je in
+  een paar minuten van de installatie naar je eerste agenda-afspraak.
+</p>
+
+<h2>Wat de plug-in doet</h2>
+
+<p>
+  <code>&#64;ebarooni/capacitor-calendar</code> verbindt je Capacitor-app met de
+  native agenda. Op iOS en Android kun je afspraken maken, bewerken en opvragen,
+  agenda's beheren en om agendatoestemming vragen. Op iOS ondersteunt het ook
+  herinneringen. Op het web maakt het in plaats daarvan een
+  <code>.ics</code>-bestand om te downloaden, omdat een browser niet in de
+  agenda van een apparaat kan schrijven.
+</p>
+
+<p>
+  Het is een gewone Capacitor-plug-in. Hij werkt dus met Ionic, Angular, React,
+  Vue of elk ander framework dat je interface rendert. De actuele tabel met
+  functies per platform staat in de README.
+</p>
+
+<h2>De plug-in installeren</h2>
+
+<p>Voeg het pakket toe en synchroniseer de native projecten:</p>
+
+<pre><code>npm install &#64;ebarooni/capacitor-calendar
+npx cap sync</code></pre>
+
+<p>
+  Zo installeer je de release voor de huidige Capacitor-versie. Gebruikt je app
+  een oudere hoofdversie van Capacitor, dan vertelt de
+  <a
+    href="https://github.com/ebarooni/capacitor-calendar#capacitor-compatibility"
+    >compatibiliteitstabel</a
+  >
+  welke npm-tag je moet installeren.
+</p>
+
+<h2>De toestemmingen declareren</h2>
+
+<p>
+  De agenda bevat persoonlijke gegevens. Daarom vragen beide platforms het de
+  gebruiker voordat een app hem mag gebruiken. Declareer eerst wat je app nodig
+  heeft. Voeg alleen de regels toe die je app echt gebruikt.
+</p>
+
+<h3>Android</h3>
+
+<p>
+  Voeg de agendatoestemmingen toe aan
+  <code>android/app/src/main/AndroidManifest.xml</code>:
+</p>
+
+<pre><code>&lt;uses-permission android:name="android.permission.READ_CALENDAR" /&gt;
+&lt;uses-permission android:name="android.permission.WRITE_CALENDAR" /&gt;</code></pre>
+
+<h3>iOS</h3>
+
+<p>
+  Voeg gebruiksbeschrijvingen toe aan <code>ios/App/App/Info.plist</code>. iOS
+  toont deze tekst in de toestemmingsdialoog, dus leg uit waarom je app toegang
+  nodig heeft:
+</p>
+
+<pre><code>&lt;key&gt;NSCalendarsFullAccessUsageDescription&lt;/key&gt;
+&lt;string&gt;Deze app heeft toegang nodig om je afspraken te lezen en te beheren.&lt;/string&gt;</code></pre>
+
+<p>
+  iOS heeft aparte sleutels voor alleen-schrijven-toegang en voor herinneringen.
+  De
+  <a href="https://github.com/ebarooni/capacitor-calendar#setup"
+    >setup-sectie van de README</a
+  >
+  noemt ze allemaal.
+</p>
+
+<h2>Toegang vragen en een afspraak maken</h2>
+
+<p>
+  Nu de code. Vraag eerst om toegang en maak dan de afspraak. Tijden zijn
+  Unix-tijdstempels in milliseconden.
+</p>
+
+<pre><code>import &#123; CapacitorCalendar &#125; from '&#64;ebarooni/capacitor-calendar';
+
+const &#123; result &#125; = await CapacitorCalendar.requestFullCalendarAccess();
+
+if (result !== 'granted') &#123;
+  throw new Error('Calendar permission denied');
+&#125;
+
+// Een afspraak die over een uur begint en een uur duurt
+const startDate = Date.now() + 60 * 60 * 1000;
+const endDate = startDate + 60 * 60 * 1000;
+
+const &#123; id &#125; = await CapacitorCalendar.createEvent(&#123;
+  title: 'Productreview',
+  location: 'Kantoor',
+  startDate,
+  endDate,
+&#125;);</code></pre>
+
+<p>
+  Bewaar de teruggegeven <code>id</code> als je de afspraak later wilt wijzigen
+  of verwijderen.
+</p>
+
+<h2>Laat de gebruiker bevestigen in de native editor</h2>
+
+<p>
+  Soms wil je niet direct in de agenda schrijven. Misschien wil de gebruiker
+  eerst een agenda kiezen, een melding toevoegen of de tijd aanpassen. Open
+  daarvoor de native afsprakeneditor met de velden al ingevuld:
+</p>
+
+<pre><code>await CapacitorCalendar.createEventWithPrompt(&#123;
+  title: 'Planningsoverleg',
+  location: 'Kantoor',
+  startDate: Date.now() + 24 * 60 * 60 * 1000,
+  endDate: Date.now() + 25 * 60 * 60 * 1000,
+&#125;);</code></pre>
+
+<p>
+  De gebruiker ziet het vertrouwde systeemscherm en bewaart de afspraak met één
+  tik. Op het web vraagt dezelfde aanroep om bevestiging en biedt hij een
+  <code>.ics</code>-bestand aan om te downloaden.
+</p>
+
+<h2>Hoe verder</h2>
+
+<p>
+  Je hebt nu een werkende agenda-integratie. De plug-in kan veel meer, zoals
+  afspraken in een periode opvragen, agenda's beheren of de agenda-app openen.
+  Deze pagina's passen altijd bij de huidige release:
+</p>
+
+<ul>
+  <li>
+    <a href="https://ebarooni.github.io/capacitor-calendar/">Documentatie</a>
+    met handleidingen en de volledige API-referentie
+  </li>
+  <li>
+    <a href="https://github.com/ebarooni/capacitor-calendar#usage-examples"
+      >Voorbeelden</a
+    >
+    in de README
+  </li>
+  <li>
+    <a href="https://www.npmjs.com/package/@ebarooni/capacitor-calendar"
+      >Het pakket op npm</a
+    >
+  </li>
+  <li>
+    <a href="https://github.com/ebarooni/capacitor-calendar"
+      >De broncode op GitHub</a
+    >, waar je ook vragen kunt stellen en bugs kunt melden
+  </li>
+  <li>
+    <a href="/plugins/capacitor-calendar">De Capacitor Calendar-pagina</a> op
+    deze site (in het Engels)
+  </li>
+</ul>
+
+<p>
+  Bouw je iets met de plug-in, of werkt iets niet zoals je verwacht, open dan
+  een issue op GitHub.
+</p>

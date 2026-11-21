@@ -9,6 +9,7 @@ import { Route } from '../../config/route';
 import { PACKAGE_NAME } from '../../plugins/capacitor-calendar/capacitor-calendar.content';
 import { findProject } from '../../projects/project-catalog';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 const BOOKMARK_STATUS_ASSETS = 'apps/safari-bookmark-status/brand';
 const SHIELDS = 'https://img.shields.io';
@@ -19,7 +20,13 @@ const SHIELDS = 'https://img.shields.io';
  */
 @Component({
   selector: 'app-product-cards',
-  imports: [ArrowIcon, NgOptimizedImage, RouterLink, TranslocoDirective],
+  imports: [
+    LocalizePathPipe,
+    ArrowIcon,
+    NgOptimizedImage,
+    RouterLink,
+    TranslocoDirective,
+  ],
   templateUrl: './product-cards.html',
   styleUrl: './product-cards.css',
 })
