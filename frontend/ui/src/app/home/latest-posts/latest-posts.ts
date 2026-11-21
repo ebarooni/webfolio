@@ -6,12 +6,19 @@ import { BLOG_POSTS } from '../../blog/post-catalog';
 import { PostRow } from '../../blog/post-row/post-row';
 import { Route } from '../../config/route';
 import { ArrowLink } from '../../shared/components/arrow-link/arrow-link';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 const POST_COUNT_ON_HOME = 2;
 
 @Component({
   selector: 'app-latest-posts',
-  imports: [ArrowLink, PostRow, RouterLink, TranslocoDirective],
+  imports: [
+    LocalizePathPipe,
+    ArrowLink,
+    PostRow,
+    RouterLink,
+    TranslocoDirective,
+  ],
   templateUrl: './latest-posts.html',
 })
 export class LatestPosts {

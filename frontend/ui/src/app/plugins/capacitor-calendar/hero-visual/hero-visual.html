@@ -1,10 +1,10 @@
 <div class="month">
   <div class="month-header">
-    <span class="month-title">Calendar</span>
+    <span class="month-title">{{ copy().calendar }}</span>
     <span class="month-dots"><i></i><i></i><i></i></span>
   </div>
   <div class="month-grid">
-    @for (weekday of weekdays; track $index) {
+    @for (weekday of copy().weekdays; track $index) {
       <span class="weekday">{{ weekday }}</span>
     }
     @for (cell of days; track cell.day) {
@@ -21,21 +21,21 @@
 <div class="event">
   <div class="event-app">
     <span class="app-icon">
-      <span class="app-icon-day">Mon</span>
+      <span class="app-icon-day">{{ copy().weekday }}</span>
       <span class="app-icon-date">17</span>
     </span>
-    Calendar
+    {{ copy().calendar }}
     <span class="saved">
       <svg viewBox="0 0 20 20"><path d="M4.5 10.5l3.5 3.5 7.5-8" /></svg>
-      Saved
+      {{ copy().saved }}
     </span>
   </div>
   <div class="event-body">
     <span class="event-bar"></span>
     <div>
-      <p class="event-title">Product review</p>
-      <p class="event-meta">Office</p>
-      <p class="event-meta">15:00 to 16:00</p>
+      <p class="event-title">{{ copy().eventTitle }}</p>
+      <p class="event-meta">{{ copy().eventPlace }}</p>
+      <p class="event-meta">{{ copy().eventTime }}</p>
     </div>
   </div>
 </div>

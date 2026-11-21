@@ -34,7 +34,7 @@
 
       <span class="flag-window">
         <span class="roll flag-roll">
-          @for (option of options; track option.code) {
+          @for (option of options(); track option.code) {
             <ng-container
               [ngTemplateOutlet]="flag"
               [ngTemplateOutletContext]="{ $implicit: option.code }"
@@ -84,13 +84,14 @@
       [id]="menuId"
       [attr.aria-label]="t('menuLabel')"
     >
-      @for (option of options; track option.code) {
-        <button
+      @for (option of options(); track option.code) {
+        <a
           #item
-          type="button"
           class="language-option"
           role="menuitemradio"
           tabindex="-1"
+          [routerLink]="option.link"
+          [attr.hreflang]="option.code"
           [attr.lang]="option.code"
           [attr.aria-checked]="option.code === language()"
           (click)="select(option.code)"
@@ -119,7 +120,7 @@
               stroke-linejoin="round"
             />
           </svg>
-        </button>
+        </a>
       }
     </div>
   }

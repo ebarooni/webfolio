@@ -4,7 +4,8 @@ import { provideRouter } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { localizationTestingModule } from '../../testing/localization-testing';
-import { routes } from '../app.routes';
+import { pageRoutesOf } from '../../testing/page-routes';
+import { languages } from '../config/languages';
 import { Route } from '../config/route';
 import { NotFound } from './not-found';
 
@@ -48,12 +49,14 @@ describe('NotFound', () => {
     expect(robotsTag()).toBeNull();
   });
 
-  it('is the last child route of the shell', () => {
-    const shell = routes.find((route) => route.path === '');
-    const children = shell?.children ?? [];
-    const last = children[children.length - 1];
+  it.each(languages)(
+    'is the last page route of the shell in %s',
+    (language) => {
+      const children = pageRoutesOf(language);
+      const last = children[children.length - 1];
 
-    expect(last.path).toBe(Route.NOT_FOUND);
-    expect(last.title).toBe('pageTitles.notFound');
-  });
+      expect(last.path).toBe(Route.NOT_FOUND);
+      expect(last.title).toBe('pageTitles.notFound');
+    },
+  );
 });

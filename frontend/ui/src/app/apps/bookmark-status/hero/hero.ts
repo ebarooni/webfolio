@@ -1,7 +1,8 @@
 import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { SiteLanguage } from '../../../localization/site-language';
 import { Route } from '../../../config/route';
 import type { Theme } from '../../../config/themes-array';
 import { Reveal } from '../../../shared/reveal/reveal';
@@ -10,13 +11,16 @@ import {
   blockPlaceholderAppStoreKey,
   blockPlaceholderAppStoreLink,
   bookmarkStatusLinks,
+  REQUIREMENTS,
 } from '../bookmark-status.copy';
 import { heroCopy } from './hero.copy';
 import { BookmarkStatusHeroVisual } from './hero-visual/hero-visual';
+import { LocalizePathPipe } from '../../../localization/localize-path.pipe';
 
 @Component({
   selector: 'app-bookmark-status-hero',
   imports: [
+    LocalizePathPipe,
     NgOptimizedImage,
     NgTemplateOutlet,
     Reveal,
@@ -28,10 +32,16 @@ import { BookmarkStatusHeroVisual } from './hero-visual/hero-visual';
 })
 export class BookmarkStatusHero {
   readonly theme = input.required<Theme>();
-  readonly copy = {
-    ...bookmarkStatusLinks,
-    hero: heroCopy,
-  };
+  private readonly language = inject(SiteLanguage).current;
+  readonly copy = computed(() => {
+    const language = this.language();
+
+    return {
+      ...bookmarkStatusLinks,
+      requirements: REQUIREMENTS[language],
+      hero: heroCopy[language],
+    };
+  });
   readonly assets = BOOKMARK_STATUS_ASSETS;
   readonly pageLink = `/${Route.APPS_BOOKMARK_STATUS}`;
   readonly blockStore = blockPlaceholderAppStoreLink;

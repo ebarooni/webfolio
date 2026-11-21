@@ -25,6 +25,12 @@
       "developerMode": "Ontwikkelaarsmodus ingeschakeld",
       "status": "status",
       "statusTitle": "Live beschikbaarheid van deze website"
+    },
+    "languageSuggestion": {
+      "label": "Taalsuggestie",
+      "text": "Deze pagina is ook beschikbaar in het Nederlands.",
+      "action": "Bekijk in het Nederlands",
+      "dismiss": "Taalsuggestie sluiten"
     }
   },
   "home": {
@@ -161,8 +167,13 @@
       "moving-away-from-firebase-hosting": {
         "title": "Weg van Firebase Hosting",
         "summary": "Ik heb mijn portfoliowebsite van Firebase Hosting naar een VPS verhuisd. In dit artikel laat ik de migratie stap voor stap zien en leg ik uit waarom ik die keuze heb gemaakt."
+      },
+      "add-events-to-native-calendar-capacitor": {
+        "title": "Afspraken toevoegen aan de native agenda met Capacitor",
+        "summary": "Stap voor stap: de plug-in Capacitor Calendar installeren, de toestemmingen voor iOS en Android instellen en afspraken toevoegen aan de agenda van het apparaat."
       }
-    }
+    },
+    "translationMissing": "Dit artikel is nog niet vertaald. Je leest het Engelse origineel."
   },
   "contact": {
     "eyebrow": "Contact",
@@ -224,7 +235,20 @@
     "post": "{{title}} | Ehsan Barooni",
     "contact": "Contact | Ehsan Barooni",
     "buildInfo": "Build-info | Ehsan Barooni",
+    "capacitorCalendar": "Capacitor Calendar: agenda-plug-in voor iOS en Android | Ehsan Barooni",
+    "bookmarkStatus": "Bookmark Status voor Safari op de Mac | Ehsan Barooni",
     "accessDenied": "Toegang geweigerd | Ehsan Barooni",
     "notFound": "Pagina niet gevonden | Ehsan Barooni"
+  },
+  "seo": {
+    "description": {
+      "home": "Portfolio van Ehsan Barooni, full-stack software engineer. Ik bouw cross-platform web- en mobiele apps met Angular, Ionic en Capacitor, en de clouddiensten erachter.",
+      "projects": "Geselecteerde projecten van Ehsan Barooni: open source Capacitor-plug-ins, een Safari-extensie voor macOS en de tools en diensten erachter.",
+      "blog": "Technische artikelen van Ehsan Barooni over webontwikkeling, Angular, Capacitor, self-hosting en de tools die hij gebruikt.",
+      "contact": "Neem contact op met Ehsan Barooni, full-stack software engineer, over een project, een baan of een vraag. Je bericht gaat rechtstreeks naar hem.",
+      "buildInfo": "Builddetails van barooni.dev: versie, builddatum en de bibliotheken die de site gebruikt."
+    },
+    "imageAlt": "Ehsan Barooni, full-stack software engineer, barooni.dev",
+    "jobTitle": "Full-stack software engineer"
   }
 }

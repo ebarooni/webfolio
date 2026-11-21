@@ -25,7 +25,8 @@ describe('Navbar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Navbar, localizationTestingModule()],
-      providers: [provideRouter([])],
+      // The language links navigate. Every address is a page here.
+      providers: [provideRouter([{ path: '**', children: [] }])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
@@ -79,7 +80,7 @@ describe('Navbar', () => {
     fixture.detectChanges();
     fixture.debugElement
       .query(By.css('app-language-switch [lang="nl"]'))
-      .triggerEventHandler('click');
+      .triggerEventHandler('click', new MouseEvent('click'));
 
     expect(themeChanged).toHaveBeenCalledExactlyOnceWith('dark');
     expect(languageChanged).toHaveBeenCalledExactlyOnceWith('nl');

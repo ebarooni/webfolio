@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 
-const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
+import { injectCopy } from '../../../localization/localized-copy';
+import { HERO_VISUAL_COPY } from './hero-visual.copy';
+
 const DAYS_IN_MONTH = 30;
 const DAYS_WITH_EVENTS: ReadonlySet<number> = new Set([3, 9, 12, 17, 18, 24]);
 const SELECTED_DAY = 17;
@@ -24,7 +26,7 @@ type DayCell = Readonly<{
   },
 })
 export class HeroVisual {
-  readonly weekdays = WEEKDAYS;
+  readonly copy = injectCopy(HERO_VISUAL_COPY);
   readonly days: readonly DayCell[] = Array.from(
     { length: DAYS_IN_MONTH },
     (_, index) => ({

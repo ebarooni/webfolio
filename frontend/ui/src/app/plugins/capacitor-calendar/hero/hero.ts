@@ -11,11 +11,15 @@ import {
   PLUGIN_LINKS,
 } from '../capacitor-calendar.content';
 import { HeroVisual } from '../hero-visual/hero-visual';
+import { injectCopy } from '../../../localization/localized-copy';
+import { HERO_COPY } from './hero.copy';
 import { InstallCommand } from '../install-command/install-command';
+import { LocalizePathPipe } from '../../../localization/localize-path.pipe';
 
 @Component({
   selector: 'app-capacitor-calendar-hero',
   imports: [
+    LocalizePathPipe,
     ArrowIcon,
     BrandIcon,
     Button,
@@ -27,6 +31,7 @@ import { InstallCommand } from '../install-command/install-command';
   styleUrl: './hero.css',
 })
 export class CapacitorCalendarHero {
+  readonly copy = injectCopy(HERO_COPY);
   readonly links = PLUGIN_LINKS;
   readonly badges = LIVE_BADGES;
   readonly installCommand = HERO_INSTALL_COMMAND;

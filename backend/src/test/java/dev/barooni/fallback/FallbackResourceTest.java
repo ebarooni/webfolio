@@ -43,7 +43,7 @@ class FallbackResourceTest {
 
   @Test
   void homeGetsTheApp() {
-    // With prerendered pages, the build has no root "index.html". The fallback returns the shell.
+    // With prerendered pages, the root "index.html" is the prerendered home page.
     Assumptions.assumeTrue(hasResource("index.csr.html") || hasResource("index.html"));
 
     given()
@@ -65,6 +65,40 @@ class FallbackResourceTest {
         .then()
         .statusCode(Response.Status.OK.getStatusCode())
         .body(containsString("<h1"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"/de", "/nl/", "/de/blog/from-astro-to-angular", "/nl/projects"})
+  void languageRouteGetsItsOwnPage(String path) {
+    Assumptions.assumeTrue(hasResource("de/index.html"));
+
+    given()
+        .when()
+        .get(path)
+        .then()
+        .statusCode(Response.Status.OK.getStatusCode())
+        .body(containsString("<h1"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"/unknown", "/de/unknown", "/nl/blog/unknown-post", "/blog/unknown-post"})
+  void unknownPageIsNotFoundButShowsTheApp(String path) {
+    // Only a build with prerendered pages knows every page.
+    Assumptions.assumeTrue(hasResource("index.csr.html"));
+
+    given()
+        .when()
+        .get(path)
+        .then()
+        .statusCode(Response.Status.NOT_FOUND.getStatusCode())
+        .body(containsString("<app-root"));
+  }
+
+  @Test
+  void accessDeniedGetsTheApp() {
+    Assumptions.assumeTrue(hasResource("index.csr.html"));
+
+    given().when().get("/access-denied").then().statusCode(Response.Status.OK.getStatusCode());
   }
 
   private static boolean hasResource(String name) {

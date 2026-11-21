@@ -22,12 +22,12 @@
             <path d="M8.8 12.2l2.2 2.2 4.2-4.6" />
           </svg>
         </span>
-        <h2 id="privacy-title">{{ copy.privacy.title }}</h2>
-        <p class="bookmark-status-lead">{{ copy.privacy.lead }}</p>
+        <h2 id="privacy-title">{{ copy().privacy.title }}</h2>
+        <p class="bookmark-status-lead">{{ copy().privacy.lead }}</p>
       </div>
       <div class="grid">
         @for (
-          point of copy.privacy.points;
+          point of copy().privacy.points;
           track point.title;
           let index = $index
         ) {

@@ -16,8 +16,11 @@ export const PLUGIN_LINKS = {
   issues: `${GITHUB}/issues`,
 } as const;
 
+export type LiveBadgeId = 'version' | 'downloads' | 'stars' | 'license';
+
+/** The label of each badge is in hero.copy.ts, in every site language. */
 export type LiveBadge = Readonly<{
-  label: string;
+  id: LiveBadgeId;
   image: string;
   href: string;
 }>;
@@ -27,22 +30,22 @@ const SHIELDS = 'https://img.shields.io';
 /** Live numbers, loaded from npm and GitHub on each visit. */
 export const LIVE_BADGES: readonly LiveBadge[] = [
   {
-    label: 'Latest npm version',
+    id: 'version',
     image: `${SHIELDS}/npm/v/${PACKAGE_NAME}?style=flat-square&label=npm`,
     href: PLUGIN_LINKS.npm,
   },
   {
-    label: 'npm downloads per month',
+    id: 'downloads',
     image: `${SHIELDS}/npm/dm/${PACKAGE_NAME}?style=flat-square`,
     href: PLUGIN_LINKS.npm,
   },
   {
-    label: 'GitHub stars',
+    id: 'stars',
     image: `${SHIELDS}/github/stars/ebarooni/capacitor-calendar?style=flat-square&logo=github`,
     href: PLUGIN_LINKS.github,
   },
   {
-    label: 'License',
+    id: 'license',
     image: `${SHIELDS}/npm/l/${PACKAGE_NAME}?style=flat-square`,
     href: PLUGIN_LINKS.npm,
   },
@@ -74,80 +77,50 @@ export const PACKAGE_MANAGERS: readonly PackageManager[] = [
 
 export const HERO_INSTALL_COMMAND = `npm i ${PACKAGE_NAME}`;
 
+export type ResourceSource = 'docs' | 'readme' | 'github';
+
+/** The title and the text of each resource are in resources.copy.ts. */
 export type Resource = Readonly<{
-  id: string;
-  title: string;
-  body: string;
+  id: ResourceId;
   href: string;
-  source: string;
+  source: ResourceSource;
 }>;
+
+export type ResourceId =
+  | 'docs'
+  | 'platforms'
+  | 'compatibility'
+  | 'setup'
+  | 'examples'
+  | 'api'
+  | 'changelog'
+  | 'breaking'
+  | 'issues';
 
 /*
  * Where each topic lives. The README anchors are its section headings.
  * If a heading changes in the README, change its anchor here.
  */
 export const RESOURCES: readonly Resource[] = [
-  {
-    id: 'docs',
-    title: 'Documentation',
-    body: 'Guides, examples and the full API reference.',
-    href: PLUGIN_LINKS.docs,
-    source: 'Docs site',
-  },
+  { id: 'docs', href: PLUGIN_LINKS.docs, source: 'docs' },
   {
     id: 'platforms',
-    title: 'Features and platforms',
-    body: 'What the plugin does on iOS, Android and the web.',
     href: `${GITHUB}#features-and-platforms`,
-    source: 'README',
+    source: 'readme',
   },
   {
     id: 'compatibility',
-    title: 'Capacitor compatibility',
-    body: 'Which npm tag to install for your Capacitor version.',
     href: `${GITHUB}#capacitor-compatibility`,
-    source: 'README',
+    source: 'readme',
   },
-  {
-    id: 'setup',
-    title: 'Setup and permissions',
-    body: 'The Info.plist keys and Android permissions to add.',
-    href: `${GITHUB}#setup`,
-    source: 'README',
-  },
-  {
-    id: 'examples',
-    title: 'Usage examples',
-    body: 'Copy-ready code for the common calendar tasks.',
-    href: `${GITHUB}#usage-examples`,
-    source: 'README',
-  },
-  {
-    id: 'api',
-    title: 'API reference',
-    body: 'Every method with its options, results and platforms.',
-    href: `${GITHUB}#api`,
-    source: 'README',
-  },
+  { id: 'setup', href: `${GITHUB}#setup`, source: 'readme' },
+  { id: 'examples', href: `${GITHUB}#usage-examples`, source: 'readme' },
+  { id: 'api', href: `${GITHUB}#api`, source: 'readme' },
   {
     id: 'changelog',
-    title: 'Changelog',
-    body: 'What changed in each release.',
     href: `${GITHUB}/blob/HEAD/CHANGELOG.md`,
-    source: 'GitHub',
+    source: 'github',
   },
-  {
-    id: 'breaking',
-    title: 'Breaking changes',
-    body: 'Migration steps between major versions.',
-    href: `${GITHUB}/blob/HEAD/BREAKING.md`,
-    source: 'GitHub',
-  },
-  {
-    id: 'issues',
-    title: 'Questions and bugs',
-    body: 'Open an issue or read the existing answers.',
-    href: PLUGIN_LINKS.issues,
-    source: 'GitHub',
-  },
+  { id: 'breaking', href: `${GITHUB}/blob/HEAD/BREAKING.md`, source: 'github' },
+  { id: 'issues', href: PLUGIN_LINKS.issues, source: 'github' },
 ];

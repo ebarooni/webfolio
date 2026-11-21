@@ -5,12 +5,19 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
 import { type CatalogProject } from '../project-catalog';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 const TAG_SEPARATOR = ' · ';
 
 @Component({
   selector: 'app-project-row',
-  imports: [ArrowIcon, NgTemplateOutlet, RouterLink, TranslocoDirective],
+  imports: [
+    LocalizePathPipe,
+    ArrowIcon,
+    NgTemplateOutlet,
+    RouterLink,
+    TranslocoDirective,
+  ],
   templateUrl: './project-row.html',
 })
 export class ProjectRow {

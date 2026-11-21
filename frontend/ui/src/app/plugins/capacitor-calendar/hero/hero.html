@@ -1,13 +1,13 @@
 <section class="hero" aria-labelledby="hero-title">
   <div class="page-container hero-grid">
     <div class="flex min-w-0 flex-col items-start gap-7">
-      <nav aria-label="Breadcrumb">
+      <nav [attr.aria-label]="copy().breadcrumbLabel">
         <ol class="meta-label flex flex-wrap items-center gap-2">
           <li>
             <a
               class="focus-ring rounded hover:text-ink"
-              [routerLink]="projectsLink"
-              >Work</a
+              [routerLink]="projectsLink | localizePath"
+              >{{ copy().work }}</a
             >
           </li>
           <li aria-hidden="true">/</li>
@@ -17,18 +17,16 @@
 
       <p class="eyebrow">
         <span class="pulse" aria-hidden="true"></span>
-        Open source Capacitor plugin
+        {{ copy().eyebrow }}
       </p>
 
       <h1 id="hero-title" class="title">
-        Native calendar events for
-        <span class="gradient-text">Capacitor apps.</span>
+        {{ copy().titleLead }}
+        <span class="gradient-text">{{ copy().titleAccent }}</span>
       </h1>
 
       <p class="max-w-[54ch] text-lead leading-[1.55] text-pretty">
-        Capacitor Calendar connects your app to the native calendar of the
-        device. One open source plugin, one import, and the calendar the user
-        already knows.
+        {{ copy().lead }}
       </p>
 
       <app-install-command
@@ -37,19 +35,23 @@
       />
 
       <div class="flex flex-wrap items-center gap-3">
-        <a appButton [routerLink]="pageLink" fragment="quick-start">
-          Get started
+        <a
+          appButton
+          [routerLink]="pageLink | localizePath"
+          fragment="quick-start"
+        >
+          {{ copy().getStarted }}
           <app-arrow-icon direction="down" />
         </a>
         <a class="ghost-button focus-ring" [href]="links.docs" rel="noopener">
-          Documentation
+          {{ copy().docs }}
           <app-arrow-icon direction="external" />
         </a>
         <a
           class="icon-button focus-ring"
           [href]="links.github"
           rel="noopener"
-          aria-label="Capacitor Calendar on GitHub"
+          [attr.aria-label]="copy().githubLabel"
         >
           <app-brand-icon brand="github" />
         </a>
@@ -57,7 +59,7 @@
           class="icon-button focus-ring"
           [href]="links.npm"
           rel="noopener"
-          aria-label="Capacitor Calendar on npm"
+          [attr.aria-label]="copy().npmLabel"
         >
           <app-brand-icon brand="npm" />
         </a>
@@ -68,8 +70,8 @@
   </div>
 
   <div class="page-container">
-    <ul class="badges" aria-label="Live package statistics">
-      @for (badge of badges; track badge.label) {
+    <ul class="badges" [attr.aria-label]="copy().badgesLabel">
+      @for (badge of badges; track badge.id) {
         <li>
           <a
             class="focus-ring block rounded"
@@ -80,7 +82,7 @@
             <!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
             <img
               [src]="badge.image"
-              [alt]="badge.label"
+              [alt]="copy().badges[badge.id]"
               height="20"
               loading="lazy"
               decoding="async"

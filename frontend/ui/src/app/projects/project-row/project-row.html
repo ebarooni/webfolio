@@ -1,6 +1,6 @@
 <ng-container *transloco="let t; prefix: 'projects'">
   @if (project().internalPath; as internalPath) {
-    <a [class]="rowClass" [routerLink]="internalPath">
+    <a [class]="rowClass" [routerLink]="internalPath | localizePath">
       <ng-container
         [ngTemplateOutlet]="content"
         [ngTemplateOutletContext]="{ external: false }"

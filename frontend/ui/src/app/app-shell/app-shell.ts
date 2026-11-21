@@ -8,14 +8,15 @@ import {
 } from '@angular/router';
 import { distinctUntilChanged, filter, map, merge, of } from 'rxjs';
 
-import { TranslocoService } from '@jsverse/transloco';
-
 import { BUILD_INFO } from '../../environments/build-info';
 import { Language } from '../config/languages';
 import { Route } from '../config/route';
 import { Theme } from '../config/themes-array';
+import { localizePath } from '../localization/localized-path';
+import { SiteLanguage } from '../localization/site-language';
 import { AppStore } from '../store/app/app.store';
 import { Footer } from './footer/footer';
+import { LanguageSuggestion } from './language-suggestion/language-suggestion';
 import { Navbar } from './navbar/navbar';
 
 type UiConfig = Readonly<{
@@ -30,7 +31,7 @@ const DEFAULT_UI_CONFIG: UiConfig = {
 
 @Component({
   selector: 'app-shell',
-  imports: [Navbar, Footer, RouterOutlet],
+  imports: [Footer, LanguageSuggestion, Navbar, RouterOutlet],
   templateUrl: './app-shell.html',
   /*
    * The main element grows to fill the screen, so the footer is never
@@ -45,12 +46,14 @@ export class AppShell {
   private readonly appStore = inject(AppStore);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
-  private readonly translocoService = inject(TranslocoService);
+  private readonly siteLanguage = inject(SiteLanguage);
 
   readonly version = `v${BUILD_INFO.version}`;
+  readonly notFoundPage = Route.NOT_FOUND;
 
   readonly theme = this.appStore.theme;
-  readonly language = this.appStore.language;
+  // The address sets the language of the page, see activateLanguage.
+  readonly language = this.siteLanguage.current;
   readonly developerMode = this.appStore.developerMode;
 
   readonly uiConfig = toSignal(
@@ -78,22 +81,19 @@ export class AppShell {
     effect(() => {
       this.document.documentElement.setAttribute('data-theme', this.theme());
     });
-
-    effect(() => {
-      const language = this.language();
-
-      this.document.documentElement.setAttribute('lang', language);
-      this.translocoService.setActiveLang(language);
-    });
   }
 
+  // The menu opens the page in the new language with a link. The store
+  // keeps the choice, so the language suggestion does not ask again.
   languageChanged(language: Language): void {
     this.appStore.updateLanguage(language);
   }
 
   developerModeEnabled(): void {
     this.appStore.enableDeveloperMode();
-    void this.router.navigate([Route.BUILD_INFO]);
+    void this.router.navigateByUrl(
+      localizePath(`/${Route.BUILD_INFO}`, this.language()),
+    );
   }
 
   themeChanged(theme: Theme): void {

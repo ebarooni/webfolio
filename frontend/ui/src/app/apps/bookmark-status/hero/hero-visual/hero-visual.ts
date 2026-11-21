@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 
+import { injectCopy } from '../../../../localization/localized-copy';
 import type { Theme } from '../../../../config/themes-array';
 import { BookmarkStatusShot } from '../../shot/shot';
 import { heroCopy } from '../hero.copy';
@@ -12,5 +13,5 @@ import { heroCopy } from '../hero.copy';
 })
 export class BookmarkStatusHeroVisual {
   readonly theme = input.required<Theme>();
-  readonly copy = heroCopy;
+  readonly copy = injectCopy(heroCopy);
 }

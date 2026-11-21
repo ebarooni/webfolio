@@ -3,7 +3,7 @@
     <header
       class="page-container flex flex-col items-start gap-6 pt-36 pb-12 lg:pt-36 lg:pb-16"
     >
-      <a appArrowLink direction="back" [routerLink]="blogLink">
+      <a appArrowLink direction="back" [routerLink]="blogLink | localizePath">
         {{ t('back') }}
       </a>
 
@@ -57,8 +57,23 @@
         </nav>
       }
 
-      <div #content class="post-prose min-w-0">
-        <ng-container [ngComponentOutlet]="postContent()" />
+      <div class="flex min-w-0 flex-col gap-8">
+        @if (isTranslationMissing()) {
+          <p
+            class="rounded-2xl border border-base-300 bg-base-200 px-5 py-4 text-sm leading-relaxed text-muted"
+            role="note"
+          >
+            {{ t('translationMissing') }}
+          </p>
+        }
+
+        <div
+          #content
+          class="post-prose min-w-0"
+          [attr.lang]="isTranslationMissing() ? 'en' : null"
+        >
+          <ng-container [ngComponentOutlet]="postContent()" />
+        </div>
       </div>
     </div>
   }

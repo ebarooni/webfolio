@@ -5,10 +5,17 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Route } from '../../config/route';
 import { ArrowIcon } from '../../shared/components/arrow-icon/arrow-icon';
 import { Button } from '../../shared/components/button/button';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 @Component({
   selector: 'app-contact-panel',
-  imports: [ArrowIcon, Button, RouterLink, TranslocoDirective],
+  imports: [
+    LocalizePathPipe,
+    ArrowIcon,
+    Button,
+    RouterLink,
+    TranslocoDirective,
+  ],
   templateUrl: './contact-panel.html',
 })
 export class ContactPanel {

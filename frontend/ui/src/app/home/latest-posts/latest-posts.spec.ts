@@ -38,7 +38,7 @@ describe('LatestPosts', () => {
   it('should show the two newest posts', () => {
     expect(rowTexts()).toHaveLength(2);
     expect(rowTexts()[0]).toContain(postText(BLOG_POSTS[0].slug).title);
-    expect(rowTexts()[0]).toContain('10 min read');
+    expect(rowTexts()[0]).toContain('5 min read');
   });
 
   it('should link the header to the blog and every row to its post', () => {
@@ -56,12 +56,12 @@ describe('LatestPosts', () => {
   });
 
   it('should format the dates for the active language', () => {
-    expect(rowTexts()[0]).toContain('Apr 4, 2026');
+    expect(rowTexts()[0]).toContain('Nov 20, 2026');
 
     TestBed.inject(TranslocoService).setActiveLang('de');
     fixture.detectChanges();
 
-    expect(rowTexts()[0]).toContain('4. Apr. 2026');
-    expect(rowTexts()[0]).toContain('10 Min. Lesezeit');
+    expect(rowTexts()[0]).toContain('20. Nov. 2026');
+    expect(rowTexts()[0]).toContain('5 Min. Lesezeit');
   });
 });

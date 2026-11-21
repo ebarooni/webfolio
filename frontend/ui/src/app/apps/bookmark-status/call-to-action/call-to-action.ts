@@ -1,12 +1,14 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 
+import { SiteLanguage } from '../../../localization/site-language';
 import { Reveal } from '../../../shared/reveal/reveal';
 import {
   BOOKMARK_STATUS_ASSETS,
   blockPlaceholderAppStoreKey,
   blockPlaceholderAppStoreLink,
   bookmarkStatusLinks,
+  REQUIREMENTS,
 } from '../bookmark-status.copy';
 import { callToActionCopy } from './call-to-action.copy';
 
@@ -17,11 +19,16 @@ import { callToActionCopy } from './call-to-action.copy';
   styleUrl: './call-to-action.css',
 })
 export class BookmarkStatusCallToAction {
-  readonly copy = {
-    storeHref: bookmarkStatusLinks.storeHref,
-    requirements: bookmarkStatusLinks.requirements,
-    finalCta: callToActionCopy,
-  };
+  private readonly language = inject(SiteLanguage).current;
+  readonly copy = computed(() => {
+    const language = this.language();
+
+    return {
+      storeHref: bookmarkStatusLinks.storeHref,
+      requirements: REQUIREMENTS[language],
+      finalCta: callToActionCopy[language],
+    };
+  });
   readonly assets = BOOKMARK_STATUS_ASSETS;
   readonly blockStore = blockPlaceholderAppStoreLink;
   readonly blockStoreKey = blockPlaceholderAppStoreKey;
