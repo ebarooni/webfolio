@@ -2,6 +2,44 @@
 <html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
+    <!--
+      Region lock. A visitor on Iran time sees only the access screen until
+      they enter the password. This runs before the body is read, so a
+      prerendered page does not paint before the app checks. It is a copy
+      of src/app/access-denied/region-lock.ts; region-lock.spec.ts keeps
+      both in step.
+    -->
+    <script>
+      (function () {
+        var zone = "";
+        try {
+          zone = String(
+            Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+          ).toLowerCase();
+        } catch (error) {}
+        var now = new Date();
+        var january = new Date(now.getFullYear(), 0, 1);
+        var locked =
+          zone === "asia/tehran" ||
+          zone === "iran" ||
+          now.getTimezoneOffset() === -210 ||
+          january.getTimezoneOffset() === -210;
+        if (!locked) {
+          return;
+        }
+        try {
+          var state = JSON.parse(localStorage.getItem("app:v1") || "null");
+          if (state && state.hasGeoAccess === true) {
+            return;
+          }
+        } catch (error) {}
+        if (/(^|\/)access-denied\/?$/.test(location.pathname)) {
+          return;
+        }
+        document.documentElement.style.display = "none";
+        location.replace("/access-denied");
+      })();
+    </script>
     <title>Ehsan Barooni | Full-Stack Software Engineer</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

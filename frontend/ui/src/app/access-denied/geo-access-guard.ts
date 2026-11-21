@@ -1,18 +1,18 @@
-import { inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Route } from '../config/route';
 import { AppStore } from '../store/app/app.store';
+import { isLockedTimeZone } from './region-lock';
 
-const TZ = ['Asia/Tehran'];
-
-function isSuspended(): boolean {
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return TZ.includes(timezone);
-}
-
-// A visitor from a suspended region who entered the password has access.
+// A visitor on Iran time who entered the password has access. The prerender
+// step runs on the build machine, so its time zone never locks a page.
 function isBlocked(): boolean {
-  return isSuspended() && !inject(AppStore).hasGeoAccess();
+  return (
+    isPlatformBrowser(inject(PLATFORM_ID)) &&
+    isLockedTimeZone() &&
+    !inject(AppStore).hasGeoAccess()
+  );
 }
 
 export const geoAccessGuard: CanActivateFn = () => {

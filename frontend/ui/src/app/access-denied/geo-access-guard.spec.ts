@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { signal } from '@angular/core';
+import { PLATFORM_ID, signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { AppStore } from '../store/app/app.store';
 import { geoAccessGuard, accessDeniedGuard } from './geo-access-guard';
@@ -50,6 +50,23 @@ describe('geo-access guards', () => {
     it('grants access in a suspended timezone after the password', () => {
       mockTimezone(EX_TZ);
       hasGeoAccess.set(true);
+      expect(runGuard(geoAccessGuard)).toBe(true);
+    });
+
+    it('blocks the old alias Iran', () => {
+      mockTimezone('Iran');
+      expect(runGuard(geoAccessGuard)).not.toBe(true);
+    });
+
+    it('blocks Iran time when the zone name is not known', () => {
+      mockTimezone('Etc/Unknown');
+      vi.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(-210);
+      expect(runGuard(geoAccessGuard)).not.toBe(true);
+    });
+
+    it('never blocks while pages are prerendered', () => {
+      mockTimezone(EX_TZ);
+      TestBed.overrideProvider(PLATFORM_ID, { useValue: 'server' });
       expect(runGuard(geoAccessGuard)).toBe(true);
     });
   });
