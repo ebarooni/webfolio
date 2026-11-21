@@ -9,6 +9,8 @@ The repository is structured to keep backend and frontend concerns separated whi
 
 The uptime of the deployed site is tracked on the [status page](https://status.barooni.dev/status/status). The site footer links to it as well.
 
+Visit statistics come from a self-hosted, cookieless [Umami](https://umami.is). The setup is in [docs/setup-analytics.md](docs/setup-analytics.md), and the privacy note is at `/privacy`.
+
 ## Architecture Overview
 
 ### Monorepo
