@@ -5,14 +5,14 @@
       type="button"
       class="copy-button"
       [class.copied]="copyState() === 'copied'"
-      aria-label="Copy code"
+      [attr.aria-label]="text().copyCode"
       (click)="copy()"
     >
       @if (copyState() === 'copied') {
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <path d="M4.5 10.5l3.5 3.5 7.5-8" />
         </svg>
-        Copied
+        {{ text().copied }}
       } @else {
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <rect x="7" y="7" width="9.5" height="9.5" rx="2" />
@@ -20,7 +20,7 @@
             d="M13 7V5a1.5 1.5 0 0 0-1.5-1.5h-6A1.5 1.5 0 0 0 4 5v6.5A1.5 1.5 0 0 0 5.5 13H7"
           />
         </svg>
-        Copy
+        {{ text().copy }}
       }
     </button>
   </figcaption>
@@ -31,10 +31,10 @@
   <p class="sr-only" aria-live="polite">
     @switch (copyState()) {
       @case ('copied') {
-        Copied to the clipboard.
+        {{ text().copiedAnnouncement }}
       }
       @case ('failed') {
-        Copy failed. Select the code and copy it by hand.
+        {{ text().copyFailed }}
       }
     }
   </p>

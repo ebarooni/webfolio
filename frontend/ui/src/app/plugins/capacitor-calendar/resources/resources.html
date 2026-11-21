@@ -4,9 +4,9 @@
   aria-labelledby="resources-title"
 >
   <app-section-heading
-    label="Documentation"
-    title="Everything you need, at the source."
-    lead="Features, platform support, versions and the API change with the plugin. They live in one place, next to the code, and are always up to date there."
+    [label]="copy().label"
+    [title]="copy().title"
+    [lead]="copy().lead"
     headingId="resources-title"
   />
 
@@ -14,12 +14,12 @@
     @for (resource of resources; track resource.id) {
       <li class="scroll-reveal">
         <a class="card" [href]="resource.href" rel="noopener">
-          <span class="source">{{ resource.source }}</span>
+          <span class="source">{{ copy().sources[resource.source] }}</span>
           <span class="title">
-            {{ resource.title }}
+            {{ copy().resources[resource.id].title }}
             <app-arrow-icon direction="external" class="arrow" />
           </span>
-          <span class="body">{{ resource.body }}</span>
+          <span class="body">{{ copy().resources[resource.id].body }}</span>
         </a>
       </li>
     }

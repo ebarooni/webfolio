@@ -4,9 +4,7 @@
 <button
   type="button"
   class="copy"
-  [attr.aria-label]="
-    copied() ? 'Copied install command' : 'Copy install command'
-  "
+  [attr.aria-label]="copied() ? text().copiedCommand : text().copyCommand"
   (click)="copy()"
 >
   @if (copied()) {
@@ -23,5 +21,5 @@
   }
 </button>
 <span class="sr-only" aria-live="polite">{{
-  copied() ? 'Copied to the clipboard.' : ''
+  copied() ? text().copiedAnnouncement : ''
 }}</span>

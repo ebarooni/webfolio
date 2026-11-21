@@ -4,7 +4,7 @@ import {
   accessDeniedGuard,
   geoAccessGuard,
 } from './access-denied/geo-access-guard';
-import { PAGE_SEO as BOOKMARK_STATUS_SEO } from './apps/bookmark-status/bookmark-status.seo';
+import { bookmarkStatusSeo } from './apps/bookmark-status/bookmark-status.seo';
 import { postExistsGuard } from './blog/post/post-exists-guard';
 import { DEFAULT_LANGUAGE, Language, languages } from './config/languages';
 import { Route } from './config/route';
@@ -13,7 +13,7 @@ import {
   activateLanguage,
   LANGUAGE_DATA_KEY,
 } from './localization/site-language';
-import { PAGE_SEO as CAPACITOR_CALENDAR_SEO } from './plugins/capacitor-calendar/capacitor-calendar.seo';
+import { capacitorCalendarSeo } from './plugins/capacitor-calendar/capacitor-calendar.seo';
 import { RouteSeo, SEO_DATA_KEY } from './shared/seo/route-seo';
 
 // Titles that start with "pageTitles." are translation keys.
@@ -90,10 +90,10 @@ function pageRoutes(): Routes {
         import('./apps/bookmark-status/bookmark-status').then(
           (m) => m.BookmarkStatusPage,
         ),
-      title: BOOKMARK_STATUS_SEO.title,
+      title: 'pageTitles.bookmarkStatus',
       data: {
         page: Route.APPS_BOOKMARK_STATUS,
-        ...seo({ kind: 'english', config: BOOKMARK_STATUS_SEO }),
+        ...seo({ kind: 'landing', seo: bookmarkStatusSeo }),
       },
     },
     {
@@ -102,10 +102,10 @@ function pageRoutes(): Routes {
         import('./plugins/capacitor-calendar/capacitor-calendar').then(
           (m) => m.CapacitorCalendarPage,
         ),
-      title: CAPACITOR_CALENDAR_SEO.title,
+      title: 'pageTitles.capacitorCalendar',
       data: {
         page: Route.PLUGINS_CAPACITOR_CALENDAR,
-        ...seo({ kind: 'english', config: CAPACITOR_CALENDAR_SEO }),
+        ...seo({ kind: 'landing', seo: capacitorCalendarSeo }),
       },
     },
     {

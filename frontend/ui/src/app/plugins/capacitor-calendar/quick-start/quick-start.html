@@ -4,9 +4,9 @@
   aria-labelledby="quick-start-title"
 >
   <app-section-heading
-    label="Quick start"
-    title="Three steps to your first event."
-    lead="Install the package here. The permissions and the code live in the plugin documentation, so they always match the current release."
+    [label]="copy().label"
+    [title]="copy().title"
+    [lead]="copy().lead"
     headingId="quick-start-title"
   />
 
@@ -14,13 +14,12 @@
     <li class="step">
       <div class="step-text">
         <span class="step-number" aria-hidden="true">1</span>
-        <h3 class="step-title">Install the plugin</h3>
+        <h3 class="step-title">{{ copy().install.title }}</h3>
         <p>
-          Add the package and sync the native projects. On an older Capacitor
-          version, install the matching npm tag from the
-          <a class="text-link" [href]="compatibilityLink" rel="noopener"
-            >compatibility table</a
-          >.
+          {{ copy().install.textBefore }}
+          <a class="text-link" [href]="compatibilityLink" rel="noopener">{{
+            copy().install.link
+          }}</a>{{ copy().install.textAfter }}
         </p>
       </div>
       <app-code-tabs name="install" [tabs]="installTabs" />
@@ -29,16 +28,15 @@
     <li class="step">
       <div class="step-text">
         <span class="step-number" aria-hidden="true">2</span>
-        <h3 class="step-title">Declare the permissions</h3>
+        <h3 class="step-title">{{ copy().permissions.title }}</h3>
         <p>
-          The plugin uses the native calendar of the device. Add the usage
-          descriptions on iOS and the calendar permissions on Android.
+          {{ copy().permissions.text }}
         </p>
       </div>
       <a class="next-card" [href]="setupLink" rel="noopener">
-        <span class="next-source">README · Setup</span>
+        <span class="next-source">{{ copy().permissions.source }}</span>
         <span class="next-title">
-          Info.plist keys and Android permissions
+          {{ copy().permissions.card }}
           <app-arrow-icon direction="external" />
         </span>
       </a>
@@ -47,24 +45,24 @@
     <li class="step">
       <div class="step-text">
         <span class="step-number" aria-hidden="true">3</span>
-        <h3 class="step-title">Call the API</h3>
+        <h3 class="step-title">{{ copy().api.title }}</h3>
         <p>
-          Import <code>CapacitorCalendar</code>, request access and create your
-          first event.
+          {{ copy().api.textBefore }} <code>CapacitorCalendar</code
+          >{{ copy().api.textAfter }}
         </p>
       </div>
       <div class="flex flex-col gap-3">
         <a class="next-card" [href]="examplesLink" rel="noopener">
-          <span class="next-source">README · Usage examples</span>
+          <span class="next-source">{{ copy().api.examplesSource }}</span>
           <span class="next-title">
-            Copy-ready code for events, calendars and more
+            {{ copy().api.examplesCard }}
             <app-arrow-icon direction="external" />
           </span>
         </a>
         <a class="next-card" [href]="docsLink" rel="noopener">
-          <span class="next-source">Documentation</span>
+          <span class="next-source">{{ copy().api.docsSource }}</span>
           <span class="next-title">
-            Guides and the full API reference
+            {{ copy().api.docsCard }}
             <app-arrow-icon direction="external" />
           </span>
         </a>

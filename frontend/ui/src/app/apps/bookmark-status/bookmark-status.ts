@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 
+import { injectCopy } from '../../localization/localized-copy';
 import { AppStore } from '../../store/app/app.store';
 import { BookmarkStatusBento } from './bento/bento';
 import { BookmarkStatusCallToAction } from './call-to-action/call-to-action';
@@ -27,13 +28,11 @@ import { pageCopy } from './bookmark-status.copy';
   styleUrl: './bookmark-status.css',
   host: {
     class: 'bookmark-status-page flex flex-1 flex-col',
-    // The page text is English in every site language.
-    lang: 'en',
   },
 })
 export class BookmarkStatusPage {
   private readonly appStore = inject(AppStore);
 
-  readonly copy = pageCopy;
+  readonly copy = injectCopy(pageCopy);
   readonly theme = this.appStore.theme;
 }

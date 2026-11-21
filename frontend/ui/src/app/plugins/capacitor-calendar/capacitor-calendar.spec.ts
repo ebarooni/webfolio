@@ -4,13 +4,19 @@ import { provideRouter } from '@angular/router';
 import { RenderMode } from '@angular/ssr';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import {
+  germanTranslation,
+  localizationTestingModule,
+} from '../../../testing/localization-testing';
 import { pageRoutesOf } from '../../../testing/page-routes';
 import { serverRoutes } from '../../app.routes.server';
+import { languages } from '../../config/languages';
 import { Route } from '../../config/route';
+import { SiteLanguage } from '../../localization/site-language';
 import { CapacitorCalendarPage } from './capacitor-calendar';
 import { RESOURCES } from './capacitor-calendar.content';
-import { PAGE_SEO, PAGE_TITLE, PAGE_URL } from './capacitor-calendar.seo';
-import { FAQ } from './faq/faq.content';
+import { capacitorCalendarSeo } from './capacitor-calendar.seo';
+import { FAQ_COPY } from './faq/faq.content';
 
 type JsonLdNode = Readonly<{
   '@type': string;
@@ -25,13 +31,17 @@ describe('CapacitorCalendarPage', () => {
     return (fixture.nativeElement as HTMLElement).textContent;
   }
 
+  const URL = 'https://barooni.dev/de/plugins/capacitor-calendar';
+
   function jsonLdGraph(): JsonLdNode[] {
-    return (PAGE_SEO.jsonLd as { '@graph'?: JsonLdNode[] })['@graph'] ?? [];
+    const seo = capacitorCalendarSeo('de', URL, 'Titel');
+
+    return (seo.jsonLd as { '@graph'?: JsonLdNode[] })['@graph'] ?? [];
   }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CapacitorCalendarPage],
+      imports: [CapacitorCalendarPage, localizationTestingModule()],
       providers: [provideRouter([])],
     }).compileComponents();
 
@@ -52,7 +62,7 @@ describe('CapacitorCalendarPage', () => {
 
     expect(pageIndex).toBeGreaterThan(-1);
     expect(pageIndex).toBeLessThan(wildcardIndex);
-    expect(children[pageIndex].title).toBe(PAGE_TITLE);
+    expect(children[pageIndex].title).toBe('pageTitles.capacitorCalendar');
   });
 
   it('is prerendered in every site language', () => {
@@ -86,29 +96,46 @@ describe('CapacitorCalendarPage', () => {
 
     expect(text()).toContain('npm i @ebarooni/capacitor-calendar');
     expect(resourceLinks).toEqual(RESOURCES.map((resource) => resource.href));
-    expect(questions.length).toBe(FAQ.length);
+    expect(questions.length).toBe(FAQ_COPY.en.entries.length);
   });
 
-  it('states no versions or numbers that change with a plugin release', () => {
-    const seoText = JSON.stringify(PAGE_SEO);
+  it('shows the page in the language of the address', async () => {
+    await TestBed.inject(SiteLanguage).activate('de');
+    fixture.detectChanges();
 
-    expect(text()).not.toMatch(/\d+k\+|\bv?\d+\.\d+\.\d+\b/);
-    expect(seoText).not.toMatch(/\d+k\+|\b\d+\.\d+\.\d+\b/);
+    expect(text()).toContain('Native Kalendertermine für');
+    expect(text()).toContain(FAQ_COPY.de.entries[0].question);
+    expect(germanTranslation.pageTitles.capacitorCalendar).toContain(
+      'Capacitor Calendar',
+    );
   });
 
-  it('gives the title, the English canonical link and structured data', () => {
-    const types = jsonLdGraph().map((node) => node['@type']);
-    const faqPage = jsonLdGraph().find((node) => node['@type'] === 'FAQPage');
+  it('states no versions or numbers that change with a plugin release', async () => {
+    for (const language of languages) {
+      await TestBed.inject(SiteLanguage).activate(language);
+      fixture.detectChanges();
 
-    expect(PAGE_SEO.title).toBe(PAGE_TITLE);
-    expect(PAGE_SEO.canonicalUrl).toBe(PAGE_URL);
-    expect(PAGE_SEO.alternates).toBeUndefined();
-    expect(types).toEqual([
+      expect(text()).not.toMatch(/\d+k\+|\bv?\d+\.\d+\.\d+\b/);
+      expect(
+        JSON.stringify(capacitorCalendarSeo(language, URL, 'Title')),
+      ).not.toMatch(/\d+k\+|\b\d+\.\d+\.\d+\b/);
+    }
+  });
+
+  it('gives structured data in the language of the page', () => {
+    const graph = jsonLdGraph();
+    const faqPage = graph.find((node) => node['@type'] === 'FAQPage');
+
+    expect(graph.map((node) => node['@type'])).toEqual([
       'WebPage',
       'SoftwareSourceCode',
       'BreadcrumbList',
       'FAQPage',
     ]);
-    expect(faqPage?.mainEntity?.length).toBe(FAQ.length);
+    expect(graph[0]).toMatchObject({ url: URL, inLanguage: 'de' });
+    expect(faqPage?.mainEntity?.length).toBe(FAQ_COPY.de.entries.length);
+    expect(faqPage?.mainEntity?.[0]).toMatchObject({
+      name: FAQ_COPY.de.entries[0].question,
+    });
   });
 });

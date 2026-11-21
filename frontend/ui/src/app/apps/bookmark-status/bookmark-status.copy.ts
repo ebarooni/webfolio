@@ -1,3 +1,5 @@
+import { LocalizedCopy } from '../../localization/localized-copy';
+
 /**
  * HTML-mockup captures live under public/apps/safari-bookmark-status/shots.
  * Replace those files with real Mac screenshots that keep the same names.
@@ -55,22 +57,32 @@ export function blockPlaceholderAppStoreKey(event: KeyboardEvent): void {
   event.preventDefault();
 }
 
-export const REQUIREMENTS = [
-  'macOS Ventura 13 or later',
-  'Safari 16.4 or later',
-] as const;
+export const REQUIREMENTS: LocalizedCopy<readonly string[]> = {
+  en: ['macOS Ventura 13 or later', 'Safari 16.4 or later'],
+  de: ['macOS Ventura 13 oder neuer', 'Safari 16.4 oder neuer'],
+  nl: ['macOS Ventura 13 of nieuwer', 'Safari 16.4 of nieuwer'],
+};
 
-/** Store link, price, and requirements shared by the hero and the final call to action. */
+/** Store link and price shared by the hero and the final call to action. */
 export const bookmarkStatusLinks = {
   appStoreUrl: APP_STORE_URL,
   storeHref: storeLinkHref(APP_STORE_URL),
   secondaryHref: SECONDARY_CALL_TO_ACTION_URL,
   howFragment: HOW_IT_WORKS_FRAGMENT,
   price: PRICE,
-  requirements: REQUIREMENTS,
 } as const;
 
-export const pageCopy = {
-  legal:
-    'Apple, the Apple logo, Mac, macOS, and Safari are trademarks of Apple Inc., registered in the U.S. and other countries. Mac App Store is a service mark of Apple Inc. Bookmark Status is an independent app and is not affiliated with Apple.',
-} as const;
+export const pageCopy: LocalizedCopy<Readonly<{ legal: string }>> = {
+  en: {
+    legal:
+      'Apple, the Apple logo, Mac, macOS, and Safari are trademarks of Apple Inc., registered in the U.S. and other countries. Mac App Store is a service mark of Apple Inc. Bookmark Status is an independent app and is not affiliated with Apple.',
+  },
+  de: {
+    legal:
+      'Apple, das Apple-Logo, Mac, macOS und Safari sind Marken der Apple Inc., die in den USA und weiteren Ländern eingetragen sind. Mac App Store ist eine Dienstleistungsmarke der Apple Inc. Bookmark Status ist eine unabhängige App und steht in keiner Verbindung zu Apple.',
+  },
+  nl: {
+    legal:
+      'Apple, het Apple-logo, Mac, macOS en Safari zijn handelsmerken van Apple Inc., gedeponeerd in de VS en andere landen. Mac App Store is een dienstmerk van Apple Inc. Bookmark Status is een onafhankelijke app en is niet verbonden aan Apple.',
+  },
+};

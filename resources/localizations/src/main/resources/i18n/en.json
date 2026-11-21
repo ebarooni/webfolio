@@ -235,6 +235,8 @@
     "post": "{{title}} | Ehsan Barooni",
     "contact": "Contact | Ehsan Barooni",
     "buildInfo": "Build info | Ehsan Barooni",
+    "capacitorCalendar": "Capacitor Calendar Plugin for iOS and Android | Ehsan Barooni",
+    "bookmarkStatus": "Bookmark Status for Safari on Mac | Ehsan Barooni",
     "accessDenied": "Access denied | Ehsan Barooni",
     "notFound": "Page not found | Ehsan Barooni"
   },

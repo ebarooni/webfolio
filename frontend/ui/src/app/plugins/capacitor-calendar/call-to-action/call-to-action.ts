@@ -9,6 +9,8 @@ import {
   PLUGIN_LINKS,
 } from '../capacitor-calendar.content';
 import { InstallCommand } from '../install-command/install-command';
+import { injectCopy } from '../../../localization/localized-copy';
+import { CALL_TO_ACTION_COPY } from './call-to-action.copy';
 import { LocalizePathPipe } from '../../../localization/localize-path.pipe';
 
 @Component({
@@ -18,6 +20,7 @@ import { LocalizePathPipe } from '../../../localization/localize-path.pipe';
   styleUrl: './call-to-action.css',
 })
 export class CapacitorCalendarCallToAction {
+  readonly copy = injectCopy(CALL_TO_ACTION_COPY);
   readonly links = PLUGIN_LINKS;
   readonly installCommand = HERO_INSTALL_COMMAND;
   readonly contactLink = `/${Route.CONTACT}`;

@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 
 import { ArrowIcon } from '../../../shared/components/arrow-icon/arrow-icon';
 import { RESOURCES } from '../capacitor-calendar.content';
+import { injectCopy } from '../../../localization/localized-copy';
 import { SectionHeading } from '../section-heading/section-heading';
+import { RESOURCES_COPY } from './resources.copy';
 
 /** Links to each topic in the plugin repository and docs. */
 @Component({
@@ -13,4 +15,5 @@ import { SectionHeading } from '../section-heading/section-heading';
 })
 export class CapacitorCalendarResources {
   readonly resources = RESOURCES;
+  readonly copy = injectCopy(RESOURCES_COPY);
 }

@@ -17,13 +17,13 @@ import { SEO_DATA_KEY } from './route-seo';
 @Component({ template: '' })
 class EmptyPage {}
 
-const ENGLISH_ONLY = {
-  title: 'English page',
-  description: 'English description',
-  canonicalUrl: 'https://barooni.dev/english',
-  image: { url: 'https://barooni.dev/x.png', alt: 'X', width: 1, height: 1 },
-  jsonLd: { '@type': 'WebPage' },
-};
+function landingSeo(language: Language, url: string, title: string) {
+  return {
+    description: `Landing ${language}`,
+    image: { url: 'https://barooni.dev/x.png', alt: 'X', width: 1, height: 1 },
+    jsonLd: { '@type': 'WebPage', url, name: title },
+  };
+}
 
 function pages(): Routes {
   return [
@@ -40,10 +40,10 @@ function pages(): Routes {
       data: { [SEO_DATA_KEY]: { kind: 'post' } },
     },
     {
-      path: 'english',
+      path: 'landing',
       component: EmptyPage,
-      title: ENGLISH_ONLY.title,
-      data: { [SEO_DATA_KEY]: { kind: 'english', config: ENGLISH_ONLY } },
+      title: 'pageTitles.capacitorCalendar',
+      data: { [SEO_DATA_KEY]: { kind: 'landing', seo: landingSeo } },
     },
     {
       path: '**',
@@ -159,13 +159,30 @@ describe('RouteSeoWriter', () => {
     });
   });
 
-  it('keeps the English canonical link of an English-only page', async () => {
-    await open('/de/english');
+  it('gives a landing page its texts and links in each language', async () => {
+    await open('/nl/landing');
+
+    const jsonLd = JSON.parse(
+      document.head.querySelector('script[type="application/ld+json"]')
+        ?.textContent ?? '{}',
+    ) as { url?: string; name?: string };
 
     expect(head('link[rel="canonical"]', 'href')).toEqual([
-      ENGLISH_ONLY.canonicalUrl,
+      'https://barooni.dev/nl/landing',
     ]);
-    expect(head('link[rel="alternate"]', 'href')).toEqual([]);
+    expect(head('link[rel="alternate"]', 'href')).toEqual([
+      'https://barooni.dev/landing',
+      'https://barooni.dev/de/landing',
+      'https://barooni.dev/nl/landing',
+      'https://barooni.dev/landing',
+    ]);
+    expect(TestBed.inject(Meta).getTag('name="description"')?.content).toBe(
+      'Landing nl',
+    );
+    expect(jsonLd).toMatchObject({
+      url: 'https://barooni.dev/nl/landing',
+      name: document.title,
+    });
   });
 
   it('asks search engines not to list an unknown page', async () => {

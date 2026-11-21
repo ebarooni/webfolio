@@ -1,4 +1,5 @@
 import { DEFAULT_LANGUAGE, isLanguage, Language } from '../config/languages';
+import { SITE_URL } from '../config/site';
 
 /**
  * English pages have no prefix, so the addresses from before the language
@@ -14,6 +15,13 @@ export function localizePath(path: string, language: Language): string {
   return normalizedPath === '/'
     ? `/${language}`
     : `/${language}${normalizedPath}`;
+}
+
+/** The full public address of a page in one language. */
+export function localizedUrl(path: string, language: Language): string {
+  const localizedPath = localizePath(path, language);
+
+  return localizedPath === '/' ? `${SITE_URL}/` : `${SITE_URL}${localizedPath}`;
 }
 
 /** Gives the language of an address and the address without its prefix. */

@@ -7,7 +7,7 @@ import { DEFAULT_LANGUAGE, Language, languages } from '../../config/languages';
 import { OPEN_GRAPH_LOCALES, SITE_IMAGE, SITE_URL } from '../../config/site';
 import { SOCIAL_LINKS } from '../../config/social-links';
 import {
-  localizePath,
+  localizedUrl,
   splitLanguagePrefix,
 } from '../../localization/localized-path';
 import { languageOfRoute } from '../../localization/site-language';
@@ -22,11 +22,27 @@ export type SeoPageKey = 'home' | 'blog' | 'projects' | 'contact' | 'buildInfo';
 export type RouteSeo =
   | Readonly<{ kind: 'page'; key: SeoPageKey; noIndex?: boolean }>
   | Readonly<{ kind: 'post' }>
-  // An English-only page. Its English address is the canonical one in
-  // every site language, so search engines list it once.
-  | Readonly<{ kind: 'english'; config: PageSeoConfig }>
+  // A landing page with its own texts in every language, see LandingSeo.
+  | Readonly<{ kind: 'landing'; seo: LandingSeoFactory }>
   // Search engines must not list the page, for example "not found".
   | Readonly<{ kind: 'hidden' }>;
+
+/**
+ * The head tags of a landing page in one language, besides the title, the
+ * canonical link, the locales and the hreflang links. The writer adds
+ * those. The url is the canonical address, for the ids in JSON-LD, and
+ * the title is the translated page title.
+ */
+export type LandingSeo = Pick<
+  PageSeoConfig,
+  'description' | 'image' | 'jsonLd' | 'social'
+>;
+
+export type LandingSeoFactory = (
+  language: Language,
+  url: string,
+  title: string,
+) => LandingSeo;
 
 const PERSON_ID = `${SITE_URL}/#person`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -49,12 +65,6 @@ function deepestChild(root: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
   return snapshot;
 }
 
-function absoluteUrl(path: string, language: Language): string {
-  const localizedPath = localizePath(path, language);
-
-  return localizedPath === '/' ? `${SITE_URL}/` : `${SITE_URL}${localizedPath}`;
-}
-
 function alternatesOf(
   path: string,
   available: readonly Language[],
@@ -62,9 +72,9 @@ function alternatesOf(
   return [
     ...available.map((language) => ({
       hreflang: language,
-      href: absoluteUrl(path, language),
+      href: localizedUrl(path, language),
     })),
-    { hreflang: 'x-default', href: absoluteUrl(path, DEFAULT_LANGUAGE) },
+    { hreflang: 'x-default', href: localizedUrl(path, DEFAULT_LANGUAGE) },
   ];
 }
 
@@ -89,9 +99,8 @@ export class RouteSeoWriter {
     }
 
     switch (routeSeo.kind) {
-      case 'english':
-        // The site language changes only the navbar and the footer.
-        this.pageSeo.apply(routeSeo.config);
+      case 'landing':
+        this.pageSeo.apply(this.landing(routeSeo.seo, path, language, title));
         return;
       case 'hidden':
         this.pageSeo.apply({
@@ -121,7 +130,7 @@ export class RouteSeoWriter {
     available: readonly Language[],
     description = this.translate('seo.description.home', language),
   ): PageSeoConfig & { jsonLd: Record<string, unknown> } {
-    const canonicalUrl = absoluteUrl(path, language);
+    const canonicalUrl = localizedUrl(path, language);
 
     return {
       title,
@@ -146,6 +155,20 @@ export class RouteSeoWriter {
         isPartOf: { '@id': WEBSITE_ID },
         author: { '@id': PERSON_ID },
       },
+    };
+  }
+
+  private landing(
+    seo: LandingSeoFactory,
+    path: string,
+    language: Language,
+    title: string,
+  ): PageSeoConfig {
+    const config = this.translatedPage(path, language, title, languages);
+
+    return {
+      ...config,
+      ...seo(language, config.canonicalUrl, title),
     };
   }
 
