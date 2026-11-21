@@ -4,6 +4,16 @@ Self-hosted, cookieless visit statistics with [Umami](https://umami.is) on the V
 
 Follow the steps in sequence. Each step tells you **where** you do it, **what** you do, the **expected result** and **why**. The site address is `barooni.dev`. Replace it if you use this guide for another domain.
 
+## Where you see the statistics
+
+The statistics are in the Umami dashboard. It is not on the internet. Open an SSH tunnel from your computer and keep the terminal open:
+
+```bash
+ssh -L 3002:127.0.0.1:3002 -N myserver
+```
+
+Then open `http://localhost:3002` in your browser and log in as `admin` with the password you set in [step 6](#6-change-the-admin-password-and-add-the-website). Choose the website `barooni.dev`. **Overview** shows visitors, page views, pages, referrers, countries, browsers and devices for a time range. **Realtime** shows the last 30 minutes. To see one language, filter by a path that starts with `/de` or `/nl`. For read-only access without the tunnel, for example on a phone, see [Open the dashboard later](#open-the-dashboard-later).
+
 ## Overview
 
 - **Two containers** – `umami` (web app, dashboard and event API) and `umami-db` (PostgreSQL). No ClickHouse, no Redis.
