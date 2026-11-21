@@ -5,14 +5,14 @@
 >
   <div class="layout">
     <app-section-heading
-      label="FAQ"
-      title="Questions developers ask first."
-      lead="Short answers, and where to find the details. The plugin documentation is always the current source."
+      [label]="copy().label"
+      [title]="copy().title"
+      [lead]="copy().lead"
       headingId="faq-title"
     />
 
     <div class="questions">
-      @for (entry of entries; track entry.id; let first = $first) {
+      @for (entry of entries(); track entry.id; let first = $first) {
         <details name="capacitor-calendar-faq" [open]="first">
           <summary>
             <h3>{{ entry.question }}</h3>

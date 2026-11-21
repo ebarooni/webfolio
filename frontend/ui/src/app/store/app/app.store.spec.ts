@@ -11,6 +11,7 @@ describe('AppStore', () => {
     developerMode: false,
     hasGeoAccess: false,
     language: 'en',
+    languageSuggestionDismissed: false,
     theme: 'light',
   };
 
@@ -69,7 +70,19 @@ describe('AppStore', () => {
       developerMode: true,
       hasGeoAccess: true,
       language: 'de',
+      languageSuggestionDismissed: false,
       theme: 'dark',
+    });
+  });
+
+  it('should remember that the language suggestion was dismissed', () => {
+    store.initialize();
+    store.dismissLanguageSuggestion();
+
+    expect(store.languageSuggestionDismissed()).toBe(true);
+    expect(persistedState()).toEqual({
+      ...defaultState,
+      languageSuggestionDismissed: true,
     });
   });
 

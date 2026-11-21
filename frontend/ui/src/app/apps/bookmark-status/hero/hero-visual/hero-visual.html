@@ -2,7 +2,7 @@
 <app-bookmark-status-shot
   name="hero-tree"
   [theme]="theme()"
-  [alt]="copy.shotAlt"
+  [alt]="copy().shotAlt"
   [width]="1280"
   [height]="918"
   frameClass="bookmark-status-hero-shot"
@@ -12,7 +12,7 @@
 <app-bookmark-status-shot
   name="toolbar-tip"
   [theme]="theme()"
-  [alt]="copy.toolbarAlt"
+  [alt]="copy().toolbarAlt"
   [width]="533"
   [height]="100"
   frameClass="float-toolbar"
@@ -36,8 +36,8 @@
     </svg>
   </span>
   <span>
-    <strong>{{ copy.pillTitle }}</strong>
-    <span>{{ copy.pillBody }}</span>
+    <strong>{{ copy().pillTitle }}</strong>
+    <span>{{ copy().pillBody }}</span>
   </span>
 </div>
 <div class="fade" aria-hidden="true"></div>

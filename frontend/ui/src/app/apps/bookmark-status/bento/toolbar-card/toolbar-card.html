@@ -1,13 +1,13 @@
 <article class="bookmark-status-card bookmark-status-card-toolbar" appReveal>
   <div class="bookmark-status-card-copy">
     <span class="bookmark-status-kicker">{{
-      copy.features.toolbar.kicker
+      copy().features.toolbar.kicker
     }}</span>
-    <h3>{{ copy.features.toolbar.title }}</h3>
-    <p>{{ copy.features.toolbar.body }}</p>
-    <div class="legend" [attr.aria-label]="copy.features.toolbar.legendLabel">
+    <h3>{{ copy().features.toolbar.title }}</h3>
+    <p>{{ copy().features.toolbar.body }}</p>
+    <div class="legend" [attr.aria-label]="copy().features.toolbar.legendLabel">
       @for (
-        label of copy.features.toolbar.legend;
+        label of copy().features.toolbar.legend;
         track label;
         let index = $index
       ) {
@@ -29,14 +29,14 @@
       <app-bookmark-status-shot
         name="toolbar-tip"
         [theme]="theme()"
-        [alt]="copy.features.toolbar.savedAlt"
+        [alt]="copy().features.toolbar.savedAlt"
         [width]="533"
         [height]="100"
       />
       <app-bookmark-status-shot
         name="toolbar-site-tip"
         [theme]="theme()"
-        [alt]="copy.features.toolbar.siteAlt"
+        [alt]="copy().features.toolbar.siteAlt"
         [width]="533"
         [height]="100"
         frameClass="offset"

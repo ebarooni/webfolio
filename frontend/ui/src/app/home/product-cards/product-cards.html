@@ -4,7 +4,7 @@
   [attr.aria-label]="t('label')"
 >
   <li class="flex">
-    <a class="card group focus-ring" [routerLink]="calendarLink">
+    <a class="card group focus-ring" [routerLink]="calendarLink | localizePath">
       <span
         class="card-icon calendar-icon"
         role="img"
@@ -52,7 +52,7 @@
   </li>
 
   <li class="flex">
-    <a class="card group focus-ring" [routerLink]="bookmarkLink">
+    <a class="card group focus-ring" [routerLink]="bookmarkLink | localizePath">
       <img
         class="card-icon"
         width="56"

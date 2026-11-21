@@ -5,12 +5,12 @@
 >
   <div class="bookmark-status-card-copy">
     <span class="bookmark-status-kicker">{{
-      copy.features.duplicates.kicker
+      copy().features.duplicates.kicker
     }}</span>
-    <h3>{{ copy.features.duplicates.title }}</h3>
+    <h3>{{ copy().features.duplicates.title }}</h3>
     <p>
-      <strong>{{ copy.features.duplicates.lead }}</strong>{{
-        copy.features.duplicates.body
+      <strong>{{ copy().features.duplicates.lead }}</strong>{{
+        copy().features.duplicates.body
       }}
     </p>
   </div>
@@ -18,7 +18,7 @@
     <app-bookmark-status-shot
       name="duplicates"
       [theme]="theme()"
-      [alt]="copy.features.duplicates.alt"
+      [alt]="copy().features.duplicates.alt"
       [width]="900"
       [height]="760"
       frameClass="duplicates-shot"

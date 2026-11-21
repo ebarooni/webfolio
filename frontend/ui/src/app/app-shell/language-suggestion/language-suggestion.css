@@ -1,0 +1,44 @@
+/*
+ * A small card at the bottom of the screen. It does not move the page and
+ * it does not take the focus, so it does not stop the visitor.
+ */
+.language-suggestion {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 10px 10px 10px 16px;
+  border: 1px solid var(--color-base-300);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-base-100) 92%, transparent);
+  box-shadow: 0 12px 32px -12px rgb(0 0 0 / 25%);
+  backdrop-filter: blur(16px) saturate(1.5);
+  animation: suggestion-in 240ms ease-out;
+}
+
+@media (width >= 40rem) {
+  .language-suggestion {
+    inset-inline: auto 24px;
+    bottom: 24px;
+    flex-wrap: nowrap;
+    max-width: 36rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .language-suggestion {
+    animation: none;
+  }
+}
+
+@keyframes suggestion-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

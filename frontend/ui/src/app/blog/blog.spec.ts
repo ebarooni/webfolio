@@ -50,16 +50,16 @@ describe('BlogComponent', () => {
 
     expect(text).toContain(postText(BLOG_POSTS[0].slug).title);
     expect(text).toContain(postText(BLOG_POSTS[0].slug).summary);
-    expect(text).toContain('10 min read');
+    expect(text).toContain('5 min read');
   });
 
   it('should format the dates for the active language', () => {
-    expect(rows()[0].textContent).toContain('Apr 4, 2026');
+    expect(rows()[0].textContent).toContain('Nov 20, 2026');
 
     TestBed.inject(TranslocoService).setActiveLang('de');
     fixture.detectChanges();
 
-    expect(rows()[0].textContent).toContain('4. Apr. 2026');
-    expect(rows()[0].textContent).toContain('10 Min. Lesezeit');
+    expect(rows()[0].textContent).toContain('20. Nov. 2026');
+    expect(rows()[0].textContent).toContain('5 Min. Lesezeit');
   });
 });

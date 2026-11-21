@@ -26,14 +26,14 @@
     </p>
 
     <nav class="mt-2 flex flex-wrap items-center gap-x-7 gap-y-3">
-      <a appButton [routerLink]="projectsLink">
+      <a appButton [routerLink]="projectsLink | localizePath">
         {{ t('ctaWork') }}
         <app-arrow-icon />
       </a>
 
       <a
         class="focus-ring inline-flex min-h-11 items-center rounded-lg font-semibold text-ink underline decoration-base-300 decoration-2 underline-offset-[6px] hover:text-primary"
-        [routerLink]="contactLink"
+        [routerLink]="contactLink | localizePath"
       >
         {{ t('ctaContact') }}
       </a>

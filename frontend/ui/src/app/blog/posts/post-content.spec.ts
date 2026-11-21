@@ -1,17 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
 
-import { languages } from '../../config/languages';
 import { BLOG_POSTS } from '../post-catalog';
 import { POST_CONTENT } from './post-content';
 
 describe('POST_CONTENT', () => {
   it('has a text with the same sections for each post in each language', () => {
     for (const post of BLOG_POSTS) {
-      const sectionCounts = languages.map((language) => {
-        const fixture = TestBed.createComponent(
-          POST_CONTENT[post.id][language],
-        );
+      const sectionCounts = post.languages.map((language) => {
+        const content = POST_CONTENT[post.id][language];
+
+        if (!content) {
+          throw new Error(`${post.slug} has no ${language} text`);
+        }
+
+        const fixture = TestBed.createComponent(content);
         fixture.detectChanges();
 
         const root = fixture.nativeElement as HTMLElement;
@@ -24,6 +27,14 @@ describe('POST_CONTENT', () => {
       });
 
       expect(new Set(sectionCounts).size).toBe(1);
+    }
+  });
+
+  it('lists exactly the translated languages of each post in the catalog', () => {
+    for (const post of BLOG_POSTS) {
+      expect(Object.keys(POST_CONTENT[post.id]).sort()).toEqual(
+        [...post.languages].sort(),
+      );
     }
   });
 });

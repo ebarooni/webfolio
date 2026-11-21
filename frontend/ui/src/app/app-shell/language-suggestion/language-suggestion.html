@@ -1,0 +1,43 @@
+@if (suggestion(); as suggestion) {
+  <aside
+    *transloco="
+      let t;
+      prefix: 'shell.languageSuggestion';
+      lang: suggestion.language
+    "
+    class="language-suggestion"
+    [attr.lang]="suggestion.language"
+    [attr.aria-label]="t('label')"
+  >
+    <p class="text-sm leading-snug text-base-content">
+      {{ t('text') }}
+    </p>
+
+    <div class="flex items-center gap-1">
+      <a
+        class="focus-ring inline-flex min-h-10 items-center rounded-[0.625rem] bg-ink px-4 text-sm font-semibold whitespace-nowrap text-base-100 hover:opacity-85"
+        [routerLink]="suggestion.link"
+        [attr.hreflang]="suggestion.language"
+      >
+        {{ t('action') }}
+      </a>
+
+      <button
+        type="button"
+        class="focus-ring inline-flex size-10 shrink-0 items-center justify-center rounded-[0.625rem] text-muted hover:bg-base-200 hover:text-ink"
+        [attr.aria-label]="t('dismiss')"
+        (click)="dismiss()"
+      >
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
+          <path
+            d="M4 4 12 12M12 4 4 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </aside>
+}

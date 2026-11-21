@@ -13,10 +13,11 @@ import { BLOG_POSTS } from '../post-catalog';
 import { postExistsGuard } from './post-exists-guard';
 
 describe('postExistsGuard', () => {
-  function runGuard(slug: string): unknown {
+  function runGuard(slug: string, language = 'en'): unknown {
     const route = {
       paramMap: convertToParamMap({ slug }),
-    } as ActivatedRouteSnapshot;
+      pathFromRoot: [{ data: { language } }],
+    } as unknown as ActivatedRouteSnapshot;
 
     return TestBed.runInInjectionContext(() =>
       postExistsGuard(route, {} as RouterStateSnapshot),
@@ -37,6 +38,14 @@ describe('postExistsGuard', () => {
     expect(result).toBeInstanceOf(UrlTree);
     expect(TestBed.inject(Router).serializeUrl(result as UrlTree)).toBe(
       '/blog',
+    );
+  });
+
+  it('should keep the language of the address', () => {
+    const result = runGuard('unknown', 'nl');
+
+    expect(TestBed.inject(Router).serializeUrl(result as UrlTree)).toBe(
+      '/nl/blog',
     );
   });
 });

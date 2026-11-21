@@ -7,6 +7,7 @@ import { injectActiveLanguage } from '../../localization/active-language';
 import { ShortDate } from '../../shared/short-date/short-date';
 import { type BlogPostPreview } from '../post-catalog';
 import { postTitleTransitionName } from '../post-title-transition';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 /**
  * One post in a list of posts. The blog page shows the summary. The home
@@ -14,7 +15,7 @@ import { postTitleTransitionName } from '../post-title-transition';
  */
 @Component({
   selector: 'app-post-row',
-  imports: [RouterLink, ShortDate, TranslocoDirective],
+  imports: [LocalizePathPipe, RouterLink, ShortDate, TranslocoDirective],
   templateUrl: './post-row.html',
 })
 export class PostRow {
@@ -23,7 +24,7 @@ export class PostRow {
   readonly showSummary = input(false, { transform: booleanAttribute });
 
   readonly language = injectActiveLanguage();
-  readonly link = computed(() => ['/', Route.BLOG, this.post().slug]);
+  readonly link = computed(() => `/${Route.BLOG}/${this.post().slug}`);
   readonly transitionName = computed(() =>
     postTitleTransitionName(this.post().slug),
   );

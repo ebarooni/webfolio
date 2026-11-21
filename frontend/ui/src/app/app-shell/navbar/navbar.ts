@@ -8,6 +8,7 @@ import { Theme } from '../../config/themes-array';
 import { Brand } from '../brand/brand';
 import { LanguageSwitch } from '../language-switch/language-switch';
 import { ThemeSwitch } from '../theme-switch/theme-switch';
+import { LocalizePathPipe } from '../../localization/localize-path.pipe';
 
 type NavItem = Readonly<{
   labelKey: string;
@@ -18,6 +19,7 @@ type NavItem = Readonly<{
 @Component({
   selector: 'app-navbar',
   imports: [
+    LocalizePathPipe,
     Brand,
     LanguageSwitch,
     RouterLink,

@@ -11,18 +11,18 @@
       class="mt-2 flex flex-wrap items-center gap-x-7 gap-y-3"
       [attr.aria-label]="t('notFound.navLabel')"
     >
-      <a appButton [routerLink]="homeLink">
+      <a appButton [routerLink]="homeLink | localizePath">
         {{ t('notFound.home') }}
         <app-arrow-icon />
       </a>
       <div class="flex flex-wrap items-center gap-x-7 gap-y-3">
-        <a appArrowLink [routerLink]="projectsLink">
+        <a appArrowLink [routerLink]="projectsLink | localizePath">
           {{ t('shell.nav.work') }}
         </a>
-        <a appArrowLink [routerLink]="blogLink">
+        <a appArrowLink [routerLink]="blogLink | localizePath">
           {{ t('shell.nav.writing') }}
         </a>
-        <a appArrowLink [routerLink]="contactLink">
+        <a appArrowLink [routerLink]="contactLink | localizePath">
           {{ t('shell.nav.contact') }}
         </a>
       </div>

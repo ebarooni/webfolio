@@ -8,6 +8,9 @@ import {
   signal,
 } from '@angular/core';
 
+import { injectCopy } from '../../../localization/localized-copy';
+import { CODE_COPY } from '../code/code.copy';
+
 const COPIED_FEEDBACK_MS = 2000;
 
 /** One install command on a single line, with a copy button. */
@@ -20,6 +23,7 @@ export class InstallCommand {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private feedbackTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
+  readonly text = injectCopy(CODE_COPY);
   readonly command = input.required<string>();
   readonly copied = signal(false);
 

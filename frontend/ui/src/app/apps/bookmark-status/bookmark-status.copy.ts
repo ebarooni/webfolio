@@ -1,3 +1,5 @@
+import { LocalizedCopy } from '../../localization/localized-copy';
+
 /**
  * HTML-mockup captures live under public/apps/safari-bookmark-status/shots.
  * Replace those files with real Mac screenshots that keep the same names.
@@ -23,101 +25,6 @@ export const BOOKMARK_STATUS_ASSETS = {
   toolbarGrey: `${BOOKMARK_STATUS_ASSET_BASE}/brand/toolbar-grey-32.png`,
   toolbarBlue: `${BOOKMARK_STATUS_ASSET_BASE}/brand/toolbar-blue-32.png`,
   toolbarRed: `${BOOKMARK_STATUS_ASSET_BASE}/brand/toolbar-red-32.png`,
-} as const;
-
-export const PAGE_TITLE = 'Bookmark Status for Safari on Mac | Ehsan Barooni';
-
-export const PAGE_CANONICAL = 'https://barooni.dev/apps/safari-bookmark-status';
-
-export type PageMetaTag = Readonly<{
-  attr: 'name' | 'property';
-  key: string;
-  content: string;
-}>;
-
-export const PAGE_META: readonly PageMetaTag[] = [
-  {
-    attr: 'name',
-    key: 'description',
-    content:
-      'See at a glance whether the page you’re on is already in your Safari bookmarks, and where. Read-only, private, and entirely on your Mac.',
-  },
-  { attr: 'property', key: 'og:type', content: 'website' },
-  { attr: 'property', key: 'og:site_name', content: 'Ehsan Barooni' },
-  {
-    attr: 'property',
-    key: 'og:title',
-    content: 'Bookmark Status: already bookmarked? Now you’ll know.',
-  },
-  {
-    attr: 'property',
-    key: 'og:description',
-    content:
-      'A Safari toolbar button that shows whether the current page is in your bookmarks, and where. Read-only and on-device.',
-  },
-  {
-    attr: 'property',
-    key: 'og:url',
-    content: PAGE_CANONICAL,
-  },
-  {
-    attr: 'property',
-    key: 'og:image',
-    content: 'https://barooni.dev/apps/safari-bookmark-status/og-image.png',
-  },
-  { attr: 'property', key: 'og:image:width', content: '1200' },
-  { attr: 'property', key: 'og:image:height', content: '630' },
-  {
-    attr: 'property',
-    key: 'og:image:alt',
-    content:
-      'Bookmark Status app icon next to a Safari bookmark tree with the current page highlighted',
-  },
-  { attr: 'name', key: 'twitter:card', content: 'summary_large_image' },
-  {
-    attr: 'name',
-    key: 'twitter:title',
-    content: 'Bookmark Status: already bookmarked? Now you’ll know.',
-  },
-  {
-    attr: 'name',
-    key: 'twitter:description',
-    content:
-      'A Safari toolbar button that shows whether the current page is in your bookmarks, and where. Read-only and on-device.',
-  },
-  {
-    attr: 'name',
-    key: 'twitter:image',
-    content: 'https://barooni.dev/apps/safari-bookmark-status/og-image.png',
-  },
-  {
-    attr: 'name',
-    key: 'twitter:image:alt',
-    content:
-      'Bookmark Status app icon next to a Safari bookmark tree with the current page highlighted',
-  },
-];
-
-export const PAGE_JSON_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Bookmark Status',
-  alternateName: 'Bookmark Status for Safari',
-  description:
-    'A Safari extension and Mac app that shows whether the current page is already in your Safari bookmarks, and where. Read-only and on-device.',
-  applicationCategory: 'UtilitiesApplication',
-  operatingSystem: 'macOS 13.0 or later',
-  softwareRequirements: 'Safari 16.4 or later',
-  url: PAGE_CANONICAL,
-  downloadUrl: APP_STORE_URL,
-  image: 'https://barooni.dev/apps/safari-bookmark-status/og-image.png',
-  screenshot:
-    'https://barooni.dev/apps/safari-bookmark-status/hero-tree-light@2x.png',
-  author: {
-    '@type': 'Person',
-    name: 'Ehsan Barooni',
-    url: 'https://barooni.dev',
-  },
 } as const;
 
 export function isAppStoreUrlPlaceholder(url: string): boolean {
@@ -150,22 +57,32 @@ export function blockPlaceholderAppStoreKey(event: KeyboardEvent): void {
   event.preventDefault();
 }
 
-export const REQUIREMENTS = [
-  'macOS Ventura 13 or later',
-  'Safari 16.4 or later',
-] as const;
+export const REQUIREMENTS: LocalizedCopy<readonly string[]> = {
+  en: ['macOS Ventura 13 or later', 'Safari 16.4 or later'],
+  de: ['macOS Ventura 13 oder neuer', 'Safari 16.4 oder neuer'],
+  nl: ['macOS Ventura 13 of nieuwer', 'Safari 16.4 of nieuwer'],
+};
 
-/** Store link, price, and requirements shared by the hero and the final call to action. */
+/** Store link and price shared by the hero and the final call to action. */
 export const bookmarkStatusLinks = {
   appStoreUrl: APP_STORE_URL,
   storeHref: storeLinkHref(APP_STORE_URL),
   secondaryHref: SECONDARY_CALL_TO_ACTION_URL,
   howFragment: HOW_IT_WORKS_FRAGMENT,
   price: PRICE,
-  requirements: REQUIREMENTS,
 } as const;
 
-export const pageCopy = {
-  legal:
-    'Apple, the Apple logo, Mac, macOS, and Safari are trademarks of Apple Inc., registered in the U.S. and other countries. Mac App Store is a service mark of Apple Inc. Bookmark Status is an independent app and is not affiliated with Apple.',
-} as const;
+export const pageCopy: LocalizedCopy<Readonly<{ legal: string }>> = {
+  en: {
+    legal:
+      'Apple, the Apple logo, Mac, macOS, and Safari are trademarks of Apple Inc., registered in the U.S. and other countries. Mac App Store is a service mark of Apple Inc. Bookmark Status is an independent app and is not affiliated with Apple.',
+  },
+  de: {
+    legal:
+      'Apple, das Apple-Logo, Mac, macOS und Safari sind Marken der Apple Inc., die in den USA und weiteren Ländern eingetragen sind. Mac App Store ist eine Dienstleistungsmarke der Apple Inc. Bookmark Status ist eine unabhängige App und steht in keiner Verbindung zu Apple.',
+  },
+  nl: {
+    legal:
+      'Apple, het Apple-logo, Mac, macOS en Safari zijn handelsmerken van Apple Inc., gedeponeerd in de VS en andere landen. Mac App Store is een dienstmerk van Apple Inc. Bookmark Status is een onafhankelijke app en is niet verbonden aan Apple.',
+  },
+};

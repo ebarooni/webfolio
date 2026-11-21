@@ -1,7 +1,7 @@
 <a
   *transloco="let t; prefix: 'blog'"
   class="group focus-ring grid gap-x-8 gap-y-2 py-7 transition-[padding] hover:pl-3 motion-reduce:transition-none md:grid-cols-[8.75rem_minmax(0,1fr)_auto] md:items-baseline"
-  [routerLink]="link()"
+  [routerLink]="link() | localizePath"
 >
   <time class="meta-label" [attr.datetime]="post().date.toISOString()">
     {{ post().date | shortDate: language() }}

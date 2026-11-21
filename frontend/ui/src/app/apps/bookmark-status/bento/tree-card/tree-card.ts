@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 
+import { SiteLanguage } from '../../../../localization/site-language';
 import { Reveal } from '../../../../shared/reveal/reveal';
 import { treeCardCopy } from './tree-card.copy';
 import { BookmarkStatusKeys } from '../../keys/keys';
@@ -11,9 +12,14 @@ import { BookmarkStatusKeys } from '../../keys/keys';
   styleUrl: './tree-card.css',
 })
 export class BookmarkStatusTreeCard {
-  readonly copy = {
-    features: {
-      tree: treeCardCopy,
-    },
-  };
+  private readonly language = inject(SiteLanguage).current;
+  readonly copy = computed(() => {
+    const language = this.language();
+
+    return {
+      features: {
+        tree: treeCardCopy[language],
+      },
+    };
+  });
 }
