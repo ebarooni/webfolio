@@ -19,6 +19,7 @@ const PAGES: readonly string[] = [
   Route.BLOG,
   Route.CONTACT,
   Route.BUILD_INFO,
+  Route.PRIVACY,
   Route.APPS_BOOKMARK_STATUS,
   Route.PLUGINS_CAPACITOR_CALENDAR,
 ];

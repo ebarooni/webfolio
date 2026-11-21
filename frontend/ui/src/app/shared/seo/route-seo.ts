@@ -17,7 +17,8 @@ import { PageAlternate, PageSeo, PageSeoConfig } from './page-seo';
 export const SEO_DATA_KEY = 'seo';
 
 /** A page with a description under "seo.description.<key>". */
-export type SeoPageKey = 'home' | 'blog' | 'projects' | 'contact' | 'buildInfo';
+export type SeoPageKey =
+  'home' | 'blog' | 'projects' | 'contact' | 'buildInfo' | 'privacy';
 
 export type RouteSeo =
   | Readonly<{ kind: 'page'; key: SeoPageKey; noIndex?: boolean }>
@@ -52,6 +53,7 @@ const PAGE_TYPES: Readonly<Record<SeoPageKey, string>> = {
   buildInfo: 'WebPage',
   contact: 'ContactPage',
   home: 'ProfilePage',
+  privacy: 'WebPage',
   projects: 'CollectionPage',
 };
 

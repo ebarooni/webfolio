@@ -43,6 +43,13 @@
     <div class="flex items-center gap-4">
       <a
         class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
+        [routerLink]="privacyLink | localizePath"
+      >
+        {{ t('privacy') }}
+      </a>
+
+      <a
+        class="meta-label focus-ring flex min-h-11 items-center rounded-lg hover:text-ink"
         [href]="statusPageUrl"
         target="_blank"
         rel="noopener noreferrer"
