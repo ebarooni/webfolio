@@ -173,6 +173,38 @@ Verify DNS propagation:
 dig +short barooni.dev
 ```
 
+### Second domain (barooni.de)
+
+`barooni.de` and `www.barooni.de` only redirect to `https://barooni.dev`. Caddy does the redirect (see `deploy/caddy/Caddyfile`). It sends a permanent `301` and keeps the path and query, so `barooni.de/de/contact?x=1` lands on `barooni.dev/de/contact?x=1`. Caddy also gets the TLS certificates for both names, so `https://barooni.de` works too.
+
+At the `barooni.de` registrar, point both names to the same server:
+
+| Type  | Name | Value         | TTI  |
+| ----- | ---- | ------------- | ---- |
+| A     | @    | `<SERVER_IP>` | 3600 |
+| CNAME | www  | barooni.de    | 3600 |
+
+Do not turn on the registrar's own forwarding or parking for this domain. It would answer instead of Caddy, and most registrar forwarding has no valid certificate for `https://`. If the domain has a CAA record, it must allow `letsencrypt.org`.
+
+The app itself only knows `barooni.dev`. Canonical links, `hreflang`, the sitemap and social preview links all use `SITE_URL` in `frontend/ui/src/app/config/site.ts`, so search engines never see `barooni.de` as a second copy of the site. Nothing else needs a change for the second domain.
+
+If no mail is sent from `barooni.de`, add these records so nobody can send mail in its name:
+
+| Type | Name    | Value                                 |
+| ---- | ------- | ------------------------------------- |
+| MX   | @       | `0 .`                                 |
+| TXT  | @       | `v=spf1 -all`                         |
+| TXT  | \_dmarc | `v=DMARC1; p=reject; adkim=s; aspf=s` |
+
+Verify the redirect:
+
+```bash
+curl -sI http://barooni.de/de/contact?x=1 | grep -iE '^(HTTP|location)'
+curl -sI https://www.barooni.de/ | grep -iE '^(HTTP|location)'
+```
+
+**Expected result:** the first command shows `308` with `Location: https://barooni.de/de/contact?x=1` (Caddy moves plain HTTP to HTTPS first). The second shows `301` with `Location: https://barooni.dev/`.
+
 ## Step 4: Deployment
 
 The deployment files live under `/opt/docker/`. Each service gets its own directory with an independent `compose.yaml`. A shared external Docker network (`proxy`) connects the services to the Caddy reverse proxy. Bitwarden uses its own network (`bitwarden`), shared only with Caddy. Passbolt uses its own network (`passbolt`), shared only with Caddy. Its database is on a second, internal network that Caddy cannot reach.
