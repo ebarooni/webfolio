@@ -249,7 +249,7 @@ See [file-permissions.md](file-permissions.md) for the full list. Then store a c
 
 ### 8. Add the Caddy site block
 
-**Where:** VPS over SSH, in `/opt/docker/caddy/Caddyfile`.
+**Where:** VPS over SSH, in `/opt/docker/caddy/Caddyfile`. Add the same block to `deploy/caddy/Caddyfile` in the repository too. The repository file is copied over the server file in later steps, so a block that exists only on the server gets lost.
 
 ```
 passbolt.example.com {

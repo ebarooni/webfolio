@@ -8,7 +8,7 @@
  */
 export const ANALYTICS = {
   host: 'barooni.dev',
-  websiteId: '',
+  websiteId: '10e9c8f8-6d24-4e41-87be-b97161e4c771',
   // Caddy forwards this path to Umami. A neutral name on the site's own
   // address gets past more content blockers than "umami.js" on a
   // separate domain. The event endpoint (/insights/e) is set in Umami.

@@ -1,9 +1,12 @@
+# Every site on the server lives in this file. The setup guides copy it over
+# /opt/docker/caddy/Caddyfile, so a block added only on the server is lost.
+
 barooni.dev {
     # Visit statistics (Umami, deploy/umami). Only the tracker script and
     # the event endpoint are public, on the site's own address. The
     # dashboard stays behind an SSH tunnel. See docs/setup-analytics.md.
-    # Until Umami runs, these two paths answer 502. The site loads the
-    # tracker only when a website ID is set (frontend config/analytics.ts).
+    # If Umami is down, these two paths answer 502 and the site works on.
+    # The website ID is in frontend config/analytics.ts.
     handle /insights/i.js {
         rewrite * /script.js
         reverse_proxy umami:3000
@@ -20,4 +23,34 @@ barooni.dev {
 
 www.barooni.dev, barooni.de, www.barooni.de {
     redir https://barooni.dev{uri} permanent
+}
+
+vault.barooni.dev {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        -Server
+    }
+
+    @admin path /admin /admin/*
+    respond @admin 403
+
+    reverse_proxy bitwarden:8080
+}
+
+status.barooni.dev {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        -Server
+    }
+
+    @public path /status/* /api/status-page/* /assets/* /upload/* /icon.svg /favicon.ico
+    handle @public {
+        reverse_proxy uptime-kuma:3001
+    }
+    handle / {
+        redir * /status/status
+    }
+    handle {
+        respond 404
+    }
 }

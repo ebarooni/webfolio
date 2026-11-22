@@ -204,7 +204,7 @@ Uptime Kuma can show a read-only status page (for example `status.example.com`).
 
 1. In Uptime Kuma: **Status Pages > New Status Page**. Write `status` in **Slug**. The `/status/` prefix is already there, so the full path becomes `/status/status`. Write a neutral title in **Name**, for example `Service status`. Then add the monitors.
 
-![Add New Status Page form with slug status](images/monitoring/status-page-new.png) 2. Point `status.example.com` to the server (A record, as in [step 1 of setup-bitwarden.md](setup-bitwarden.md#1-point-vaultexamplecom-to-the-server)). 3. Add this block to `/opt/docker/caddy/Caddyfile`. It sends only the status page and the files it needs to Uptime Kuma. Everything else, the login and dashboard included, gets `404`:
+![Add New Status Page form with slug status](images/monitoring/status-page-new.png) 2. Point `status.example.com` to the server (A record, as in [step 1 of setup-bitwarden.md](setup-bitwarden.md#1-point-vaultexamplecom-to-the-server)). 3. Add this block to `/opt/docker/caddy/Caddyfile`. It sends only the status page and the files it needs to Uptime Kuma. Everything else, the login and dashboard included, gets `404`. Add the same block to `deploy/caddy/Caddyfile` in the repository too. The repository file is copied over the server file in later steps, so a block that exists only on the server gets lost.
 
 ```
 status.example.com {

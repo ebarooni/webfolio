@@ -262,7 +262,7 @@ docker buildx imagetools inspect ghcr.io/bitwarden/lite:2026.10.1 | grep -m1 Dig
 
 ### 10. Add the Caddy site block
 
-**Where:** VPS over SSH, in `/opt/docker/caddy/Caddyfile`.
+**Where:** VPS over SSH, in `/opt/docker/caddy/Caddyfile`. Add the same block to `deploy/caddy/Caddyfile` in the repository too. The repository file is copied over the server file in later steps, so a block that exists only on the server gets lost.
 
 ```
 vault.example.com {
@@ -439,7 +439,7 @@ The idea in short:
 
 #### 1. Block /admin in Caddy for good
 
-**Where:** VPS over SSH, in `/opt/docker/caddy/Caddyfile`.
+**Where:** VPS over SSH, in `/opt/docker/caddy/Caddyfile`. Add the same block to `deploy/caddy/Caddyfile` in the repository too. The repository file is copied over the server file in later steps, so a block that exists only on the server gets lost.
 
 1. Open the Caddyfile:
 

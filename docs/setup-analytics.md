@@ -167,11 +167,15 @@ Open `http://localhost:3002`. Log in with the default user `admin` and the passw
 
 **Where:** local Mac terminal, then VPS over SSH.
 
-The repository's `deploy/caddy/Caddyfile` already has the two `handle` blocks for `/insights/...`. Copy it and reload Caddy:
+The repository's `deploy/caddy/Caddyfile` already has the two `handle` blocks for `/insights/...`, next to the blocks for the redirect domains, the vault and the status page. Compare it with the server's file first, so that no block that exists only on the server gets lost. Then copy it and reload Caddy:
 
 ```bash
+ssh myserver cat /opt/docker/caddy/Caddyfile | diff - deploy/caddy/Caddyfile
+ssh myserver cp /opt/docker/caddy/Caddyfile /opt/docker/caddy/Caddyfile.bak
 scp deploy/caddy/Caddyfile myserver:/opt/docker/caddy/Caddyfile
 ```
+
+The `diff` must show only the `/insights/...` lines as new. If it shows a block that the repository does not have, add that block to `deploy/caddy/Caddyfile` first.
 
 ```bash
 cd /opt/docker/caddy
