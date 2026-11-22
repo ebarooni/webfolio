@@ -199,7 +199,7 @@ If no mail is sent from `barooni.de`, add these records so nobody can send mail 
 Verify the redirect:
 
 ```bash
-curl -sI http://barooni.de/de/contact?x=1 | grep -iE '^(HTTP|location)'
+curl -sI 'http://barooni.de/de/contact?x=1' | grep -iE '^(HTTP|location)'
 curl -sI https://www.barooni.de/ | grep -iE '^(HTTP|location)'
 ```
 
