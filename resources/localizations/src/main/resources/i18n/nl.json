@@ -233,7 +233,7 @@
     "eyebrow": "Privacy",
     "title": "Wat deze site over je weet.",
     "lead": "Heel weinig. Geen cookies, geen advertenties en geen trackers van derden. Deze pagina legt elk gegeven uit en waarom het er is.",
-    "updated": "Laatst bijgewerkt: 21 november 2026",
+    "updated": "Laatst bijgewerkt: 22 november 2026",
     "contactLink": "Stuur me een bericht",
     "operator": {
       "title": "Wie deze site beheert",
@@ -241,11 +241,11 @@
     },
     "statistics": {
       "title": "Bezoekstatistieken",
-      "body": "Om te zien welke pagina's worden gelezen, telt de site bezoeken met Umami. Umami draait op mijn eigen server, plaatst geen cookies en slaat je IP-adres niet op. Het telt de pagina, de pagina waar je vandaan kwam, je browser, besturingssysteem, type apparaat, schermgrootte, taal en land. Het land komt uit je IP-adres, dat daarna wordt weggegooid. Paginaweergaven van één bezoek worden gekoppeld met een eenrichtingscode die elke maand verandert en niet terug te rekenen is naar je adres. De gegevens blijven op mijn server. Ik deel of verkoop ze niet. Als je browser „Do Not Track” stuurt, word je niet geteld. De rechtsgrond is mijn gerechtvaardigd belang om te weten hoe de site wordt gebruikt (art. 6 lid 1 sub f AVG)."
+      "body": "Om te zien welke pagina's worden gelezen, telt de site bezoeken met Umami. Umami draait op mijn eigen server, plaatst geen cookies en slaat je IP-adres niet op. Het telt de pagina, de pagina waar je vandaan kwam, je browser, besturingssysteem, type apparaat, schermgrootte, taal en globale locatie (land, regio en stad). De locatie komt uit je IP-adres, dat daarna wordt weggegooid. Paginaweergaven van één bezoek worden gekoppeld met een eenrichtingscode die elke maand verandert en niet terug te rekenen is naar je adres. De gegevens blijven op mijn server. Ik deel of verkoop ze niet. Als je browser „Do Not Track” stuurt, word je niet geteld. De rechtsgrond is mijn gerechtvaardigd belang om te weten hoe de site wordt gebruikt (art. 6 lid 1 sub f AVG)."
     },
     "contact": {
       "title": "Contactformulier",
-      "body": "Als je het contactformulier verstuurt, gaan je naam, e-mailadres en bericht als Telegram-bericht naar mij. De site slaat ze niet op. Ik gebruik ze alleen om je te antwoorden, en ik verwijder ze als je dat vraagt. De rechtsgrond is je verzoek (art. 6 lid 1 sub b en f AVG)."
+      "body": "Als je het contactformulier verstuurt, gaan je naam, e-mailadres en bericht als Telegram-bericht naar mij. Telegram is een berichtendienst buiten de EU en verwerkt het bericht daar om het te bezorgen. De site slaat ze niet op. Ik gebruik ze alleen om je te antwoorden, en ik verwijder ze als je dat vraagt. De rechtsgrond is je verzoek (art. 6 lid 1 sub b en f AVG)."
     },
     "hosting": {
       "title": "Hosting",
@@ -257,7 +257,7 @@
     },
     "external": {
       "title": "Andere diensten",
-      "body": "De pagina over Capacitor Calendar toont actuele badges van shields.io. Om ze te laden, maakt je browser verbinding met shields.io, dat dan je IP-adres ziet. Links naar GitHub, npm, LinkedIn en andere sites openen die sites, en daar gelden hun eigen privacyregels."
+      "body": "De startpagina en de pagina over Capacitor Calendar tonen actuele badges van shields.io. Om ze te laden, maakt je browser verbinding met shields.io, dat dan je IP-adres ziet. Links naar GitHub, npm, LinkedIn en andere sites openen die sites, en daar gelden hun eigen privacyregels."
     },
     "rights": {
       "title": "Je rechten",

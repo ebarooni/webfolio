@@ -233,7 +233,7 @@
     "eyebrow": "Privacy",
     "title": "What this site knows about you.",
     "lead": "Very little. No cookies, no ads and no third-party trackers. This page explains each piece of data and why it is there.",
-    "updated": "Last updated: 21 November 2026",
+    "updated": "Last updated: 22 November 2026",
     "contactLink": "Write to me",
     "operator": {
       "title": "Who runs this site",
@@ -241,11 +241,11 @@
     },
     "statistics": {
       "title": "Visit statistics",
-      "body": "To see which pages people read, the site counts visits with Umami. Umami runs on my own server, sets no cookies and does not store your IP address. It counts the page, the page you came from, your browser, operating system, device type, screen size, language and country. The country comes from your IP address, which is then discarded. Page views of one visit are linked by a one-way code that changes every month and cannot be turned back into your address. The data stays on my server. I do not share or sell it. If your browser sends “Do Not Track”, you are not counted. The legal basis is my legitimate interest in knowing how the site is used (Art. 6(1)(f) GDPR)."
+      "body": "To see which pages people read, the site counts visits with Umami. Umami runs on my own server, sets no cookies and does not store your IP address. It counts the page, the page you came from, your browser, operating system, device type, screen size, language and approximate location (country, region and city). The location comes from your IP address, which is then discarded. Page views of one visit are linked by a one-way code that changes every month and cannot be turned back into your address. The data stays on my server. I do not share or sell it. If your browser sends “Do Not Track”, you are not counted. The legal basis is my legitimate interest in knowing how the site is used (Art. 6(1)(f) GDPR)."
     },
     "contact": {
       "title": "Contact form",
-      "body": "When you send the contact form, your name, email address and message go to me as a Telegram message. The site does not store them. I use them only to answer you, and I delete them when you ask. The legal basis is your request (Art. 6(1)(b) and (f) GDPR)."
+      "body": "When you send the contact form, your name, email address and message go to me as a Telegram message. Telegram is a messaging service based outside the EU, so it processes the message there to deliver it. The site does not store them. I use them only to answer you, and I delete them when you ask. The legal basis is your request (Art. 6(1)(b) and (f) GDPR)."
     },
     "hosting": {
       "title": "Hosting",
@@ -257,7 +257,7 @@
     },
     "external": {
       "title": "Other services",
-      "body": "The Capacitor Calendar page shows live badges from shields.io. To load them, your browser connects to shields.io, which then sees your IP address. Links to GitHub, npm, LinkedIn and other sites open those sites, and their own privacy rules apply."
+      "body": "The home page and the Capacitor Calendar page show live badges from shields.io. To load them, your browser connects to shields.io, which then sees your IP address. Links to GitHub, npm, LinkedIn and other sites open those sites, and their own privacy rules apply."
     },
     "rights": {
       "title": "Your rights",

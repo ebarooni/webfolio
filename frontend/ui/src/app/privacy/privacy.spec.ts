@@ -64,6 +64,6 @@ describe('Privacy', () => {
   });
 
   it('should show the date of the last change', () => {
-    expect(text('p.meta-label')).toContain('Last updated: 21 November 2026');
+    expect(text('p.meta-label')).toContain('Last updated: 22 November 2026');
   });
 });

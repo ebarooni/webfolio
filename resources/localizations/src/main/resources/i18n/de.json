@@ -233,7 +233,7 @@
     "eyebrow": "Datenschutz",
     "title": "Was diese Website über dich weiß.",
     "lead": "Sehr wenig. Keine Cookies, keine Werbung und keine Tracker von Dritten. Diese Seite erklärt jede Angabe und warum es sie gibt.",
-    "updated": "Stand: 21. November 2026",
+    "updated": "Stand: 22. November 2026",
     "contactLink": "Schreib mir",
     "operator": {
       "title": "Wer diese Website betreibt",
@@ -241,11 +241,11 @@
     },
     "statistics": {
       "title": "Besuchsstatistik",
-      "body": "Um zu sehen, welche Seiten gelesen werden, zählt die Website Besuche mit Umami. Umami läuft auf meinem eigenen Server, setzt keine Cookies und speichert deine IP-Adresse nicht. Gezählt werden die Seite, die Seite, von der du kommst, dein Browser, Betriebssystem, Gerätetyp, Bildschirmgröße, Sprache und Land. Das Land wird aus deiner IP-Adresse ermittelt, die danach verworfen wird. Seitenaufrufe eines Besuchs werden über einen Einweg-Code verknüpft, der sich jeden Monat ändert und sich nicht in deine Adresse zurückrechnen lässt. Die Daten bleiben auf meinem Server. Ich gebe sie nicht weiter und verkaufe sie nicht. Sendet dein Browser „Do Not Track“, wirst du nicht gezählt. Rechtsgrundlage ist mein berechtigtes Interesse zu wissen, wie die Website genutzt wird (Art. 6 Abs. 1 lit. f DSGVO)."
+      "body": "Um zu sehen, welche Seiten gelesen werden, zählt die Website Besuche mit Umami. Umami läuft auf meinem eigenen Server, setzt keine Cookies und speichert deine IP-Adresse nicht. Gezählt werden die Seite, die Seite, von der du kommst, dein Browser, Betriebssystem, Gerätetyp, Bildschirmgröße, Sprache und ungefährer Ort (Land, Region und Stadt). Der Ort wird aus deiner IP-Adresse ermittelt, die danach verworfen wird. Seitenaufrufe eines Besuchs werden über einen Einweg-Code verknüpft, der sich jeden Monat ändert und sich nicht in deine Adresse zurückrechnen lässt. Die Daten bleiben auf meinem Server. Ich gebe sie nicht weiter und verkaufe sie nicht. Sendet dein Browser „Do Not Track“, wirst du nicht gezählt. Rechtsgrundlage ist mein berechtigtes Interesse zu wissen, wie die Website genutzt wird (Art. 6 Abs. 1 lit. f DSGVO)."
     },
     "contact": {
       "title": "Kontaktformular",
-      "body": "Wenn du das Kontaktformular sendest, gehen dein Name, deine E-Mail-Adresse und deine Nachricht als Telegram-Nachricht an mich. Die Website speichert sie nicht. Ich nutze sie nur, um dir zu antworten, und lösche sie, wenn du das möchtest. Rechtsgrundlage ist deine Anfrage (Art. 6 Abs. 1 lit. b und f DSGVO)."
+      "body": "Wenn du das Kontaktformular sendest, gehen dein Name, deine E-Mail-Adresse und deine Nachricht als Telegram-Nachricht an mich. Telegram ist ein Nachrichtendienst mit Sitz außerhalb der EU und verarbeitet die Nachricht dort, um sie zuzustellen. Die Website speichert sie nicht. Ich nutze sie nur, um dir zu antworten, und lösche sie, wenn du das möchtest. Rechtsgrundlage ist deine Anfrage (Art. 6 Abs. 1 lit. b und f DSGVO)."
     },
     "hosting": {
       "title": "Hosting",
@@ -257,7 +257,7 @@
     },
     "external": {
       "title": "Andere Dienste",
-      "body": "Die Seite zu Capacitor Calendar zeigt aktuelle Badges von shields.io. Um sie zu laden, verbindet sich dein Browser mit shields.io, das dabei deine IP-Adresse sieht. Links zu GitHub, npm, LinkedIn und anderen Websites öffnen diese Websites, und es gelten deren eigene Datenschutzregeln."
+      "body": "Die Startseite und die Seite zu Capacitor Calendar zeigen aktuelle Badges von shields.io. Um sie zu laden, verbindet sich dein Browser mit shields.io, das dabei deine IP-Adresse sieht. Links zu GitHub, npm, LinkedIn und anderen Websites öffnen diese Websites, und es gelten deren eigene Datenschutzregeln."
     },
     "rights": {
       "title": "Deine Rechte",

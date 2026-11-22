@@ -66,6 +66,13 @@ services:
       # and the tracker script from the public site (see the Caddyfile).
       # Umami writes the path into the tracker script when it starts.
       COLLECT_API_ENDPOINT: /insights/e
+      # Take the visitor address only from X-Forwarded-For. Caddy replaces
+      # that header with the address it sees. Umami would otherwise trust
+      # headers such as X-Real-IP or CF-Connecting-IP, which a visitor can
+      # send to fake an address. For the same reason, ignore country
+      # headers and look the location up in Umami's own database.
+      CLIENT_IP_HEADER: x-forwarded-for
+      SKIP_LOCATION_HEADERS: "1"
       # No calls home: no usage telemetry, no update check.
       DISABLE_TELEMETRY: "1"
       DISABLE_UPDATES: "1"

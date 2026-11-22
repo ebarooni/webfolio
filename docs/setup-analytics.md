@@ -69,6 +69,7 @@ flowchart LR
 | Dashboard on `127.0.0.1:3002` and an SSH tunnel             | The login page is not on the internet. Only someone with SSH access can reach it.                                                                     |
 | Tracker paths on `barooni.dev`, not `analytics.barooni.dev` | Same origin: no extra DNS record, no extra certificate, no CSP entry, and block lists that match Umami's default names do not match `/insights/i.js`. |
 | `COLLECT_API_ENDPOINT=/insights/e`                          | Umami writes this path into the tracker script when it starts. Caddy then forwards only this path, not the whole Umami API.                           |
+| `CLIENT_IP_HEADER=x-forwarded-for`                          | Caddy replaces `X-Forwarded-For` with the address it sees. Other headers, such as `X-Real-IP`, pass through Caddy, so a visitor could fake them.      |
 | Database on an `internal` network                           | The database has no route to the internet, and Caddy cannot reach it.                                                                                 |
 | Telemetry and update check off                              | Umami does not call home. You learn about updates from the release page (see [Updates](#updates)).                                                    |
 | The tracker loads after the access check                    | Visitors who must stay on the access screen are not counted.                                                                                          |
@@ -156,9 +157,9 @@ ssh -L 3002:127.0.0.1:3002 -N holu@<SERVER_IP>
 
 Open `http://localhost:3002`. Log in with the default user `admin` and the password `umami`. Then, at once:
 
-1. **Settings > Profile > Change password**: set a long unique password and save it in your password manager.
-2. **Settings > Websites > Add website**: name `barooni.dev`, domain `barooni.dev`.
-3. Open the new website and copy its **Website ID** (a UUID).
+1. **Settings > Security > Change password**: set a long unique password and save it in your password manager.
+2. **Websites > Add website** (in the main menu): name `barooni.dev`, domain `barooni.dev`.
+3. Open the settings of the new website (**Settings > Websites**, then the website) and copy its **Website ID** (a UUID).
 
 **Why at once:** every new Umami has the same default login. The tunnel protects it, but change it before you do anything else.
 
@@ -304,10 +305,14 @@ Create `/opt/docker/umami/backup.sh`:
 #!/usr/bin/env bash
 # Nightly Umami dump. Keeps the last 14 dumps.
 set -euo pipefail
+umask 077
 target=/opt/docker/umami/backups
+file="$target/umami-$(date +%F).dump"
 mkdir -p "$target"
+# Write to a temporary file first, so a failed dump never replaces a good one.
 docker compose -f /opt/docker/umami/compose.yaml exec -T db \
-  pg_dump -U umami --format=custom umami > "$target/umami-$(date +%F).dump"
+  pg_dump -U umami --format=custom umami > "$file.tmp"
+mv "$file.tmp" "$file"
 find "$target" -name 'umami-*.dump' -mtime +14 -delete
 ```
 
@@ -318,14 +323,16 @@ crontab -e
 30 3 * * * /opt/docker/umami/backup.sh
 ```
 
-**Expected result:** the next morning, `ls -lh /opt/docker/umami/backups` shows one dump. Copy the dumps off the server with your other backups.
+Run it once by hand: `/opt/docker/umami/backup.sh && ls -lh /opt/docker/umami/backups`. **Expected result:** one dump that is not empty, and no error. The next morning, a second dump is there. `umask 077` makes the dumps readable only by you. Copy the dumps off the server with your other backups.
 
 ### Restore
+
+Replace `<DUMP>` with the path of the dump, for example `~/umami-backup-2026-11-22/umami.dump` or `/opt/docker/umami/backups/umami-2026-11-22.dump`.
 
 ```bash
 cd /opt/docker/umami
 docker compose stop umami
-docker compose exec -T db pg_restore -U umami -d umami --clean --if-exists < umami.dump
+docker compose exec -T db pg_restore -U umami -d umami --clean --if-exists < <DUMP>
 docker compose start umami
 ```
 
@@ -341,7 +348,26 @@ On a new server, first do setup steps 2 to 5 with the old `.env` (`umami.env`), 
 
 **All visits show "Unknown" country or one location.** Caddy sees the Docker gateway address, not the visitor, and passes that on to Umami. Test it: open the site from your phone on mobile data and from your computer on Wi-Fi. If **Realtime** shows both with the same location or as "Unknown", the address is wrong.
 
-The usual cause is Docker's userland proxy for IPv6 traffic. Two fixes, both outside this stack: enable IPv6 for Docker with `"ipv6": true`, `"ip6tables": true` and `"userland-proxy": false` in `/etc/docker/daemon.json`, or run Caddy with `network_mode: host`. Test either change on a quiet evening, because it restarts all containers.
+The usual cause is IPv6. The `proxy` network has only IPv4 addresses. Docker forwards IPv4 visitors with their own address, but it hands IPv6 visitors to its userland proxy, and Caddy then sees the gateway address (for example `172.18.0.1`). Umami treats that as a local address and shows "Unknown". Mobile networks often use IPv6, so the phone test shows it. Check whether the site has an IPv6 address at all:
+
+```bash
+dig +short AAAA barooni.dev
+```
+
+If this prints nothing, IPv6 is not the cause. If it prints an address, the fix is to give the `proxy` network IPv6 addresses. It needs Docker 27 or newer (`docker version`), and every container on `proxy` must be stopped, because an existing network cannot be changed. Plan it for a quiet evening:
+
+```bash
+# in each folder whose stack uses the proxy network: caddy, webfolio, umami, uptime-kuma
+docker compose down
+docker network rm proxy
+docker network create --ipv6 proxy
+# then in each folder again
+docker compose up -d
+```
+
+**Expected result:** the site opens over IPv4 and IPv6 (`curl -6 -sI https://barooni.dev | head -1` from a machine with IPv6), and the phone test shows the right country. Caddy is also on the `bitwarden` and `passbolt` networks. If IPv6 visitors still show "Unknown", those networks may carry Caddy's published ports. Then check which addresses Caddy has with `docker inspect caddy --format '{{json .NetworkSettings.Networks}}'` before you change anything else.
+
+Do not only set `"userland-proxy": false` in `/etc/docker/daemon.json`: with an IPv4-only network, IPv6 visitors then cannot reach the site at all. Do not run Caddy with `network_mode: host` either: Caddy then cannot reach containers such as `webfolio` or `umami` by name.
 
 **A content blocker stops the tracker.** Some visitors block all statistics. That is their choice. The numbers are a lower bound, not exact.
 
