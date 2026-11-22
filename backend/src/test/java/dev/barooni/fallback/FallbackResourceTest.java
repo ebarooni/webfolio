@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsString;
 import dev.barooni.telegram.WireMockTelegram;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -92,6 +93,34 @@ class FallbackResourceTest {
         .then()
         .statusCode(Response.Status.NOT_FOUND.getStatusCode())
         .body(containsString("<app-root"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"/", "/de", "/de/", "/nl/projects", "/plugins/capacitor-calendar/"})
+  void pageIsCheckedAgainOnEveryVisit(String path) {
+    // A cached page names build files that a later deploy removes, so it must not be reused
+    // without asking. "/" and "/de/" must not come from the static file handler and its day cache.
+    Assumptions.assumeTrue(hasResource("de/index.html"));
+
+    given()
+        .when()
+        .get(path)
+        .then()
+        .statusCode(Response.Status.OK.getStatusCode())
+        .header(HttpHeaders.CACHE_CONTROL, FallbackResource.PAGE_CACHE_CONTROL)
+        .body(containsString("<app-root"));
+  }
+
+  @Test
+  void unknownPageIsCheckedAgainOnEveryVisit() {
+    Assumptions.assumeTrue(hasResource("index.csr.html"));
+
+    given()
+        .when()
+        .get("/unknown")
+        .then()
+        .statusCode(Response.Status.NOT_FOUND.getStatusCode())
+        .header(HttpHeaders.CACHE_CONTROL, FallbackResource.PAGE_CACHE_CONTROL);
   }
 
   @Test

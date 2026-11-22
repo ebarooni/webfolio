@@ -4,6 +4,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.io.InputStream;
@@ -49,6 +50,14 @@ public class FallbackResource {
   private static final Pattern PAGE_PATH = Pattern.compile("[a-z0-9-]+(/[a-z0-9-]+)*");
 
   /**
+   * A page names the hashed script and style files of the build that made it. After a deploy those
+   * files are gone, so a page from the browser cache loads no app: the theme button and the menus
+   * do nothing until a reload. The browser may keep a page, but must ask the server before it shows
+   * it again.
+   */
+  static final String PAGE_CACHE_CONTROL = "no-cache";
+
+  /**
    * Handles all GET requests that were not matched by a more specific route. A route that the
    * Angular build prerendered gets its own HTML, so that search engines read the full page. The
    * build prerenders every public page in every language ("/", "/de/...", "/nl/..."). Any other
@@ -73,7 +82,9 @@ public class FallbackResource {
     Optional<InputStream> prerendered = prerenderedPageResource(path).flatMap(this::open);
 
     if (prerendered.isPresent()) {
-      return Response.ok(prerendered.get()).build();
+      return Response.ok(prerendered.get())
+          .header(HttpHeaders.CACHE_CONTROL, PAGE_CACHE_CONTROL)
+          .build();
     }
 
     Optional<InputStream> shell = Optional.empty();
@@ -95,7 +106,10 @@ public class FallbackResource {
             ? Response.Status.OK
             : Response.Status.NOT_FOUND;
 
-    return Response.status(status).entity(shell.get()).build();
+    return Response.status(status)
+        .entity(shell.get())
+        .header(HttpHeaders.CACHE_CONTROL, PAGE_CACHE_CONTROL)
+        .build();
   }
 
   /**
