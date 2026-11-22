@@ -1,6 +1,3 @@
-# Every site on the server lives in this file. The setup guides copy it over
-# /opt/docker/caddy/Caddyfile, so a block added only on the server is lost.
-
 barooni.dev {
     # Visit statistics (Umami, deploy/umami). Only the tracker script and
     # the event endpoint are public, on the site's own address. The
@@ -25,8 +22,6 @@ www.barooni.dev, barooni.de, www.barooni.de {
     redir https://barooni.dev{uri} permanent
 }
 
-# Bitwarden (deploy/bitwarden). /admin is closed for good and reached only
-# through the SSH tunnel. See docs/setup-bitwarden.md.
 vault.barooni.dev {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains"
@@ -39,9 +34,6 @@ vault.barooni.dev {
     reverse_proxy bitwarden:8080
 }
 
-# Public Uptime Kuma status page (deploy/uptime-kuma). Only the status page
-# and its files are public; the dashboard stays behind the SSH tunnel. See
-# docs/setup-monitoring.md.
 status.barooni.dev {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains"
