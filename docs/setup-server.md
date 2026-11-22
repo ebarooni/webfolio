@@ -188,13 +188,19 @@ Do not turn on the registrar's own forwarding or parking for this domain. It wou
 
 The app itself only knows `barooni.dev`. Canonical links, `hreflang`, the sitemap and social preview links all use `SITE_URL` in `frontend/ui/src/app/config/site.ts`, so search engines never see `barooni.de` as a second copy of the site. Nothing else needs a change for the second domain.
 
-If no mail is sent from `barooni.de`, add these records so nobody can send mail in its name:
+`barooni.de` also has a mailbox. The web redirect only touches HTTP and HTTPS, so mail is not affected. Keep these points in mind when you change DNS:
 
-| Type | Name    | Value                                 |
-| ---- | ------- | ------------------------------------- |
-| MX   | @       | `0 .`                                 |
-| TXT  | @       | `v=spf1 -all`                         |
-| TXT  | \_dmarc | `v=DMARC1; p=reject; adkim=s; aspf=s` |
+- Leave the mail provider's records as they are: `MX`, the SPF `TXT` record on `@` and the DKIM records (usually `TXT` or `CNAME` records under `_domainkey`).
+- Use an `A` record for `@`, never a `CNAME`. A `CNAME` on `@` would hide the `MX` and `TXT` records and break mail.
+- There is only one SPF record per name. Never add a second `v=spf1` record. If another service has to send mail as `barooni.de`, add it to the existing record.
+
+Add a DMARC record so other servers can check that mail from `barooni.de` really comes from you. Start in report-only mode:
+
+| Type | Name    | Value                                           |
+| ---- | ------- | ----------------------------------------------- |
+| TXT  | \_dmarc | `v=DMARC1; p=none; rua=mailto:<REPORT_ADDRESS>` |
+
+Replace `<REPORT_ADDRESS>` with a mailbox that receives the daily reports. After a few weeks of reports that show only your own mail provider, change `p=none` to `p=quarantine`, and later to `p=reject`.
 
 Verify the redirect:
 
