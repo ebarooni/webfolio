@@ -1,0 +1,127 @@
+# Based on the official Umami compose file
+# (https://github.com/umami-software/umami/blob/master/docker-compose.yml),
+# changed for this VPS: pinned images, no public port, a dashboard on
+# loopback for an SSH tunnel, and a database network that Caddy cannot
+# reach. See docs/setup-analytics.md.
+services:
+  db:
+    # The digest pins the image. The tag is only for people to read.
+    image: postgres:17.12-alpine@sha256:f9cf3e1f0066f0eb0c48707d864f0ac5941e9ff454a072077d97a4d278d07d73
+    container_name: umami-db
+    restart: unless-stopped
+
+    # The image starts as root by default, changes the owner of the data
+    # directory, and then switches to "postgres". That needs capabilities,
+    # and all of them are dropped below. Start as "postgres" directly. A
+    # new named volume already has the correct owner from the image.
+    user: postgres
+
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD:?Set UMAMI_DB_PASSWORD in .env}
+
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+
+    # Only the umami container shares this network. The database
+    # publishes no port, not even on loopback.
+    networks:
+      - umami-db
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 256m
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  umami:
+    # The digest pins the image. The tag is only for people to read.
+    image: ghcr.io/umami-software/umami:3.5.0@sha256:b64f40400d77bcadd39cf5c62a1e368c99524ca442024f96e1133355a19a5dbc
+    container_name: umami
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD}@db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET:?Set UMAMI_APP_SECRET in .env}
+      # The tracker sends its events here. Caddy forwards only this path
+      # and the tracker script from the public site (see the Caddyfile).
+      # Umami writes the path into the tracker script when it starts.
+      COLLECT_API_ENDPOINT: /insights/e
+      # Take the visitor address only from X-Forwarded-For. Caddy replaces
+      # that header with the address it sees. Umami would otherwise trust
+      # headers such as X-Real-IP or CF-Connecting-IP, which a visitor can
+      # send to fake an address. For the same reason, ignore country
+      # headers and look the location up in Umami's own database.
+      CLIENT_IP_HEADER: x-forwarded-for
+      SKIP_LOCATION_HEADERS: "1"
+      # No calls home: no usage telemetry, no update check.
+      DISABLE_TELEMETRY: "1"
+      DISABLE_UPDATES: "1"
+      TZ: ${TZ:-Europe/Berlin}
+
+    # Dashboard over an SSH tunnel only. Never remove "127.0.0.1:".
+    ports:
+      - "127.0.0.1:3002:3000"
+
+    # "proxy": Caddy forwards the tracker paths, and Uptime Kuma checks
+    # http://umami:3000/api/heartbeat. "umami-db": the database.
+    networks:
+      - proxy
+      - umami-db
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    mem_limit: 512m
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/api/heartbeat"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+# A named volume, not a bind mount: the database runs as the image's own
+# "postgres" user, and Docker then owns the permissions. Back it up with
+# pg_dump (see "Backups" in docs/setup-analytics.md), not by copying the
+# volume while the database runs.
+volumes:
+  database_volume:
+
+networks:
+  proxy:
+    external: true
+  # Compose creates this network. "internal" gives the database no route
+  # to the internet. The fixed name keeps the check in
+  # docs/setup-analytics.md independent of the project name.
+  umami-db:
+    name: umami-db
+    internal: true

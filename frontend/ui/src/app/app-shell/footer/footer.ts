@@ -55,6 +55,7 @@ export class Footer {
 
   readonly currentYear = new Date().getFullYear();
   readonly buildInfoLink = `/${Route.BUILD_INFO}`;
+  readonly privacyLink = `/${Route.PRIVACY}`;
   readonly versionToast = signal<VersionToast | null>(null);
 
   readonly links = SOCIAL_LINKS;

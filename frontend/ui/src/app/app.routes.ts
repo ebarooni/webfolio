@@ -82,6 +82,15 @@ function pageRoutes(): Routes {
       },
     },
     {
+      path: Route.PRIVACY,
+      loadComponent: () => import('./privacy/privacy').then((m) => m.Privacy),
+      title: 'pageTitles.privacy',
+      data: {
+        page: Route.PRIVACY,
+        ...seo({ kind: 'page', key: 'privacy' }),
+      },
+    },
+    {
       path: Route.APPS_BOOKMARK_STATUS,
       loadComponent: () =>
         import('./apps/bookmark-status/bookmark-status').then(

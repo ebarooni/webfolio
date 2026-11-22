@@ -93,6 +93,15 @@ describe('Footer', () => {
     expect(statusLink.textContent).toContain('status');
   });
 
+  it('should link to the privacy note on the site', () => {
+    const privacyLink = fixture.debugElement.query(
+      By.css(`a[href="/${Route.PRIVACY}"]`),
+    ).nativeElement as HTMLAnchorElement;
+
+    expect(privacyLink.target).toBe('');
+    expect(privacyLink.textContent.trim()).toBe('privacy');
+  });
+
   it('should keep the status link when the version is empty', () => {
     fixture.componentRef.setInput('version', '');
     fixture.detectChanges();

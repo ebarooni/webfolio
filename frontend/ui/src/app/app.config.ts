@@ -25,6 +25,7 @@ import { initializeApp } from './initialize-app';
 import { LocalizedTitleStrategy } from './localization/localized-title-strategy';
 import { provideLocalization } from './localization/provide-localization';
 import { skipUnwantedViewTransition } from './view-transition-filter';
+import { startVisitStatistics } from './visit-statistics/visit-statistics';
 
 function registerFixedHeaderScrollOffset(): void {
   const documentRef = inject(DOCUMENT);
@@ -45,6 +46,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(initializeApp),
     provideAppInitializer(registerFixedHeaderScrollOffset),
     provideAppInitializer(greetInBrowser),
+    provideAppInitializer(startVisitStatistics),
     provideBrowserGlobalErrorListeners(),
     // A prerendered page keeps its HTML when the app starts. Client-rendered
     // pages have no server markup, so hydration does nothing for them.

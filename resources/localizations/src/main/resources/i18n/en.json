@@ -24,7 +24,8 @@
       "tapsLeft": "{{count}} more to go",
       "developerMode": "Developer mode enabled",
       "status": "status",
-      "statusTitle": "Live uptime of this site"
+      "statusTitle": "Live uptime of this site",
+      "privacy": "privacy"
     },
     "languageSuggestion": {
       "label": "Language suggestion",
@@ -228,6 +229,41 @@
     "navLabel": "Pages to continue",
     "home": "Go to the home page"
   },
+  "privacy": {
+    "eyebrow": "Privacy",
+    "title": "What this site knows about you.",
+    "lead": "Very little. No cookies, no ads and no third-party trackers. This page explains each piece of data and why it is there.",
+    "updated": "Last updated: 22 November 2026",
+    "contactLink": "Write to me",
+    "operator": {
+      "title": "Who runs this site",
+      "body": "Ehsan Barooni runs barooni.dev and is responsible for the data on it. For any question about your data, use the contact form."
+    },
+    "statistics": {
+      "title": "Visit statistics",
+      "body": "To see which pages people read, the site counts visits with Umami. Umami runs on my own server, sets no cookies and does not store your IP address. It counts the page, the page you came from, your browser, operating system, device type, screen size, language and approximate location (country, region and city). The location comes from your IP address, which is then discarded. Page views of one visit are linked by a one-way code that changes every month and cannot be turned back into your address. The data stays on my server. I do not share or sell it. If your browser sends “Do Not Track”, you are not counted. The legal basis is my legitimate interest in knowing how the site is used (Art. 6(1)(f) GDPR)."
+    },
+    "contact": {
+      "title": "Contact form",
+      "body": "When you send the contact form, your name, email address and message go to me as a Telegram message. Telegram is a messaging service based outside the EU, so it processes the message there to deliver it. The site does not store them. I use them only to answer you, and I delete them when you ask. The legal basis is your request (Art. 6(1)(b) and (f) GDPR)."
+    },
+    "hosting": {
+      "title": "Hosting",
+      "body": "The site runs on a server rented from Hetzner Online GmbH in Germany. The server must read your IP address to send you the pages. It keeps no access log of your visits."
+    },
+    "browser": {
+      "title": "Stored in your browser",
+      "body": "The site stores a few settings in your browser, such as the theme, your language choice and hints that you closed. They never leave your device, and you can delete them in your browser settings at any time."
+    },
+    "external": {
+      "title": "Other services",
+      "body": "The home page and the Capacitor Calendar page show live badges from shields.io. To load them, your browser connects to shields.io, which then sees your IP address. Links to GitHub, npm, LinkedIn and other sites open those sites, and their own privacy rules apply."
+    },
+    "rights": {
+      "title": "Your rights",
+      "body": "You can ask what data I have about you, and ask me to correct or delete it, limit its use or stop using it. You can also complain to a data protection authority. Write to me through the contact form."
+    }
+  },
   "pageTitles": {
     "home": "Ehsan Barooni | Full-Stack Software Engineer",
     "projects": "Projects | Ehsan Barooni",
@@ -238,7 +274,8 @@
     "capacitorCalendar": "Capacitor Calendar Plugin for iOS and Android | Ehsan Barooni",
     "bookmarkStatus": "Bookmark Status for Safari on Mac | Ehsan Barooni",
     "accessDenied": "Access denied | Ehsan Barooni",
-    "notFound": "Page not found | Ehsan Barooni"
+    "notFound": "Page not found | Ehsan Barooni",
+    "privacy": "Privacy | Ehsan Barooni"
   },
   "seo": {
     "description": {
@@ -246,7 +283,8 @@
       "projects": "Selected projects by Ehsan Barooni: open source Capacitor plugins, a Safari extension for macOS, and the tools and services behind them.",
       "blog": "Technical write-ups by Ehsan Barooni on web development, Angular, Capacitor, self-hosting and the tooling he uses.",
       "contact": "Contact Ehsan Barooni, full-stack software engineer, about a project, a job or a question. Your message goes straight to him.",
-      "buildInfo": "Build details of barooni.dev: version, build date and the libraries the site uses."
+      "buildInfo": "Build details of barooni.dev: version, build date and the libraries the site uses.",
+      "privacy": "How barooni.dev handles your data: cookieless visit statistics on its own server, the contact form, hosting and your rights."
     },
     "imageAlt": "Ehsan Barooni, full-stack software engineer, barooni.dev",
     "jobTitle": "Full-stack software engineer"

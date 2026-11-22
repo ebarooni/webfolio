@@ -1,0 +1,35 @@
+<ng-container *transloco="let t; prefix: 'privacy'">
+  <app-page-header
+    [eyebrow]="t('eyebrow')"
+    [title]="t('title')"
+    [lead]="t('lead')"
+  />
+
+  <div class="page-container flex flex-col gap-10 pb-24 lg:pb-32">
+    <div class="rule-list">
+      @for (section of sections; track section) {
+        <section
+          class="grid gap-x-18 gap-y-3 py-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]"
+          [attr.aria-labelledby]="'privacy-' + section"
+        >
+          <h2
+            [id]="'privacy-' + section"
+            class="text-lg font-semibold text-ink"
+          >
+            {{ t(section + '.title') }}
+          </h2>
+          <div class="flex max-w-prose flex-col items-start gap-4">
+            <p class="text-muted">{{ t(section + '.body') }}</p>
+            @if (section === 'operator' || section === 'rights') {
+              <a appArrowLink [routerLink]="contactLink | localizePath">
+                {{ t('contactLink') }}
+              </a>
+            }
+          </div>
+        </section>
+      }
+    </div>
+
+    <p class="meta-label text-muted">{{ t('updated') }}</p>
+  </div>
+</ng-container>
