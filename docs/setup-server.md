@@ -259,7 +259,7 @@ SSH into the server and edit the configuration files:
 ssh holu@<SERVER_IP>
 ```
 
-Edit the Caddyfile and replace `example.com` with your actual domain:
+The Caddyfile already has the real domains and every site on this server. Check it, and edit it only for a new server with other domains:
 
 ```bash
 nano /opt/docker/caddy/Caddyfile
@@ -384,7 +384,7 @@ networks:
     external: true
 ```
 
-3. Add a block to `/opt/docker/caddy/Caddyfile`:
+3. Add a block to `deploy/caddy/Caddyfile` in the repository, then copy that file to `/opt/docker/caddy/Caddyfile`. Keep every site in the repository file, so that a copy never drops one:
 
 ```
 another-domain.com {
