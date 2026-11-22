@@ -37,7 +37,7 @@ flowchart LR
 
 ### What the site does
 
-- The Angular app loads the tracker after the first page opened that is not the access screen. A visitor who must stay on the access screen never loads it. A filter in the page also drops any event of the access screen. See `frontend/ui/src/app/visit-statistics/visit-statistics.ts`.
+- The Angular app loads the tracker once the first page opened, so the first view is counted with its final path. Every page is counted, the access screen too. It always shows as `/access-denied`, whatever the language, so its visits are one row under **Pages**. See `frontend/ui/src/app/visit-statistics/visit-statistics.ts`.
 - The tracker counts each page change of the single-page app by itself. `/de/...` and `/nl/...` are separate paths, so you can filter the statistics by language with the path.
 - Query strings and fragments are not sent. Visitors with "Do Not Track" are not counted.
 - The tracker runs only on `barooni.dev`. Local runs and the prerender step send nothing.
@@ -72,7 +72,7 @@ flowchart LR
 | `CLIENT_IP_HEADER=x-forwarded-for`                          | Caddy replaces `X-Forwarded-For` with the address it sees. Other headers, such as `X-Real-IP`, pass through Caddy, so a visitor could fake them.      |
 | Database on an `internal` network                           | The database has no route to the internet, and Caddy cannot reach it.                                                                                 |
 | Telemetry and update check off                              | Umami does not call home. You learn about updates from the release page (see [Updates](#updates)).                                                    |
-| The tracker loads after the access check                    | Visitors who must stay on the access screen are not counted.                                                                                          |
+| The access screen is counted like other pages               | You see how many visitors land on `/access-denied`. The access check still runs first and is not changed by the tracker.                              |
 
 ## Setup
 
