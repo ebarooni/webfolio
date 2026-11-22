@@ -40,7 +40,7 @@ flowchart LR
 - The Angular app loads the tracker once the first page opened, so the first view is counted with its final path. Every page is counted, the access screen too. It always shows as `/access-denied`, whatever the language, so its visits are one row under **Pages**. See `frontend/ui/src/app/visit-statistics/visit-statistics.ts`.
 - The tracker counts each page change of the single-page app by itself. `/de/...` and `/nl/...` are separate paths, so you can filter the statistics by language with the path.
 - Query strings and fragments are not sent. Visitors with "Do Not Track" are not counted.
-- The tracker runs only on `barooni.dev`. Local runs and the prerender step send nothing.
+- The tracker runs only on `barooni.dev`. Local runs and the prerender step send nothing. Visits through `barooni.de` are counted on `barooni.dev` after the redirect (see [setup-server.md](setup-server.md#second-domain-baroonide)).
 
 ### Order of the steps
 

@@ -179,7 +179,7 @@ dig +short barooni.dev
 
 At the `barooni.de` registrar, point both names to the same server:
 
-| Type  | Name | Value         | TTI  |
+| Type  | Name | Value         | TTL  |
 | ----- | ---- | ------------- | ---- |
 | A     | @    | `<SERVER_IP>` | 3600 |
 | CNAME | www  | barooni.de    | 3600 |
