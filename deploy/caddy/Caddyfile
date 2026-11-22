@@ -21,3 +21,38 @@ barooni.dev {
 www.barooni.dev, barooni.de, www.barooni.de {
     redir https://barooni.dev{uri} permanent
 }
+
+# Bitwarden (deploy/bitwarden). /admin is closed for good and reached only
+# through the SSH tunnel. See docs/setup-bitwarden.md.
+vault.barooni.dev {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        -Server
+    }
+
+    @admin path /admin /admin/*
+    respond @admin 403
+
+    reverse_proxy bitwarden:8080
+}
+
+# Public Uptime Kuma status page (deploy/uptime-kuma). Only the status page
+# and its files are public; the dashboard stays behind the SSH tunnel. See
+# docs/setup-monitoring.md.
+status.barooni.dev {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        -Server
+    }
+
+    @public path /status/* /api/status-page/* /assets/* /upload/* /icon.svg /favicon.ico
+    handle @public {
+        reverse_proxy uptime-kuma:3001
+    }
+    handle / {
+        redir * /status/status
+    }
+    handle {
+        respond 404
+    }
+}
