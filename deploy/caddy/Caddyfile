@@ -1,3 +1,6 @@
+# Every site on the server lives in this file. The setup guides copy it over
+# /opt/docker/caddy/Caddyfile, so a block added only on the server is lost.
+
 barooni.dev {
     # Visit statistics (Umami, deploy/umami). Only the tracker script and
     # the event endpoint are public, on the site's own address. The
