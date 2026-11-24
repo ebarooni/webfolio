@@ -103,14 +103,32 @@ class OpenApiMcpServerTest {
   }
 
   @Test
+  void websiteFallbackIsNotAnApiEndpoint() {
+    client
+        .when()
+        .toolsCall(
+            "getEndpointDetails",
+            Map.of("path", "/{path}"),
+            response -> assertTrue(response.isError()))
+        .toolsCall(
+            "searchEndpoint",
+            Map.of("keyword", "index"),
+            response ->
+                assertTrue(response.firstContent().asText().text().startsWith("No endpoints")))
+        .thenAssertResults();
+  }
+
+  @Test
   void openApiResourceIsReadable() {
     client
         .when()
         .resourcesRead(
             "webfolio://openapi",
-            response ->
-                assertTrue(
-                    response.contents().getFirst().asText().text().contains(CONTACT_FORM_PATH)))
+            response -> {
+              final String spec = response.contents().getFirst().asText().text();
+              assertTrue(spec.contains(CONTACT_FORM_PATH), spec);
+              assertTrue(spec.contains("\"WebFolio API\""), spec);
+            })
         .thenAssertResults();
   }
 }

@@ -42,7 +42,7 @@ The backend exposes a [Model Context Protocol](https://modelcontextprotocol.io) 
 
 The server provides the following capabilities:
 
-- **Resources** — the full OpenAPI specification of the WebFolio API, served as JSON at `webfolio://openapi`
+- **Resources** — the full OpenAPI specification of the WebFolio REST API (the `/api/...` endpoints; the website pages are left out), served as JSON at `webfolio://openapi`
 - **Tools** — search endpoints by keyword and retrieve detailed information about a specific path
 - **Prompts** — reusable prompt templates for API onboarding, contact form integration, debugging, and API review
 
