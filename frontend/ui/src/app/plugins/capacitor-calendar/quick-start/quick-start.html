@@ -52,6 +52,13 @@
         </p>
       </div>
       <div class="flex flex-col gap-3">
+        <a class="next-card" [routerLink]="guideLink | localizePath">
+          <span class="next-source">{{ copy().api.guideSource }}</span>
+          <span class="next-title">
+            {{ copy().api.guideCard }}
+            <app-arrow-icon />
+          </span>
+        </a>
         <a class="next-card" [href]="examplesLink" rel="noopener">
           <span class="next-source">{{ copy().api.examplesSource }}</span>
           <span class="next-title">

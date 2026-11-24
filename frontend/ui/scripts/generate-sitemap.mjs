@@ -3,7 +3,8 @@
  *
  * The prerendered HTML is the single source: each page that is its own
  * canonical page and that search engines may list goes into the sitemap,
- * with its hreflang links. The script also checks that the hreflang links
+ * with its hreflang links and, for an article, the date of its last
+ * change (dateModified in the structured data). The script also checks that the hreflang links
  * of all pages point back to each other, as search engines require. A
  * missing link stops the build.
  *
@@ -51,8 +52,12 @@ function readPage(file) {
     }))
     .filter((alternate) => alternate.hreflang && alternate.href);
 
+  // Only articles carry a date that really tells when the text changed.
+  const modified = head.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/)?.[1];
+
   return {
     url,
+    lastModified: modified ?? null,
     canonical: canonical ? attribute(canonical, "href") : null,
     noIndex: (robots ? attribute(robots, "content") : "").includes("noindex"),
     alternates,
@@ -96,6 +101,9 @@ const entries = listed.map((page) => {
   return [
     "  <url>",
     `    <loc>${escape(page.url)}</loc>`,
+    ...(page.lastModified
+      ? [`    <lastmod>${page.lastModified}</lastmod>`]
+      : []),
     ...links,
     "  </url>",
   ].join("\n");

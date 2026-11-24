@@ -19,6 +19,11 @@ export type BlogPostPreview = Readonly<{
   languages: readonly Language[];
   readTime: number;
   slug: string;
+  /**
+   * The day of the last real change to the text. Search engines read it
+   * from the structured data and the sitemap. Leave it out until then.
+   */
+  updated?: Date;
 }>;
 
 const UNSORTED_POSTS: readonly BlogPostPreview[] = [

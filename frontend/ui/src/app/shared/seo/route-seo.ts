@@ -252,6 +252,9 @@ export class RouteSeoWriter {
             description,
             inLanguage: contentLanguage,
             datePublished: post?.date.toISOString().slice(0, 10),
+            dateModified: (post?.updated ?? post?.date)
+              ?.toISOString()
+              .slice(0, 10),
             image: SITE_IMAGE.url,
             author: { '@id': PERSON_ID },
             publisher: { '@id': PERSON_ID },
