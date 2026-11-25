@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 /** Catch all endpoint used to support Angular SPA routing. */
 @Path("/")
@@ -59,10 +60,14 @@ public class FallbackResource {
    * <p>A frontend build without prerendered pages has no {@code index.csr.html}. Then every address
    * without a file extension is an app route, as before prerendering.
    *
+   * <p>The method is left out of the OpenAPI spec, because it serves the website and is not part of
+   * the REST API. The spec is what the MCP server describes to AI clients.
+   *
    * @param path the requested path without the leading slash
    * @return the page HTML with status 200 for an app route, or status 404
    */
   @GET
+  @Operation(hidden = true)
   @Path("{path: .*}")
   @Produces(MediaType.TEXT_HTML)
   public Response index(@PathParam("path") String path) {
